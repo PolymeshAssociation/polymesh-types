@@ -1,4 +1,4 @@
-name: npm
+name: main
 
 on:
   push:
