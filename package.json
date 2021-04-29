@@ -1,10 +1,10 @@
 {
-    "name": "@polymath/polymesh-types",
+    "name": "@polymathnetwork/polymesh-types",
     "version": "0.1.0",
     "description": "Substrate types used in polymesh chain",
     "main": "build/index.js",
     "typings": "index.d.ts",
-    "repository": "https://github.com/polymath/polymesh-types",
+    "repository": "https://github.com/PolymathNetwork/polymesh-types",
     "author": "Polymath Inc",
     "license": "Apache-2.0",
     "keywords": [

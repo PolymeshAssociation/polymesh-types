@@ -8,7 +8,7 @@ Substrate types used in polymesh chain.
 Import the types in your JS or TS app.
 
 ```ts
-import schema from "@polymath/polymesh-types";
+import schema from "@polymathnetwork/polymesh-types";
 ```
 
 ## Development
