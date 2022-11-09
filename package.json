@@ -1,23 +1,22 @@
 {
-    "name": "@polymathnetwork/polymesh-types",
-    "version": "0.1.0",
-    "description": "Substrate types used in polymesh chain",
-    "main": "build/index.js",
-    "typings": "index.d.ts",
-    "repository": "https://github.com/PolymathNetwork/polymesh-types",
-    "author": "Polymath Inc",
-    "license": "Apache-2.0",
-    "keywords": [
-        "Polkadot",
-        "Polymath",
-        "Polymesh"
-    ],
-    "scripts": {
-        "build": "webpack",
-        "prepublish": "yarn build"
-    },
-    "devDependencies": {
-        "webpack": "^5.2.0",
-        "webpack-cli": "^4.2.0"
-    }
+  "name": "@polymeshassociation/polymesh-types",
+  "version": "1.0.0",
+  "description": "Substrate types used in Polymesh chain",
+  "main": "build/index.js",
+  "typings": "index.d.ts",
+  "repository": "https://github.com/PolymeshAssociation/polymesh-types",
+  "author": "Polymesh Association",
+  "license": "Apache-2.0",
+  "keywords": [
+    "Polkadot",
+    "Polymesh"
+  ],
+  "scripts": {
+    "build": "webpack",
+    "prepublish": "yarn build"
+  },
+  "devDependencies": {
+    "webpack": "^5.2.0",
+    "webpack-cli": "^4.2.0"
+  }
 }
