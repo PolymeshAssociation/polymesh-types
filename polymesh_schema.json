@@ -967,7 +967,8 @@
     "SettlementType": {
       "_enum": {
         "SettleOnAffirmation": "",
-        "SettleOnBlock": "BlockNumber"
+        "SettleOnBlock": "BlockNumber",
+        "SettleManual": "BlockNumber"
       }
     },
     "LegId": "u64",
@@ -1185,8 +1186,7 @@
         "Unclaimed": "Balance",
         "Claimed": ""
       }
-    },
-    "DispatchErrorModule": "DispatchErrorModuleU8"
+    }
   },
   "rpc": {
     "compliance": {
@@ -1523,6 +1523,12 @@
         ],
         "type": "Vec<Member>"
       }
+    }
+  },
+  "signedExtensions": {
+    "StoreCallMetadata": {
+      "extrinsic": {},
+      "payload": {}
     }
   }
 }
