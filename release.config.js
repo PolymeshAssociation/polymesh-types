@@ -1,5 +1,5 @@
 module.exports = {
-  repositoryUrl: 'https://github.com/PolymeshAssociation/typescript-boilerplate.git',
+  repositoryUrl: 'https://github.com/PolymeshAssociation/polymesh-types.git',
   branches: ['main'],
   /*
    * In this order the **prepare** step of @semantic-release/npm will run first
