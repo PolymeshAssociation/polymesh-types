@@ -2,15 +2,14 @@
 
 Substrate types used in polymesh chain.
 
-
 ## Usage
 
 Import the types in your JS or TS app.
 
 ```ts
-import schema from "@polymathnetwork/polymesh-types";
+import schema from '@polymeshassocation/polymesh-types';
 ```
 
 ## Development
 
-Types are in [polymesh_schema file](./polymesh_schema.json).
+Types specific to different chain versions are in [types](src/types/) folder
