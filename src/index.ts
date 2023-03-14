@@ -4,13 +4,17 @@ import rpc from './rpc';
 import signedExtensions from './signedExtensions';
 import types from './types';
 
+interface PolymeshTypesBundle {
+  spec: Record<string, OverrideBundleDefinition>;
+}
+
 const specTypes: OverrideBundleDefinition = {
   rpc,
   types,
   signedExtensions,
 };
 
-export const typesBundle = {
+export const typesBundle: PolymeshTypesBundle = {
   spec: {
     polymesh_dev: specTypes,
     polymesh: specTypes,
