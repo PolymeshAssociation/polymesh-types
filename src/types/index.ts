@@ -5,8 +5,13 @@ import fiveZeroX from './5.0.x.json';
 import fiveOneX from './5.1.x.json';
 import fiveTwoX from './5.2.x.json';
 import fiveThreeX from './5.3.x.json';
+import fiveFourX from './5.4.x.json';
 
 export default [
+  {
+    minmax: [5004000, 5004009],
+    types: fiveFourX,
+  },
   {
     minmax: [5003000, 5003009],
     types: fiveThreeX,
