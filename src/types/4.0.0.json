@@ -841,5 +841,6 @@
       "PolymeshV1PIA": ""
     }
   },
-  "ItnRewardStatus": { "_enum": { "Unclaimed": "Balance", "Claimed": "" } }
+  "ItnRewardStatus": { "_enum": { "Unclaimed": "Balance", "Claimed": "" } },
+  "DispatchErrorModule": "DispatchErrorModuleU8"
 }
