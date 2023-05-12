@@ -1,3 +1,10 @@
+## [5.4.1](https://github.com/PolymeshAssociation/polymesh-types/compare/v5.4.0...v5.4.1) (2023-05-12)
+
+
+### Bug Fixes
+
+* 🐛 add missing dispatch error to 4.x types ([3c5aa75](https://github.com/PolymeshAssociation/polymesh-types/commit/3c5aa75a07fd25ed46244dcf03744fd249d76fe9))
+
 # [5.4.0](https://github.com/PolymeshAssociation/polymesh-types/compare/v5.3.0...v5.4.0) (2023-04-24)
 
 

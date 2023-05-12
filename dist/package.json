@@ -1,6 +1,6 @@
 {
   "name": "@polymeshassociation/polymesh-types",
-  "version": "5.4.0",
+  "version": "5.4.1",
   "description": "Substrate types used in Polymesh chain",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
