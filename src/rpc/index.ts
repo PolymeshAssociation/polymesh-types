@@ -1,33 +1,4 @@
 export default {
-  compliance: {
-    canTransfer: {
-      description:
-        'Checks whether a transaction with given parameters is compliant to the compliance manager conditions',
-      params: [
-        {
-          name: 'ticker',
-          type: 'Ticker',
-          isOptional: false,
-        },
-        {
-          name: 'from_did',
-          type: 'Option<IdentityId>',
-          isOptional: false,
-        },
-        {
-          name: 'to_did',
-          type: 'Option<IdentityId>',
-          isOptional: false,
-        },
-        {
-          name: 'blockHash',
-          type: 'Hash',
-          isOptional: true,
-        },
-      ],
-      type: 'AssetComplianceResult',
-    },
-  },
   identity: {
     isIdentityHasValidCdd: {
       description: 'use to tell whether the given did has valid cdd claim or not',
@@ -141,6 +112,28 @@ export default {
       ],
       type: 'Option<KeyIdentityData>',
     },
+    validCDDClaims: {
+      description:
+        'Returns all valid IdentityClaim of type CustomerDueDiligence for the given target_identity',
+      params: [
+        {
+          name: 'target_identity',
+          type: 'IdentityId',
+          isOptional: false,
+        },
+        {
+          name: 'cdd_checker_leeway',
+          type: 'u64',
+          isOptional: true,
+        },
+        {
+          name: 'blockHash',
+          type: 'Hash',
+          isOptional: true,
+        },
+      ],
+      type: 'Vec<IdentityClaim>',
+    },
   },
   pips: {
     getVotes: {
@@ -224,52 +217,6 @@ export default {
     },
   },
   asset: {
-    canTransfer: {
-      description: 'Checks whether a transaction with given parameters can take place or not',
-      params: [
-        {
-          name: 'sender',
-          type: 'AccountId',
-          isOptional: false,
-        },
-        {
-          name: 'from_custodian',
-          type: 'Option<IdentityId>',
-          isOptional: false,
-        },
-        {
-          name: 'from_portfolio',
-          type: 'PortfolioId',
-          isOptional: false,
-        },
-        {
-          name: 'to_custodian',
-          type: 'Option<IdentityId>',
-          isOptional: false,
-        },
-        {
-          name: 'to_portfolio',
-          type: 'PortfolioId',
-          isOptional: false,
-        },
-        {
-          name: 'ticker',
-          type: 'Ticker',
-          isOptional: false,
-        },
-        {
-          name: 'value',
-          type: 'Balance',
-          isOptional: false,
-        },
-        {
-          name: 'blockHash',
-          type: 'Hash',
-          isOptional: true,
-        },
-      ],
-      type: 'CanTransferResult',
-    },
     canTransferGranular: {
       description:
         'Checks whether a transaction with given parameters can take place or not. The result is granular meaning each check is run and returned regardless of outcome.',
@@ -310,7 +257,7 @@ export default {
           isOptional: true,
         },
       ],
-      type: 'GranularCanTransferResult',
+      type: 'canTransferGranularReturn',
     },
   },
   group: {
