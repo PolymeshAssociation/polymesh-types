@@ -1,3 +1,10 @@
+# [5.5.0](https://github.com/PolymeshAssociation/polymesh-types/compare/v5.4.1...v5.5.0) (2023-06-30)
+
+
+### Features
+
+* 🎸 add 6.0.x types ([a287ae0](https://github.com/PolymeshAssociation/polymesh-types/commit/a287ae0dc43d99865697aa936e0a8d7c3a89d071))
+
 ## [5.4.1](https://github.com/PolymeshAssociation/polymesh-types/compare/v5.4.0...v5.4.1) (2023-05-12)
 
 
