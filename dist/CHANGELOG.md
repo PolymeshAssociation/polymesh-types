@@ -1,3 +1,10 @@
+## [5.5.1](https://github.com/PolymeshAssociation/polymesh-types/compare/v5.5.0...v5.5.1) (2023-07-04)
+
+
+### Bug Fixes
+
+* 🐛 fix 6.0.x spec minmx field ([9af5756](https://github.com/PolymeshAssociation/polymesh-types/commit/9af5756efa2d937a3f3a5680296925774fe6961e))
+
 # [5.5.0](https://github.com/PolymeshAssociation/polymesh-types/compare/v5.4.1...v5.5.0) (2023-06-30)
 
 
