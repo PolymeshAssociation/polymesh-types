@@ -9,7 +9,7 @@ import fiveFourX from './5.4.x.json';
 import sixZeroX from './6.0.x.json';
 
 export default [
-  { minmax: [6000000, 5000009], types: sixZeroX },
+  { minmax: [6000000, 6000009], types: sixZeroX },
   {
     minmax: [5004000, 5004009],
     types: fiveFourX,
