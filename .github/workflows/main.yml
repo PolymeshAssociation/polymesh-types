@@ -40,7 +40,7 @@ jobs:
       - name: build
         run: |
           yarn build:ts
-          cp package.json dist/package.json
+          sed 's/dist\//.\//' package.json > dist/package.json
       - name: release
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
