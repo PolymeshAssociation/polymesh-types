@@ -1,3 +1,10 @@
+## [5.5.2](https://github.com/PolymeshAssociation/polymesh-types/compare/v5.5.1...v5.5.2) (2023-07-19)
+
+
+### Bug Fixes
+
+* prevent Invalid 'main' field in './package.json' ([d643fdc](https://github.com/PolymeshAssociation/polymesh-types/commit/d643fdc8676804ce7e9f58f6992bfb5b192c562c))
+
 ## [5.5.1](https://github.com/PolymeshAssociation/polymesh-types/compare/v5.5.0...v5.5.1) (2023-07-04)
 
 

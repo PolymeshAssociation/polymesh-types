@@ -1,9 +1,9 @@
 {
   "name": "@polymeshassociation/polymesh-types",
-  "version": "5.5.1",
+  "version": "5.5.2",
   "description": "Substrate types used in Polymesh chain",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./index.js",
+  "types": "./index.d.ts",
   "repository": "https://github.com/PolymeshAssociation/polymesh-types",
   "author": "Polymesh Association",
   "license": "Apache-2.0",
