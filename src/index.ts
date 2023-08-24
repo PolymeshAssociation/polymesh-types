@@ -4,7 +4,7 @@ import rpc from './rpc';
 import signedExtensions from './signedExtensions';
 import types from './types';
 
-interface PolymeshTypesBundle {
+export interface PolymeshTypesBundle {
   spec: Record<string, OverrideBundleDefinition>;
 }
 
