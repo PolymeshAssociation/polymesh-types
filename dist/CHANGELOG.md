@@ -1,3 +1,10 @@
+## [5.5.3](https://github.com/PolymeshAssociation/polymesh-types/compare/v5.5.2...v5.5.3) (2023-08-24)
+
+
+### Bug Fixes
+
+* 🐛 Export `PolymeshTypesBundle` to fix ts declaration error ([#13](https://github.com/PolymeshAssociation/polymesh-types/issues/13)) ([700c455](https://github.com/PolymeshAssociation/polymesh-types/commit/700c455bd1436e6e31a7c1d4eecdd34d121faf33))
+
 ## [5.5.2](https://github.com/PolymeshAssociation/polymesh-types/compare/v5.5.1...v5.5.2) (2023-07-19)
 
 
