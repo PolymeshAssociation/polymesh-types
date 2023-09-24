@@ -1,3 +1,16 @@
+# [5.6.0](https://github.com/PolymeshAssociation/polymesh-types/compare/v5.5.3...v5.6.0) (2023-09-24)
+
+
+### Bug Fixes
+
+* 🐛 Add missing RPC type ([af78c4d](https://github.com/PolymeshAssociation/polymesh-types/commit/af78c4de2d31286192a7c71b7c26f7ab9409632b))
+* 🐛 Update to correct 6.0.x types ([a086d9e](https://github.com/PolymeshAssociation/polymesh-types/commit/a086d9ec9a7ce72979a1439fe4aea8ab17fc2c47))
+
+
+### Features
+
+* 🎸 Add runtime calls definitions ([e624982](https://github.com/PolymeshAssociation/polymesh-types/commit/e62498256f40e7a111fa9dbf38504d253e38a9b2))
+
 ## [5.5.3](https://github.com/PolymeshAssociation/polymesh-types/compare/v5.5.2...v5.5.3) (2023-08-24)
 
 
