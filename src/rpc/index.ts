@@ -257,7 +257,7 @@ export default {
           isOptional: true,
         },
       ],
-      type: 'canTransferGranularReturn',
+      type: 'CanTransferGranularReturn',
     },
   },
   group: {
@@ -311,6 +311,25 @@ export default {
         },
       ],
       type: 'DispatchResult',
+    },
+  },
+  settlement: {
+    getExecuteInstructionInfo: {
+      description:
+        'Returns an ExecuteInstructionInfo instance, containing the consumed weight and the number of tokens in the instruction.',
+      params: [
+        {
+          name: 'instruction_id',
+          type: 'InstructionId',
+          isOptional: false,
+        },
+        {
+          name: 'blockHash',
+          type: 'Hash',
+          isOptional: true,
+        },
+      ],
+      type: 'ExecuteInstructionInfo',
     },
   },
 };
