@@ -1,6 +1,7 @@
 import { OverrideBundleDefinition } from '@polkadot/types/types';
 
 import rpc from './rpc';
+import runtime from './runtime';
 import signedExtensions from './signedExtensions';
 import types from './types';
 
@@ -10,6 +11,7 @@ export interface PolymeshTypesBundle {
 
 const specTypes: OverrideBundleDefinition = {
   rpc,
+  runtime,
   types,
   signedExtensions,
 };
