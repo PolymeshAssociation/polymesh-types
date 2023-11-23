@@ -91,7 +91,15 @@
     },
     "DidStatus": Object {
       "_enum": Object {
-@@ -673,7 +698,7 @@
+@@ -572,7 +597,6 @@
+        "Unknown": "",
+      },
+    },
+-   "DispatchErrorModule": "DispatchErrorModuleU8",
+    "DispatchableName": "Text",
+    "DispatchableNames": Object {
+      "_enum": Object {
+@@ -674,7 +698,7 @@
       "self_transfer": "bool",
       "sender_custodian_error": "bool",
       "sender_insufficient_balance": "bool",
@@ -100,7 +108,7 @@
     },
     "HandledTxStatus": Object {
       "_enum": Object {
-@@ -726,7 +751,10 @@
+@@ -727,7 +751,10 @@
       },
     },
     "InvestorUid": "[u8; 16]",
@@ -112,7 +120,7 @@
     "ItnRewardStatus": Object {
       "_enum": Object {
         "Claimed": "",
-@@ -737,6 +765,13 @@
+@@ -738,6 +765,13 @@
       "identity": "IdentityId",
       "permissions": "Option<Permissions>",
     },
@@ -126,7 +134,7 @@
     "Leg": Object {
       "amount": "Balance",
       "asset": "Ticker",
-@@ -769,7 +804,7 @@
+@@ -770,7 +804,7 @@
         "Some": "BlockNumber",
       },
     },
@@ -135,22 +143,23 @@
     "MetaDescription": "Text",
     "MetaUrl": "Text",
     "MetaVersion": "u32",
-@@ -786,13 +821,7 @@
+@@ -786,14 +820,8 @@
+      "amount": "Balance",
       "memo": "Option<Memo>",
       "ticker": "Ticker",
-    },
+-   },
 -   "OffChainSignature": Object {
 -     "_enum": Object {
 -       "Ecdsa": "H512",
 -       "Ed25519": "H512",
 -       "Sr25519": "H512",
 -     },
--   },
+    },
 +   "OffChainSignature": "MultiSignature",
     "PalletName": "Text",
     "PalletPermissions": Object {
       "dispatchable_names": "DispatchableNames",
-@@ -954,6 +983,16 @@
+@@ -955,6 +983,16 @@
       ],
     },
     "RistrettoPoint": "[u8; 32]",
@@ -167,7 +176,7 @@
     "Scalar": "[u8; 32]",
     "ScheduleId": "u64",
     "ScheduleSpec": Object {
-@@ -975,11 +1014,11 @@
+@@ -976,11 +1014,11 @@
     },
     "ScopeId": "[u8; 32]",
     "SecondaryKey": Object {
@@ -181,7 +190,7 @@
       "secondary_key": "SecondaryKey",
     },
     "SecurityToken": Object {
-@@ -1039,7 +1078,38 @@
+@@ -1040,7 +1078,38 @@
     "SnapshottedPip": Object {
       "id": "PipId",
       "weight": "(bool, Balance)",
@@ -220,7 +229,7 @@
     "StoredSchedule": Object {
       "at": "Moment",
       "id": "ScheduleId",
-@@ -1093,15 +1163,22 @@
+@@ -1094,15 +1163,22 @@
       "max_ticker_length": "u8",
       "registration_length": "Option<Moment>",
     },
@@ -248,7 +257,7 @@
     },
     "TrustedFor": Object {
       "_enum": Object {
-@@ -1153,6 +1230,12 @@
+@@ -1154,6 +1230,12 @@
       "ayes_stake": "Balance",
       "nays_count": "u32",
       "nays_stake": "Balance",

@@ -180,7 +180,7 @@ export default {
       methods: {
         get_execute_instruction_info: {
           description:
-            'Returns an ExecuteInstructionInfo instance, containing the consumed weight and the number of tokens in the instruction.',
+            'Returns an ExecuteInstructionInfo instance containing the consumed weight and the number of tokens in the instruction.',
           params: [
             {
               name: 'instruction_id',
@@ -188,6 +188,21 @@ export default {
             },
           ],
           type: 'ExecuteInstructionInfo',
+        },
+        get_affirmation_count: {
+          description:
+            'Returns an AffirmationCount instance containing the number of assets being sent/received from portfolios, and the number of off-chain assets in the instruction.',
+          params: [
+            {
+              name: 'instruction_id',
+              type: 'InstructionId',
+            },
+            {
+              name: 'portfolios',
+              type: 'Vec<PortfolioId>',
+            },
+          ],
+          type: 'AffirmationCount',
         },
       },
       version: 1,

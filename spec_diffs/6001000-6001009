@@ -1,0 +1,201 @@
+- Expected
++ Received
+
+@@ -2,6 +2,11 @@
+    "AGId": "u32",
+    "AccountInfo": "AccountInfoWithDualRefCount",
+    "Address": "MultiAddress",
++   "AffirmationCount": Object {
++     "offchain_count": "u32",
++     "receiver_asset_count": "AssetCount",
++     "sender_asset_count": "AssetCount",
++   },
+    "AffirmationStatus": Object {
+      "_enum": Object {
+        "Affirmed": "",
+@@ -26,6 +31,11 @@
+      "paused": "bool",
+      "requirements": "Vec<ComplianceRequirementResult>",
+      "result": "bool",
++   },
++   "AssetCount": Object {
++     "fungible_tokens": "u32",
++     "non_fungible_tokens": "u32",
++     "off_chain_assets": "u32",
+    },
+    "AssetDidResult": Object {
+      "_enum": Object {
+@@ -216,7 +226,13 @@
+        "Month",
+        "Year",
+      ],
++   },
++   "CanTransferGranularReturn": Object {
++     "_enum": Object {
++       "Err": "DispatchError",
++       "Ok": "GranularCanTransferResult",
+      },
++   },
+    "CanTransferResult": Object {
+      "_enum": Object {
+        "Err": "Vec<u8>",
+@@ -246,11 +262,8 @@
+        "Custom": "(CustomClaimTypeId, Option<Scope>)",
+        "CustomerDueDiligence": "CddId",
+        "Exempted": "Scope",
+-       "InvestorUniqueness": "(Scope, ScopeId, CddId)",
+-       "InvestorUniquenessV2": "CddId",
+        "Jurisdiction": "(CountryCode, Scope)",
+        "KnowYourCustomer": "Scope",
+-       "NoData": "",
+        "SellLockup": "Scope",
+      },
+    },
+@@ -271,11 +284,8 @@
+        "Custom": "CustomClaimTypeId",
+        "CustomerDueDiligence": "",
+        "Exempted": "",
+-       "InvestorUniqueness": "",
+-       "InvestorUniquenessV2": "",
+        "Jurisdiction": "",
+        "KnowYourCustomer": "",
+-       "NoData": "",
+        "SellLockup": "",
+      },
+    },
+@@ -638,6 +648,13 @@
+    "EthereumAddress": "[u8; 20]",
+    "EventCounts": "Vec<u32>",
+    "EventDid": "IdentityId",
++   "ExecuteInstructionInfo": Object {
++     "consumed_weight": "Weight",
++     "error": "Option<String>",
++     "fungible_tokens": "u32",
++     "non_fungible_tokens": "u32",
++     "off_chain_assets": "u32",
++   },
+    "ExtrinsicPermissions": Object {
+      "_enum": Object {
+        "Except": "Vec<PalletPermissions>",
+@@ -684,6 +701,12 @@
+      "remaining": "Balance",
+      "total": "Balance",
+    },
++   "FungibleLeg": Object {
++     "amount": "Balance",
++     "receiver": "PortfolioId",
++     "sender": "PortfolioId",
++     "ticker": "Ticker",
++   },
+    "FungibleToken": Object {
+      "amount": "Balance",
+      "ticker": "Ticker",
+@@ -763,8 +786,6 @@
+        "Unknown": "",
+      },
+    },
+-   "InvestorUid": "[u8; 16]",
+-   "InvestorZKProofData": "[u8; 64]",
+    "ItnRewardStatus": Object {
+      "_enum": Object {
+        "Claimed": "",
+@@ -783,15 +804,10 @@
+      },
+    },
+    "Leg": Object {
+-     "asset": "LegAsset",
+-     "from": "PortfolioId",
+-     "to": "PortfolioId",
+-   },
+-   "LegAsset": Object {
+      "_enum": Object {
+-       "Fungible": "FungibleToken",
+-       "NonFungible": "NFTs",
+-       "OffChain": "OffChainAsset",
++       "Fungible": "FungibleLeg",
++       "NonFungible": "NonFungibleLeg",
++       "OffChain": "OffChainLeg",
+      },
+    },
+    "LegId": "u64",
+@@ -833,6 +849,11 @@
+    "NFTs": Object {
+      "ids": "Vec<NFTId>",
+      "ticker": "Ticker",
++   },
++   "NonFungibleLeg": Object {
++     "nfts": "NFTs",
++     "receiver": "PortfolioId",
++     "sender": "PortfolioId",
+    },
+    "NonFungibleType": Object {
+      "_enum": Object {
+@@ -846,6 +867,12 @@
+      "amount": "Balance",
+      "ticker": "Ticker",
+    },
++   "OffChainLeg": Object {
++     "amount": "Balance",
++     "receiver_identity": "IdentityId",
++     "sender_identity": "IdentityId",
++     "ticker": "Ticker",
++   },
+    "OffChainSignature": "MultiSignature",
+    "PalletName": "Text",
+    "PalletPermissions": Object {
+@@ -971,6 +998,9 @@
+        "ContractsPutCode",
+        "CorporateBallotAttachBallot",
+        "CapitalDistributionDistribute",
++       "NFTCreateCollection",
++       "NFTMint",
++       "IdentityCreateChildIdentity",
+      ],
+    },
+    "Receipt": Object {
+@@ -1006,7 +1036,6 @@
+        "ForceValid",
+      ],
+    },
+-   "RistrettoPoint": "[u8; 32]",
+    "RpcDidRecords": Object {
+      "_enum": Object {
+        "IdNotFound": "Vec<u8>",
+@@ -1017,7 +1046,6 @@
+      "primary_key": "AccountId",
+      "secondary_keys": "Vec<SecondaryKey>",
+    },
+-   "Scalar": "[u8; 32]",
+    "ScheduleId": "u64",
+    "ScheduleSpec": Object {
+      "period": "CalendarPeriod",
+@@ -1031,12 +1059,6 @@
+        "Ticker": "Ticker",
+      },
+    },
+-   "ScopeClaimProof": Object {
+-     "proof_scope_id_cdd_id_match": "ZkProofData",
+-     "proof_scope_id_wellformed": "Signature",
+-     "scope_id": "RistrettoPoint",
+-   },
+-   "ScopeId": "[u8; 32]",
+    "SecondaryKey": Object {
+      "key": "AccountId",
+      "permissions": "Permissions",
+@@ -1240,16 +1262,5 @@
+      "coeffInteger": "Balance",
+      "degree": "u8",
+      "negative": "bool",
+-   },
+-   "ZkProofData": Object {
+-     "blinded_scope_did_hash": "RistrettoPoint",
+-     "challenge_responses": "[Scalar; 2]",
+-     "subtract_expressions_res": "RistrettoPoint",
+-   },
+-   "canTransferGranularReturn": Object {
+-     "_enum": Object {
+-       "Err": "DispatchError",
+-       "Ok": "GranularCanTransferResult",
+-     },
+    },
+  }

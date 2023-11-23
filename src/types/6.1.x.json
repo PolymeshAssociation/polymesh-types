@@ -1213,5 +1213,15 @@
     "off_chain_assets": "u32",
     "consumed_weight": "Weight",
     "error": "Option<String>"
+  },
+  "AssetCount": {
+    "fungible_tokens": "u32",
+    "non_fungible_tokens": "u32",
+    "off_chain_assets": "u32"
+  },
+  "AffirmationCount": {
+    "sender_asset_count": "AssetCount",
+    "receiver_asset_count": "AssetCount",
+    "offchain_count": "u32"
   }
 }
