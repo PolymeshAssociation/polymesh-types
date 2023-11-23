@@ -1,0 +1,85 @@
+- Expected
++ Received
+
+@@ -279,16 +279,6 @@
+        "SellLockup": "",
+      },
+    },
+-   "ClassicTickerImport": Object {
+-     "eth_owner": "EthereumAddress",
+-     "is_contract": "bool",
+-     "is_created": "bool",
+-     "ticker": "Ticker",
+-   },
+-   "ClassicTickerRegistration": Object {
+-     "eth_owner": "EthereumAddress",
+-     "is_created": "bool",
+-   },
+    "Committee": Object {
+      "_enum": Object {
+        "Technical": "",
+@@ -701,10 +691,10 @@
+    "GranularCanTransferResult": Object {
+      "asset_frozen": "bool",
+      "compliance_result": "AssetComplianceResult",
++     "consumed_weight": "Option<Weight>",
+      "invalid_granularity": "bool",
+      "invalid_receiver_cdd": "bool",
+      "invalid_sender_cdd": "bool",
+-     "missing_scope_claim": "bool",
+      "portfolio_validity_result": "PortfolioValidityResult",
+      "receiver_custodian_error": "bool",
+      "result": "bool",
+@@ -793,8 +783,7 @@
+      },
+    },
+    "Leg": Object {
+-     "amount": "Balance",
+-     "asset": "Ticker",
++     "asset": "LegAsset",
+      "from": "PortfolioId",
+      "to": "PortfolioId",
+    },
+@@ -802,6 +791,7 @@
+      "_enum": Object {
+        "Fungible": "FungibleToken",
+        "NonFungible": "NFTs",
++       "OffChain": "OffChainAsset",
+      },
+    },
+    "LegId": "u64",
+@@ -812,11 +802,6 @@
+        "PendingTokenLock": "",
+      },
+    },
+-   "LegV2": Object {
+-     "asset": "LegAsset",
+-     "from": "PortfolioId",
+-     "to": "PortfolioId",
+-   },
+    "LocalCAId": "u32",
+    "LookupSource": "MultiAddress",
+    "MaybeBlock": Object {
+@@ -857,6 +842,10 @@
+        "Invoice": "",
+      },
+    },
++   "OffChainAsset": Object {
++     "amount": "Balance",
++     "ticker": "Ticker",
++   },
+    "OffChainSignature": "MultiSignature",
+    "PalletName": "Text",
+    "PalletPermissions": Object {
+@@ -1256,5 +1245,11 @@
+      "blinded_scope_did_hash": "RistrettoPoint",
+      "challenge_responses": "[Scalar; 2]",
+      "subtract_expressions_res": "RistrettoPoint",
++   },
++   "canTransferGranularReturn": Object {
++     "_enum": Object {
++       "Err": "DispatchError",
++       "Ok": "GranularCanTransferResult",
++     },
+    },
+  }

@@ -576,6 +576,7 @@
 +       "Unknown": "",
 +     },
 +   },
++   "DispatchErrorModule": "DispatchErrorModuleU8",
 +   "DispatchableName": "Text",
 +   "DispatchableNames": Object {
 +     "_enum": Object {

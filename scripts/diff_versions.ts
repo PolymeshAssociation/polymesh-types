@@ -2,9 +2,9 @@ import { writeFileSync } from 'fs';
 import { diff } from 'jest-diff';
 import { join } from 'path';
 
-import schema from '../src/';
+import types from '../src/types';
 
-let versions: { minmax: number[]; types: Record<string, string> }[] = schema.types;
+let versions: { minmax: number[]; types: Record<string, string> }[] = types;
 versions = versions.reverse();
 
 let previous = {};
