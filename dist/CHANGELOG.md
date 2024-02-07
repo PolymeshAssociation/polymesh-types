@@ -1,3 +1,10 @@
+# [5.8.0](https://github.com/PolymeshAssociation/polymesh-types/compare/v5.7.0...v5.8.0) (2024-02-07)
+
+
+### Features
+
+* 🎸 update types for 6.2 chain (identical to 6.1 schema) ([#16](https://github.com/PolymeshAssociation/polymesh-types/issues/16)) ([fb12ced](https://github.com/PolymeshAssociation/polymesh-types/commit/fb12ced5bb5767683b84861f928cf1fbc3d1f6c0))
+
 # [5.7.0](https://github.com/PolymeshAssociation/polymesh-types/compare/v5.6.0...v5.7.0) (2023-11-23)
 
 
