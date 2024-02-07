@@ -10,7 +10,7 @@ import sixZeroX from './6.0.x.json';
 import sixOneX from './6.1.x.json';
 
 export default [
-  { minmax: [6001000, 6001009], types: sixOneX },
+  { minmax: [6001000, 6002009], types: sixOneX },
   { minmax: [6000000, 6000009], types: sixZeroX },
   {
     minmax: [5004000, 5004009],
