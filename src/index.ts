@@ -23,5 +23,7 @@ export const typesBundle: PolymeshTypesBundle = {
     polymesh_ci: specTypes,
     polymesh_mainnet: specTypes,
     polymesh_testnet: specTypes,
+    polymesh_private_dev: specTypes,
+    polymesh_private_prod: specTypes,
   },
 };
