@@ -1,3 +1,10 @@
+# [5.9.0](https://github.com/PolymeshAssociation/polymesh-types/compare/v5.8.0...v5.9.0) (2024-03-07)
+
+
+### Features
+
+* 🎸 add polymesh-private lookup ([c0016f6](https://github.com/PolymeshAssociation/polymesh-types/commit/c0016f6739cbe897ea45b2450098ba79ab490e1a))
+
 # [5.8.0](https://github.com/PolymeshAssociation/polymesh-types/compare/v5.7.0...v5.8.0) (2024-02-07)
 
 
