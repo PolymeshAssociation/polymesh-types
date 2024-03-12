@@ -1,3 +1,10 @@
+## [5.9.1](https://github.com/PolymeshAssociation/polymesh-types/compare/v5.9.0...v5.9.1) (2024-03-12)
+
+
+### Bug Fixes
+
+* 🐛 fix AssetCount RPC types ([#18](https://github.com/PolymeshAssociation/polymesh-types/issues/18)) ([39093e5](https://github.com/PolymeshAssociation/polymesh-types/commit/39093e5dee4b089152a898a9d4d4755d6de17900))
+
 # [5.9.0](https://github.com/PolymeshAssociation/polymesh-types/compare/v5.8.0...v5.9.0) (2024-03-07)
 
 
