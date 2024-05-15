@@ -1,3 +1,11 @@
+# [5.10.0](https://github.com/PolymeshAssociation/polymesh-types/compare/v5.9.1...v5.10.0) (2024-05-15)
+
+
+### Features
+
+* 🎸 Update spec range for PP chain ([9cbab94](https://github.com/PolymeshAssociation/polymesh-types/commit/9cbab9482aea916f6276adac8967efa2d2a1ad1d))
+* 🎸 update spec range to support `6.2.10` chain ([957fb64](https://github.com/PolymeshAssociation/polymesh-types/commit/957fb645b68d2606930902e8cde3eb2d2c639128))
+
 ## [5.9.1](https://github.com/PolymeshAssociation/polymesh-types/compare/v5.9.0...v5.9.1) (2024-03-12)
 
 
