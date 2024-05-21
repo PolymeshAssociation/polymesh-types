@@ -1,3 +1,10 @@
+## [5.11.1](https://github.com/PolymeshAssociation/polymesh-types/compare/v5.11.0...v5.11.1) (2024-05-21)
+
+
+### Bug Fixes
+
+* 🐛 add missing 6.2 range coverage ([a0486ea](https://github.com/PolymeshAssociation/polymesh-types/commit/a0486ea69639bb5dd6102f42d98ae09a8966157c))
+
 # [5.11.0](https://github.com/PolymeshAssociation/polymesh-types/compare/v5.10.0...v5.11.0) (2024-05-16)
 
 
