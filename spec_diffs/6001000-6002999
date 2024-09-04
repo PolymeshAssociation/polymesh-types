@@ -1,0 +1,27 @@
+- Expected
++ Received
+
+@@ -2,6 +2,11 @@
+    "AGId": "u32",
+    "AccountInfo": "AccountInfoWithDualRefCount",
+    "Address": "MultiAddress",
++   "AffirmationCount": Object {
++     "offchain_count": "u32",
++     "receiver_asset_count": "AssetCount",
++     "sender_asset_count": "AssetCount",
++   },
+    "AffirmationStatus": Object {
+      "_enum": Object {
+        "Affirmed": "",
+@@ -26,6 +31,11 @@
+      "paused": "bool",
+      "requirements": "Vec<ComplianceRequirementResult>",
+      "result": "bool",
++   },
++   "AssetCount": Object {
++     "fungible": "u32",
++     "non_fungible": "u32",
++     "off_chain": "u32",
+    },
+    "AssetDidResult": Object {
+      "_enum": Object {

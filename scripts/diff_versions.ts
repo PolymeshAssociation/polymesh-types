@@ -4,7 +4,7 @@ import { join } from 'path';
 
 import types from '../src/types';
 
-let versions: { minmax: number[]; types: Record<string, string> }[] = types;
+let versions: { minmax: number[]; types: Record<string, unknown> }[] = types;
 versions = versions.reverse();
 
 let previous = {};

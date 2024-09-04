@@ -21,6 +21,22 @@ export default {
       ],
       type: 'CddStatus',
     },
+    getAssetDid: {
+      description: 'function is used to query the given ticker DID',
+      params: [
+        {
+          name: 'ticker',
+          type: 'Ticker',
+          isOptional: false,
+        },
+        {
+          name: 'blockHash',
+          type: 'Hash',
+          isOptional: true,
+        },
+      ],
+      type: 'AssetDidResult',
+    },
     getDidRecords: {
       description: 'Used to get the did record values for a given DID',
       params: [
@@ -201,33 +217,38 @@ export default {
     },
   },
   asset: {
-    transferReport: {
+    canTransferGranular: {
       description:
-        "Returns a vector containing all errors for the transfer. An empty vec means there's no error.",
+        'Checks whether a transaction with given parameters can take place or not. The result is granular meaning each check is run and returned regardless of outcome.',
       params: [
         {
-          name: 'sender_portfolio',
+          name: 'from_custodian',
+          type: 'Option<IdentityId>',
+          isOptional: false,
+        },
+        {
+          name: 'from_portfolio',
           type: 'PortfolioId',
           isOptional: false,
         },
         {
-          name: 'receiver_portfolio',
+          name: 'to_custodian',
+          type: 'Option<IdentityId>',
+          isOptional: false,
+        },
+        {
+          name: 'to_portfolio',
           type: 'PortfolioId',
           isOptional: false,
         },
         {
-          name: 'asset_id',
-          type: 'AssetID',
+          name: 'ticker',
+          type: 'Ticker',
           isOptional: false,
         },
         {
-          name: 'transfer_value',
+          name: 'value',
           type: 'Balance',
-          isOptional: false,
-        },
-        {
-          name: 'skip_locked_check',
-          type: 'bool',
           isOptional: false,
         },
         {
@@ -236,7 +257,7 @@ export default {
           isOptional: true,
         },
       ],
-      type: 'Vec<DispatchError>',
+      type: 'CanTransferGranularReturn',
     },
   },
   group: {
@@ -264,9 +285,9 @@ export default {
     },
   },
   nft: {
-    transferReport: {
+    validateNFTTransfer: {
       description:
-        "Returns a vector containing all errors for the transfer. An empty vec means there's no error.",
+        'Verifies if and the sender and receiver are not the same, if both have valid balances, if the sender owns the nft, and if all compliance rules are being respected.',
       params: [
         {
           name: 'sender_portfolio',
@@ -284,17 +305,12 @@ export default {
           isOptional: false,
         },
         {
-          name: 'skip_locked_check',
-          type: 'bool',
-          isOptional: false,
-        },
-        {
           name: 'blockHash',
           type: 'Hash',
           isOptional: true,
         },
       ],
-      type: 'Vec<DispatchError>',
+      type: 'DispatchResult',
     },
   },
   settlement: {
@@ -313,7 +329,7 @@ export default {
           isOptional: true,
         },
       ],
-      type: 'Option<ExecuteInstructionInfo>',
+      type: 'ExecuteInstructionInfo',
     },
     getAffirmationCount: {
       description:
@@ -337,17 +353,6 @@ export default {
       ],
       type: 'AffirmationCount',
     },
-    getExecuteInstructionReport: {
-      description:
-        "Returns a vector containing all errors for the execution. An empty vec means there's no error.",
-      params: [
-        {
-          name: 'instruction_id',
-          type: 'InstructionId',
-        },
-      ],
-      type: 'Vec<DispatchError>',
-    },
     getTransferReport: {
       description:
         "Returns a vector containing all errors for the transfer. An empty vec means there's no error.",
@@ -363,25 +368,16 @@ export default {
       ],
       type: 'Vec<DispatchError>',
     },
-  },
-  compliance: {
-    complianceReport: {
-      description: 'Checks all compliance requirements for the given asset.',
+    getExecuteInstructionReport: {
+      description:
+        "Returns a vector containing all errors for the execution. An empty vec means there's no error.",
       params: [
         {
-          name: 'asset_id',
-          type: 'AssetID',
-        },
-        {
-          name: 'sender_identity',
-          type: 'IdentityId',
-        },
-        {
-          name: 'receiver_identity',
-          type: 'IdentityId',
+          name: 'instruction_id',
+          type: 'InstructionId',
         },
       ],
-      type: 'Result<ComplianceReport, DispatchError>',
+      type: 'Vec<DispatchError>',
     },
   },
 };

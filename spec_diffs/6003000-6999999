@@ -1,0 +1,53 @@
+- Expected
++ Received
+
+@@ -33,9 +33,9 @@
+      "result": "bool",
+    },
+    "AssetCount": Object {
+-     "fungible": "u32",
+-     "non_fungible": "u32",
+-     "off_chain": "u32",
++     "fungible_tokens": "u32",
++     "non_fungible_tokens": "u32",
++     "off_chain_assets": "u32",
+    },
+    "AssetDidResult": Object {
+      "_enum": Object {
+@@ -295,6 +295,11 @@
+        "Upgrade": "",
+      },
+    },
++   "ComplianceReport": Object {
++     "any_requirement_satistifed": "bool",
++     "paused_compliance": "bool",
++     "requirements": "Vec<RequirementReport>",
++   },
+    "ComplianceRequirement": Object {
+      "id": "u32",
+      "receiver_conditions": "Vec<Condition>",
+@@ -310,6 +315,10 @@
+      "condition_type": "ConditionType",
+      "issuers": "Vec<TrustedIssuer>",
+    },
++   "ConditionReport": Object {
++     "condition": "Condition",
++     "satisfied": "bool",
++   },
+    "ConditionResult": Object {
+      "condition": "Condition",
+      "result": "bool",
+@@ -1027,7 +1036,13 @@
+        "Existing": "CheckpointId",
+        "ExistingSchedule": "ScheduleId",
+        "Scheduled": "Moment",
++     },
+    },
++   "RequirementReport": Object {
++     "id": "u32",
++     "receiver_conditions": "Vec<ConditionReport>",
++     "requirement_satisfied": "bool",
++     "sender_conditions": "Vec<ConditionReport>",
+    },
+    "RestrictionResult": Object {
+      "_enum": Array [

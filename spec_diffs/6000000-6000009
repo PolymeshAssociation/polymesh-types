@@ -1,16 +1,49 @@
 - Expected
 + Received
 
-@@ -279,16 +279,6 @@
-        "SellLockup": "",
+@@ -217,6 +217,12 @@
+        "Year",
+      ],
+    },
++   "CanTransferGranularReturn": Object {
++     "_enum": Object {
++       "Err": "DispatchError",
++       "Ok": "GranularCanTransferResult",
++     },
++   },
+    "CanTransferResult": Object {
+      "_enum": Object {
+        "Err": "Vec<u8>",
+@@ -246,11 +252,8 @@
+        "Custom": "(CustomClaimTypeId, Option<Scope>)",
+        "CustomerDueDiligence": "CddId",
+        "Exempted": "Scope",
+-       "InvestorUniqueness": "(Scope, ScopeId, CddId)",
+-       "InvestorUniquenessV2": "CddId",
+        "Jurisdiction": "(CountryCode, Scope)",
+        "KnowYourCustomer": "Scope",
+-       "NoData": "",
+        "SellLockup": "Scope",
       },
     },
+@@ -271,24 +274,11 @@
+        "Custom": "CustomClaimTypeId",
+        "CustomerDueDiligence": "",
+        "Exempted": "",
+-       "InvestorUniqueness": "",
+-       "InvestorUniquenessV2": "",
+        "Jurisdiction": "",
+        "KnowYourCustomer": "",
+-       "NoData": "",
+        "SellLockup": "",
+-     },
+      },
 -   "ClassicTickerImport": Object {
 -     "eth_owner": "EthereumAddress",
 -     "is_contract": "bool",
 -     "is_created": "bool",
 -     "ticker": "Ticker",
--   },
+    },
 -   "ClassicTickerRegistration": Object {
 -     "eth_owner": "EthereumAddress",
 -     "is_created": "bool",
@@ -18,7 +51,34 @@
     "Committee": Object {
       "_enum": Object {
         "Technical": "",
-@@ -701,10 +691,10 @@
+@@ -648,6 +638,13 @@
+    "EthereumAddress": "[u8; 20]",
+    "EventCounts": "Vec<u32>",
+    "EventDid": "IdentityId",
++   "ExecuteInstructionInfo": Object {
++     "consumed_weight": "Weight",
++     "error": "Option<String>",
++     "fungible_tokens": "u32",
++     "non_fungible_tokens": "u32",
++     "off_chain_assets": "u32",
++   },
+    "ExtrinsicPermissions": Object {
+      "_enum": Object {
+        "Except": "Vec<PalletPermissions>",
+@@ -694,6 +691,12 @@
+      "remaining": "Balance",
+      "total": "Balance",
+    },
++   "FungibleLeg": Object {
++     "amount": "Balance",
++     "receiver": "PortfolioId",
++     "sender": "PortfolioId",
++     "ticker": "Ticker",
++   },
+    "FungibleToken": Object {
+      "amount": "Balance",
+      "ticker": "Ticker",
+@@ -701,10 +704,10 @@
     "GranularCanTransferResult": Object {
       "asset_frozen": "bool",
       "compliance_result": "AssetComplianceResult",
@@ -30,25 +90,35 @@
       "portfolio_validity_result": "PortfolioValidityResult",
       "receiver_custodian_error": "bool",
       "result": "bool",
-@@ -793,8 +783,7 @@
+@@ -773,8 +776,6 @@
+        "Unknown": "",
+      },
+    },
+-   "InvestorUid": "[u8; 16]",
+-   "InvestorZKProofData": "[u8; 64]",
+    "ItnRewardStatus": Object {
+      "_enum": Object {
+        "Claimed": "",
+@@ -793,15 +794,10 @@
       },
     },
     "Leg": Object {
 -     "amount": "Balance",
 -     "asset": "Ticker",
-+     "asset": "LegAsset",
-      "from": "PortfolioId",
-      "to": "PortfolioId",
-    },
-@@ -802,6 +791,7 @@
+-     "from": "PortfolioId",
+-     "to": "PortfolioId",
+-   },
+-   "LegAsset": Object {
       "_enum": Object {
-        "Fungible": "FungibleToken",
-        "NonFungible": "NFTs",
-+       "OffChain": "OffChainAsset",
+-       "Fungible": "FungibleToken",
+-       "NonFungible": "NFTs",
++       "Fungible": "FungibleLeg",
++       "NonFungible": "NonFungibleLeg",
++       "OffChain": "OffChainLeg",
       },
     },
     "LegId": "u64",
-@@ -812,11 +802,6 @@
+@@ -812,11 +808,6 @@
         "PendingTokenLock": "",
       },
     },
@@ -60,26 +130,84 @@
     "LocalCAId": "u32",
     "LookupSource": "MultiAddress",
     "MaybeBlock": Object {
-@@ -857,6 +842,10 @@
-        "Invoice": "",
-      },
+@@ -849,13 +840,28 @@
+      "ids": "Vec<NFTId>",
+      "ticker": "Ticker",
     },
++   "NonFungibleLeg": Object {
++     "nfts": "NFTs",
++     "receiver": "PortfolioId",
++     "sender": "PortfolioId",
++   },
+    "NonFungibleType": Object {
+      "_enum": Object {
+        "Custom": "CustomAssetTypeId",
+        "Derivative": "",
+        "FixedIncome": "",
+        "Invoice": "",
++     },
++   },
 +   "OffChainAsset": Object {
 +     "amount": "Balance",
 +     "ticker": "Ticker",
-+   },
+    },
++   "OffChainLeg": Object {
++     "amount": "Balance",
++     "receiver_identity": "IdentityId",
++     "sender_identity": "IdentityId",
++     "ticker": "Ticker",
+    },
     "OffChainSignature": "MultiSignature",
     "PalletName": "Text",
-    "PalletPermissions": Object {
-@@ -1256,5 +1245,11 @@
-      "blinded_scope_did_hash": "RistrettoPoint",
-      "challenge_responses": "[Scalar; 2]",
-      "subtract_expressions_res": "RistrettoPoint",
-+   },
-+   "canTransferGranularReturn": Object {
-+     "_enum": Object {
-+       "Err": "DispatchError",
-+       "Ok": "GranularCanTransferResult",
-+     },
+@@ -982,6 +988,9 @@
+        "ContractsPutCode",
+        "CorporateBallotAttachBallot",
+        "CapitalDistributionDistribute",
++       "NFTCreateCollection",
++       "NFTMint",
++       "IdentityCreateChildIdentity",
+      ],
+    },
+    "Receipt": Object {
+@@ -1017,7 +1026,6 @@
+        "ForceValid",
+      ],
+    },
+-   "RistrettoPoint": "[u8; 32]",
+    "RpcDidRecords": Object {
+      "_enum": Object {
+        "IdNotFound": "Vec<u8>",
+@@ -1028,7 +1036,6 @@
+      "primary_key": "AccountId",
+      "secondary_keys": "Vec<SecondaryKey>",
+    },
+-   "Scalar": "[u8; 32]",
+    "ScheduleId": "u64",
+    "ScheduleSpec": Object {
+      "period": "CalendarPeriod",
+@@ -1040,14 +1047,8 @@
+        "Custom": "Vec<u8>",
+        "Identity": "IdentityId",
+        "Ticker": "Ticker",
+-     },
+      },
+-   "ScopeClaimProof": Object {
+-     "proof_scope_id_cdd_id_match": "ZkProofData",
+-     "proof_scope_id_wellformed": "Signature",
+-     "scope_id": "RistrettoPoint",
+    },
+-   "ScopeId": "[u8; 32]",
+    "SecondaryKey": Object {
+      "key": "AccountId",
+      "permissions": "Permissions",
+@@ -1251,10 +1252,5 @@
+      "coeffInteger": "Balance",
+      "degree": "u8",
+      "negative": "bool",
+-   },
+-   "ZkProofData": Object {
+-     "blinded_scope_did_hash": "RistrettoPoint",
+-     "challenge_responses": "[Scalar; 2]",
+-     "subtract_expressions_res": "RistrettoPoint",
     },
   }

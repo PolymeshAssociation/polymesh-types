@@ -2,35 +2,39 @@ export default {
   AssetApi: [
     {
       methods: {
-        transfer_report: {
+        can_transfer_granular: {
           description:
-            "Returns a vector containing all errors for the transfer. An empty vec means there's no error.",
+            'Checks whether a transaction with given parameters can take place or not. The result is granular meaning each check is run and returned regardless of outcome.',
           params: [
             {
-              name: 'sender_portfolio',
+              name: 'from_custodian',
+              type: 'Option<IdentityId>',
+            },
+            {
+              name: 'from_portfolio',
               type: 'PortfolioId',
             },
             {
-              name: 'receiver_portfolio',
+              name: 'to_custodian',
+              type: 'Option<IdentityId>',
+            },
+            {
+              name: 'to_portfolio',
               type: 'PortfolioId',
             },
             {
-              name: 'asset_id',
-              type: 'AssetID',
+              name: 'ticker',
+              type: 'Ticker',
             },
             {
-              name: 'transfer_value',
+              name: 'value',
               type: 'Balance',
             },
-            {
-              name: 'skip_locked_check',
-              type: 'bool',
-            },
           ],
-          type: 'Vec<DispatchError>',
+          type: 'CanTransferGranularReturn',
         },
       },
-      version: 4,
+      version: 3,
     },
   ],
   GroupApi: [
@@ -66,6 +70,16 @@ export default {
             },
           ],
           type: 'CddStatus',
+        },
+        get_asset_did: {
+          description: 'function is used to query the given ticker DID',
+          params: [
+            {
+              name: 'ticker',
+              type: 'Ticker',
+            },
+          ],
+          type: 'AssetDidResult',
         },
         get_did_records: {
           description: 'Used to get the did record values for a given DID',
@@ -132,15 +146,15 @@ export default {
           type: 'Vec<IdentityClaim>',
         },
       },
-      version: 4,
+      version: 3,
     },
   ],
   NFTApi: [
     {
       methods: {
-        transfer_report: {
+        validate_nft_transfer: {
           description:
-            "Returns a vector containing all errors for the transfer. An empty vec means there's no error.",
+            'Verifies if and the sender and receiver are not the same, if both have valid balances, if the sender owns the nft, and if all compliance rules are being respected.',
           params: [
             {
               name: 'sender_portfolio',
@@ -154,15 +168,11 @@ export default {
               name: 'nfts',
               type: 'NFTs',
             },
-            {
-              name: 'skip_locked_check',
-              type: 'bool',
-            },
           ],
-          type: 'Vec<DispatchError>',
+          type: 'DispatchResult',
         },
       },
-      version: 2,
+      version: 1,
     },
   ],
   SettlementApi: [
@@ -177,7 +187,7 @@ export default {
               type: 'InstructionId',
             },
           ],
-          type: 'Option<ExecuteInstructionInfo>',
+          type: 'ExecuteInstructionInfo',
         },
         get_affirmation_count: {
           description:
@@ -221,7 +231,7 @@ export default {
           type: 'Vec<DispatchError>',
         },
       },
-      version: 2,
+      version: 1,
     },
   ],
   PipsApi: [
@@ -294,11 +304,11 @@ export default {
     {
       methods: {
         compliance_report: {
-          description: 'Checks all compliance requirements for the given asset_id.',
+          description: 'Checks all compliance requirements for the given ticker.',
           params: [
             {
-              name: 'asset_id',
-              type: 'AssetID',
+              name: 'ticker',
+              type: 'Ticker',
             },
             {
               name: 'sender_identity',
@@ -312,7 +322,7 @@ export default {
           type: 'Result<ComplianceReport, DispatchError>',
         },
       },
-      version: 2,
+      version: 1,
     },
   ],
 };

@@ -1,14 +1,15 @@
 - Expected
 + Received
 
+@@ -1,18 +1,9 @@
   Object {
--   "AGId": "u32",
+    "AGId": "u32",
 -   "AccountInfo": "AccountInfoWithDualRefCount",
 -   "Address": "MultiAddress",
--   "AffirmationCount": Object {
--     "offchain_count": "u32",
--     "receiver_asset_count": "AssetCount",
--     "sender_asset_count": "AssetCount",
+    "AffirmationCount": Object {
+      "offchain_count": "u32",
+      "receiver_asset_count": "AssetCount",
+      "sender_asset_count": "AssetCount",
 -   },
 -   "AffirmationStatus": Object {
 -     "_enum": Object {
@@ -16,34 +17,24 @@
 -       "Pending": "",
 -       "Unknown": "",
 -     },
--   },
--   "AgentGroup": Object {
--     "_enum": Object {
--       "Custom": "AGId",
--       "ExceptMeta": "",
--       "Full": "",
--       "PolymeshV1CAA": "",
--       "PolymeshV1PIA": "",
--     },
--   },
+    },
+    "AgentGroup": Object {
+      "_enum": Object {
+@@ -23,10 +14,6 @@
+        "PolymeshV1PIA": "",
+      },
+    },
 -   "AssetCompliance": Object {
 -     "paused": "bool",
 -     "requirements": "Vec<ComplianceRequirement>",
 -   },
--   "AssetComplianceResult": Object {
--     "paused": "bool",
--     "requirements": "Vec<ComplianceRequirementResult>",
--     "result": "bool",
--   },
--   "AssetCount": Object {
--     "fungible": "u32",
--     "non_fungible": "u32",
--     "off_chain": "u32",
--   },
--   "AssetDidResult": Object {
--     "_enum": Object {
--       "Err": "Vec<u8>",
--       "Ok": "IdentityId",
+    "AssetComplianceResult": Object {
+      "paused": "bool",
+      "requirements": "Vec<ComplianceRequirementResult>",
+@@ -41,84 +28,16 @@
+      "_enum": Object {
+        "Err": "Vec<u8>",
+        "Ok": "IdentityId",
 -     },
 -   },
 -   "AssetIdentifier": Object {
@@ -53,8 +44,8 @@
 -       "FIGI": "[u8; 12]",
 -       "ISIN": "[u8; 12]",
 -       "LEI": "[u8; 20]",
--     },
--   },
+      },
+    },
 -   "AssetMetadataDescription": "Text",
 -   "AssetMetadataGlobalKey": "u64",
 -   "AssetMetadataKey": Object {
@@ -90,22 +81,25 @@
 -       "TickerOwned": "",
 -     },
 -   },
--   "AssetPermissions": Object {
--     "_enum": Object {
++   "AssetID": "[u8; 16]",
+    "AssetPermissions": Object {
+      "_enum": Object {
 -       "Except": "Vec<Ticker>",
 -       "These": "Vec<Ticker>",
--       "Whole": "",
++       "Except": "Vec<AssetID>",
++       "These": "Vec<AssetID>",
+        "Whole": "",
 -     },
 -   },
 -   "AssetScope": Object {
 -     "_enum": Object {
 -       "Ticker": "Ticker",
--     },
+      },
 -   },
 -   "AssetTransferCompliance": Object {
 -     "paused": "bool",
 -     "requirements": "Vec<TransferCondition>",
--   },
+    },
 -   "AssetType": Object {
 -     "_enum": Object {
 -       "Commodity": "",
@@ -122,39 +116,32 @@
 -       "StructuredProduct": "",
 -     },
 -   },
--   "Authorization": Object {
--     "auth_id": "u64",
--     "authorization_data": "AuthorizationData",
--     "authorized_by": "IdentityId",
--     "expiry": "Option<Moment>",
--   },
--   "AuthorizationData": Object {
--     "_enum": Object {
--       "AddMultiSigSigner": "AccountId",
--       "AddRelayerPayingKey": "(AccountId, AccountId, Balance)",
--       "AttestPrimaryKeyRotation": "IdentityId",
+    "Authorization": Object {
+      "auth_id": "u64",
+      "authorization_data": "AuthorizationData",
+@@ -130,16 +49,15 @@
+        "AddMultiSigSigner": "AccountId",
+        "AddRelayerPayingKey": "(AccountId, AccountId, Balance)",
+        "AttestPrimaryKeyRotation": "IdentityId",
 -       "BecomeAgent": "(Ticker, AgentGroup)",
--       "JoinIdentity": "Permissions",
--       "PortfolioCustody": "PortfolioId",
--       "RotatePrimaryKey": "",
--       "RotatePrimaryKeyToSecondary": "Permissions",
++       "BecomeAgent": "(AssetID, AgentGroup)",
+        "JoinIdentity": "Permissions",
+        "PortfolioCustody": "PortfolioId",
+        "RotatePrimaryKey": "",
+        "RotatePrimaryKeyToSecondary": "Permissions",
 -       "TransferAssetOwnership": "Ticker",
--       "TransferTicker": "Ticker",
--     },
--   },
++       "TransferAssetOwnership": "AssetID",
+        "TransferTicker": "Ticker",
+      },
+    },
 -   "AuthorizationNonce": "u64",
--   "AuthorizationType": Object {
--     "_enum": Object {
--       "AddMultiSigSigner": "",
--       "AddRelayerPayingKey": "",
--       "AttestPrimaryKeyRotation": "",
--       "BecomeAgent": "",
--       "JoinIdentity": "",
--       "PortfolioCustody": "",
--       "RotatePrimaryKey": "",
--       "RotatePrimaryKeyToSecondary": "",
--       "TransferAssetOwnership": "",
--       "TransferTicker": "",
+    "AuthorizationType": Object {
+      "_enum": Object {
+        "AddMultiSigSigner": "",
+@@ -152,91 +70,12 @@
+        "RotatePrimaryKeyToSecondary": "",
+        "TransferAssetOwnership": "",
+        "TransferTicker": "",
 -     },
 -   },
 -   "BallotMeta": Object {
@@ -179,13 +166,13 @@
 -     "nonce": "u32",
 -     "recipient": "AccountId",
 -     "tx_hash": "H256",
--   },
+      },
 -   "BridgeTxDetail": Object {
 -     "amount": "Balance",
 -     "execution_block": "BlockNumber",
 -     "status": "BridgeTxStatus",
 -     "tx_hash": "H256",
--   },
+    },
 -   "BridgeTxStatus": Object {
 -     "_enum": Object {
 -       "Absent": "",
@@ -230,101 +217,77 @@
 -       "Year",
 -     ],
 -   },
--   "CanTransferGranularReturn": Object {
--     "_enum": Object {
--       "Err": "DispatchError",
--       "Ok": "GranularCanTransferResult",
+    "CanTransferGranularReturn": Object {
+      "_enum": Object {
+        "Err": "DispatchError",
+        "Ok": "GranularCanTransferResult",
 -     },
 -   },
 -   "CanTransferResult": Object {
 -     "_enum": Object {
 -       "Err": "Vec<u8>",
 -       "Ok": "u8",
--     },
--   },
--   "CappedFee": "u64",
--   "CddId": "[u8; 32]",
--   "CddStatus": Object {
--     "_enum": Object {
--       "Err": "Vec<u8>",
--       "Ok": "IdentityId",
--     },
--   },
+      },
+    },
+    "CappedFee": "u64",
+@@ -247,12 +86,6 @@
+        "Ok": "IdentityId",
+      },
+    },
 -   "CheckpointId": "u64",
 -   "CheckpointSchedule": Object {
 -     "period": "CalendarPeriod",
 -     "start": "Moment",
 -   },
 -   "ChoiceTitle": "Text",
--   "Claim": Object {
--     "_enum": Object {
--       "Accredited": "Scope",
--       "Affiliate": "Scope",
--       "Blocked": "Scope",
--       "BuyLockup": "Scope",
--       "Custom": "(CustomClaimTypeId, Option<Scope>)",
--       "CustomerDueDiligence": "CddId",
--       "Exempted": "Scope",
--       "Jurisdiction": "(CountryCode, Scope)",
--       "KnowYourCustomer": "Scope",
--       "SellLockup": "Scope",
+    "Claim": Object {
+      "_enum": Object {
+        "Accredited": "Scope",
+@@ -265,16 +98,8 @@
+        "Jurisdiction": "(CountryCode, Scope)",
+        "KnowYourCustomer": "Scope",
+        "SellLockup": "Scope",
 -     },
--   },
+      },
 -   "Claim1stKey": Object {
 -     "claim_type": "ClaimType",
 -     "target": "IdentityId",
--   },
+    },
 -   "Claim2ndKey": Object {
 -     "issuer": "IdentityId",
 -     "scope": "Option<Scope>",
 -   },
--   "ClaimType": Object {
--     "_enum": Object {
--       "Accredited": "",
--       "Affiliate": "",
--       "Blocked": "",
--       "BuyLockup": "",
--       "Custom": "CustomClaimTypeId",
--       "CustomerDueDiligence": "",
--       "Exempted": "",
--       "Jurisdiction": "",
--       "KnowYourCustomer": "",
--       "SellLockup": "",
+    "ClaimType": Object {
+      "_enum": Object {
+        "Accredited": "",
+@@ -287,23 +112,12 @@
+        "Jurisdiction": "",
+        "KnowYourCustomer": "",
+        "SellLockup": "",
 -     },
 -   },
 -   "Committee": Object {
 -     "_enum": Object {
 -       "Technical": "",
 -       "Upgrade": "",
--     },
+      },
+    },
+    "ComplianceReport": Object {
+      "any_requirement_satistifed": "bool",
+      "paused_compliance": "bool",
+      "requirements": "Vec<RequirementReport>",
 -   },
 -   "ComplianceRequirement": Object {
 -     "id": "u32",
 -     "receiver_conditions": "Vec<Condition>",
 -     "sender_conditions": "Vec<Condition>",
--   },
--   "ComplianceRequirementResult": Object {
--     "id": "u32",
--     "receiver_conditions": "Vec<ConditionResult>",
--     "result": "bool",
--     "sender_conditions": "Vec<ConditionResult>",
--   },
--   "Condition": Object {
--     "condition_type": "ConditionType",
--     "issuers": "Vec<TrustedIssuer>",
--   },
--   "ConditionResult": Object {
--     "condition": "Condition",
--     "result": "bool",
--   },
--   "ConditionType": Object {
--     "_enum": Object {
--       "IsAbsent": "Claim",
--       "IsAnyOf": "Vec<Claim>",
--       "IsIdentity": "TargetIdentity",
--       "IsNoneOf": "Vec<Claim>",
--       "IsPresent": "Claim",
--     },
+    },
+    "ComplianceRequirementResult": Object {
+      "id": "u32",
+@@ -331,14 +145,6 @@
+        "IsNoneOf": "Vec<Claim>",
+        "IsPresent": "Claim",
+      },
 -   },
 -   "CorporateAction": Object {
 -     "decl_date": "Moment",
@@ -333,263 +296,15 @@
 -     "record_date": "Option<RecordDate>",
 -     "targets": "TargetIdentities",
 -     "withholding_tax": "Vec<(IdentityId, Tax)>",
--   },
--   "CountryCode": Object {
--     "_enum": Array [
--       "AF",
--       "AX",
--       "AL",
--       "DZ",
--       "AS",
--       "AD",
--       "AO",
--       "AI",
--       "AQ",
--       "AG",
--       "AR",
--       "AM",
--       "AW",
--       "AU",
--       "AT",
--       "AZ",
--       "BS",
--       "BH",
--       "BD",
--       "BB",
--       "BY",
--       "BE",
--       "BZ",
--       "BJ",
--       "BM",
--       "BT",
--       "BO",
--       "BA",
--       "BW",
--       "BV",
--       "BR",
--       "VG",
--       "IO",
--       "BN",
--       "BG",
--       "BF",
--       "BI",
--       "KH",
--       "CM",
--       "CA",
--       "CV",
--       "KY",
--       "CF",
--       "TD",
--       "CL",
--       "CN",
--       "HK",
--       "MO",
--       "CX",
--       "CC",
--       "CO",
--       "KM",
--       "CG",
--       "CD",
--       "CK",
--       "CR",
--       "CI",
--       "HR",
--       "CU",
--       "CY",
--       "CZ",
--       "DK",
--       "DJ",
--       "DM",
--       "DO",
--       "EC",
--       "EG",
--       "SV",
--       "GQ",
--       "ER",
--       "EE",
--       "ET",
--       "FK",
--       "FO",
--       "FJ",
--       "FI",
--       "FR",
--       "GF",
--       "PF",
--       "TF",
--       "GA",
--       "GM",
--       "GE",
--       "DE",
--       "GH",
--       "GI",
--       "GR",
--       "GL",
--       "GD",
--       "GP",
--       "GU",
--       "GT",
--       "GG",
--       "GN",
--       "GW",
--       "GY",
--       "HT",
--       "HM",
--       "VA",
--       "HN",
--       "HU",
--       "IS",
--       "IN",
--       "ID",
--       "IR",
--       "IQ",
--       "IE",
--       "IM",
--       "IL",
--       "IT",
--       "JM",
--       "JP",
--       "JE",
--       "JO",
--       "KZ",
--       "KE",
--       "KI",
--       "KP",
--       "KR",
--       "KW",
--       "KG",
--       "LA",
--       "LV",
--       "LB",
--       "LS",
--       "LR",
--       "LY",
--       "LI",
--       "LT",
--       "LU",
--       "MK",
--       "MG",
--       "MW",
--       "MY",
--       "MV",
--       "ML",
--       "MT",
--       "MH",
--       "MQ",
--       "MR",
--       "MU",
--       "YT",
--       "MX",
--       "FM",
--       "MD",
--       "MC",
--       "MN",
--       "ME",
--       "MS",
--       "MA",
--       "MZ",
--       "MM",
--       "NA",
--       "NR",
--       "NP",
--       "NL",
--       "AN",
--       "NC",
--       "NZ",
--       "NI",
--       "NE",
--       "NG",
--       "NU",
--       "NF",
--       "MP",
--       "NO",
--       "OM",
--       "PK",
--       "PW",
--       "PS",
--       "PA",
--       "PG",
--       "PY",
--       "PE",
--       "PH",
--       "PN",
--       "PL",
--       "PT",
--       "PR",
--       "QA",
--       "RE",
--       "RO",
--       "RU",
--       "RW",
--       "BL",
--       "SH",
--       "KN",
--       "LC",
--       "MF",
--       "PM",
--       "VC",
--       "WS",
--       "SM",
--       "ST",
--       "SA",
--       "SN",
--       "RS",
--       "SC",
--       "SL",
--       "SG",
--       "SK",
--       "SI",
--       "SB",
--       "SO",
--       "ZA",
--       "GS",
--       "SS",
--       "ES",
--       "LK",
--       "SD",
--       "SR",
--       "SJ",
--       "SZ",
--       "SE",
--       "CH",
--       "SY",
--       "TW",
--       "TJ",
--       "TZ",
--       "TH",
--       "TL",
--       "TG",
--       "TK",
--       "TO",
--       "TT",
--       "TN",
--       "TR",
--       "TM",
--       "TC",
--       "TV",
--       "UG",
--       "UA",
--       "AE",
--       "GB",
--       "US",
--       "UM",
--       "UY",
--       "UZ",
--       "VU",
--       "VE",
--       "VN",
--       "VI",
--       "WF",
--       "EH",
--       "YE",
--       "ZM",
--       "ZW",
--       "BQ",
--       "CW",
--       "SX",
--     ],
--   },
+    },
+    "CountryCode": Object {
+      "_enum": Array [
+@@ -594,15 +400,7 @@
+        "SX",
+      ],
+    },
 -   "CustomAssetTypeId": "u32",
--   "CustomClaimTypeId": "u32",
+    "CustomClaimTypeId": "u32",
 -   "DepositInfo": Object {
 -     "amount": "Balance",
 -     "owner": "AccountId",
@@ -597,13 +312,13 @@
 -   "DidRecord": Object {
 -     "primary_key": "Option<AccountId>",
 -   },
--   "DidStatus": Object {
--     "_enum": Object {
--       "CddVerified": "",
--       "Exists": "",
--       "Unknown": "",
--     },
--   },
+    "DidStatus": Object {
+      "_enum": Object {
+        "CddVerified": "",
+@@ -610,53 +408,6 @@
+        "Unknown": "",
+      },
+    },
 -   "DispatchableName": "Text",
 -   "DispatchableNames": Object {
 -     "_enum": Object {
@@ -651,26 +366,31 @@
 -   "EthereumAddress": "[u8; 20]",
 -   "EventCounts": "Vec<u32>",
 -   "EventDid": "IdentityId",
--   "ExecuteInstructionInfo": Object {
--     "consumed_weight": "Weight",
--     "error": "Option<String>",
--     "fungible_tokens": "u32",
--     "non_fungible_tokens": "u32",
--     "off_chain_assets": "u32",
--   },
+    "ExecuteInstructionInfo": Object {
+      "consumed_weight": "Weight",
+      "error": "Option<String>",
+@@ -664,62 +415,27 @@
+      "non_fungible_tokens": "u32",
+      "off_chain_assets": "u32",
+    },
 -   "ExtrinsicPermissions": Object {
--     "_enum": Object {
++   "ExtrinsicName": "Text",
++   "ExtrinsicNames": Object {
+      "_enum": Object {
 -       "Except": "Vec<PalletPermissions>",
 -       "These": "Vec<PalletPermissions>",
--       "Whole": "",
--     },
--   },
++       "Except": "Vec<ExtrinsicName>",
++       "These": "Vec<ExtrinsicName>",
+        "Whole": "",
+      },
+    },
 -   "Fund": Object {
 -     "description": "FundDescription",
 -     "memo": "Option<Memo>",
 -   },
 -   "FundDescription": Object {
--     "_enum": Object {
++   "ExtrinsicPermissions": Object {
+      "_enum": Object {
 -       "Fungible": "FungibleToken",
 -       "NonFungible": "NFTs",
 -     },
@@ -698,51 +418,46 @@
 -       "Closed",
 -       "ClosedEarly",
 -     ],
--   },
++       "Except": "Vec<(PalletName, PalletPermissions)>",
++       "These": "Vec<(PalletName, PalletPermissions)>",
++       "Whole": "",
+      },
 -   "FundraiserTier": Object {
 -     "price": "Balance",
 -     "remaining": "Balance",
 -     "total": "Balance",
--   },
--   "FungibleLeg": Object {
--     "amount": "Balance",
--     "receiver": "PortfolioId",
--     "sender": "PortfolioId",
+    },
+    "FungibleLeg": Object {
+      "amount": "Balance",
++     "asset_id": "AssetID",
+      "receiver": "PortfolioId",
+      "sender": "PortfolioId",
 -     "ticker": "Ticker",
--   },
+    },
 -   "FungibleToken": Object {
 -     "amount": "Balance",
 -     "ticker": "Ticker",
 -   },
--   "GranularCanTransferResult": Object {
--     "asset_frozen": "bool",
--     "compliance_result": "AssetComplianceResult",
--     "consumed_weight": "Option<Weight>",
--     "invalid_granularity": "bool",
--     "invalid_receiver_cdd": "bool",
--     "invalid_sender_cdd": "bool",
--     "portfolio_validity_result": "PortfolioValidityResult",
--     "receiver_custodian_error": "bool",
--     "result": "bool",
--     "self_transfer": "bool",
--     "sender_custodian_error": "bool",
--     "sender_insufficient_balance": "bool",
--     "transfer_condition_result": "Vec<TransferConditionResult>",
--   },
+    "GranularCanTransferResult": Object {
+      "asset_frozen": "bool",
+      "compliance_result": "AssetComplianceResult",
+@@ -735,12 +451,6 @@
+      "sender_insufficient_balance": "bool",
+      "transfer_condition_result": "Vec<TransferConditionResult>",
+    },
 -   "HandledTxStatus": Object {
 -     "_enum": Object {
 -       "Error": "Text",
 -       "Success": "",
 -     },
 -   },
--   "IdentityClaim": Object {
--     "claim": "Claim",
--     "claim_issuer": "IdentityId",
--     "expiry": "Option<Moment>",
--     "issuance_date": "Moment",
--     "last_update_date": "Moment",
--   },
--   "IdentityId": "[u8; 32]",
+    "IdentityClaim": Object {
+      "claim": "Claim",
+      "claim_issuer": "IdentityId",
+@@ -749,176 +459,51 @@
+      "last_update_date": "Moment",
+    },
+    "IdentityId": "[u8; 32]",
 -   "IdentityRole": Object {
 -     "_enum": Array [
 -       "Issuer",
@@ -781,7 +496,7 @@
 -     "value_date": "Option<Moment>",
 -     "venue_id": "VenueId",
 -   },
--   "InstructionId": "u64",
+    "InstructionId": "u64",
 -   "InstructionStatus": Object {
 -     "_enum": Object {
 -       "Failed": "",
@@ -795,9 +510,9 @@
 -       "Unclaimed": "Balance",
 -     },
 -   },
--   "KeyIdentityData": Object {
--     "identity": "IdentityId",
--     "permissions": "Option<Permissions>",
+    "KeyIdentityData": Object {
+      "identity": "IdentityId",
+      "permissions": "Option<Permissions>",
 -   },
 -   "KeyRecord": Object {
 -     "_enum": Object {
@@ -805,14 +520,14 @@
 -       "PrimaryKey": "IdentityId",
 -       "SecondaryKey": "(IdentityId, Permissions)",
 -     },
--   },
--   "Leg": Object {
--     "_enum": Object {
--       "Fungible": "FungibleLeg",
--       "NonFungible": "NonFungibleLeg",
--       "OffChain": "OffChainLeg",
+    },
+    "Leg": Object {
+      "_enum": Object {
+        "Fungible": "FungibleLeg",
+        "NonFungible": "NonFungibleLeg",
+        "OffChain": "OffChainLeg",
 -     },
--   },
+      },
 -   "LegId": "u64",
 -   "LegStatus": Object {
 -     "_enum": Object {
@@ -820,7 +535,7 @@
 -       "ExecutionToBeSkipped": "(AccountId, u64)",
 -       "PendingTokenLock": "",
 -     },
--   },
+    },
 -   "LocalCAId": "u32",
 -   "LookupSource": "MultiAddress",
 -   "MaybeBlock": Object {
@@ -829,13 +544,13 @@
 -       "Some": "BlockNumber",
 -     },
 -   },
--   "Member": Object {
--     "expiry_at": "Option<Moment>",
--     "id": "IdentityId",
--     "inactive_from": "Option<Moment>",
--   },
+    "Member": Object {
+      "expiry_at": "Option<Moment>",
+      "id": "IdentityId",
+      "inactive_from": "Option<Moment>",
+    },
 -   "Memo": "[u8; 32]",
--   "Moment": "u64",
+    "Moment": "u64",
 -   "Motion": Object {
 -     "choices": "Vec<ChoiceTitle>",
 -     "info_link": "MotionInfoLink",
@@ -848,15 +563,16 @@
 -     "memo": "Option<Memo>",
 -     "ticker": "Ticker",
 -   },
--   "NFTId": "u64",
--   "NFTs": Object {
--     "ids": "Vec<NFTId>",
+    "NFTId": "u64",
+    "NFTs": Object {
++     "asset_id": "AssetID",
+      "ids": "Vec<NFTId>",
 -     "ticker": "Ticker",
--   },
--   "NonFungibleLeg": Object {
--     "nfts": "NFTs",
--     "receiver": "PortfolioId",
--     "sender": "PortfolioId",
+    },
+    "NonFungibleLeg": Object {
+      "nfts": "NFTs",
+      "receiver": "PortfolioId",
+      "sender": "PortfolioId",
 -   },
 -   "NonFungibleType": Object {
 -     "_enum": Object {
@@ -869,36 +585,38 @@
 -   "OffChainAsset": Object {
 -     "amount": "Balance",
 -     "ticker": "Ticker",
--   },
--   "OffChainLeg": Object {
--     "amount": "Balance",
--     "receiver_identity": "IdentityId",
--     "sender_identity": "IdentityId",
+    },
+    "OffChainLeg": Object {
+      "amount": "Balance",
++     "asset_id": "AssetID",
+      "receiver_identity": "IdentityId",
+      "sender_identity": "IdentityId",
 -     "ticker": "Ticker",
--   },
+    },
 -   "OffChainSignature": "MultiSignature",
--   "PalletName": "Text",
--   "PalletPermissions": Object {
+    "PalletName": "Text",
+    "PalletPermissions": Object {
 -     "dispatchable_names": "DispatchableNames",
 -     "pallet_name": "PalletName",
--   },
--   "Percentage": "Permill",
++     "extrinsics": "ExtrinsicNames",
+    },
+    "Percentage": "Permill",
 -   "PermissionedIdentityPrefs": Object {
 -     "intended_count": "u32",
 -     "running_count": "u32",
 -   },
--   "Permissions": Object {
--     "asset": "AssetPermissions",
--     "extrinsic": "ExtrinsicPermissions",
--     "portfolio": "PortfolioPermissions",
--   },
+    "Permissions": Object {
+      "asset": "AssetPermissions",
+      "extrinsic": "ExtrinsicPermissions",
+      "portfolio": "PortfolioPermissions",
+    },
 -   "Pip": Object {
 -     "id": "PipId",
 -     "proposal": "Call",
 -     "proposer": "Proposer",
 -   },
 -   "PipDescription": "Text",
--   "PipId": "u32",
+    "PipId": "u32",
 -   "PipsMetadata": Object {
 -     "created_at": "BlockNumber",
 -     "description": "Option<PipDescription>",
@@ -913,31 +631,21 @@
 -     "index": "u32",
 -     "nays": "Vec<IdentityId>",
 -   },
--   "PortfolioId": Object {
--     "did": "IdentityId",
--     "kind": "PortfolioKind",
--   },
--   "PortfolioKind": Object {
--     "_enum": Object {
--       "Default": "",
--       "User": "PortfolioNumber",
--     },
--   },
+    "PortfolioId": Object {
+      "did": "IdentityId",
+      "kind": "PortfolioKind",
+@@ -929,7 +514,6 @@
+        "User": "PortfolioNumber",
+      },
+    },
 -   "PortfolioName": "Text",
--   "PortfolioNumber": "u64",
--   "PortfolioPermissions": Object {
--     "_enum": Object {
--       "Except": "Vec<PortfolioId>",
--       "These": "Vec<PortfolioId>",
--       "Whole": "",
--     },
--   },
--   "PortfolioValidityResult": Object {
--     "receiver_is_same_portfolio": "bool",
--     "receiver_portfolio_does_not_exist": "bool",
--     "result": "bool",
--     "sender_insufficient_balance": "bool",
--     "sender_portfolio_does_not_exist": "bool",
+    "PortfolioNumber": "u64",
+    "PortfolioPermissions": Object {
+      "_enum": Object {
+@@ -944,54 +528,7 @@
+      "result": "bool",
+      "sender_insufficient_balance": "bool",
+      "sender_portfolio_does_not_exist": "bool",
 -   },
 -   "PosRatio": "(u32, u32)",
 -   "PreAuthorizedKeyInfo": Object {
@@ -960,7 +668,7 @@
 -     "expiry": "Option<Moment>",
 -     "rejections": "u64",
 -     "status": "ProposalStatus",
--   },
+    },
 -   "ProposalState": Object {
 -     "_enum": Array [
 -       "Pending",
@@ -986,25 +694,13 @@
 -       "Community": "AccountId",
 -     },
 -   },
--   "ProtocolOp": Object {
--     "_enum": Array [
--       "AssetRegisterTicker",
--       "AssetIssue",
--       "AssetAddDocuments",
--       "AssetCreateAsset",
--       "CheckpointCreateSchedule",
--       "ComplianceManagerAddComplianceRequirement",
--       "IdentityCddRegisterDid",
--       "IdentityAddClaim",
--       "IdentityAddSecondaryKeysWithAuthorization",
--       "PipsPropose",
--       "ContractsPutCode",
--       "CorporateBallotAttachBallot",
--       "CapitalDistributionDistribute",
--       "NFTCreateCollection",
--       "NFTMint",
--       "IdentityCreateChildIdentity",
--     ],
+    "ProtocolOp": Object {
+      "_enum": Array [
+        "AssetRegisterTicker",
+@@ -1011,46 +548,13 @@
+        "NFTMint",
+        "IdentityCreateChildIdentity",
+      ],
 -   },
 -   "Receipt": Object {
 -     "amount": "Balance",
@@ -1024,7 +720,7 @@
 -   "RecordDate": Object {
 -     "checkpoint": "CACheckpoint",
 -     "date": "Moment",
--   },
+    },
 -   "RecordDateSpec": Object {
 -     "_enum": Object {
 -       "Existing": "CheckpointId",
@@ -1032,6 +728,12 @@
 -       "Scheduled": "Moment",
 -     },
 -   },
+    "RequirementReport": Object {
+      "id": "u32",
+      "receiver_conditions": "Vec<ConditionReport>",
+      "requirement_satisfied": "bool",
+      "sender_conditions": "Vec<ConditionReport>",
+    },
 -   "RestrictionResult": Object {
 -     "_enum": Array [
 -       "Valid",
@@ -1039,33 +741,32 @@
 -       "ForceValid",
 -     ],
 -   },
--   "RpcDidRecords": Object {
--     "_enum": Object {
--       "IdNotFound": "Vec<u8>",
--       "Success": "RpcDidRecordsSuccess",
--     },
--   },
--   "RpcDidRecordsSuccess": Object {
--     "primary_key": "AccountId",
--     "secondary_keys": "Vec<SecondaryKey>",
+    "RpcDidRecords": Object {
+      "_enum": Object {
+        "IdNotFound": "Vec<u8>",
+@@ -1060,144 +564,38 @@
+    "RpcDidRecordsSuccess": Object {
+      "primary_key": "AccountId",
+      "secondary_keys": "Vec<SecondaryKey>",
 -   },
 -   "ScheduleId": "u64",
 -   "ScheduleSpec": Object {
 -     "period": "CalendarPeriod",
 -     "remaining": "u32",
 -     "start": "Option<Moment>",
--   },
--   "Scope": Object {
--     "_enum": Object {
--       "Custom": "Vec<u8>",
--       "Identity": "IdentityId",
+    },
+    "Scope": Object {
+      "_enum": Object {
++       "Asset": "AssetID",
+        "Custom": "Vec<u8>",
+        "Identity": "IdentityId",
 -       "Ticker": "Ticker",
--     },
--   },
--   "SecondaryKey": Object {
--     "key": "AccountId",
--     "permissions": "Permissions",
--   },
+      },
+    },
+    "SecondaryKey": Object {
+      "key": "AccountId",
+      "permissions": "Permissions",
+    },
 -   "SecondaryKeyWithAuth": Object {
 -     "auth_signature": "H512",
 -     "secondary_key": "SecondaryKey",
@@ -1083,12 +784,12 @@
 -       "SettleOnBlock": "BlockNumber",
 -     },
 -   },
--   "Signatory": Object {
--     "_enum": Object {
--       "Account": "AccountId",
--       "Identity": "IdentityId",
--     },
--   },
+    "Signatory": Object {
+      "_enum": Object {
+        "Account": "AccountId",
+        "Identity": "IdentityId",
+      },
+    },
 -   "SkippedCount": "u8",
 -   "SlashingSwitch": Object {
 -     "_enum": Array [
@@ -1124,11 +825,11 @@
 -       "NoClaimStat": "",
 -     },
 -   },
--   "StatClaim": Object {
--     "_enum": Object {
--       "Accredited": "bool",
--       "Affiliate": "bool",
--       "Jurisdiction": "Option<CountryCode>",
+    "StatClaim": Object {
+      "_enum": Object {
+        "Accredited": "bool",
+        "Affiliate": "bool",
+        "Jurisdiction": "Option<CountryCode>",
 -     },
 -   },
 -   "StatOpType": Object {
@@ -1150,7 +851,7 @@
 -     "id": "ScheduleId",
 -     "remaining": "u32",
 -     "schedule": "CheckpointSchedule",
--   },
+      },
 -   "Subsidy": Object {
 -     "paying_key": "AccountId",
 -     "remaining": "Balance",
@@ -1163,21 +864,21 @@
 -   "TargetIdentities": Object {
 -     "identities": "Vec<IdentityId>",
 -     "treatment": "TargetTreatment",
--   },
--   "TargetIdentity": Object {
--     "_enum": Object {
--       "ExternalAgent": "",
--       "Specific": "IdentityId",
+    },
+    "TargetIdentity": Object {
+      "_enum": Object {
+        "ExternalAgent": "",
+        "Specific": "IdentityId",
 -     },
--   },
+      },
 -   "TargetTreatment": Object {
 -     "_enum": Array [
 -       "Include",
 -       "Exclude",
 -     ],
--   },
+    },
 -   "Tax": "Permill",
--   "Ticker": "[u8; 12]",
+    "Ticker": "[u8; 12]",
 -   "TickerRegistration": Object {
 -     "expiry": "Option<Moment>",
 -     "owner": "IdentityId",
@@ -1186,32 +887,25 @@
 -     "max_ticker_length": "u8",
 -     "registration_length": "Option<Moment>",
 -   },
--   "TransferCondition": Object {
--     "_enum": Object {
--       "ClaimCount": "(StatClaim, IdentityId, u64, Option<u64>)",
--       "ClaimOwnership": "(StatClaim, IdentityId, Percentage, Percentage)",
--       "MaxInvestorCount": "u64",
--       "MaxInvestorOwnership": "Percentage",
--     },
--   },
+    "TransferCondition": Object {
+      "_enum": Object {
+        "ClaimCount": "(StatClaim, IdentityId, u64, Option<u64>)",
+@@ -1206,11 +604,6 @@
+        "MaxInvestorOwnership": "Percentage",
+      },
+    },
 -   "TransferConditionExemptKey": Object {
 -     "asset": "AssetScope",
 -     "claim_type": "Option<ClaimType>",
 -     "op": "StatOpType",
 -   },
--   "TransferConditionResult": Object {
--     "condition": "TransferCondition",
--     "result": "bool",
--   },
--   "TrustedFor": Object {
--     "_enum": Object {
--       "Any": "",
--       "Specific": "Vec<ClaimType>",
--     },
--   },
--   "TrustedIssuer": Object {
--     "issuer": "IdentityId",
--     "trusted_for": "TrustedFor",
+    "TransferConditionResult": Object {
+      "condition": "TransferCondition",
+      "result": "bool",
+@@ -1224,32 +617,7 @@
+    "TrustedIssuer": Object {
+      "issuer": "IdentityId",
+      "trusted_for": "TrustedFor",
 -   },
 -   "UniqueCall": Object {
 -     "call": "Call",
@@ -1231,22 +925,20 @@
 -       "Sto",
 -       "Exchange",
 -     ],
--   },
+    },
 -   "Version": "u8",
 -   "Vote": "(bool, Balance)",
 -   "VoteByPip": Object {
 -     "pip": "PipId",
 -     "vote": "Vote",
 -   },
--   "VoteCount": Object {
--     "_enum": Object {
--       "ProposalFound": "VoteCountProposalFound",
--       "ProposalNotFound": "",
--     },
--   },
--   "VoteCountProposalFound": Object {
--     "ayes": "u64",
--     "nays": "u64",
+    "VoteCount": Object {
+      "_enum": Object {
+        "ProposalFound": "VoteCountProposalFound",
+@@ -1259,23 +627,5 @@
+    "VoteCountProposalFound": Object {
+      "ayes": "u64",
+      "nays": "u64",
 -   },
 -   "VotingResult": Object {
 -     "ayes_count": "u32",
@@ -1265,8 +957,5 @@
 -     "coeffInteger": "Balance",
 -     "degree": "u8",
 -     "negative": "bool",
--   },
-+   "AccountInfo": "AccountInfoWithRefCount",
-+   "Address": "IndicesLookupSource",
-+   "LookupSource": "IndicesLookupSource",
+    },
   }
