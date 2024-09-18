@@ -7,8 +7,8 @@ import { ComplianceApiV2 } from './complianceApi/v2';
 import { GroupApiV1 } from './groupApi/v1';
 import { IdentityApiV3 } from './identityApi/v3';
 import { IdentityApiV4 } from './identityApi/v4';
-import { NftApiV1 } from './nftApi/v1';
-import { NftApiV2 } from './nftApi/v2';
+import { NFTApiV1 } from './nftApi/v1';
+import { NFTApiV2 } from './nftApi/v2';
 import { PipsApiV1 } from './pipsApi/v1';
 import { ProtocolApiV1 } from './protocolApi/v1';
 import { SettlementApiV1 } from './settlementApi/v1';
@@ -29,9 +29,9 @@ export const runtime: DefinitionsCall = {
     { methods: IdentityApiV4, version: 4 },
     { methods: IdentityApiV3, version: 3 },
   ],
-  NftApi: [
-    { methods: NftApiV2, version: 2 },
-    { methods: NftApiV1, version: 1 },
+  NFTApi: [
+    { methods: NFTApiV2, version: 2 },
+    { methods: NFTApiV1, version: 1 },
   ],
   PipsApi: [{ methods: PipsApiV1, version: 1 }],
   ProtocolFeeApi: [{ methods: ProtocolApiV1, version: 1 }],

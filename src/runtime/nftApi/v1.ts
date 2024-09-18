@@ -1,6 +1,6 @@
 import { DefinitionCall } from '@polkadot/types/types';
 
-export const NftApiV1: Record<string, DefinitionCall> = {
+export const NFTApiV1: Record<string, DefinitionCall> = {
   validate_nft_transfer: {
     description:
       'Verifies if and the sender and receiver are not the same, if both have valid balances, if the sender owns the nft, and if all compliance rules are being respected.',
