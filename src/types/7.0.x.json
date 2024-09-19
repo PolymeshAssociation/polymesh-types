@@ -615,7 +615,7 @@
     "offchain_count": "u32"
   },
   "ComplianceReport": {
-    "any_requirement_satistifed": "bool",
+    "any_requirement_satisfied": "bool",
     "paused_compliance": "bool",
     "requirements": "Vec<RequirementReport>"
   },
