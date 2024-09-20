@@ -14,6 +14,7 @@ import { ProtocolApiV1 } from './protocolApi/v1';
 import { SettlementApiV1 } from './settlementApi/v1';
 import { SettlementApiV2 } from './settlementApi/v2';
 import { StakingApiV1 } from './stakingApi/v1';
+import { StatisticsApiV0 } from './statisticsApi/v0';
 
 export const runtime: DefinitionsCall = {
   AssetApi: [
@@ -40,6 +41,7 @@ export const runtime: DefinitionsCall = {
     { methods: SettlementApiV1, version: 1 },
   ],
   StakingApi: [{ methods: StakingApiV1, version: 1 }],
+  StatisticsApi: [{ methods: StatisticsApiV0, version: 0 }],
 };
 
 export default runtime;
