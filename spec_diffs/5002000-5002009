@@ -1,7 +1,7 @@
 - Expected
 + Received
 
-@@ -242,10 +242,11 @@
+@@ -243,10 +243,11 @@
         "Affiliate": "Scope",
         "Blocked": "Scope",
         "BuyLockup": "Scope",
@@ -14,7 +14,7 @@
         "Jurisdiction": "(CountryCode, Scope)",
         "KnowYourCustomer": "Scope",
         "NoData": "",
-@@ -266,6 +267,7 @@
+@@ -267,6 +268,7 @@
         "Affiliate": "",
         "Blocked": "",
         "BuyLockup": "",
@@ -22,7 +22,7 @@
         "CustomerDueDiligence": "",
         "Exempted": "",
         "InvestorUniqueness": "",
-@@ -583,6 +585,7 @@
+@@ -584,6 +586,7 @@
       ],
     },
     "CustomAssetTypeId": "u32",
@@ -30,7 +30,7 @@
     "DepositInfo": Object {
       "amount": "Balance",
       "owner": "AccountId",
-@@ -644,10 +647,6 @@
+@@ -645,10 +648,6 @@
     "EthereumAddress": "[u8; 20]",
     "EventCounts": "Vec<u32>",
     "EventDid": "IdentityId",
@@ -41,7 +41,7 @@
     "ExtrinsicPermissions": Object {
       "_enum": Object {
         "Except": "Vec<PalletPermissions>",
-@@ -800,6 +799,11 @@
+@@ -801,6 +800,11 @@
         "Some": "BlockNumber",
       },
     },
@@ -53,7 +53,7 @@
     "Memo": "[u8; 32]",
     "Moment": "u64",
     "Motion": Object {
-@@ -1021,6 +1025,7 @@
+@@ -1022,6 +1026,7 @@
     },
     "SettlementType": Object {
       "_enum": Object {

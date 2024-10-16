@@ -9,7 +9,7 @@
         "REIT": "",
         "RevenueShareAgreement": "",
         "StableCoin": "",
-@@ -654,6 +655,16 @@
+@@ -655,6 +656,16 @@
         "Whole": "",
       },
     },
@@ -26,7 +26,7 @@
     "FundingRoundName": "Text",
     "Fundraiser": Object {
       "creator": "IdentityId",
-@@ -683,6 +694,10 @@
+@@ -684,6 +695,10 @@
       "remaining": "Balance",
       "total": "Balance",
     },
@@ -37,7 +37,7 @@
     "GranularCanTransferResult": Object {
       "asset_frozen": "bool",
       "compliance_result": "AssetComplianceResult",
-@@ -783,6 +798,12 @@
+@@ -784,6 +799,12 @@
       "from": "PortfolioId",
       "to": "PortfolioId",
     },
@@ -50,7 +50,7 @@
     "LegId": "u64",
     "LegStatus": Object {
       "_enum": Object {
-@@ -791,6 +812,11 @@
+@@ -792,6 +813,11 @@
         "PendingTokenLock": "",
       },
     },
@@ -62,7 +62,7 @@
     "LocalCAId": "u32",
     "LookupSource": "MultiAddress",
     "MaybeBlock": Object {
-@@ -817,6 +843,19 @@
+@@ -818,6 +844,19 @@
       "amount": "Balance",
       "memo": "Option<Memo>",
       "ticker": "Ticker",

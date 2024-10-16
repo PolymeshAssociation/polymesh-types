@@ -7,7 +7,7 @@ export const AssetApiV4: Record<string, DefinitionCall> = {
     params: [
       { name: 'sender_portfolio', type: 'PortfolioId' },
       { name: 'receiver_portfolio', type: 'PortfolioId' },
-      { name: 'asset_id', type: 'AssetID' },
+      { name: 'asset_id', type: 'AssetId' },
       { name: 'transfer_value', type: 'Balance' },
       { name: 'skip_locked_check', type: 'bool' },
     ],

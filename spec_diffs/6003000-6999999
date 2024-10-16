@@ -14,7 +14,7 @@
     },
     "AssetDidResult": Object {
       "_enum": Object {
-@@ -295,6 +295,11 @@
+@@ -296,6 +296,11 @@
         "Upgrade": "",
       },
     },
@@ -26,7 +26,7 @@
     "ComplianceRequirement": Object {
       "id": "u32",
       "receiver_conditions": "Vec<Condition>",
-@@ -310,6 +315,10 @@
+@@ -311,6 +316,10 @@
       "condition_type": "ConditionType",
       "issuers": "Vec<TrustedIssuer>",
     },
@@ -37,7 +37,7 @@
     "ConditionResult": Object {
       "condition": "Condition",
       "result": "bool",
-@@ -1027,7 +1036,13 @@
+@@ -1028,7 +1037,13 @@
         "Existing": "CheckpointId",
         "ExistingSchedule": "ScheduleId",
         "Scheduled": "Moment",

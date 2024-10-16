@@ -1,7 +1,7 @@
 - Expected
 + Received
 
-@@ -217,6 +217,12 @@
+@@ -218,6 +218,12 @@
         "Year",
       ],
     },
@@ -14,7 +14,7 @@
     "CanTransferResult": Object {
       "_enum": Object {
         "Err": "Vec<u8>",
-@@ -246,11 +252,8 @@
+@@ -247,11 +253,8 @@
         "Custom": "(CustomClaimTypeId, Option<Scope>)",
         "CustomerDueDiligence": "CddId",
         "Exempted": "Scope",
@@ -26,7 +26,7 @@
         "SellLockup": "Scope",
       },
     },
-@@ -271,24 +274,11 @@
+@@ -272,24 +275,11 @@
         "Custom": "CustomClaimTypeId",
         "CustomerDueDiligence": "",
         "Exempted": "",
@@ -51,7 +51,7 @@
     "Committee": Object {
       "_enum": Object {
         "Technical": "",
-@@ -648,6 +638,13 @@
+@@ -649,6 +639,13 @@
     "EthereumAddress": "[u8; 20]",
     "EventCounts": "Vec<u32>",
     "EventDid": "IdentityId",
@@ -65,7 +65,7 @@
     "ExtrinsicPermissions": Object {
       "_enum": Object {
         "Except": "Vec<PalletPermissions>",
-@@ -694,6 +691,12 @@
+@@ -695,6 +692,12 @@
       "remaining": "Balance",
       "total": "Balance",
     },
@@ -78,7 +78,7 @@
     "FungibleToken": Object {
       "amount": "Balance",
       "ticker": "Ticker",
-@@ -701,10 +704,10 @@
+@@ -702,10 +705,10 @@
     "GranularCanTransferResult": Object {
       "asset_frozen": "bool",
       "compliance_result": "AssetComplianceResult",
@@ -90,7 +90,7 @@
       "portfolio_validity_result": "PortfolioValidityResult",
       "receiver_custodian_error": "bool",
       "result": "bool",
-@@ -773,8 +776,6 @@
+@@ -774,8 +777,6 @@
         "Unknown": "",
       },
     },
@@ -99,7 +99,7 @@
     "ItnRewardStatus": Object {
       "_enum": Object {
         "Claimed": "",
-@@ -793,15 +794,10 @@
+@@ -794,15 +795,10 @@
       },
     },
     "Leg": Object {
@@ -118,7 +118,7 @@
       },
     },
     "LegId": "u64",
-@@ -812,11 +808,6 @@
+@@ -813,11 +809,6 @@
         "PendingTokenLock": "",
       },
     },
@@ -130,7 +130,7 @@
     "LocalCAId": "u32",
     "LookupSource": "MultiAddress",
     "MaybeBlock": Object {
-@@ -849,13 +840,28 @@
+@@ -850,13 +841,28 @@
       "ids": "Vec<NFTId>",
       "ticker": "Ticker",
     },
@@ -159,7 +159,7 @@
     },
     "OffChainSignature": "MultiSignature",
     "PalletName": "Text",
-@@ -982,6 +988,9 @@
+@@ -983,6 +989,9 @@
         "ContractsPutCode",
         "CorporateBallotAttachBallot",
         "CapitalDistributionDistribute",
@@ -169,7 +169,7 @@
       ],
     },
     "Receipt": Object {
-@@ -1017,7 +1026,6 @@
+@@ -1018,7 +1027,6 @@
         "ForceValid",
       ],
     },
@@ -177,7 +177,7 @@
     "RpcDidRecords": Object {
       "_enum": Object {
         "IdNotFound": "Vec<u8>",
-@@ -1028,7 +1036,6 @@
+@@ -1029,7 +1037,6 @@
       "primary_key": "AccountId",
       "secondary_keys": "Vec<SecondaryKey>",
     },
@@ -185,7 +185,7 @@
     "ScheduleId": "u64",
     "ScheduleSpec": Object {
       "period": "CalendarPeriod",
-@@ -1040,14 +1047,8 @@
+@@ -1041,14 +1048,8 @@
         "Custom": "Vec<u8>",
         "Identity": "IdentityId",
         "Ticker": "Ticker",
@@ -200,7 +200,7 @@
     "SecondaryKey": Object {
       "key": "AccountId",
       "permissions": "Permissions",
-@@ -1251,10 +1252,5 @@
+@@ -1252,10 +1253,5 @@
       "coeffInteger": "Balance",
       "degree": "u8",
       "negative": "bool",

@@ -126,6 +126,7 @@
 -     "auth_id": "u64",
 -     "authorization_data": "AuthorizationData",
 -     "authorized_by": "IdentityId",
+-     "count": "u32",
 -     "expiry": "Option<Moment>",
 -   },
 -   "AuthorizationData": Object {
