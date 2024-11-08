@@ -60,4 +60,5 @@ export default [
    * Polymesh Private spec - These may need their own package in the future
    */
   { minmax: [1000000, 1999999], types: sixOneX }, // private v1 has the same spec as public 6.1/6.2
+  { minmax: [2000000, 2999999], types: sevenZeroX }, // private v2 has the same spec as public v7
 ];
