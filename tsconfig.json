@@ -4,7 +4,9 @@
     "rootDir": "src",
     "baseUrl": ".",
     "paths": {
-      "~/*": ["src/*"]
+      "~/*": ["src/*"],
+      "@polkadot/api/augment": ["src/generated-types/augment-api.ts"],
+      "@polkadot/types/augment": ["src/generated-types/augment-types.ts"]
     },
     "plugins": [
       {
@@ -22,10 +24,9 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "lib": ["es2017", "dom"],
-    "typeRoots": ["./node_modules/@types", "./src/typings"]
+    "typeRoots": ["./node_modules/@types", "./src/typings"],
+    "skipLibCheck": true
   },
-  "include": [
-    "src/**/*",
-  ],
+  "include": ["src/**/*"],
   "exclude": ["dist", "node_modules", "test.ts"]
 }

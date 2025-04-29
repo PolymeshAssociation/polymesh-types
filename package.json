@@ -15,20 +15,31 @@
   "scripts": {
     "build:ts": "tsc -b",
     "commit": "npx git-cz",
-    "diff_versions": "ts-node scripts/diff_versions",
+    "diff_versions": "ts-node scripts/diff_versions.ts",
     "semantic-release": "semantic-release",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
-    "format": "cross-env prettier-eslint $PWD\"/src/**/*.{ts,tsx,js,jsx,json,css,md}\" --write"
+    "format": "cross-env prettier-eslint $PWD\"/src/**/*.{ts,tsx,js,jsx,json,css,md}\" --write",
+    "generate:defs": "node --loader @polkadot/dev-ts node_modules/.bin/polkadot-types-from-defs --endpoint metadata.json --package . --input ./src/generated-types",
+    "generate:meta": "node --loader @polkadot/dev-ts node_modules/.bin/polkadot-types-from-chain --endpoint metadata.json --package . --output ./src/generated-types --strict",
+    "fetch:definitions": "ts-node scripts/fetchDefinitions.ts",
+    "generate:types": "rimraf src/generated-types/* && yarn fetch:definitions && yarn generate:defs && yarn generate:meta"
+  },
+  "dependencies": {
+    "@polkadot/api": "^10.13.1",
+    "@polkadot/types": "^10.13.1"
   },
   "devDependencies": {
     "@commitlint/cli": "13.1.0",
     "@commitlint/config-conventional": "13.1.0",
-    "@polkadot/typegen": "^10.1.2",
+    "@polkadot/dev": "^0.83.2",
+    "@polkadot/dev-ts": "^0.83.2",
+    "@polkadot/typegen": "^10.13.1",
     "@semantic-release/changelog": "^6.0.2",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/github": "^8.0.7",
     "@semantic-release/npm": "^9.0.2",
     "@types/jest": "26.0.24",
+    "@types/lodash": "^4.17.16",
     "@types/node": "^18.15.3",
     "@typescript-eslint/eslint-plugin": "4.29.0",
     "@typescript-eslint/parser": "4.29.0",
@@ -48,9 +59,11 @@
     "jest": "27.0.6",
     "jest-diff": "^27.2.0",
     "lint-staged": "11.1.1",
+    "lodash": "^4.17.21",
     "prettier": "2.3.2",
     "prettier-eslint": "13.0.0",
     "prettier-eslint-cli": "5.0.1",
+    "rimraf": "^6.0.1",
     "semantic-release": "^19.0.5",
     "ts-jest": "27.0.4",
     "ts-node": "^10.9.1",
@@ -65,5 +78,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }
