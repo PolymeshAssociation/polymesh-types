@@ -5,8 +5,9 @@
 // this is required to allow for ambient/previous definitions
 import '@polkadot/api-base/types/calls';
 
+import type { AffirmationCount, Authorization, AuthorizationType, CappedFee, CddStatus, ComplianceReport, DidStatus, ExecuteInstructionInfo, IdentityClaim, IdentityId, InstructionId, KeyIdentityData, Leg, Member, NFTs, PipId, PortfolioId, ProtocolOp, RpcDidRecords, Signatory, TransferCondition, VoteCount } from './polymesh';
 import type { ApiTypes, AugmentedCall, DecoratedCallBase } from '@polkadot/api-base/types';
-import type { Bytes, Null, Option, Vec, u32 } from '@polkadot/types-codec';
+import type { Bytes, Null, Option, Result, Vec, bool, u32, u64 } from '@polkadot/types-codec';
 import type { AnyNumber, IMethod, ITuple } from '@polkadot/types-codec/types';
 import type { BabeEquivocationProof, BabeGenesisConfiguration, Epoch, OpaqueKeyOwnershipProof } from '@polkadot/types/interfaces/babe';
 import type { CheckInherentsResult, InherentData } from '@polkadot/types/interfaces/blockbuilder';
@@ -17,9 +18,9 @@ import type { Extrinsic } from '@polkadot/types/interfaces/extrinsics';
 import type { AuthorityList, GrandpaEquivocationProof, SetId } from '@polkadot/types/interfaces/grandpa';
 import type { OpaqueMetadata } from '@polkadot/types/interfaces/metadata';
 import type { FeeDetails, RuntimeDispatchInfo } from '@polkadot/types/interfaces/payment';
-import type { AccountId, Balance, Block, Call, Header, Index, KeyTypeId, Slot, WeightV2 } from '@polkadot/types/interfaces/runtime';
+import type { AccountId, AssetId, Balance, Block, Call, Header, Index, KeyTypeId, Perbill, Slot, WeightV2 } from '@polkadot/types/interfaces/runtime';
 import type { RuntimeVersion } from '@polkadot/types/interfaces/state';
-import type { ApplyExtrinsicResult } from '@polkadot/types/interfaces/system';
+import type { ApplyExtrinsicResult, DispatchError } from '@polkadot/types/interfaces/system';
 import type { TransactionSource, TransactionValidity } from '@polkadot/types/interfaces/txqueue';
 import type { IExtrinsic, Observable } from '@polkadot/types/types';
 
@@ -34,6 +35,13 @@ declare module '@polkadot/api-base/types/calls' {
        * The API to query account nonce (aka transaction index)
        **/
       accountNonce: AugmentedCall<ApiType, (accountId: AccountId | string | Uint8Array) => Observable<Index>>;
+    };
+    /** 0xbb6ba9053c5c9d78/4 */
+    assetApi: {
+      /**
+       * Returns a vector containing all errors for the transfer. An empty vec means there's no error.
+       **/
+      transferReport: AugmentedCall<ApiType, (sender_portfolio: PortfolioId | { did?: any; kind?: any } | string | Uint8Array, receiver_portfolio: PortfolioId | { did?: any; kind?: any } | string | Uint8Array, asset_id: AssetId | string | Uint8Array, transfer_value: Balance | AnyNumber | Uint8Array, skip_locked_check: bool | boolean | Uint8Array) => Observable<Vec<DispatchError>>>;
     };
     /** 0x687ad44ad37f03c2/1 */
     authorityDiscoveryApi: {
@@ -88,6 +96,13 @@ declare module '@polkadot/api-base/types/calls' {
        **/
       inherentExtrinsics: AugmentedCall<ApiType, (inherent: InherentData | { data?: any } | string | Uint8Array) => Observable<Vec<Extrinsic>>>;
     };
+    /** 0x98cf18c375950e1f/2 */
+    complianceApi: {
+      /**
+       * Checks all compliance requirements for the given asset_id.
+       **/
+      complianceReport: AugmentedCall<ApiType, (asset_id: AssetId | string | Uint8Array, sender_identity: IdentityId | string | Uint8Array, receiver_identity: IdentityId | string | Uint8Array) => Observable<Result<ComplianceReport, DispatchError>>>;
+    };
     /** 0x68b66ba122c93fa7/2 */
     contractsApi: {
       /**
@@ -141,6 +156,44 @@ declare module '@polkadot/api-base/types/calls' {
        **/
       submitReportEquivocationUnsignedExtrinsic: AugmentedCall<ApiType, (equivocationProof: GrandpaEquivocationProof | { setId?: any; equivocation?: any } | string | Uint8Array, keyOwnerProof: OpaqueKeyOwnershipProof | string | Uint8Array) => Observable<Option<Null>>>;
     };
+    /** 0x595ac34c5ea1f5fe/1 */
+    groupApi: {
+      /**
+       * Get the CDD members
+       **/
+      getCddValidMembers: AugmentedCall<ApiType, () => Observable<Vec<Member>>>;
+      /**
+       * Get the GC members
+       **/
+      getGcValidMembers: AugmentedCall<ApiType, () => Observable<Vec<Member>>>;
+    };
+    /** 0xf28e8080b6e2dfd0/4 */
+    identityApi: {
+      /**
+       * Used to get the did record values for a given DID
+       **/
+      getDidRecords: AugmentedCall<ApiType, (did: IdentityId | string | Uint8Array) => Observable<RpcDidRecords>>;
+      /**
+       * Retrieve status of the DID
+       **/
+      getDidStatus: AugmentedCall<ApiType, (did: Vec<IdentityId> | (IdentityId | string | Uint8Array)[]) => Observable<Vec<DidStatus>>>;
+      /**
+       * Retrieve authorizations data for a given signatory and filtered using the given authorization type
+       **/
+      getFilteredAuthorizations: AugmentedCall<ApiType, (signatory: Signatory | { Identity: any } | { Account: any } | string | Uint8Array, allow_expired: bool | boolean | Uint8Array, auth_type: Option<AuthorizationType> | null | Uint8Array | AuthorizationType | 'AttestPrimaryKeyRotation' | 'RotatePrimaryKey' | 'TransferTicker' | 'AddMultiSigSigner' | 'TransferAssetOwnership' | 'JoinIdentity' | 'PortfolioCustody' | 'BecomeAgent' | 'AddRelayerPayingKey' | 'RotatePrimaryKeyToSecondary' | number) => Observable<Vec<Authorization>>>;
+      /**
+       * Query relation between a signing key and a DID
+       **/
+      getKeyIdentityData: AugmentedCall<ApiType, (acc: AccountId | string | Uint8Array) => Observable<Option<KeyIdentityData>>>;
+      /**
+       * use to tell whether the given did has valid cdd claim or not
+       **/
+      isIdentityHasValidCdd: AugmentedCall<ApiType, (did: IdentityId | string | Uint8Array, buffer_time: Option<u64> | null | Uint8Array | u64 | AnyNumber) => Observable<CddStatus>>;
+      /**
+       * Returns all valid IdentityClaim of type CustomerDueDiligence for the given target_identity
+       **/
+      validCddClaims: AugmentedCall<ApiType, (target_identity: IdentityId | string | Uint8Array, cdd_checker_leeway: Option<u64> | null | Uint8Array | u64 | AnyNumber) => Observable<Vec<IdentityClaim>>>;
+    };
     /** 0x37e397fc7c91f5e4/1 */
     metadata: {
       /**
@@ -148,12 +201,41 @@ declare module '@polkadot/api-base/types/calls' {
        **/
       metadata: AugmentedCall<ApiType, () => Observable<OpaqueMetadata>>;
     };
+    /** 0x9ea061a615cee2fe/2 */
+    nftApi: {
+      /**
+       * Returns a vector containing all errors for the transfer. An empty vec means there's no error.
+       **/
+      transferReport: AugmentedCall<ApiType, (sender_portfolio: PortfolioId | { did?: any; kind?: any } | string | Uint8Array, receiver_portfolio: PortfolioId | { did?: any; kind?: any } | string | Uint8Array, nfts: NFTs | { asset_id?: any; ids?: any } | string | Uint8Array, skip_locked_check: bool | boolean | Uint8Array) => Observable<Vec<DispatchError>>>;
+    };
     /** 0xf78b278be53f454c/2 */
     offchainWorkerApi: {
       /**
        * Starts the off-chain task for given block header.
        **/
       offchainWorker: AugmentedCall<ApiType, (header: Header | { parentHash?: any; number?: any; stateRoot?: any; extrinsicsRoot?: any; digest?: any } | string | Uint8Array) => Observable<Null>>;
+    };
+    /** 0x329342994773047f/1 */
+    pipsApi: {
+      /**
+       * Summary of votes of a proposal given by index
+       **/
+      getVotes: AugmentedCall<ApiType, (index: PipId | AnyNumber | Uint8Array) => Observable<VoteCount>>;
+      /**
+       * Retrieves proposal indices started by address
+       **/
+      proposedBy: AugmentedCall<ApiType, (address: AccountId | string | Uint8Array) => Observable<Vec<PipId>>>;
+      /**
+       * Retrieves proposal address indices voted on
+       **/
+      votedOn: AugmentedCall<ApiType, (address: AccountId | string | Uint8Array) => Observable<Vec<PipId>>>;
+    };
+    /** 0x001a0b29f17d01f4/1 */
+    protocolFeeApi: {
+      /**
+       * Gets the fee of a chargeable extrinsic operation
+       **/
+      computeFee: AugmentedCall<ApiType, (op: ProtocolOp | 'AssetRegisterTicker' | 'AssetIssue' | 'AssetAddDocuments' | 'AssetCreateAsset' | 'CheckpointCreateSchedule' | 'ComplianceManagerAddComplianceRequirement' | 'IdentityCddRegisterDid' | 'IdentityAddClaim' | 'IdentityAddSecondaryKeysWithAuthorization' | 'PipsPropose' | 'ContractsPutCode' | 'CorporateBallotAttachBallot' | 'CapitalDistributionDistribute' | 'NFTCreateCollection' | 'NFTMint' | 'IdentityCreateChildIdentity' | number | Uint8Array) => Observable<CappedFee>>;
     };
     /** 0xab3c0572291feb8b/1 */
     sessionKeys: {
@@ -166,12 +248,42 @@ declare module '@polkadot/api-base/types/calls' {
        **/
       generateSessionKeys: AugmentedCall<ApiType, (seed: Option<Bytes> | null | Uint8Array | Bytes | string) => Observable<Bytes>>;
     };
+    /** 0x53df5001418f3b46/2 */
+    settlementApi: {
+      /**
+       * Returns an AffirmationCount instance containing the number of assets being sent/received from portfolios, and the number of off-chain assets in the instruction.
+       **/
+      getAffirmationCount: AugmentedCall<ApiType, (instruction_id: InstructionId | AnyNumber | Uint8Array, portfolios: Vec<PortfolioId> | (PortfolioId | { did?: any; kind?: any } | string | Uint8Array)[]) => Observable<AffirmationCount>>;
+      /**
+       * Returns an ExecuteInstructionInfo instance containing the consumed weight and the number of tokens in the instruction.
+       **/
+      getExecuteInstructionInfo: AugmentedCall<ApiType, (instruction_id: InstructionId | AnyNumber | Uint8Array) => Observable<Option<ExecuteInstructionInfo>>>;
+      /**
+       * Returns a vector containing all errors for the execution. An empty vec means there's no error.
+       **/
+      getExecuteInstructionReport: AugmentedCall<ApiType, (instruction_id: InstructionId | AnyNumber | Uint8Array) => Observable<Vec<DispatchError>>>;
+      /**
+       * Returns a vector containing all errors for the transfer. An empty vec means there's no error.
+       **/
+      getTransferReport: AugmentedCall<ApiType, (leg: Leg | { Fungible: any } | { NonFungible: any } | { OffChain: any } | string | Uint8Array, skip_locked_check: bool | boolean | Uint8Array) => Observable<Vec<DispatchError>>>;
+    };
     /** 0x18ef58a3b67ba770/1 */
     stakingApi: {
+      /**
+       * Retrieves curves parameters
+       **/
+      getCurve: AugmentedCall<ApiType, () => Observable<Vec<ITuple<[Perbill, Perbill]>>>>;
       /**
        * Returns the nominations quota for a nominator with a given balance.
        **/
       nominationsQuota: AugmentedCall<ApiType, (balance: Balance | AnyNumber | Uint8Array) => Observable<u32>>;
+    };
+    /** 0x608339ce0e76adf3/0 */
+    statisticsApi: {
+      /**
+       * Returns a vector containing all TransferCondition that are not being respected for the transfer. An empty vec means there's no error.
+       **/
+      transferRestrictionsReport: AugmentedCall<ApiType, (asset_id: AssetId | string | Uint8Array, sender_did: IdentityId | string | Uint8Array, receiver_did: IdentityId | string | Uint8Array, transfer_amount: Balance | AnyNumber | Uint8Array) => Observable<Result<Vec<TransferCondition>, DispatchError>>>;
     };
     /** 0xd2bc9897eed08f15/3 */
     taggedTransactionQueue: {

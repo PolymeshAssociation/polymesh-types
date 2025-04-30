@@ -92,7 +92,7 @@ function writeDefinitions(schemaObj: {
   fs.writeFileSync(
     path.resolve(typesDir, 'definitions.ts'),
     `export default ${util.inspect(
-      { rpc: {}, types },
+      { ...schemaObj, rpc: {} },
       {
         compact: false,
         depth: null,
