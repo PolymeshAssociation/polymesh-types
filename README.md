@@ -30,8 +30,8 @@ If your `tsconfig.json` includes the `src` folder (e.g., `"include": ["src"]`), 
 
 ```ts
 // At the top of your entry point file
-import '@polymeshassociation/polymesh-types/src/generated-types/augment-types';
-import '@polymeshassociation/polymesh-types/src/generated-types/augment-api';
+import '@polymeshassociation/polymesh-types/generated-types/augment-types';
+import '@polymeshassociation/polymesh-types/generated-types/augment-api';
 
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { typesBundle } from '@polymeshassociation/polymesh-types';
