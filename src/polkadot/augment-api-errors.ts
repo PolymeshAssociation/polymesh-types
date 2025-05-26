@@ -1987,6 +1987,12 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       Unauthorized: AugmentedError<ApiType>;
     };
+    sudo: {
+      /**
+       * Sender must be the Sudo account
+       **/
+      RequireSudo: AugmentedError<ApiType>;
+    };
     system: {
       /**
        * The origin filter prevent the call to be dispatched.

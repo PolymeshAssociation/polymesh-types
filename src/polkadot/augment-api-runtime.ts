@@ -5,7 +5,7 @@
 // this is required to allow for ambient/previous definitions
 import '@polkadot/api-base/types/calls';
 
-import type { AffirmationCount, Authorization, AuthorizationType, CappedFee, CddStatus, ComplianceReport, DidStatus, ExecuteInstructionInfo, IdentityClaim, IdentityId, InstructionId, KeyIdentityData, Leg, Member, NFTs, PipId, PortfolioId, ProtocolOp, RpcDidRecords, Signatory, TransferCondition, VoteCount } from './polymesh';
+import type { AffirmationCount, Authorization, AuthorizationType, CappedFee, CddStatus, ComplianceReport, DidStatus, ExecuteInstructionInfo, IdentityClaim, IdentityId, InstructionId, KeyIdentityData, Leg, Member, NFTs, PipId, PolymeshAssetId, PortfolioId, ProtocolOp, RpcDidRecords, Signatory, TransferCondition, VoteCount } from './polymesh';
 import type { ApiTypes, AugmentedCall, DecoratedCallBase } from '@polkadot/api-base/types';
 import type { Bytes, Null, Option, Result, Vec, bool, u32, u64 } from '@polkadot/types-codec';
 import type { AnyNumber, IMethod, ITuple } from '@polkadot/types-codec/types';
@@ -18,7 +18,7 @@ import type { Extrinsic } from '@polkadot/types/interfaces/extrinsics';
 import type { AuthorityList, GrandpaEquivocationProof, SetId } from '@polkadot/types/interfaces/grandpa';
 import type { OpaqueMetadata } from '@polkadot/types/interfaces/metadata';
 import type { FeeDetails, RuntimeDispatchInfo } from '@polkadot/types/interfaces/payment';
-import type { AccountId, AssetId, Balance, Block, Call, Header, Index, KeyTypeId, Perbill, Slot, WeightV2 } from '@polkadot/types/interfaces/runtime';
+import type { AccountId, Balance, Block, Call, Header, Index, KeyTypeId, Perbill, Slot, WeightV2 } from '@polkadot/types/interfaces/runtime';
 import type { RuntimeVersion } from '@polkadot/types/interfaces/state';
 import type { ApplyExtrinsicResult, DispatchError } from '@polkadot/types/interfaces/system';
 import type { TransactionSource, TransactionValidity } from '@polkadot/types/interfaces/txqueue';
@@ -41,7 +41,7 @@ declare module '@polkadot/api-base/types/calls' {
       /**
        * Returns a vector containing all errors for the transfer. An empty vec means there's no error.
        **/
-      transferReport: AugmentedCall<ApiType, (sender_portfolio: PortfolioId | { did?: any; kind?: any } | string | Uint8Array, receiver_portfolio: PortfolioId | { did?: any; kind?: any } | string | Uint8Array, asset_id: AssetId | string | Uint8Array, transfer_value: Balance | AnyNumber | Uint8Array, skip_locked_check: bool | boolean | Uint8Array) => Observable<Vec<DispatchError>>>;
+      transferReport: AugmentedCall<ApiType, (sender_portfolio: PortfolioId | { did?: any; kind?: any } | string | Uint8Array, receiver_portfolio: PortfolioId | { did?: any; kind?: any } | string | Uint8Array, asset_id: PolymeshAssetId | string | Uint8Array, transfer_value: Balance | AnyNumber | Uint8Array, skip_locked_check: bool | boolean | Uint8Array) => Observable<Vec<DispatchError>>>;
     };
     /** 0x687ad44ad37f03c2/1 */
     authorityDiscoveryApi: {
@@ -101,7 +101,7 @@ declare module '@polkadot/api-base/types/calls' {
       /**
        * Checks all compliance requirements for the given asset_id.
        **/
-      complianceReport: AugmentedCall<ApiType, (asset_id: AssetId | string | Uint8Array, sender_identity: IdentityId | string | Uint8Array, receiver_identity: IdentityId | string | Uint8Array) => Observable<Result<ComplianceReport, DispatchError>>>;
+      complianceReport: AugmentedCall<ApiType, (asset_id: PolymeshAssetId | string | Uint8Array, sender_identity: IdentityId | string | Uint8Array, receiver_identity: IdentityId | string | Uint8Array) => Observable<Result<ComplianceReport, DispatchError>>>;
     };
     /** 0x68b66ba122c93fa7/2 */
     contractsApi: {
@@ -206,7 +206,7 @@ declare module '@polkadot/api-base/types/calls' {
       /**
        * Returns a vector containing all errors for the transfer. An empty vec means there's no error.
        **/
-      transferReport: AugmentedCall<ApiType, (sender_portfolio: PortfolioId | { did?: any; kind?: any } | string | Uint8Array, receiver_portfolio: PortfolioId | { did?: any; kind?: any } | string | Uint8Array, nfts: NFTs | { asset_id?: any; ids?: any } | string | Uint8Array, skip_locked_check: bool | boolean | Uint8Array) => Observable<Vec<DispatchError>>>;
+      transferReport: AugmentedCall<ApiType, (sender_portfolio: PortfolioId | { did?: any; kind?: any } | string | Uint8Array, receiver_portfolio: PortfolioId | { did?: any; kind?: any } | string | Uint8Array, nfts: NFTs | { assetId?: any; ids?: any } | string | Uint8Array, skip_locked_check: bool | boolean | Uint8Array) => Observable<Vec<DispatchError>>>;
     };
     /** 0xf78b278be53f454c/2 */
     offchainWorkerApi: {
@@ -283,7 +283,7 @@ declare module '@polkadot/api-base/types/calls' {
       /**
        * Returns a vector containing all TransferCondition that are not being respected for the transfer. An empty vec means there's no error.
        **/
-      transferRestrictionsReport: AugmentedCall<ApiType, (asset_id: AssetId | string | Uint8Array, sender_did: IdentityId | string | Uint8Array, receiver_did: IdentityId | string | Uint8Array, transfer_amount: Balance | AnyNumber | Uint8Array) => Observable<Result<Vec<TransferCondition>, DispatchError>>>;
+      transferRestrictionsReport: AugmentedCall<ApiType, (asset_id: PolymeshAssetId | string | Uint8Array, sender_did: IdentityId | string | Uint8Array, receiver_did: IdentityId | string | Uint8Array, transfer_amount: Balance | AnyNumber | Uint8Array) => Observable<Result<Vec<TransferCondition>, DispatchError>>>;
     };
     /** 0xd2bc9897eed08f15/3 */
     taggedTransactionQueue: {

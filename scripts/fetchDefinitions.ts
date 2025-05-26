@@ -14,7 +14,7 @@ import util from 'util';
 
 import { PolymeshTypesBundle, typesBundle } from '../src';
 
-const definitionsDir = path.resolve('src', 'generated-types');
+const definitionsDir = path.resolve('src', 'polkadot');
 const typesDir = path.resolve(definitionsDir, 'polymesh');
 
 rimraf.sync(typesDir);

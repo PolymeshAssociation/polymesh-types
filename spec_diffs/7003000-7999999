@@ -1,0 +1,277 @@
+- Expected
++ Received
+
+@@ -1,9 +1,9 @@
+  Object {
+    "AGId": "u32",
+    "AffirmationCount": Object {
+-     "offchain_count": "u32",
+-     "receiver_asset_count": "AssetCount",
+-     "sender_asset_count": "AssetCount",
++     "offchainCount": "u32",
++     "receiverAssetCount": "AssetCount",
++     "senderAssetCount": "AssetCount",
+    },
+    "AgentGroup": Object {
+      "_enum": Object {
+@@ -20,9 +20,9 @@
+      "result": "bool",
+    },
+    "AssetCount": Object {
+-     "fungible_tokens": "u32",
+-     "non_fungible_tokens": "u32",
+-     "off_chain_assets": "u32",
++     "fungibleTokens": "u32",
++     "nonFungibleTokens": "u32",
++     "offChainAssets": "u32",
+    },
+    "AssetDidResult": Object {
+      "_enum": Object {
+@@ -30,32 +30,31 @@
+        "Ok": "IdentityId",
+      },
+    },
+-   "AssetId": "[u8; 16]",
+    "AssetPermissions": Object {
+      "_enum": Object {
+-       "Except": "Vec<AssetId>",
+-       "These": "Vec<AssetId>",
++       "Except": "BTreeSet<PolymeshAssetId>",
++       "These": "BTreeSet<PolymeshAssetId>",
+        "Whole": "",
+      },
+    },
+    "Authorization": Object {
+-     "auth_id": "u64",
+-     "authorization_data": "AuthorizationData",
+-     "authorized_by": "IdentityId",
++     "authId": "u64",
++     "authorizationData": "AuthorizationData",
++     "authorizedBy": "IdentityId",
+      "count": "u32",
+-     "expiry": "Option<Moment>",
++     "expiry": "Option<PolymeshMoment>",
+    },
+    "AuthorizationData": Object {
+      "_enum": Object {
+        "AddMultiSigSigner": "AccountId",
+-       "AddRelayerPayingKey": "(AccountId, AccountId, Balance)",
++       "AddRelayerPayingKey": "(AccountId32, AccountId32, u128)",
+        "AttestPrimaryKeyRotation": "IdentityId",
+-       "BecomeAgent": "(AssetId, AgentGroup)",
++       "BecomeAgent": "(PolymeshAssetId, AgentGroup)",
+        "JoinIdentity": "Permissions",
+        "PortfolioCustody": "PortfolioId",
+        "RotatePrimaryKey": "",
+        "RotatePrimaryKeyToSecondary": "Permissions",
+-       "TransferAssetOwnership": "AssetId",
++       "TransferAssetOwnership": "PolymeshAssetId",
+        "TransferTicker": "Ticker",
+      },
+    },
+@@ -116,18 +115,18 @@
+      },
+    },
+    "ComplianceReport": Object {
+-     "any_requirement_satisfied": "bool",
+-     "paused_compliance": "bool",
++     "anyRequirementSatisfied": "bool",
++     "pausedCompliance": "bool",
+      "requirements": "Vec<RequirementReport>",
+    },
+    "ComplianceRequirementResult": Object {
+      "id": "u32",
+-     "receiver_conditions": "Vec<ConditionResult>",
++     "receiverConditions": "Vec<ConditionResult>",
+      "result": "bool",
+-     "sender_conditions": "Vec<ConditionResult>",
++     "senderConditions": "Vec<ConditionResult>",
+    },
+    "Condition": Object {
+-     "condition_type": "ConditionType",
++     "conditionType": "ConditionType",
+      "issuers": "Vec<TrustedIssuer>",
+    },
+    "ConditionReport": Object {
+@@ -410,54 +409,54 @@
+      },
+    },
+    "ExecuteInstructionInfo": Object {
+-     "consumed_weight": "Weight",
++     "consumedWeight": "Weight",
+      "error": "Option<String>",
+-     "fungible_tokens": "u32",
+-     "non_fungible_tokens": "u32",
+-     "off_chain_assets": "u32",
++     "fungibleTokens": "u32",
++     "nonFungibleTokens": "u32",
++     "offChainAssets": "u32",
+    },
+    "ExtrinsicName": "Text",
+    "ExtrinsicNames": Object {
+      "_enum": Object {
+-       "Except": "Vec<ExtrinsicName>",
+-       "These": "Vec<ExtrinsicName>",
++       "Except": "BTreeSet<ExtrinsicName>",
++       "These": "BTreeSet<ExtrinsicName>",
+        "Whole": "",
+      },
+    },
+    "ExtrinsicPermissions": Object {
+      "_enum": Object {
+-       "Except": "Vec<(PalletName, PalletPermissions)>",
+-       "These": "Vec<(PalletName, PalletPermissions)>",
++       "Except": "BTreeMap<PalletName, PalletPermissions>",
++       "These": "BTreeMap<PalletName, PalletPermissions>",
+        "Whole": "",
+      },
+    },
+    "FungibleLeg": Object {
+      "amount": "Balance",
+-     "asset_id": "AssetId",
++     "assetId": "PolymeshAssetId",
+      "receiver": "PortfolioId",
+      "sender": "PortfolioId",
+    },
+    "GranularCanTransferResult": Object {
+-     "asset_frozen": "bool",
+-     "compliance_result": "AssetComplianceResult",
+-     "consumed_weight": "Option<Weight>",
+-     "invalid_granularity": "bool",
+-     "invalid_receiver_cdd": "bool",
+-     "invalid_sender_cdd": "bool",
+-     "portfolio_validity_result": "PortfolioValidityResult",
+-     "receiver_custodian_error": "bool",
++     "assetFrozen": "bool",
++     "complianceResult": "AssetComplianceResult",
++     "consumedWeight": "Option<Weight>",
++     "invalidGranularity": "bool",
++     "invalidReceiverCdd": "bool",
++     "invalidSenderCdd": "bool",
++     "portfolioValidityResult": "PortfolioValidityResult",
++     "receiverCustodianError": "bool",
+      "result": "bool",
+-     "self_transfer": "bool",
+-     "sender_custodian_error": "bool",
+-     "sender_insufficient_balance": "bool",
+-     "transfer_condition_result": "Vec<TransferConditionResult>",
++     "selfTransfer": "bool",
++     "senderCustodianError": "bool",
++     "senderInsufficientBalance": "bool",
++     "transferConditionResult": "Vec<TransferConditionResult>",
+    },
+    "IdentityClaim": Object {
+      "claim": "Claim",
+-     "claim_issuer": "IdentityId",
+-     "expiry": "Option<Moment>",
+-     "issuance_date": "Moment",
+-     "last_update_date": "Moment",
++     "claimIssuer": "IdentityId",
++     "expiry": "Option<PolymeshMoment>",
++     "issuanceDate": "PolymeshMoment",
++     "lastUpdateDate": "PolymeshMoment",
+    },
+    "IdentityId": "[u8; 32]",
+    "InstructionId": "u64",
+@@ -473,14 +472,13 @@
+      },
+    },
+    "Member": Object {
+-     "expiry_at": "Option<Moment>",
++     "expiryAt": "Option<PolymeshMoment>",
+      "id": "IdentityId",
+-     "inactive_from": "Option<Moment>",
++     "inactiveFrom": "Option<PolymeshMoment>",
+    },
+-   "Moment": "u64",
+    "NFTId": "u64",
+    "NFTs": Object {
+-     "asset_id": "AssetId",
++     "assetId": "PolymeshAssetId",
+      "ids": "Vec<NFTId>",
+    },
+    "NonFungibleLeg": Object {
+@@ -490,9 +488,9 @@
+    },
+    "OffChainLeg": Object {
+      "amount": "Balance",
+-     "asset_id": "AssetId",
+-     "receiver_identity": "IdentityId",
+-     "sender_identity": "IdentityId",
++     "receiverIdentity": "IdentityId",
++     "senderIdentity": "IdentityId",
++     "ticker": "Ticker",
+    },
+    "PalletName": "Text",
+    "PalletPermissions": Object {
+@@ -505,6 +503,8 @@
+      "portfolio": "PortfolioPermissions",
+    },
+    "PipId": "u32",
++   "PolymeshAssetId": "[u8; 16]",
++   "PolymeshMoment": "u64",
+    "PortfolioId": Object {
+      "did": "IdentityId",
+      "kind": "PortfolioKind",
+@@ -518,17 +518,17 @@
+    "PortfolioNumber": "u64",
+    "PortfolioPermissions": Object {
+      "_enum": Object {
+-       "Except": "Vec<PortfolioId>",
+-       "These": "Vec<PortfolioId>",
++       "Except": "BTreeSet<PortfolioId>",
++       "These": "BTreeSet<PortfolioId>",
+        "Whole": "",
+      },
+    },
+    "PortfolioValidityResult": Object {
+-     "receiver_is_same_portfolio": "bool",
+-     "receiver_portfolio_does_not_exist": "bool",
++     "receiverIsSamePortfolio": "bool",
++     "receiverPortfolioDoesNotExist": "bool",
+      "result": "bool",
+-     "sender_insufficient_balance": "bool",
+-     "sender_portfolio_does_not_exist": "bool",
++     "senderInsufficientBalance": "bool",
++     "senderPortfolioDoesNotExist": "bool",
+    },
+    "ProtocolOp": Object {
+      "_enum": Array [
+@@ -552,9 +552,9 @@
+    },
+    "RequirementReport": Object {
+      "id": "u32",
+-     "receiver_conditions": "Vec<ConditionReport>",
+-     "requirement_satisfied": "bool",
+-     "sender_conditions": "Vec<ConditionReport>",
++     "receiverConditions": "Vec<ConditionReport>",
++     "requirementSatisfied": "bool",
++     "senderConditions": "Vec<ConditionReport>",
+    },
+    "RpcDidRecords": Object {
+      "_enum": Object {
+@@ -563,12 +563,12 @@
+      },
+    },
+    "RpcDidRecordsSuccess": Object {
+-     "primary_key": "AccountId",
+-     "secondary_keys": "Vec<SecondaryKey>",
++     "primaryKey": "AccountId",
++     "secondaryKeys": "Vec<SecondaryKey>",
+    },
+    "Scope": Object {
+      "_enum": Object {
+-       "Asset": "AssetId",
++       "Asset": "PolymeshAssetId",
+        "Custom": "Vec<u8>",
+        "Identity": "IdentityId",
+      },
+@@ -617,7 +617,7 @@
+    },
+    "TrustedIssuer": Object {
+      "issuer": "IdentityId",
+-     "trusted_for": "TrustedFor",
++     "trustedFor": "TrustedFor",
+    },
+    "VoteCount": Object {
+      "_enum": Object {

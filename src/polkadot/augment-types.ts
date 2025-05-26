@@ -5,7 +5,7 @@
 // this is required to allow for ambient/previous definitions
 import '@polkadot/types/types/registry';
 
-import type { AGId, AffirmationCount, AgentGroup, AssetComplianceResult, AssetCount, AssetDidResult, AssetPermissions, Authorization, AuthorizationData, AuthorizationType, CanTransferGranularReturn, CappedFee, CddId, CddStatus, Claim, ClaimType, ComplianceReport, ComplianceRequirementResult, Condition, ConditionReport, ConditionResult, ConditionType, CountryCode, CustomClaimTypeId, DidStatus, ExecuteInstructionInfo, ExtrinsicName, ExtrinsicNames, ExtrinsicPermissions, FungibleLeg, GranularCanTransferResult, IdentityClaim, IdentityId, InstructionId, KeyIdentityData, Leg, Member, NFTId, NFTs, NonFungibleLeg, OffChainLeg, PalletName, PalletPermissions, Percentage, Permissions, PipId, PortfolioId, PortfolioKind, PortfolioNumber, PortfolioPermissions, PortfolioValidityResult, ProtocolOp, RequirementReport, RpcDidRecords, RpcDidRecordsSuccess, Scope, SecondaryKey, Signatory, StatClaim, TargetIdentity, Ticker, TransferCondition, TransferConditionResult, TrustedFor, TrustedIssuer, VoteCount, VoteCountProposalFound } from './polymesh';
+import type { AGId, AffirmationCount, AgentGroup, AssetComplianceResult, AssetCount, AssetDidResult, AssetPermissions, Authorization, AuthorizationData, AuthorizationType, CanTransferGranularReturn, CappedFee, CddId, CddStatus, Claim, ClaimType, ComplianceReport, ComplianceRequirementResult, Condition, ConditionReport, ConditionResult, ConditionType, CountryCode, CustomClaimTypeId, DidStatus, ExecuteInstructionInfo, ExtrinsicName, ExtrinsicNames, ExtrinsicPermissions, FungibleLeg, GranularCanTransferResult, IdentityClaim, IdentityId, InstructionId, KeyIdentityData, Leg, Member, NFTId, NFTs, NonFungibleLeg, OffChainLeg, PalletName, PalletPermissions, Percentage, Permissions, PipId, PolymeshAssetId, PolymeshMoment, PortfolioId, PortfolioKind, PortfolioNumber, PortfolioPermissions, PortfolioValidityResult, ProtocolOp, RequirementReport, RpcDidRecords, RpcDidRecordsSuccess, Scope, SecondaryKey, Signatory, StatClaim, TargetIdentity, Ticker, TransferCondition, TransferConditionResult, TrustedFor, TrustedIssuer, VoteCount, VoteCountProposalFound } from './polymesh';
 import type { Data, StorageKey } from '@polkadot/types';
 import type { BitVec, Bool, Bytes, F32, F64, I128, I16, I256, I32, I64, I8, ISize, Json, Null, OptionBool, Raw, Text, Type, U128, U16, U256, U32, U64, U8, USize, bool, f32, f64, i128, i16, i256, i32, i64, i8, isize, u128, u16, u256, u32, u64, u8, usize } from '@polkadot/types-codec';
 import type { TAssetConversion } from '@polkadot/types/interfaces/assetConversion';
@@ -849,6 +849,8 @@ declare module '@polkadot/types/types/registry' {
     PhantomData: PhantomData;
     Phase: Phase;
     PipId: PipId;
+    PolymeshAssetId: PolymeshAssetId;
+    PolymeshMoment: PolymeshMoment;
     PortableType: PortableType;
     PortableTypeV14: PortableTypeV14;
     PortfolioId: PortfolioId;

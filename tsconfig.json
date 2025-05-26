@@ -5,8 +5,8 @@
     "baseUrl": ".",
     "paths": {
       "~/*": ["src/*"],
-      "@polkadot/api/augment": ["src/generated-types/augment-api.ts"],
-      "@polkadot/types/augment": ["src/generated-types/augment-types.ts"]
+      "@polkadot/api/augment": ["src/polkadot/augment-api.ts"],
+      "@polkadot/types/augment": ["src/polkadot/augment-types.ts"]
     },
     "plugins": [
       {

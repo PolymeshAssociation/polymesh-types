@@ -15,7 +15,7 @@ export default {
         },
         {
           name: 'asset_id',
-          type: 'AssetId',
+          type: 'PolymeshAssetId',
           isOptional: false
         },
         {

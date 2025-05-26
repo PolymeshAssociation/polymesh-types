@@ -19,10 +19,11 @@
     "semantic-release": "semantic-release",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
     "format": "cross-env prettier-eslint $PWD\"/src/**/*.{ts,tsx,js,jsx,json,css,md}\" --write",
-    "generate:defs": "node --loader @polkadot/dev-ts node_modules/.bin/polkadot-types-from-defs --endpoint metadata.json --package . --input ./src/generated-types",
-    "generate:meta": "node --loader @polkadot/dev-ts node_modules/.bin/polkadot-types-from-chain --endpoint metadata.json --package . --output ./src/generated-types --strict",
+    "generate:defs": "node --loader @polkadot/dev-ts node_modules/.bin/polkadot-types-from-defs --endpoint metadata.json --package . --input ./src/polkadot",
+    "generate:meta": "node --loader @polkadot/dev-ts node_modules/.bin/polkadot-types-from-chain --endpoint metadata.json --package . --output ./src/polkadot --strict",
     "fetch:definitions": "ts-node scripts/fetchDefinitions.ts",
-    "generate:types": "rimraf src/generated-types/* && yarn fetch:definitions && yarn generate:defs && yarn generate:meta"
+    "generate:consts": "ts-node scripts/generateConsts.ts",
+    "generate:types": "rimraf src/polkadot/* && yarn fetch:definitions && yarn generate:defs && yarn generate:meta && yarn generate:consts && yarn format"
   },
   "dependencies": {
     "@polkadot/api": "^10.13.1",

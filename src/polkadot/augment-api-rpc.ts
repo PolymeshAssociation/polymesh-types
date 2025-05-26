@@ -5,7 +5,7 @@
 // this is required to allow for ambient/previous definitions
 import '@polkadot/rpc-core/types/jsonrpc';
 
-import type { AffirmationCount, Authorization, AuthorizationType, CappedFee, CddStatus, ComplianceReport, DidStatus, ExecuteInstructionInfo, IdentityClaim, IdentityId, InstructionId, KeyIdentityData, Leg, Member, NFTs, PipId, PortfolioId, ProtocolOp, RpcDidRecords, Signatory, VoteCount } from './polymesh';
+import type { AffirmationCount, Authorization, AuthorizationType, CappedFee, CddStatus, ComplianceReport, DidStatus, ExecuteInstructionInfo, IdentityClaim, IdentityId, InstructionId, KeyIdentityData, Leg, Member, NFTs, PipId, PolymeshAssetId, PortfolioId, ProtocolOp, RpcDidRecords, Signatory, VoteCount } from './polymesh';
 import type { AugmentedRpc } from '@polkadot/rpc-core/types';
 import type { Metadata, StorageKey } from '@polkadot/types';
 import type { Bytes, HashMap, Json, Null, Option, Result, Text, U256, U64, Vec, bool, f64, u32, u64 } from '@polkadot/types-codec';
@@ -26,7 +26,7 @@ import type { MmrHash, MmrLeafBatchProof } from '@polkadot/types/interfaces/mmr'
 import type { StorageKind } from '@polkadot/types/interfaces/offchain';
 import type { FeeDetails, RuntimeDispatchInfoV1 } from '@polkadot/types/interfaces/payment';
 import type { RpcMethods } from '@polkadot/types/interfaces/rpc';
-import type { AccountId, AssetId, Balance, BlockNumber, H160, H256, H64, Hash, Header, Index, Justification, KeyValue, Perbill, SignedBlock, StorageData } from '@polkadot/types/interfaces/runtime';
+import type { AccountId, Balance, BlockNumber, H160, H256, H64, Hash, Header, Index, Justification, KeyValue, Perbill, SignedBlock, StorageData } from '@polkadot/types/interfaces/runtime';
 import type { MigrationStatusResult, ReadProof, RuntimeVersion, TraceBlockResponse } from '@polkadot/types/interfaces/state';
 import type { ApplyExtrinsicResult, ChainProperties, ChainType, DispatchError, Health, NetworkState, NodeRole, PeerInfo, SyncState } from '@polkadot/types/interfaces/system';
 import type { IExtrinsic, Observable } from '@polkadot/types/types';
@@ -39,7 +39,7 @@ declare module '@polkadot/rpc-core/types/jsonrpc' {
       /**
        * Returns a vector containing all errors for the transfer. An empty vec means there's no error.
        **/
-      transferReport: AugmentedRpc<(sender_portfolio: PortfolioId | { did?: any; kind?: any } | string | Uint8Array, receiver_portfolio: PortfolioId | { did?: any; kind?: any } | string | Uint8Array, asset_id: AssetId | string | Uint8Array, transfer_value: Balance | AnyNumber | Uint8Array, skip_locked_check: bool | boolean | Uint8Array, blockHash?: Hash | string | Uint8Array) => Observable<Vec<DispatchError>>>;
+      transferReport: AugmentedRpc<(sender_portfolio: PortfolioId | { did?: any; kind?: any } | string | Uint8Array, receiver_portfolio: PortfolioId | { did?: any; kind?: any } | string | Uint8Array, asset_id: PolymeshAssetId | string | Uint8Array, transfer_value: Balance | AnyNumber | Uint8Array, skip_locked_check: bool | boolean | Uint8Array, blockHash?: Hash | string | Uint8Array) => Observable<Vec<DispatchError>>>;
     };
     author: {
       /**
@@ -151,7 +151,7 @@ declare module '@polkadot/rpc-core/types/jsonrpc' {
       /**
        * Checks all compliance requirements for the given asset.
        **/
-      complianceReport: AugmentedRpc<(asset_id: AssetId | string | Uint8Array, sender_identity: IdentityId | string | Uint8Array, receiver_identity: IdentityId | string | Uint8Array) => Observable<Result<ComplianceReport, DispatchError>>>;
+      complianceReport: AugmentedRpc<(asset_id: PolymeshAssetId | string | Uint8Array, sender_identity: IdentityId | string | Uint8Array, receiver_identity: IdentityId | string | Uint8Array) => Observable<Result<ComplianceReport, DispatchError>>>;
     };
     contracts: {
       /**
@@ -456,7 +456,7 @@ declare module '@polkadot/rpc-core/types/jsonrpc' {
       /**
        * Returns a vector containing all errors for the transfer. An empty vec means there's no error.
        **/
-      transferReport: AugmentedRpc<(sender_portfolio: PortfolioId | { did?: any; kind?: any } | string | Uint8Array, receiver_portfolio: PortfolioId | { did?: any; kind?: any } | string | Uint8Array, nfts: NFTs | { asset_id?: any; ids?: any } | string | Uint8Array, skip_locked_check: bool | boolean | Uint8Array, blockHash?: Hash | string | Uint8Array) => Observable<Vec<DispatchError>>>;
+      transferReport: AugmentedRpc<(sender_portfolio: PortfolioId | { did?: any; kind?: any } | string | Uint8Array, receiver_portfolio: PortfolioId | { did?: any; kind?: any } | string | Uint8Array, nfts: NFTs | { assetId?: any; ids?: any } | string | Uint8Array, skip_locked_check: bool | boolean | Uint8Array, blockHash?: Hash | string | Uint8Array) => Observable<Vec<DispatchError>>>;
     };
     offchain: {
       /**

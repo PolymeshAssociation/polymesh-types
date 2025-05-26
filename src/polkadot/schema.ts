@@ -1,6 +1,6 @@
 export default {
   types: {
-    AssetId: '[u8; 16]',
+    PolymeshAssetId: '[u8; 16]',
     IdentityId: '[u8; 32]',
     Ticker: '[u8; 12]',
     CddId: '[u8; 32]',
@@ -9,22 +9,22 @@ export default {
     AssetPermissions: {
       _enum: {
         Whole: '',
-        These: 'Vec<AssetId>',
-        Except: 'Vec<AssetId>'
+        These: 'BTreeSet<PolymeshAssetId>',
+        Except: 'BTreeSet<PolymeshAssetId>'
       }
     },
     PortfolioPermissions: {
       _enum: {
         Whole: '',
-        These: 'Vec<PortfolioId>',
-        Except: 'Vec<PortfolioId>'
+        These: 'BTreeSet<PortfolioId>',
+        Except: 'BTreeSet<PortfolioId>'
       }
     },
     ExtrinsicNames: {
       _enum: {
         Whole: '',
-        These: 'Vec<ExtrinsicName>',
-        Except: 'Vec<ExtrinsicName>'
+        These: 'BTreeSet<ExtrinsicName>',
+        Except: 'BTreeSet<ExtrinsicName>'
       }
     },
     PalletPermissions: {
@@ -33,8 +33,8 @@ export default {
     ExtrinsicPermissions: {
       _enum: {
         Whole: '',
-        These: 'Vec<(PalletName, PalletPermissions)>',
-        Except: 'Vec<(PalletName, PalletPermissions)>'
+        These: 'BTreeMap<PalletName, PalletPermissions>',
+        Except: 'BTreeMap<PalletName, PalletPermissions>'
       }
     },
     Permissions: {
@@ -313,7 +313,7 @@ export default {
     Scope: {
       _enum: {
         Identity: 'IdentityId',
-        Asset: 'AssetId',
+        Asset: 'PolymeshAssetId',
         Custom: 'Vec<u8>'
       }
     },
@@ -347,15 +347,15 @@ export default {
       }
     },
     IdentityClaim: {
-      claim_issuer: 'IdentityId',
-      issuance_date: 'Moment',
-      last_update_date: 'Moment',
-      expiry: 'Option<Moment>',
+      claimIssuer: 'IdentityId',
+      issuanceDate: 'PolymeshMoment',
+      lastUpdateDate: 'PolymeshMoment',
+      expiry: 'Option<PolymeshMoment>',
       claim: 'Claim'
     },
     ComplianceRequirementResult: {
-      sender_conditions: 'Vec<ConditionResult>',
-      receiver_conditions: 'Vec<ConditionResult>',
+      senderConditions: 'Vec<ConditionResult>',
+      receiverConditions: 'Vec<ConditionResult>',
       id: 'u32',
       result: 'bool'
     },
@@ -376,10 +376,10 @@ export default {
     },
     TrustedIssuer: {
       issuer: 'IdentityId',
-      trusted_for: 'TrustedFor'
+      trustedFor: 'TrustedFor'
     },
     Condition: {
-      condition_type: 'ConditionType',
+      conditionType: 'ConditionType',
       issuers: 'Vec<TrustedIssuer>'
     },
     ConditionResult: {
@@ -388,10 +388,10 @@ export default {
     },
     PipId: 'u32',
     Authorization: {
-      authorization_data: 'AuthorizationData',
-      authorized_by: 'IdentityId',
-      expiry: 'Option<Moment>',
-      auth_id: 'u64',
+      authorizationData: 'AuthorizationData',
+      authorizedBy: 'IdentityId',
+      expiry: 'Option<PolymeshMoment>',
+      authId: 'u64',
       count: 'u32'
     },
     AuthorizationData: {
@@ -400,11 +400,11 @@ export default {
         RotatePrimaryKey: '',
         TransferTicker: 'Ticker',
         AddMultiSigSigner: 'AccountId',
-        TransferAssetOwnership: 'AssetId',
+        TransferAssetOwnership: 'PolymeshAssetId',
         JoinIdentity: 'Permissions',
         PortfolioCustody: 'PortfolioId',
-        BecomeAgent: '(AssetId, AgentGroup)',
-        AddRelayerPayingKey: '(AccountId, AccountId, Balance)',
+        BecomeAgent: '(PolymeshAssetId, AgentGroup)',
+        AddRelayerPayingKey: '(AccountId32, AccountId32, u128)',
         RotatePrimaryKeyToSecondary: 'Permissions'
       }
     },
@@ -462,8 +462,8 @@ export default {
       }
     },
     RpcDidRecordsSuccess: {
-      primary_key: 'AccountId',
-      secondary_keys: 'Vec<SecondaryKey>'
+      primaryKey: 'AccountId',
+      secondaryKeys: 'Vec<SecondaryKey>'
     },
     RpcDidRecords: {
       _enum: {
@@ -514,7 +514,7 @@ export default {
       did: 'IdentityId',
       kind: 'PortfolioKind'
     },
-    Moment: 'u64',
+    PolymeshMoment: 'u64',
     InstructionId: 'u64',
     TargetIdentity: {
       _enum: {
@@ -529,25 +529,25 @@ export default {
       }
     },
     GranularCanTransferResult: {
-      invalid_granularity: 'bool',
-      self_transfer: 'bool',
-      invalid_receiver_cdd: 'bool',
-      invalid_sender_cdd: 'bool',
-      receiver_custodian_error: 'bool',
-      sender_custodian_error: 'bool',
-      sender_insufficient_balance: 'bool',
-      portfolio_validity_result: 'PortfolioValidityResult',
-      asset_frozen: 'bool',
-      transfer_condition_result: 'Vec<TransferConditionResult>',
-      compliance_result: 'AssetComplianceResult',
+      invalidGranularity: 'bool',
+      selfTransfer: 'bool',
+      invalidReceiverCdd: 'bool',
+      invalidSenderCdd: 'bool',
+      receiverCustodianError: 'bool',
+      senderCustodianError: 'bool',
+      senderInsufficientBalance: 'bool',
+      portfolioValidityResult: 'PortfolioValidityResult',
+      assetFrozen: 'bool',
+      transferConditionResult: 'Vec<TransferConditionResult>',
+      complianceResult: 'AssetComplianceResult',
       result: 'bool',
-      consumed_weight: 'Option<Weight>'
+      consumedWeight: 'Option<Weight>'
     },
     PortfolioValidityResult: {
-      receiver_is_same_portfolio: 'bool',
-      sender_portfolio_does_not_exist: 'bool',
-      receiver_portfolio_does_not_exist: 'bool',
-      sender_insufficient_balance: 'bool',
+      receiverIsSamePortfolio: 'bool',
+      senderPortfolioDoesNotExist: 'bool',
+      receiverPortfolioDoesNotExist: 'bool',
+      senderInsufficientBalance: 'bool',
       result: 'bool'
     },
     TransferConditionResult: {
@@ -566,18 +566,18 @@ export default {
     },
     Member: {
       id: 'IdentityId',
-      expiry_at: 'Option<Moment>',
-      inactive_from: 'Option<Moment>'
+      expiryAt: 'Option<PolymeshMoment>',
+      inactiveFrom: 'Option<PolymeshMoment>'
     },
     NFTId: 'u64',
     NFTs: {
-      asset_id: 'AssetId',
+      assetId: 'PolymeshAssetId',
       ids: 'Vec<NFTId>'
     },
     FungibleLeg: {
       sender: 'PortfolioId',
       receiver: 'PortfolioId',
-      asset_id: 'AssetId',
+      assetId: 'PolymeshAssetId',
       amount: 'Balance'
     },
     NonFungibleLeg: {
@@ -586,9 +586,9 @@ export default {
       nfts: 'NFTs'
     },
     OffChainLeg: {
-      sender_identity: 'IdentityId',
-      receiver_identity: 'IdentityId',
-      asset_id: 'AssetId',
+      senderIdentity: 'IdentityId',
+      receiverIdentity: 'IdentityId',
+      ticker: 'Ticker',
       amount: 'Balance'
     },
     Leg: {
@@ -599,39 +599,417 @@ export default {
       }
     },
     ExecuteInstructionInfo: {
-      fungible_tokens: 'u32',
-      non_fungible_tokens: 'u32',
-      off_chain_assets: 'u32',
-      consumed_weight: 'Weight',
+      fungibleTokens: 'u32',
+      nonFungibleTokens: 'u32',
+      offChainAssets: 'u32',
+      consumedWeight: 'Weight',
       error: 'Option<String>'
     },
     AssetCount: {
-      fungible_tokens: 'u32',
-      non_fungible_tokens: 'u32',
-      off_chain_assets: 'u32'
+      fungibleTokens: 'u32',
+      nonFungibleTokens: 'u32',
+      offChainAssets: 'u32'
     },
     AffirmationCount: {
-      sender_asset_count: 'AssetCount',
-      receiver_asset_count: 'AssetCount',
-      offchain_count: 'u32'
+      senderAssetCount: 'AssetCount',
+      receiverAssetCount: 'AssetCount',
+      offchainCount: 'u32'
     },
     ComplianceReport: {
-      any_requirement_satisfied: 'bool',
-      paused_compliance: 'bool',
+      anyRequirementSatisfied: 'bool',
+      pausedCompliance: 'bool',
       requirements: 'Vec<RequirementReport>'
     },
     RequirementReport: {
-      requirement_satisfied: 'bool',
+      requirementSatisfied: 'bool',
       id: 'u32',
-      sender_conditions: 'Vec<ConditionReport>',
-      receiver_conditions: 'Vec<ConditionReport>'
+      senderConditions: 'Vec<ConditionReport>',
+      receiverConditions: 'Vec<ConditionReport>'
     },
     ConditionReport: {
       satisfied: 'bool',
       condition: 'Condition'
     }
   },
-  rpc: {},
+  rpc: {
+    identity: {
+      isIdentityHasValidCdd: {
+        description: 'use to tell whether the given did has valid cdd claim or not',
+        params: [
+          {
+            name: 'did',
+            type: 'IdentityId',
+            isOptional: false
+          },
+          {
+            name: 'buffer_time',
+            type: 'u64',
+            isOptional: true
+          },
+          {
+            name: 'blockHash',
+            type: 'Hash',
+            isOptional: true
+          }
+        ],
+        type: 'CddStatus'
+      },
+      getDidRecords: {
+        description: 'Used to get the did record values for a given DID',
+        params: [
+          {
+            name: 'did',
+            type: 'IdentityId',
+            isOptional: false
+          },
+          {
+            name: 'blockHash',
+            type: 'Hash',
+            isOptional: true
+          }
+        ],
+        type: 'RpcDidRecords'
+      },
+      getDidStatus: {
+        description: 'Retrieve status of the DID',
+        params: [
+          {
+            name: 'did',
+            type: 'Vec<IdentityId>',
+            isOptional: false
+          },
+          {
+            name: 'blockHash',
+            type: 'Hash',
+            isOptional: true
+          }
+        ],
+        type: 'Vec<DidStatus>'
+      },
+      getFilteredAuthorizations: {
+        description: 'Retrieve authorizations data for a given signatory and filtered using the given authorization type',
+        params: [
+          {
+            name: 'signatory',
+            type: 'Signatory',
+            isOptional: false
+          },
+          {
+            name: 'allow_expired',
+            type: 'bool',
+            isOptional: false
+          },
+          {
+            name: 'auth_type',
+            type: 'AuthorizationType',
+            isOptional: true
+          },
+          {
+            name: 'blockHash',
+            type: 'Hash',
+            isOptional: true
+          }
+        ],
+        type: 'Vec<Authorization>'
+      },
+      getKeyIdentityData: {
+        description: 'Query relation between a signing key and a DID',
+        params: [
+          {
+            name: 'acc',
+            type: 'AccountId',
+            isOptional: false
+          },
+          {
+            name: 'blockHash',
+            type: 'Hash',
+            isOptional: true
+          }
+        ],
+        type: 'Option<KeyIdentityData>'
+      },
+      validCDDClaims: {
+        description: 'Returns all valid IdentityClaim of type CustomerDueDiligence for the given target_identity',
+        params: [
+          {
+            name: 'target_identity',
+            type: 'IdentityId',
+            isOptional: false
+          },
+          {
+            name: 'cdd_checker_leeway',
+            type: 'u64',
+            isOptional: true
+          },
+          {
+            name: 'blockHash',
+            type: 'Hash',
+            isOptional: true
+          }
+        ],
+        type: 'Vec<IdentityClaim>'
+      }
+    },
+    pips: {
+      getVotes: {
+        description: 'Summary of votes of a proposal given by index',
+        params: [
+          {
+            name: 'index',
+            type: 'PipId',
+            isOptional: false
+          },
+          {
+            name: 'blockHash',
+            type: 'Hash',
+            isOptional: true
+          }
+        ],
+        type: 'VoteCount'
+      },
+      proposedBy: {
+        description: 'Retrieves proposal indices started by address',
+        params: [
+          {
+            name: 'address',
+            type: 'AccountId',
+            isOptional: false
+          },
+          {
+            name: 'blockHash',
+            type: 'Hash',
+            isOptional: true
+          }
+        ],
+        type: 'Vec<PipId>'
+      },
+      votedOn: {
+        description: 'Retrieves proposal address indices voted on',
+        params: [
+          {
+            name: 'address',
+            type: 'AccountId',
+            isOptional: false
+          },
+          {
+            name: 'blockHash',
+            type: 'Hash',
+            isOptional: true
+          }
+        ],
+        type: 'Vec<PipId>'
+      }
+    },
+    protocolFee: {
+      computeFee: {
+        description: 'Gets the fee of a chargeable extrinsic operation',
+        params: [
+          {
+            name: 'op',
+            type: 'ProtocolOp',
+            isOptional: false
+          },
+          {
+            name: 'blockHash',
+            type: 'Hash',
+            isOptional: true
+          }
+        ],
+        type: 'CappedFee'
+      }
+    },
+    staking: {
+      getCurve: {
+        description: 'Retrieves curves parameters',
+        params: [
+          {
+            name: 'blockHash',
+            type: 'Hash',
+            isOptional: true
+          }
+        ],
+        type: 'Vec<(Perbill, Perbill)>'
+      }
+    },
+    asset: {
+      transferReport: {
+        description: "Returns a vector containing all errors for the transfer. An empty vec means there's no error.",
+        params: [
+          {
+            name: 'sender_portfolio',
+            type: 'PortfolioId',
+            isOptional: false
+          },
+          {
+            name: 'receiver_portfolio',
+            type: 'PortfolioId',
+            isOptional: false
+          },
+          {
+            name: 'asset_id',
+            type: 'PolymeshAssetId',
+            isOptional: false
+          },
+          {
+            name: 'transfer_value',
+            type: 'Balance',
+            isOptional: false
+          },
+          {
+            name: 'skip_locked_check',
+            type: 'bool',
+            isOptional: false
+          },
+          {
+            name: 'blockHash',
+            type: 'Hash',
+            isOptional: true
+          }
+        ],
+        type: 'Vec<DispatchError>'
+      }
+    },
+    group: {
+      getCDDValidMembers: {
+        description: 'Get the CDD members',
+        params: [
+          {
+            name: 'blockHash',
+            type: 'Hash',
+            isOptional: true
+          }
+        ],
+        type: 'Vec<Member>'
+      },
+      getGCValidMembers: {
+        description: 'Get the GC members',
+        params: [
+          {
+            name: 'blockHash',
+            type: 'Hash',
+            isOptional: true
+          }
+        ],
+        type: 'Vec<Member>'
+      }
+    },
+    nft: {
+      transferReport: {
+        description: "Returns a vector containing all errors for the transfer. An empty vec means there's no error.",
+        params: [
+          {
+            name: 'sender_portfolio',
+            type: 'PortfolioId',
+            isOptional: false
+          },
+          {
+            name: 'receiver_portfolio',
+            type: 'PortfolioId',
+            isOptional: false
+          },
+          {
+            name: 'nfts',
+            type: 'NFTs',
+            isOptional: false
+          },
+          {
+            name: 'skip_locked_check',
+            type: 'bool',
+            isOptional: false
+          },
+          {
+            name: 'blockHash',
+            type: 'Hash',
+            isOptional: true
+          }
+        ],
+        type: 'Vec<DispatchError>'
+      }
+    },
+    settlement: {
+      getExecuteInstructionInfo: {
+        description: 'Returns an ExecuteInstructionInfo instance, containing the consumed weight and the number of tokens in the instruction.',
+        params: [
+          {
+            name: 'instruction_id',
+            type: 'InstructionId',
+            isOptional: false
+          },
+          {
+            name: 'blockHash',
+            type: 'Hash',
+            isOptional: true
+          }
+        ],
+        type: 'Option<ExecuteInstructionInfo>'
+      },
+      getAffirmationCount: {
+        description: 'Returns an instance of AffirmationCount, which holds the asset count for both the sender and receiver and the number of offchain assets in the instruction',
+        params: [
+          {
+            name: 'instruction_id',
+            type: 'InstructionId',
+            isOptional: false
+          },
+          {
+            name: 'portfolios',
+            type: 'Vec<PortfolioId>',
+            isOptional: false
+          },
+          {
+            name: 'blockHash',
+            type: 'Hash',
+            isOptional: true
+          }
+        ],
+        type: 'AffirmationCount'
+      },
+      getExecuteInstructionReport: {
+        description: "Returns a vector containing all errors for the execution. An empty vec means there's no error.",
+        params: [
+          {
+            name: 'instruction_id',
+            type: 'InstructionId'
+          }
+        ],
+        type: 'Vec<DispatchError>'
+      },
+      getTransferReport: {
+        description: "Returns a vector containing all errors for the transfer. An empty vec means there's no error.",
+        params: [
+          {
+            name: 'leg',
+            type: 'Leg'
+          },
+          {
+            name: 'skip_locked_check',
+            type: 'bool'
+          }
+        ],
+        type: 'Vec<DispatchError>'
+      }
+    },
+    compliance: {
+      complianceReport: {
+        description: 'Checks all compliance requirements for the given asset.',
+        params: [
+          {
+            name: 'asset_id',
+            type: 'PolymeshAssetId'
+          },
+          {
+            name: 'sender_identity',
+            type: 'IdentityId'
+          },
+          {
+            name: 'receiver_identity',
+            type: 'IdentityId'
+          }
+        ],
+        type: 'Result<ComplianceReport, DispatchError>'
+      }
+    }
+  },
   runtime: {
     AssetApi: [
       {
@@ -649,7 +1027,7 @@ export default {
               },
               {
                 name: 'asset_id',
-                type: 'AssetId'
+                type: 'PolymeshAssetId'
               },
               {
                 name: 'transfer_value',
@@ -709,7 +1087,7 @@ export default {
             params: [
               {
                 name: 'asset_id',
-                type: 'AssetId'
+                type: 'PolymeshAssetId'
               },
               {
                 name: 'sender_identity',
@@ -1174,7 +1552,7 @@ export default {
             params: [
               {
                 name: 'asset_id',
-                type: 'AssetId'
+                type: 'PolymeshAssetId'
               },
               {
                 name: 'sender_did',
