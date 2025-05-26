@@ -7,7 +7,7 @@ export const StatisticsApiV0: Record<string, DefinitionCall> = {
     params: [
       {
         name: 'asset_id',
-        type: 'AssetId',
+        type: 'PolymeshAssetId',
       },
       {
         name: 'sender_did',

@@ -217,7 +217,7 @@ export default {
         },
         {
           name: 'asset_id',
-          type: 'AssetId',
+          type: 'PolymeshAssetId',
           isOptional: false,
         },
         {
@@ -370,7 +370,7 @@ export default {
       params: [
         {
           name: 'asset_id',
-          type: 'AssetId',
+          type: 'PolymeshAssetId',
         },
         {
           name: 'sender_identity',

@@ -10,7 +10,7 @@ import { IdentityApiV4 } from './identityApi/v4';
 import { NFTApiV1 } from './nftApi/v1';
 import { NFTApiV2 } from './nftApi/v2';
 import { PipsApiV1 } from './pipsApi/v1';
-import { ProtocolApiV1 } from './protocolApi/v1';
+import { ProtocolFeeApiV1 } from './protocolFeeApi/v1';
 import { SettlementApiV1 } from './settlementApi/v1';
 import { SettlementApiV2 } from './settlementApi/v2';
 import { StakingApiV1 } from './stakingApi/v1';
@@ -35,7 +35,7 @@ export const runtime: DefinitionsCall = {
     { methods: NFTApiV1, version: 1 },
   ],
   PipsApi: [{ methods: PipsApiV1, version: 1 }],
-  ProtocolFeeApi: [{ methods: ProtocolApiV1, version: 1 }],
+  ProtocolFeeApi: [{ methods: ProtocolFeeApiV1, version: 1 }],
   SettlementApi: [
     { methods: SettlementApiV2, version: 2 },
     { methods: SettlementApiV1, version: 1 },
