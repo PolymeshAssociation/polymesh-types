@@ -710,6 +710,7 @@ export enum SettlementTx {
   AffirmInstructionAsMediator = 'settlement.affirmInstructionAsMediator',
   WithdrawAffirmationAsMediator = 'settlement.withdrawAffirmationAsMediator',
   RejectInstructionAsMediator = 'settlement.rejectInstructionAsMediator',
+  LockInstruction = 'settlement.lockInstruction',
 }
 
 export enum StatisticsTx {
@@ -730,6 +731,7 @@ export enum StoTx {
   UnfreezeFundraiser = 'sto.unfreezeFundraiser',
   ModifyFundraiserWindow = 'sto.modifyFundraiserWindow',
   Stop = 'sto.stop',
+  EnableOffchainFunding = 'sto.enableOffchainFunding',
 }
 
 export enum TreasuryTx {

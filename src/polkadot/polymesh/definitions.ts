@@ -6,55 +6,80 @@ export default {
     CddId: '[u8; 32]',
     PalletName: 'Text',
     ExtrinsicName: 'Text',
+    AuthorizationNonce: 'u64',
+    TargetIdAuthorization: {
+      targetId: 'IdentityId',
+      nonce: 'AuthorizationNonce',
+      expiresAt: 'PolymeshMoment',
+    },
+    Receipt: {
+      uid: 'u64',
+      instructionId: 'InstructionId',
+      legId: 'LegId',
+      senderIdentity: 'IdentityId',
+      receiverIdentity: 'IdentityId',
+      ticker: 'Ticker',
+      amount: 'Balance',
+    },
+    FundraiserId: 'u64',
+    FundraiserReceipt: {
+      uid: 'u64',
+      fundraiserId: 'FundraiserId',
+      legId: 'LegId',
+      senderIdentity: 'IdentityId',
+      receiverIdentity: 'IdentityId',
+      ticker: 'Ticker',
+      amount: 'Balance',
+    },
     AssetPermissions: {
       _enum: {
         Whole: '',
         These: 'BTreeSet<PolymeshAssetId>',
-        Except: 'BTreeSet<PolymeshAssetId>'
-      }
+        Except: 'BTreeSet<PolymeshAssetId>',
+      },
     },
     PortfolioPermissions: {
       _enum: {
         Whole: '',
         These: 'BTreeSet<PortfolioId>',
-        Except: 'BTreeSet<PortfolioId>'
-      }
+        Except: 'BTreeSet<PortfolioId>',
+      },
     },
     ExtrinsicNames: {
       _enum: {
         Whole: '',
         These: 'BTreeSet<ExtrinsicName>',
-        Except: 'BTreeSet<ExtrinsicName>'
-      }
+        Except: 'BTreeSet<ExtrinsicName>',
+      },
     },
     PalletPermissions: {
-      extrinsics: 'ExtrinsicNames'
+      extrinsics: 'ExtrinsicNames',
     },
     ExtrinsicPermissions: {
       _enum: {
         Whole: '',
         These: 'BTreeMap<PalletName, PalletPermissions>',
-        Except: 'BTreeMap<PalletName, PalletPermissions>'
-      }
+        Except: 'BTreeMap<PalletName, PalletPermissions>',
+      },
     },
     Permissions: {
       asset: 'AssetPermissions',
       extrinsic: 'ExtrinsicPermissions',
-      portfolio: 'PortfolioPermissions'
+      portfolio: 'PortfolioPermissions',
     },
     Signatory: {
       _enum: {
         Identity: 'IdentityId',
-        Account: 'AccountId'
-      }
+        Account: 'AccountId',
+      },
     },
     SecondaryKey: {
       key: 'AccountId',
-      permissions: 'Permissions'
+      permissions: 'Permissions',
     },
     KeyIdentityData: {
       identity: 'IdentityId',
-      permissions: 'Option<Permissions>'
+      permissions: 'Option<Permissions>',
     },
     CountryCode: {
       _enum: [
@@ -307,15 +332,15 @@ export default {
         'ZW',
         'BQ',
         'CW',
-        'SX'
-      ]
+        'SX',
+      ],
     },
     Scope: {
       _enum: {
         Identity: 'IdentityId',
         Asset: 'PolymeshAssetId',
-        Custom: 'Vec<u8>'
-      }
+        Custom: 'Vec<u8>',
+      },
     },
     CustomClaimTypeId: 'u32',
     Claim: {
@@ -329,8 +354,8 @@ export default {
         Jurisdiction: '(CountryCode, Scope)',
         Exempted: 'Scope',
         Blocked: 'Scope',
-        Custom: '(CustomClaimTypeId, Option<Scope>)'
-      }
+        Custom: '(CustomClaimTypeId, Option<Scope>)',
+      },
     },
     ClaimType: {
       _enum: {
@@ -343,21 +368,21 @@ export default {
         Jurisdiction: '',
         Exempted: '',
         Blocked: '',
-        Custom: 'CustomClaimTypeId'
-      }
+        Custom: 'CustomClaimTypeId',
+      },
     },
     IdentityClaim: {
       claimIssuer: 'IdentityId',
       issuanceDate: 'PolymeshMoment',
       lastUpdateDate: 'PolymeshMoment',
       expiry: 'Option<PolymeshMoment>',
-      claim: 'Claim'
+      claim: 'Claim',
     },
     ComplianceRequirementResult: {
       senderConditions: 'Vec<ConditionResult>',
       receiverConditions: 'Vec<ConditionResult>',
       id: 'u32',
-      result: 'bool'
+      result: 'bool',
     },
     ConditionType: {
       _enum: {
@@ -365,26 +390,26 @@ export default {
         IsAbsent: 'Claim',
         IsAnyOf: 'Vec<Claim>',
         IsNoneOf: 'Vec<Claim>',
-        IsIdentity: 'TargetIdentity'
-      }
+        IsIdentity: 'TargetIdentity',
+      },
     },
     TrustedFor: {
       _enum: {
         Any: '',
-        Specific: 'Vec<ClaimType>'
-      }
+        Specific: 'Vec<ClaimType>',
+      },
     },
     TrustedIssuer: {
       issuer: 'IdentityId',
-      trustedFor: 'TrustedFor'
+      trustedFor: 'TrustedFor',
     },
     Condition: {
       conditionType: 'ConditionType',
-      issuers: 'Vec<TrustedIssuer>'
+      issuers: 'Vec<TrustedIssuer>',
     },
     ConditionResult: {
       condition: 'Condition',
-      result: 'bool'
+      result: 'bool',
     },
     PipId: 'u32',
     Authorization: {
@@ -392,7 +417,7 @@ export default {
       authorizedBy: 'IdentityId',
       expiry: 'Option<PolymeshMoment>',
       authId: 'u64',
-      count: 'u32'
+      count: 'u32',
     },
     AuthorizationData: {
       _enum: {
@@ -405,29 +430,29 @@ export default {
         PortfolioCustody: 'PortfolioId',
         BecomeAgent: '(PolymeshAssetId, AgentGroup)',
         AddRelayerPayingKey: '(AccountId32, AccountId32, u128)',
-        RotatePrimaryKeyToSecondary: 'Permissions'
-      }
+        RotatePrimaryKeyToSecondary: 'Permissions',
+      },
     },
     Percentage: 'Permill',
     StatClaim: {
       _enum: {
         Accredited: 'bool',
         Affiliate: 'bool',
-        Jurisdiction: 'Option<CountryCode>'
-      }
+        Jurisdiction: 'Option<CountryCode>',
+      },
     },
     TransferCondition: {
       _enum: {
         MaxInvestorCount: 'u64',
         MaxInvestorOwnership: 'Percentage',
         ClaimCount: '(StatClaim, IdentityId, u64, Option<u64>)',
-        ClaimOwnership: '(StatClaim, IdentityId, Percentage, Percentage)'
-      }
+        ClaimOwnership: '(StatClaim, IdentityId, Percentage, Percentage)',
+      },
     },
     AssetComplianceResult: {
       paused: 'bool',
       requirements: 'Vec<ComplianceRequirementResult>',
-      result: 'bool'
+      result: 'bool',
     },
     ProtocolOp: {
       _enum: [
@@ -446,40 +471,40 @@ export default {
         'CapitalDistributionDistribute',
         'NFTCreateCollection',
         'NFTMint',
-        'IdentityCreateChildIdentity'
-      ]
+        'IdentityCreateChildIdentity',
+      ],
     },
     CddStatus: {
       _enum: {
         Ok: 'IdentityId',
-        Err: 'Vec<u8>'
-      }
+        Err: 'Vec<u8>',
+      },
     },
     AssetDidResult: {
       _enum: {
         Ok: 'IdentityId',
-        Err: 'Vec<u8>'
-      }
+        Err: 'Vec<u8>',
+      },
     },
     RpcDidRecordsSuccess: {
       primaryKey: 'AccountId',
-      secondaryKeys: 'Vec<SecondaryKey>'
+      secondaryKeys: 'Vec<SecondaryKey>',
     },
     RpcDidRecords: {
       _enum: {
         Success: 'RpcDidRecordsSuccess',
-        IdNotFound: 'Vec<u8>'
-      }
+        IdNotFound: 'Vec<u8>',
+      },
     },
     VoteCountProposalFound: {
       ayes: 'u64',
-      nays: 'u64'
+      nays: 'u64',
     },
     VoteCount: {
       _enum: {
         ProposalFound: 'VoteCountProposalFound',
-        ProposalNotFound: ''
-      }
+        ProposalNotFound: '',
+      },
     },
     CappedFee: 'u64',
     AuthorizationType: {
@@ -493,40 +518,41 @@ export default {
         PortfolioCustody: '',
         BecomeAgent: '',
         AddRelayerPayingKey: '',
-        RotatePrimaryKeyToSecondary: ''
-      }
+        RotatePrimaryKeyToSecondary: '',
+      },
     },
     DidStatus: {
       _enum: {
         Unknown: '',
         Exists: '',
-        CddVerified: ''
-      }
+        CddVerified: '',
+      },
     },
     PortfolioNumber: 'u64',
     PortfolioKind: {
       _enum: {
         Default: '',
-        User: 'PortfolioNumber'
-      }
+        User: 'PortfolioNumber',
+      },
     },
     PortfolioId: {
       did: 'IdentityId',
-      kind: 'PortfolioKind'
+      kind: 'PortfolioKind',
     },
     PolymeshMoment: 'u64',
     InstructionId: 'u64',
+    LegId: 'u64',
     TargetIdentity: {
       _enum: {
         ExternalAgent: '',
-        Specific: 'IdentityId'
-      }
+        Specific: 'IdentityId',
+      },
     },
     CanTransferGranularReturn: {
       _enum: {
         Ok: 'GranularCanTransferResult',
-        Err: 'DispatchError'
-      }
+        Err: 'DispatchError',
+      },
     },
     GranularCanTransferResult: {
       invalidGranularity: 'bool',
@@ -541,18 +567,18 @@ export default {
       transferConditionResult: 'Vec<TransferConditionResult>',
       complianceResult: 'AssetComplianceResult',
       result: 'bool',
-      consumedWeight: 'Option<Weight>'
+      consumedWeight: 'Option<Weight>',
     },
     PortfolioValidityResult: {
       receiverIsSamePortfolio: 'bool',
       senderPortfolioDoesNotExist: 'bool',
       receiverPortfolioDoesNotExist: 'bool',
       senderInsufficientBalance: 'bool',
-      result: 'bool'
+      result: 'bool',
     },
     TransferConditionResult: {
       condition: 'TransferCondition',
-      result: 'bool'
+      result: 'bool',
     },
     AGId: 'u32',
     AgentGroup: {
@@ -561,75 +587,75 @@ export default {
         Custom: 'AGId',
         ExceptMeta: '',
         PolymeshV1CAA: '',
-        PolymeshV1PIA: ''
-      }
+        PolymeshV1PIA: '',
+      },
     },
     Member: {
       id: 'IdentityId',
       expiryAt: 'Option<PolymeshMoment>',
-      inactiveFrom: 'Option<PolymeshMoment>'
+      inactiveFrom: 'Option<PolymeshMoment>',
     },
     NFTId: 'u64',
     NFTs: {
       assetId: 'PolymeshAssetId',
-      ids: 'Vec<NFTId>'
+      ids: 'Vec<NFTId>',
     },
     FungibleLeg: {
       sender: 'PortfolioId',
       receiver: 'PortfolioId',
       assetId: 'PolymeshAssetId',
-      amount: 'Balance'
+      amount: 'Balance',
     },
     NonFungibleLeg: {
       sender: 'PortfolioId',
       receiver: 'PortfolioId',
-      nfts: 'NFTs'
+      nfts: 'NFTs',
     },
     OffChainLeg: {
       senderIdentity: 'IdentityId',
       receiverIdentity: 'IdentityId',
       ticker: 'Ticker',
-      amount: 'Balance'
+      amount: 'Balance',
     },
     Leg: {
       _enum: {
         Fungible: 'FungibleLeg',
         NonFungible: 'NonFungibleLeg',
-        OffChain: 'OffChainLeg'
-      }
+        OffChain: 'OffChainLeg',
+      },
     },
     ExecuteInstructionInfo: {
       fungibleTokens: 'u32',
       nonFungibleTokens: 'u32',
       offChainAssets: 'u32',
       consumedWeight: 'Weight',
-      error: 'Option<String>'
+      error: 'Option<String>',
     },
     AssetCount: {
       fungibleTokens: 'u32',
       nonFungibleTokens: 'u32',
-      offChainAssets: 'u32'
+      offChainAssets: 'u32',
     },
     AffirmationCount: {
       senderAssetCount: 'AssetCount',
       receiverAssetCount: 'AssetCount',
-      offchainCount: 'u32'
+      offchainCount: 'u32',
     },
     ComplianceReport: {
       anyRequirementSatisfied: 'bool',
       pausedCompliance: 'bool',
-      requirements: 'Vec<RequirementReport>'
+      requirements: 'Vec<RequirementReport>',
     },
     RequirementReport: {
       requirementSatisfied: 'bool',
       id: 'u32',
       senderConditions: 'Vec<ConditionReport>',
-      receiverConditions: 'Vec<ConditionReport>'
+      receiverConditions: 'Vec<ConditionReport>',
     },
     ConditionReport: {
       satisfied: 'bool',
-      condition: 'Condition'
-    }
+      condition: 'Condition',
+    },
   },
   rpc: {},
   runtime: {
@@ -637,69 +663,71 @@ export default {
       {
         methods: {
           transfer_report: {
-            description: "Returns a vector containing all errors for the transfer. An empty vec means there's no error.",
+            description:
+              "Returns a vector containing all errors for the transfer. An empty vec means there's no error.",
             params: [
               {
                 name: 'sender_portfolio',
-                type: 'PortfolioId'
+                type: 'PortfolioId',
               },
               {
                 name: 'receiver_portfolio',
-                type: 'PortfolioId'
+                type: 'PortfolioId',
               },
               {
                 name: 'asset_id',
-                type: 'PolymeshAssetId'
+                type: 'PolymeshAssetId',
               },
               {
                 name: 'transfer_value',
-                type: 'Balance'
+                type: 'Balance',
               },
               {
                 name: 'skip_locked_check',
-                type: 'bool'
-              }
+                type: 'bool',
+              },
             ],
-            type: 'Vec<DispatchError>'
-          }
+            type: 'Vec<DispatchError>',
+          },
         },
-        version: 4
+        version: 4,
       },
       {
         methods: {
           can_transfer_granular: {
-            description: 'Checks whether a transaction with given parameters can take place or not. The result is granular meaning each check is run and returned regardless of outcome.',
+            description:
+              'Checks whether a transaction with given parameters can take place or not. The result is granular meaning each check is run and returned regardless of outcome.',
             params: [
               {
                 name: 'from_custodian',
-                type: 'Option<IdentityId>'
+                type: 'Option<IdentityId>',
               },
               {
                 name: 'from_portfolio',
-                type: 'PortfolioId'
+                type: 'PortfolioId',
               },
               {
                 name: 'to_custodian',
-                type: 'Option<IdentityId>'
+                type: 'Option<IdentityId>',
               },
               {
                 name: 'to_portfolio',
-                type: 'PortfolioId'
+                type: 'PortfolioId',
               },
               {
                 name: 'ticker',
-                type: 'Ticker'
+                type: 'Ticker',
               },
               {
                 name: 'value',
-                type: 'Balance'
-              }
+                type: 'Balance',
+              },
             ],
-            type: 'CanTransferGranularReturn'
-          }
+            type: 'CanTransferGranularReturn',
+          },
         },
-        version: 3
-      }
+        version: 3,
+      },
     ],
     ComplianceApi: [
       {
@@ -709,21 +737,21 @@ export default {
             params: [
               {
                 name: 'asset_id',
-                type: 'PolymeshAssetId'
+                type: 'PolymeshAssetId',
               },
               {
                 name: 'sender_identity',
-                type: 'IdentityId'
+                type: 'IdentityId',
               },
               {
                 name: 'receiver_identity',
-                type: 'IdentityId'
-              }
+                type: 'IdentityId',
+              },
             ],
-            type: 'Result<ComplianceReport, DispatchError>'
-          }
+            type: 'Result<ComplianceReport, DispatchError>',
+          },
         },
-        version: 2
+        version: 2,
       },
       {
         methods: {
@@ -732,22 +760,22 @@ export default {
             params: [
               {
                 name: 'ticker',
-                type: 'Ticker'
+                type: 'Ticker',
               },
               {
                 name: 'sender_identity',
-                type: 'IdentityId'
+                type: 'IdentityId',
               },
               {
                 name: 'receiver_identity',
-                type: 'IdentityId'
-              }
+                type: 'IdentityId',
+              },
             ],
-            type: 'Result<ComplianceReport, DispatchError>'
-          }
+            type: 'Result<ComplianceReport, DispatchError>',
+          },
         },
-        version: 1
-      }
+        version: 1,
+      },
     ],
     GroupApi: [
       {
@@ -755,16 +783,16 @@ export default {
           get_cdd_valid_members: {
             description: 'Get the CDD members',
             params: [],
-            type: 'Vec<Member>'
+            type: 'Vec<Member>',
           },
           get_gc_valid_members: {
             description: 'Get the GC members',
             params: [],
-            type: 'Vec<Member>'
-          }
+            type: 'Vec<Member>',
+          },
         },
-        version: 1
-      }
+        version: 1,
+      },
     ],
     IdentityApi: [
       {
@@ -774,79 +802,81 @@ export default {
             params: [
               {
                 name: 'did',
-                type: 'IdentityId'
+                type: 'IdentityId',
               },
               {
                 name: 'buffer_time',
-                type: 'Option<u64>'
-              }
+                type: 'Option<u64>',
+              },
             ],
-            type: 'CddStatus'
+            type: 'CddStatus',
           },
           get_did_records: {
             description: 'Used to get the did record values for a given DID',
             params: [
               {
                 name: 'did',
-                type: 'IdentityId'
-              }
+                type: 'IdentityId',
+              },
             ],
-            type: 'RpcDidRecords'
+            type: 'RpcDidRecords',
           },
           get_did_status: {
             description: 'Retrieve status of the DID',
             params: [
               {
                 name: 'did',
-                type: 'Vec<IdentityId>'
-              }
+                type: 'Vec<IdentityId>',
+              },
             ],
-            type: 'Vec<DidStatus>'
+            type: 'Vec<DidStatus>',
           },
           get_filtered_authorizations: {
-            description: 'Retrieve authorizations data for a given signatory and filtered using the given authorization type',
+            description:
+              'Retrieve authorizations data for a given signatory and filtered using the given authorization type',
             params: [
               {
                 name: 'signatory',
-                type: 'Signatory'
+                type: 'Signatory',
               },
               {
                 name: 'allow_expired',
-                type: 'bool'
+                type: 'bool',
               },
               {
                 name: 'auth_type',
-                type: 'Option<AuthorizationType>'
-              }
+                type: 'Option<AuthorizationType>',
+              },
             ],
-            type: 'Vec<Authorization>'
+            type: 'Vec<Authorization>',
           },
           get_key_identity_data: {
             description: 'Query relation between a signing key and a DID',
             params: [
               {
                 name: 'acc',
-                type: 'AccountId'
-              }
+                type: 'AccountId',
+              },
             ],
-            type: 'Option<KeyIdentityData>'
+            type: 'Option<KeyIdentityData>',
           },
           valid_cdd_claims: {
-            description: 'Returns all valid IdentityClaim of type CustomerDueDiligence for the given target_identity',
+            description:
+              'Returns all valid IdentityClaim of type CustomerDueDiligence for the given target_identity',
             params: [
               {
                 name: 'target_identity',
-                type: 'IdentityId'
+                type: 'IdentityId',
               },
               {
                 name: 'cdd_checker_leeway',
-                type: 'Option<u64>'
-              }
+                type: 'Option<u64>',
+              },
             ],
-            type: 'Vec<IdentityClaim>'
-          }
+            type: 'Vec<IdentityClaim>',
+          },
         },
-        version: 4
+        version: 4,
       },
       {
         methods: {
@@ -855,142 +885,146 @@ export default {
             params: [
               {
                 name: 'did',
-                type: 'IdentityId'
+                type: 'IdentityId',
               },
               {
                 name: 'buffer_time',
-                type: 'Option<u64>'
-              }
+                type: 'Option<u64>',
+              },
             ],
-            type: 'CddStatus'
+            type: 'CddStatus',
           },
           get_asset_did: {
             description: 'function is used to query the given ticker DID',
             params: [
               {
                 name: 'ticker',
-                type: 'Ticker'
-              }
+                type: 'Ticker',
+              },
             ],
-            type: 'AssetDidResult'
+            type: 'AssetDidResult',
           },
           get_did_records: {
             description: 'Used to get the did record values for a given DID',
             params: [
               {
                 name: 'did',
-                type: 'IdentityId'
-              }
+                type: 'IdentityId',
+              },
             ],
-            type: 'RpcDidRecords'
+            type: 'RpcDidRecords',
           },
           get_did_status: {
             description: 'Retrieve status of the DID',
             params: [
               {
                 name: 'did',
-                type: 'Vec<IdentityId>'
-              }
+                type: 'Vec<IdentityId>',
+              },
             ],
-            type: 'Vec<DidStatus>'
+            type: 'Vec<DidStatus>',
           },
           get_filtered_authorizations: {
-            description: 'Retrieve authorizations data for a given signatory and filtered using the given authorization type',
+            description:
+              'Retrieve authorizations data for a given signatory and filtered using the given authorization type',
             params: [
               {
                 name: 'signatory',
-                type: 'Signatory'
+                type: 'Signatory',
               },
               {
                 name: 'allow_expired',
-                type: 'bool'
+                type: 'bool',
               },
               {
                 name: 'auth_type',
-                type: 'Option<AuthorizationType>'
-              }
+                type: 'Option<AuthorizationType>',
+              },
             ],
-            type: 'Vec<Authorization>'
+            type: 'Vec<Authorization>',
           },
           get_key_identity_data: {
             description: 'Query relation between a signing key and a DID',
             params: [
               {
                 name: 'acc',
-                type: 'AccountId'
-              }
+                type: 'AccountId',
+              },
             ],
-            type: 'Option<KeyIdentityData>'
+            type: 'Option<KeyIdentityData>',
           },
           valid_cdd_claims: {
-            description: 'Returns all valid IdentityClaim of type CustomerDueDiligence for the given target_identity',
+            description:
+              'Returns all valid IdentityClaim of type CustomerDueDiligence for the given target_identity',
             params: [
               {
                 name: 'target_identity',
-                type: 'IdentityId'
+                type: 'IdentityId',
               },
               {
                 name: 'cdd_checker_leeway',
-                type: 'Option<u64>'
-              }
+                type: 'Option<u64>',
+              },
             ],
-            type: 'Vec<IdentityClaim>'
-          }
+            type: 'Vec<IdentityClaim>',
+          },
         },
-        version: 3
-      }
+        version: 3,
+      },
     ],
     NFTApi: [
       {
         methods: {
           transfer_report: {
-            description: "Returns a vector containing all errors for the transfer. An empty vec means there's no error.",
+            description:
+              "Returns a vector containing all errors for the transfer. An empty vec means there's no error.",
             params: [
               {
                 name: 'sender_portfolio',
-                type: 'PortfolioId'
+                type: 'PortfolioId',
               },
               {
                 name: 'receiver_portfolio',
-                type: 'PortfolioId'
+                type: 'PortfolioId',
               },
               {
                 name: 'nfts',
-                type: 'NFTs'
+                type: 'NFTs',
               },
               {
                 name: 'skip_locked_check',
-                type: 'bool'
-              }
+                type: 'bool',
+              },
             ],
-            type: 'Vec<DispatchError>'
-          }
+            type: 'Vec<DispatchError>',
+          },
         },
-        version: 2
+        version: 2,
       },
       {
         methods: {
           validate_nft_transfer: {
-            description: 'Verifies if and the sender and receiver are not the same, if both have valid balances, if the sender owns the nft, and if all compliance rules are being respected.',
+            description:
+              'Verifies if and the sender and receiver are not the same, if both have valid balances, if the sender owns the nft, and if all compliance rules are being respected.',
             params: [
               {
                 name: 'sender_portfolio',
-                type: 'PortfolioId'
+                type: 'PortfolioId',
               },
               {
                 name: 'receiver_portfolio',
-                type: 'PortfolioId'
+                type: 'PortfolioId',
               },
               {
                 name: 'nfts',
-                type: 'NFTs'
-              }
+                type: 'NFTs',
+              },
             ],
-            type: 'DispatchResult'
-          }
+            type: 'DispatchResult',
+          },
         },
-        version: 1
-      }
+        version: 1,
+      },
     ],
     PipsApi: [
       {
@@ -1000,34 +1034,34 @@ export default {
             params: [
               {
                 name: 'index',
-                type: 'PipId'
-              }
+                type: 'PipId',
+              },
             ],
-            type: 'VoteCount'
+            type: 'VoteCount',
           },
           proposed_by: {
             description: 'Retrieves proposal indices started by address',
             params: [
               {
                 name: 'address',
-                type: 'AccountId'
-              }
+                type: 'AccountId',
+              },
             ],
-            type: 'Vec<PipId>'
+            type: 'Vec<PipId>',
           },
           voted_on: {
             description: 'Retrieves proposal address indices voted on',
             params: [
               {
                 name: 'address',
-                type: 'AccountId'
-              }
+                type: 'AccountId',
+              },
             ],
-            type: 'Vec<PipId>'
-          }
+            type: 'Vec<PipId>',
+          },
         },
-        version: 1
-      }
+        version: 1,
+      },
     ],
     ProtocolFeeApi: [
       {
@@ -1037,122 +1071,130 @@ export default {
             params: [
               {
                 name: 'op',
-                type: 'ProtocolOp'
-              }
+                type: 'ProtocolOp',
+              },
             ],
-            type: 'CappedFee'
-          }
+            type: 'CappedFee',
+          },
         },
-        version: 1
-      }
+        version: 1,
+      },
     ],
     SettlementApi: [
       {
         methods: {
           get_execute_instruction_info: {
-            description: 'Returns an ExecuteInstructionInfo instance containing the consumed weight and the number of tokens in the instruction.',
+            description:
+              'Returns an ExecuteInstructionInfo instance containing the consumed weight and the number of tokens in the instruction.',
             params: [
               {
                 name: 'instruction_id',
-                type: 'InstructionId'
-              }
+                type: 'InstructionId',
+              },
             ],
-            type: 'Option<ExecuteInstructionInfo>'
+            type: 'Option<ExecuteInstructionInfo>',
           },
           get_affirmation_count: {
-            description: 'Returns an AffirmationCount instance containing the number of assets being sent/received from portfolios, and the number of off-chain assets in the instruction.',
+            description:
+              'Returns an AffirmationCount instance containing the number of assets being sent/received from portfolios, and the number of off-chain assets in the instruction.',
             params: [
               {
                 name: 'instruction_id',
-                type: 'InstructionId'
+                type: 'InstructionId',
               },
               {
                 name: 'portfolios',
-                type: 'Vec<PortfolioId>'
-              }
+                type: 'Vec<PortfolioId>',
+              },
             ],
-            type: 'AffirmationCount'
+            type: 'AffirmationCount',
           },
           get_transfer_report: {
-            description: "Returns a vector containing all errors for the transfer. An empty vec means there's no error.",
+            description:
+              "Returns a vector containing all errors for the transfer. An empty vec means there's no error.",
             params: [
               {
                 name: 'leg',
-                type: 'Leg'
+                type: 'Leg',
               },
               {
                 name: 'skip_locked_check',
-                type: 'bool'
-              }
+                type: 'bool',
+              },
             ],
-            type: 'Vec<DispatchError>'
+            type: 'Vec<DispatchError>',
           },
           get_execute_instruction_report: {
-            description: "Returns a vector containing all errors for the execution. An empty vec means there's no error.",
+            description:
+              "Returns a vector containing all errors for the execution. An empty vec means there's no error.",
             params: [
               {
                 name: 'instruction_id',
-                type: 'InstructionId'
-              }
+                type: 'InstructionId',
+              },
             ],
-            type: 'Vec<DispatchError>'
-          }
+            type: 'Vec<DispatchError>',
+          },
         },
-        version: 2
+        version: 2,
       },
       {
         methods: {
           get_execute_instruction_info: {
-            description: 'Returns an ExecuteInstructionInfo instance containing the consumed weight and the number of tokens in the instruction.',
+            description:
+              'Returns an ExecuteInstructionInfo instance containing the consumed weight and the number of tokens in the instruction.',
             params: [
               {
                 name: 'instruction_id',
-                type: 'InstructionId'
-              }
+                type: 'InstructionId',
+              },
             ],
-            type: 'ExecuteInstructionInfo'
+            type: 'ExecuteInstructionInfo',
           },
           get_affirmation_count: {
-            description: 'Returns an AffirmationCount instance containing the number of assets being sent/received from portfolios, and the number of off-chain assets in the instruction.',
+            description:
+              'Returns an AffirmationCount instance containing the number of assets being sent/received from portfolios, and the number of off-chain assets in the instruction.',
             params: [
               {
                 name: 'instruction_id',
-                type: 'InstructionId'
+                type: 'InstructionId',
               },
               {
                 name: 'portfolios',
-                type: 'Vec<PortfolioId>'
-              }
+                type: 'Vec<PortfolioId>',
+              },
             ],
-            type: 'AffirmationCount'
+            type: 'AffirmationCount',
           },
           get_transfer_report: {
-            description: "Returns a vector containing all errors for the transfer. An empty vec means there's no error.",
+            description:
+              "Returns a vector containing all errors for the transfer. An empty vec means there's no error.",
             params: [
               {
                 name: 'leg',
-                type: 'Leg'
+                type: 'Leg',
               },
               {
                 name: 'skip_locked_check',
-                type: 'bool'
-              }
+                type: 'bool',
+              },
             ],
-            type: 'Vec<DispatchError>'
+            type: 'Vec<DispatchError>',
           },
           get_execute_instruction_report: {
-            description: "Returns a vector containing all errors for the execution. An empty vec means there's no error.",
+            description:
+              "Returns a vector containing all errors for the execution. An empty vec means there's no error.",
             params: [
               {
                 name: 'instruction_id',
-                type: 'InstructionId'
-              }
+                type: 'InstructionId',
+              },
             ],
-            type: 'Vec<DispatchError>'
-          }
+            type: 'Vec<DispatchError>',
+          },
         },
-        version: 1
-      }
+        version: 1,
+      },
     ],
     StakingApi: [
       {
@@ -1160,46 +1202,47 @@ export default {
           get_curve: {
             description: 'Retrieves curves parameters',
             params: [],
-            type: 'Vec<(Perbill, Perbill)>'
-          }
+            type: 'Vec<(Perbill, Perbill)>',
+          },
         },
-        version: 1
-      }
+        version: 1,
+      },
     ],
     StatisticsApi: [
       {
         methods: {
           transfer_restrictions_report: {
-            description: "Returns a vector containing all TransferCondition that are not being respected for the transfer. An empty vec means there's no error.",
+            description:
+              "Returns a vector containing all TransferCondition that are not being respected for the transfer. An empty vec means there's no error.",
             params: [
               {
                 name: 'asset_id',
-                type: 'PolymeshAssetId'
+                type: 'PolymeshAssetId',
               },
               {
                 name: 'sender_did',
-                type: 'IdentityId'
+                type: 'IdentityId',
               },
               {
                 name: 'receiver_did',
-                type: 'IdentityId'
+                type: 'IdentityId',
               },
               {
                 name: 'transfer_amount',
-                type: 'Balance'
-              }
+                type: 'Balance',
+              },
             ],
-            type: 'Result<Vec<TransferCondition>, DispatchError>'
-          }
+            type: 'Result<Vec<TransferCondition>, DispatchError>',
+          },
         },
-        version: 0
-      }
-    ]
+        version: 0,
+      },
+    ],
   },
   signedExtensions: {
     StoreCallMetadata: {
       extrinsic: {},
-      payload: {}
-    }
-  }
-}
+      payload: {},
+    },
+  },
+};

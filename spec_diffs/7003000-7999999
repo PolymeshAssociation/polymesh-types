@@ -27,7 +27,7 @@
     },
     "AssetDidResult": Object {
       "_enum": Object {
-@@ -30,32 +30,31 @@
+@@ -30,35 +30,35 @@
         "Ok": "IdentityId",
       },
     },
@@ -69,7 +69,11 @@
         "TransferTicker": "Ticker",
       },
     },
-@@ -116,18 +115,18 @@
++   "AuthorizationNonce": "u64",
+    "AuthorizationType": Object {
+      "_enum": Object {
+        "AddMultiSigSigner": "",
+@@ -116,18 +116,18 @@
       },
     },
     "ComplianceReport": Object {
@@ -93,7 +97,7 @@
       "issuers": "Vec<TrustedIssuer>",
     },
     "ConditionReport": Object {
-@@ -410,54 +409,54 @@
+@@ -410,54 +410,64 @@
       },
     },
     "ExecuteInstructionInfo": Object {
@@ -126,6 +130,16 @@
         "Whole": "",
       },
     },
++   "FundraiserId": "u64",
++   "FundraiserReceipt": Object {
++     "amount": "Balance",
++     "fundraiserId": "FundraiserId",
++     "legId": "LegId",
++     "receiverIdentity": "IdentityId",
++     "senderIdentity": "IdentityId",
++     "ticker": "Ticker",
++     "uid": "u64",
++   },
     "FungibleLeg": Object {
       "amount": "Balance",
 -     "asset_id": "AssetId",
@@ -173,9 +187,11 @@
     },
     "IdentityId": "[u8; 32]",
     "InstructionId": "u64",
-@@ -473,14 +472,13 @@
+@@ -472,15 +482,15 @@
+        "OffChain": "OffChainLeg",
       },
     },
++   "LegId": "u64",
     "Member": Object {
 -     "expiry_at": "Option<Moment>",
 +     "expiryAt": "Option<PolymeshMoment>",
@@ -191,7 +207,7 @@
       "ids": "Vec<NFTId>",
     },
     "NonFungibleLeg": Object {
-@@ -490,9 +488,9 @@
+@@ -490,9 +500,9 @@
     },
     "OffChainLeg": Object {
       "amount": "Balance",
@@ -204,7 +220,7 @@
     },
     "PalletName": "Text",
     "PalletPermissions": Object {
-@@ -505,6 +503,8 @@
+@@ -505,6 +515,8 @@
       "portfolio": "PortfolioPermissions",
     },
     "PipId": "u32",
@@ -213,7 +229,7 @@
     "PortfolioId": Object {
       "did": "IdentityId",
       "kind": "PortfolioKind",
-@@ -518,17 +518,17 @@
+@@ -518,17 +530,17 @@
     "PortfolioNumber": "u64",
     "PortfolioPermissions": Object {
       "_enum": Object {
@@ -237,7 +253,19 @@
     },
     "ProtocolOp": Object {
       "_enum": Array [
-@@ -552,9 +552,9 @@
+@@ -549,12 +561,21 @@
+        "NFTMint",
+        "IdentityCreateChildIdentity",
+      ],
++   },
++   "Receipt": Object {
++     "amount": "Balance",
++     "instructionId": "InstructionId",
++     "legId": "LegId",
++     "receiverIdentity": "IdentityId",
++     "senderIdentity": "IdentityId",
++     "ticker": "Ticker",
++     "uid": "u64",
     },
     "RequirementReport": Object {
       "id": "u32",
@@ -250,7 +278,7 @@
     },
     "RpcDidRecords": Object {
       "_enum": Object {
-@@ -563,12 +563,12 @@
+@@ -563,12 +584,12 @@
       },
     },
     "RpcDidRecordsSuccess": Object {
@@ -266,7 +294,20 @@
         "Custom": "Vec<u8>",
         "Identity": "IdentityId",
       },
-@@ -617,7 +617,7 @@
+@@ -588,7 +609,12 @@
+        "Accredited": "bool",
+        "Affiliate": "bool",
+        "Jurisdiction": "Option<CountryCode>",
++     },
+    },
++   "TargetIdAuthorization": Object {
++     "expiresAt": "PolymeshMoment",
++     "nonce": "AuthorizationNonce",
++     "targetId": "IdentityId",
+    },
+    "TargetIdentity": Object {
+      "_enum": Object {
+@@ -617,7 +643,7 @@
     },
     "TrustedIssuer": Object {
       "issuer": "IdentityId",

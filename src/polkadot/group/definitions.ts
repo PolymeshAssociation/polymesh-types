@@ -6,10 +6,10 @@ export default {
         {
           name: 'blockHash',
           type: 'Hash',
-          isOptional: true
-        }
+          isOptional: true,
+        },
       ],
-      type: 'Vec<Member>'
+      type: 'Vec<Member>',
     },
     getGCValidMembers: {
       description: 'Get the GC members',
@@ -17,11 +17,11 @@ export default {
         {
           name: 'blockHash',
           type: 'Hash',
-          isOptional: true
-        }
+          isOptional: true,
+        },
       ],
-      type: 'Vec<Member>'
-    }
+      type: 'Vec<Member>',
+    },
   },
-  types: {}
-}
+  types: {},
+};

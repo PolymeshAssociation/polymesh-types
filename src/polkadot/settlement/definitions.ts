@@ -1,66 +1,70 @@
 export default {
   rpc: {
     getExecuteInstructionInfo: {
-      description: 'Returns an ExecuteInstructionInfo instance, containing the consumed weight and the number of tokens in the instruction.',
+      description:
+        'Returns an ExecuteInstructionInfo instance, containing the consumed weight and the number of tokens in the instruction.',
       params: [
         {
           name: 'instruction_id',
           type: 'InstructionId',
-          isOptional: false
+          isOptional: false,
         },
         {
           name: 'blockHash',
           type: 'Hash',
-          isOptional: true
-        }
+          isOptional: true,
+        },
       ],
-      type: 'Option<ExecuteInstructionInfo>'
+      type: 'Option<ExecuteInstructionInfo>',
     },
     getAffirmationCount: {
-      description: 'Returns an instance of AffirmationCount, which holds the asset count for both the sender and receiver and the number of offchain assets in the instruction',
+      description:
+        'Returns an instance of AffirmationCount, which holds the asset count for both the sender and receiver and the number of offchain assets in the instruction',
       params: [
         {
           name: 'instruction_id',
           type: 'InstructionId',
-          isOptional: false
+          isOptional: false,
         },
         {
           name: 'portfolios',
           type: 'Vec<PortfolioId>',
-          isOptional: false
+          isOptional: false,
         },
         {
           name: 'blockHash',
           type: 'Hash',
-          isOptional: true
-        }
+          isOptional: true,
+        },
       ],
-      type: 'AffirmationCount'
+      type: 'AffirmationCount',
     },
     getExecuteInstructionReport: {
-      description: "Returns a vector containing all errors for the execution. An empty vec means there's no error.",
+      description:
+        "Returns a vector containing all errors for the execution. An empty vec means there's no error.",
       params: [
         {
           name: 'instruction_id',
-          type: 'InstructionId'
-        }
+          type: 'InstructionId',
+        },
       ],
-      type: 'Vec<DispatchError>'
+      type: 'Vec<DispatchError>',
     },
     getTransferReport: {
-      description: "Returns a vector containing all errors for the transfer. An empty vec means there's no error.",
+      description:
+        "Returns a vector containing all errors for the transfer. An empty vec means there's no error.",
       params: [
         {
           name: 'leg',
-          type: 'Leg'
+          type: 'Leg',
         },
         {
           name: 'skip_locked_check',
-          type: 'bool'
-        }
+          type: 'bool',
+        },
       ],
-      type: 'Vec<DispatchError>'
-    }
+      type: 'Vec<DispatchError>',
+    },
   },
-  types: {}
-}
+  types: {},
+};

@@ -256,7 +256,7 @@ declare module '@polkadot/api-base/types/errors' {
     base: {
       /**
        * The sequence counter for something overflowed.
-       * 
+       *
        * When this happens depends on e.g., the capacity of the identifier type.
        * For example, we might have `pub struct PipId(u32);`, with `u32::MAX` capacity.
        * In practice, these errors will never happen but no code path should result in a panic,
@@ -451,11 +451,11 @@ declare module '@polkadot/api-base/types/errors' {
       CodeNotFound: AugmentedError<ApiType>;
       /**
        * The contract's code was found to be invalid during validation or instrumentation.
-       * 
+       *
        * The most likely cause of this is that an API was used which is not supported by the
        * node. This hapens if an older node is used with a new version of ink!. Try updating
        * your node to the newest available version.
-       * 
+       *
        * A more detailed error can be found on the node console if debug messages are enabled
        * by supplying `-lruntime::contracts=debug`.
        **/
@@ -486,7 +486,7 @@ declare module '@polkadot/api-base/types/errors' {
       DecodingFailed: AugmentedError<ApiType>;
       /**
        * Removal of a contract failed because the deletion queue is full.
-       * 
+       *
        * This can happen when calling `seal_terminate`.
        * The queue is filled by deleting contracts and emptied by a fixed amount each block.
        * Trying again during another block is the only way to resolve this issue.
@@ -553,7 +553,7 @@ declare module '@polkadot/api-base/types/errors' {
       StorageDepositNotEnoughFunds: AugmentedError<ApiType>;
       /**
        * A contract self destructed in its constructor.
-       * 
+       *
        * This can be triggered by a call to `seal_terminate`.
        **/
       TerminatedInConstructor: AugmentedError<ApiType>;
@@ -943,6 +943,18 @@ declare module '@polkadot/api-base/types/errors' {
        * Signatory is not pre authorized by the identity
        **/
       Unauthorized: AugmentedError<ApiType>;
+      /**
+       * The DID is missing a CDD claim.
+       **/
+      UnauthorizedCallerDidMissingCdd: AugmentedError<ApiType>;
+      /**
+       * Frozen secondary key.
+       **/
+      UnauthorizedCallerFrozenDid: AugmentedError<ApiType>;
+      /**
+       * The key does not have permissions to execute the extrinsic.
+       **/
+      UnauthorizedCallerMissingPermissions: AugmentedError<ApiType>;
       /**
        * Only CDD service providers are allowed.
        **/
@@ -1390,6 +1402,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       BadAuthorizationType: AugmentedError<ApiType>;
       /**
+       * Default portfolios cannot have custodians.
+       **/
+      DefaultPortfoliosCannotHaveCustodians: AugmentedError<ApiType>;
+      /**
        * The source and destination portfolios should be different.
        **/
       DestinationIsSamePortfolio: AugmentedError<ApiType>;
@@ -1598,6 +1614,14 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       DuplicateReceiptUid: AugmentedError<ApiType>;
       /**
+       * The instruction has been locked for too much time.
+       **/
+      ExceededMaximumLockingPeriod: AugmentedError<ApiType>;
+      /**
+       * Not all conditions for transferring the asset have been met.
+       **/
+      FailedAssetTransferringConditions: AugmentedError<ApiType>;
+      /**
        * The instruction failed to release asset locks or transfer the assets.
        **/
       FailedToReleaseLockOrTransferAssets: AugmentedError<ApiType>;
@@ -1634,6 +1658,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       InvalidInstructionStatusForExecution: AugmentedError<ApiType>;
       /**
+       * [`InstructionStatus::Unknow`] can't be rejected.
+       **/
+      InvalidInstructionStatusForRejection: AugmentedError<ApiType>;
+      /**
        * Offchain signature is invalid.
        **/
       InvalidSignature: AugmentedError<ApiType>;
@@ -1645,6 +1673,10 @@ declare module '@polkadot/api-base/types/errors' {
        * No leg with the given id was found
        **/
       LegNotFound: AugmentedError<ApiType>;
+      /**
+       * All locked instructions must register a lock timestamp.
+       **/
+      LockTimestampNotFound: AugmentedError<ApiType>;
       /**
        * The maximum number of fungible assets was exceeded.
        **/
@@ -1749,6 +1781,10 @@ declare module '@polkadot/api-base/types/errors' {
        * AssetId could not be found on chain.
        **/
       UnexpectedOFFChainAsset: AugmentedError<ApiType>;
+      /**
+       * Unexpected settlement type.
+       **/
+      UnexpectedSettlementType: AugmentedError<ApiType>;
       /**
        * Instruction status is unknown
        **/
@@ -1939,51 +1975,59 @@ declare module '@polkadot/api-base/types/errors' {
     };
     sto: {
       /**
-       * Fundraiser has been closed/stopped already.
+       * The fundraiser has been permanently closed or stopped.
        **/
       FundraiserClosed: AugmentedError<ApiType>;
       /**
-       * Interacting with a fundraiser past the end `Moment`.
+       * Attempting to interact with a fundraiser after its end time has passed.
        **/
       FundraiserExpired: AugmentedError<ApiType>;
       /**
-       * Fundraiser not found.
+       * The specified fundraiser does not exist for the given asset.
        **/
       FundraiserNotFound: AugmentedError<ApiType>;
       /**
-       * Fundraiser is either frozen or stopped.
+       * The fundraiser is not in a live state (either frozen or stopped).
        **/
       FundraiserNotLive: AugmentedError<ApiType>;
       /**
-       * Not enough tokens left for sale.
+       * The fundraiser does not have enough tokens remaining to fulfil the investment.
        **/
       InsufficientTokensRemaining: AugmentedError<ApiType>;
       /**
-       * Window (start time, end time) has invalid parameters, e.g start time is after end time.
+       * The fundraiser time window has invalid parameters (start time after end time).
        **/
       InvalidOfferingWindow: AugmentedError<ApiType>;
       /**
-       * An individual price tier was invalid or a set of price tiers was invalid.
+       * One or more price tiers have invalid parameters (zero total, too many tiers, etc.).
        **/
       InvalidPriceTiers: AugmentedError<ApiType>;
       /**
-       * An invalid venue provided.
+       * The off-chain receipt signature is invalid or could not be verified.
+       **/
+      InvalidSignature: AugmentedError<ApiType>;
+      /**
+       * The provided venue is invalid (does not exist, wrong type, or wrong creator).
        **/
       InvalidVenue: AugmentedError<ApiType>;
       /**
-       * Investment amount is lower than minimum investment amount.
+       * The investment amount is below the minimum investment threshold for this fundraiser.
        **/
       InvestmentAmountTooLow: AugmentedError<ApiType>;
       /**
-       * Price of the investment exceeded the max price.
+       * The calculated price per token exceeds the maximum price specified by the investor.
        **/
       MaxPriceExceeded: AugmentedError<ApiType>;
       /**
-       * An arithmetic operation overflowed.
+       * Off-chain funding has not been enabled for this fundraiser.
+       **/
+      OffchainFundingNotAllowed: AugmentedError<ApiType>;
+      /**
+       * An arithmetic operation resulted in overflow or underflow.
        **/
       Overflow: AugmentedError<ApiType>;
       /**
-       * Sender does not have required permissions.
+       * Sender does not have required permissions for the requested operation.
        **/
       Unauthorized: AugmentedError<ApiType>;
     };
@@ -2000,7 +2044,7 @@ declare module '@polkadot/api-base/types/errors' {
       CallFiltered: AugmentedError<ApiType>;
       /**
        * Failed to extract the runtime version from the new runtime.
-       * 
+       *
        * Either calling `Core_version` or decoding `RuntimeVersion` failed.
        **/
       FailedToExtractRuntimeVersion: AugmentedError<ApiType>;

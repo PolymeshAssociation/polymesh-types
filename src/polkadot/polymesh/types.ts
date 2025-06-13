@@ -1,9 +1,29 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import type { BTreeMap, BTreeSet, Bytes, Enum, Option, Struct, Text, U8aFixed, Vec, bool, u128, u32, u64 } from '@polkadot/types-codec';
+import type {
+  BTreeMap,
+  BTreeSet,
+  Bytes,
+  Enum,
+  Option,
+  Struct,
+  Text,
+  U8aFixed,
+  Vec,
+  bool,
+  u128,
+  u32,
+  u64,
+} from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
-import type { AccountId, AccountId32, Balance, Permill, Weight } from '@polkadot/types/interfaces/runtime';
+import type {
+  AccountId,
+  AccountId32,
+  Balance,
+  Permill,
+  Weight,
+} from '@polkadot/types/interfaces/runtime';
 import type { DispatchError } from '@polkadot/types/interfaces/system';
 
 /** @name AffirmationCount */
@@ -90,8 +110,21 @@ export interface AuthorizationData extends Enum {
   readonly asAddRelayerPayingKey: ITuple<[AccountId32, AccountId32, u128]>;
   readonly isRotatePrimaryKeyToSecondary: boolean;
   readonly asRotatePrimaryKeyToSecondary: Permissions;
-  readonly type: 'AttestPrimaryKeyRotation' | 'RotatePrimaryKey' | 'TransferTicker' | 'AddMultiSigSigner' | 'TransferAssetOwnership' | 'JoinIdentity' | 'PortfolioCustody' | 'BecomeAgent' | 'AddRelayerPayingKey' | 'RotatePrimaryKeyToSecondary';
+  readonly type:
+    | 'AttestPrimaryKeyRotation'
+    | 'RotatePrimaryKey'
+    | 'TransferTicker'
+    | 'AddMultiSigSigner'
+    | 'TransferAssetOwnership'
+    | 'JoinIdentity'
+    | 'PortfolioCustody'
+    | 'BecomeAgent'
+    | 'AddRelayerPayingKey'
+    | 'RotatePrimaryKeyToSecondary';
 }
+
+/** @name AuthorizationNonce */
+export interface AuthorizationNonce extends u64 {}
 
 /** @name AuthorizationType */
 export interface AuthorizationType extends Enum {
@@ -105,7 +138,17 @@ export interface AuthorizationType extends Enum {
   readonly isBecomeAgent: boolean;
   readonly isAddRelayerPayingKey: boolean;
   readonly isRotatePrimaryKeyToSecondary: boolean;
-  readonly type: 'AttestPrimaryKeyRotation' | 'RotatePrimaryKey' | 'TransferTicker' | 'AddMultiSigSigner' | 'TransferAssetOwnership' | 'JoinIdentity' | 'PortfolioCustody' | 'BecomeAgent' | 'AddRelayerPayingKey' | 'RotatePrimaryKeyToSecondary';
+  readonly type:
+    | 'AttestPrimaryKeyRotation'
+    | 'RotatePrimaryKey'
+    | 'TransferTicker'
+    | 'AddMultiSigSigner'
+    | 'TransferAssetOwnership'
+    | 'JoinIdentity'
+    | 'PortfolioCustody'
+    | 'BecomeAgent'
+    | 'AddRelayerPayingKey'
+    | 'RotatePrimaryKeyToSecondary';
 }
 
 /** @name CanTransferGranularReturn */
@@ -154,7 +197,17 @@ export interface Claim extends Enum {
   readonly asBlocked: Scope;
   readonly isCustom: boolean;
   readonly asCustom: ITuple<[CustomClaimTypeId, Option<Scope>]>;
-  readonly type: 'Accredited' | 'Affiliate' | 'BuyLockup' | 'SellLockup' | 'CustomerDueDiligence' | 'KnowYourCustomer' | 'Jurisdiction' | 'Exempted' | 'Blocked' | 'Custom';
+  readonly type:
+    | 'Accredited'
+    | 'Affiliate'
+    | 'BuyLockup'
+    | 'SellLockup'
+    | 'CustomerDueDiligence'
+    | 'KnowYourCustomer'
+    | 'Jurisdiction'
+    | 'Exempted'
+    | 'Blocked'
+    | 'Custom';
 }
 
 /** @name ClaimType */
@@ -170,7 +223,17 @@ export interface ClaimType extends Enum {
   readonly isBlocked: boolean;
   readonly isCustom: boolean;
   readonly asCustom: CustomClaimTypeId;
-  readonly type: 'Accredited' | 'Affiliate' | 'BuyLockup' | 'SellLockup' | 'CustomerDueDiligence' | 'KnowYourCustomer' | 'Jurisdiction' | 'Exempted' | 'Blocked' | 'Custom';
+  readonly type:
+    | 'Accredited'
+    | 'Affiliate'
+    | 'BuyLockup'
+    | 'SellLockup'
+    | 'CustomerDueDiligence'
+    | 'KnowYourCustomer'
+    | 'Jurisdiction'
+    | 'Exempted'
+    | 'Blocked'
+    | 'Custom';
 }
 
 /** @name ComplianceReport */
@@ -473,7 +536,257 @@ export interface CountryCode extends Enum {
   readonly isBq: boolean;
   readonly isCw: boolean;
   readonly isSx: boolean;
-  readonly type: 'Af' | 'Ax' | 'Al' | 'Dz' | 'As' | 'Ad' | 'Ao' | 'Ai' | 'Aq' | 'Ag' | 'Ar' | 'Am' | 'Aw' | 'Au' | 'At' | 'Az' | 'Bs' | 'Bh' | 'Bd' | 'Bb' | 'By' | 'Be' | 'Bz' | 'Bj' | 'Bm' | 'Bt' | 'Bo' | 'Ba' | 'Bw' | 'Bv' | 'Br' | 'Vg' | 'Io' | 'Bn' | 'Bg' | 'Bf' | 'Bi' | 'Kh' | 'Cm' | 'Ca' | 'Cv' | 'Ky' | 'Cf' | 'Td' | 'Cl' | 'Cn' | 'Hk' | 'Mo' | 'Cx' | 'Cc' | 'Co' | 'Km' | 'Cg' | 'Cd' | 'Ck' | 'Cr' | 'Ci' | 'Hr' | 'Cu' | 'Cy' | 'Cz' | 'Dk' | 'Dj' | 'Dm' | 'Do' | 'Ec' | 'Eg' | 'Sv' | 'Gq' | 'Er' | 'Ee' | 'Et' | 'Fk' | 'Fo' | 'Fj' | 'Fi' | 'Fr' | 'Gf' | 'Pf' | 'Tf' | 'Ga' | 'Gm' | 'Ge' | 'De' | 'Gh' | 'Gi' | 'Gr' | 'Gl' | 'Gd' | 'Gp' | 'Gu' | 'Gt' | 'Gg' | 'Gn' | 'Gw' | 'Gy' | 'Ht' | 'Hm' | 'Va' | 'Hn' | 'Hu' | 'Is' | 'In' | 'Id' | 'Ir' | 'Iq' | 'Ie' | 'Im' | 'Il' | 'It' | 'Jm' | 'Jp' | 'Je' | 'Jo' | 'Kz' | 'Ke' | 'Ki' | 'Kp' | 'Kr' | 'Kw' | 'Kg' | 'La' | 'Lv' | 'Lb' | 'Ls' | 'Lr' | 'Ly' | 'Li' | 'Lt' | 'Lu' | 'Mk' | 'Mg' | 'Mw' | 'My' | 'Mv' | 'Ml' | 'Mt' | 'Mh' | 'Mq' | 'Mr' | 'Mu' | 'Yt' | 'Mx' | 'Fm' | 'Md' | 'Mc' | 'Mn' | 'Me' | 'Ms' | 'Ma' | 'Mz' | 'Mm' | 'Na' | 'Nr' | 'Np' | 'Nl' | 'An' | 'Nc' | 'Nz' | 'Ni' | 'Ne' | 'Ng' | 'Nu' | 'Nf' | 'Mp' | 'No' | 'Om' | 'Pk' | 'Pw' | 'Ps' | 'Pa' | 'Pg' | 'Py' | 'Pe' | 'Ph' | 'Pn' | 'Pl' | 'Pt' | 'Pr' | 'Qa' | 'Re' | 'Ro' | 'Ru' | 'Rw' | 'Bl' | 'Sh' | 'Kn' | 'Lc' | 'Mf' | 'Pm' | 'Vc' | 'Ws' | 'Sm' | 'St' | 'Sa' | 'Sn' | 'Rs' | 'Sc' | 'Sl' | 'Sg' | 'Sk' | 'Si' | 'Sb' | 'So' | 'Za' | 'Gs' | 'Ss' | 'Es' | 'Lk' | 'Sd' | 'Sr' | 'Sj' | 'Sz' | 'Se' | 'Ch' | 'Sy' | 'Tw' | 'Tj' | 'Tz' | 'Th' | 'Tl' | 'Tg' | 'Tk' | 'To' | 'Tt' | 'Tn' | 'Tr' | 'Tm' | 'Tc' | 'Tv' | 'Ug' | 'Ua' | 'Ae' | 'Gb' | 'Us' | 'Um' | 'Uy' | 'Uz' | 'Vu' | 'Ve' | 'Vn' | 'Vi' | 'Wf' | 'Eh' | 'Ye' | 'Zm' | 'Zw' | 'Bq' | 'Cw' | 'Sx';
+  readonly type:
+    | 'Af'
+    | 'Ax'
+    | 'Al'
+    | 'Dz'
+    | 'As'
+    | 'Ad'
+    | 'Ao'
+    | 'Ai'
+    | 'Aq'
+    | 'Ag'
+    | 'Ar'
+    | 'Am'
+    | 'Aw'
+    | 'Au'
+    | 'At'
+    | 'Az'
+    | 'Bs'
+    | 'Bh'
+    | 'Bd'
+    | 'Bb'
+    | 'By'
+    | 'Be'
+    | 'Bz'
+    | 'Bj'
+    | 'Bm'
+    | 'Bt'
+    | 'Bo'
+    | 'Ba'
+    | 'Bw'
+    | 'Bv'
+    | 'Br'
+    | 'Vg'
+    | 'Io'
+    | 'Bn'
+    | 'Bg'
+    | 'Bf'
+    | 'Bi'
+    | 'Kh'
+    | 'Cm'
+    | 'Ca'
+    | 'Cv'
+    | 'Ky'
+    | 'Cf'
+    | 'Td'
+    | 'Cl'
+    | 'Cn'
+    | 'Hk'
+    | 'Mo'
+    | 'Cx'
+    | 'Cc'
+    | 'Co'
+    | 'Km'
+    | 'Cg'
+    | 'Cd'
+    | 'Ck'
+    | 'Cr'
+    | 'Ci'
+    | 'Hr'
+    | 'Cu'
+    | 'Cy'
+    | 'Cz'
+    | 'Dk'
+    | 'Dj'
+    | 'Dm'
+    | 'Do'
+    | 'Ec'
+    | 'Eg'
+    | 'Sv'
+    | 'Gq'
+    | 'Er'
+    | 'Ee'
+    | 'Et'
+    | 'Fk'
+    | 'Fo'
+    | 'Fj'
+    | 'Fi'
+    | 'Fr'
+    | 'Gf'
+    | 'Pf'
+    | 'Tf'
+    | 'Ga'
+    | 'Gm'
+    | 'Ge'
+    | 'De'
+    | 'Gh'
+    | 'Gi'
+    | 'Gr'
+    | 'Gl'
+    | 'Gd'
+    | 'Gp'
+    | 'Gu'
+    | 'Gt'
+    | 'Gg'
+    | 'Gn'
+    | 'Gw'
+    | 'Gy'
+    | 'Ht'
+    | 'Hm'
+    | 'Va'
+    | 'Hn'
+    | 'Hu'
+    | 'Is'
+    | 'In'
+    | 'Id'
+    | 'Ir'
+    | 'Iq'
+    | 'Ie'
+    | 'Im'
+    | 'Il'
+    | 'It'
+    | 'Jm'
+    | 'Jp'
+    | 'Je'
+    | 'Jo'
+    | 'Kz'
+    | 'Ke'
+    | 'Ki'
+    | 'Kp'
+    | 'Kr'
+    | 'Kw'
+    | 'Kg'
+    | 'La'
+    | 'Lv'
+    | 'Lb'
+    | 'Ls'
+    | 'Lr'
+    | 'Ly'
+    | 'Li'
+    | 'Lt'
+    | 'Lu'
+    | 'Mk'
+    | 'Mg'
+    | 'Mw'
+    | 'My'
+    | 'Mv'
+    | 'Ml'
+    | 'Mt'
+    | 'Mh'
+    | 'Mq'
+    | 'Mr'
+    | 'Mu'
+    | 'Yt'
+    | 'Mx'
+    | 'Fm'
+    | 'Md'
+    | 'Mc'
+    | 'Mn'
+    | 'Me'
+    | 'Ms'
+    | 'Ma'
+    | 'Mz'
+    | 'Mm'
+    | 'Na'
+    | 'Nr'
+    | 'Np'
+    | 'Nl'
+    | 'An'
+    | 'Nc'
+    | 'Nz'
+    | 'Ni'
+    | 'Ne'
+    | 'Ng'
+    | 'Nu'
+    | 'Nf'
+    | 'Mp'
+    | 'No'
+    | 'Om'
+    | 'Pk'
+    | 'Pw'
+    | 'Ps'
+    | 'Pa'
+    | 'Pg'
+    | 'Py'
+    | 'Pe'
+    | 'Ph'
+    | 'Pn'
+    | 'Pl'
+    | 'Pt'
+    | 'Pr'
+    | 'Qa'
+    | 'Re'
+    | 'Ro'
+    | 'Ru'
+    | 'Rw'
+    | 'Bl'
+    | 'Sh'
+    | 'Kn'
+    | 'Lc'
+    | 'Mf'
+    | 'Pm'
+    | 'Vc'
+    | 'Ws'
+    | 'Sm'
+    | 'St'
+    | 'Sa'
+    | 'Sn'
+    | 'Rs'
+    | 'Sc'
+    | 'Sl'
+    | 'Sg'
+    | 'Sk'
+    | 'Si'
+    | 'Sb'
+    | 'So'
+    | 'Za'
+    | 'Gs'
+    | 'Ss'
+    | 'Es'
+    | 'Lk'
+    | 'Sd'
+    | 'Sr'
+    | 'Sj'
+    | 'Sz'
+    | 'Se'
+    | 'Ch'
+    | 'Sy'
+    | 'Tw'
+    | 'Tj'
+    | 'Tz'
+    | 'Th'
+    | 'Tl'
+    | 'Tg'
+    | 'Tk'
+    | 'To'
+    | 'Tt'
+    | 'Tn'
+    | 'Tr'
+    | 'Tm'
+    | 'Tc'
+    | 'Tv'
+    | 'Ug'
+    | 'Ua'
+    | 'Ae'
+    | 'Gb'
+    | 'Us'
+    | 'Um'
+    | 'Uy'
+    | 'Uz'
+    | 'Vu'
+    | 'Ve'
+    | 'Vn'
+    | 'Vi'
+    | 'Wf'
+    | 'Eh'
+    | 'Ye'
+    | 'Zm'
+    | 'Zw'
+    | 'Bq'
+    | 'Cw'
+    | 'Sx';
 }
 
 /** @name CustomClaimTypeId */
@@ -513,10 +826,24 @@ export interface ExtrinsicNames extends Enum {
 export interface ExtrinsicPermissions extends Enum {
   readonly isWhole: boolean;
   readonly isThese: boolean;
-  readonly asThese: BTreeMap<PalletName,PalletPermissions>;
+  readonly asThese: BTreeMap<PalletName, PalletPermissions>;
   readonly isExcept: boolean;
-  readonly asExcept: BTreeMap<PalletName,PalletPermissions>;
+  readonly asExcept: BTreeMap<PalletName, PalletPermissions>;
   readonly type: 'Whole' | 'These' | 'Except';
+}
+
+/** @name FundraiserId */
+export interface FundraiserId extends u64 {}
+
+/** @name FundraiserReceipt */
+export interface FundraiserReceipt extends Struct {
+  readonly uid: u64;
+  readonly fundraiserId: FundraiserId;
+  readonly legId: LegId;
+  readonly senderIdentity: IdentityId;
+  readonly receiverIdentity: IdentityId;
+  readonly ticker: Ticker;
+  readonly amount: Balance;
 }
 
 /** @name FungibleLeg */
@@ -575,6 +902,9 @@ export interface Leg extends Enum {
   readonly asOffChain: OffChainLeg;
   readonly type: 'Fungible' | 'NonFungible' | 'OffChain';
 }
+
+/** @name LegId */
+export interface LegId extends u64 {}
 
 /** @name Member */
 export interface Member extends Struct {
@@ -688,7 +1018,34 @@ export interface ProtocolOp extends Enum {
   readonly isNftCreateCollection: boolean;
   readonly isNftMint: boolean;
   readonly isIdentityCreateChildIdentity: boolean;
-  readonly type: 'AssetRegisterTicker' | 'AssetIssue' | 'AssetAddDocuments' | 'AssetCreateAsset' | 'CheckpointCreateSchedule' | 'ComplianceManagerAddComplianceRequirement' | 'IdentityCddRegisterDid' | 'IdentityAddClaim' | 'IdentityAddSecondaryKeysWithAuthorization' | 'PipsPropose' | 'ContractsPutCode' | 'CorporateBallotAttachBallot' | 'CapitalDistributionDistribute' | 'NftCreateCollection' | 'NftMint' | 'IdentityCreateChildIdentity';
+  readonly type:
+    | 'AssetRegisterTicker'
+    | 'AssetIssue'
+    | 'AssetAddDocuments'
+    | 'AssetCreateAsset'
+    | 'CheckpointCreateSchedule'
+    | 'ComplianceManagerAddComplianceRequirement'
+    | 'IdentityCddRegisterDid'
+    | 'IdentityAddClaim'
+    | 'IdentityAddSecondaryKeysWithAuthorization'
+    | 'PipsPropose'
+    | 'ContractsPutCode'
+    | 'CorporateBallotAttachBallot'
+    | 'CapitalDistributionDistribute'
+    | 'NftCreateCollection'
+    | 'NftMint'
+    | 'IdentityCreateChildIdentity';
+}
+
+/** @name Receipt */
+export interface Receipt extends Struct {
+  readonly uid: u64;
+  readonly instructionId: InstructionId;
+  readonly legId: LegId;
+  readonly senderIdentity: IdentityId;
+  readonly receiverIdentity: IdentityId;
+  readonly ticker: Ticker;
+  readonly amount: Balance;
 }
 
 /** @name RequirementReport */
@@ -749,6 +1106,13 @@ export interface StatClaim extends Enum {
   readonly isJurisdiction: boolean;
   readonly asJurisdiction: Option<CountryCode>;
   readonly type: 'Accredited' | 'Affiliate' | 'Jurisdiction';
+}
+
+/** @name TargetIdAuthorization */
+export interface TargetIdAuthorization extends Struct {
+  readonly targetId: IdentityId;
+  readonly nonce: AuthorizationNonce;
+  readonly expiresAt: PolymeshMoment;
 }
 
 /** @name TargetIdentity */

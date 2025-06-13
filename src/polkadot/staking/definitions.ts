@@ -6,11 +6,11 @@ export default {
         {
           name: 'blockHash',
           type: 'Hash',
-          isOptional: true
-        }
+          isOptional: true,
+        },
       ],
-      type: 'Vec<(Perbill, Perbill)>'
-    }
+      type: 'Vec<(Perbill, Perbill)>',
+    },
   },
-  types: {}
-}
+  types: {},
+};

@@ -8,7 +8,15 @@ import '@polkadot/api-base/types/consts';
 import type { ApiTypes, AugmentedConst } from '@polkadot/api-base/types';
 import type { Vec, bool, u128, u16, u32, u64, u8 } from '@polkadot/types-codec';
 import type { Perbill, Permill } from '@polkadot/types/interfaces/runtime';
-import type { FrameSystemLimitsBlockLength, FrameSystemLimitsBlockWeights, PalletContractsSchedule, SpVersionRuntimeVersion, SpWeightsRuntimeDbWeight, SpWeightsWeightToFeeCoefficient, SpWeightsWeightV2Weight } from '@polkadot/types/lookup';
+import type {
+  FrameSystemLimitsBlockLength,
+  FrameSystemLimitsBlockWeights,
+  PalletContractsSchedule,
+  SpVersionRuntimeVersion,
+  SpWeightsRuntimeDbWeight,
+  SpWeightsWeightToFeeCoefficient,
+  SpWeightsWeightV2Weight,
+} from '@polkadot/types/lookup';
 
 export type __AugmentedConst<ApiType extends ApiTypes> = AugmentedConst<ApiType>;
 
@@ -70,7 +78,7 @@ declare module '@polkadot/api-base/types/consts' {
     base: {
       /**
        * The maximum length governing `TooLong`.
-       * 
+       *
        * How lengths are computed to compare against this value is situation based.
        * For example, you could halve it, double it, compute a sum for some tree of strings, etc.
        **/
@@ -85,15 +93,15 @@ declare module '@polkadot/api-base/types/consts' {
     contracts: {
       /**
        * The maximum number of contracts that can be pending for deletion.
-       * 
+       *
        * When a contract is deleted by calling `seal_terminate` it becomes inaccessible
        * immediately, but the deletion of the storage items it has accumulated is performed
        * later. The contract is put into the deletion queue. This defines how many
        * contracts can be queued up at the same time. If that limit is reached `seal_terminate`
        * will fail. The action must be retried in a later block in that case.
-       * 
+       *
        * The reasons for limiting the queue depth are:
-       * 
+       *
        * 1. The queue is in storage in order to be persistent between blocks. We want to limit
        * the amount of storage that can be consumed.
        * 2. The queue is stored in a vector and needs to be decoded as a whole when reading
@@ -103,7 +111,7 @@ declare module '@polkadot/api-base/types/consts' {
       deletionQueueDepth: u32 & AugmentedConst<ApiType>;
       /**
        * The maximum amount of weight that can be consumed per block for lazy trie removal.
-       * 
+       *
        * The amount of weight that is dedicated per block to work on the deletion queue. Larger
        * values allow more trie keys to be deleted in each block but reduce the amount of
        * weight that is left for transactions. See [`Self::DeletionQueueDepth`] for more
@@ -112,17 +120,17 @@ declare module '@polkadot/api-base/types/consts' {
       deletionWeightLimit: SpWeightsWeightV2Weight & AugmentedConst<ApiType>;
       /**
        * The amount of balance a caller has to pay for each byte of storage.
-       * 
+       *
        * # Note
-       * 
+       *
        * Changing this value for an existing chain might need a storage migration.
        **/
       depositPerByte: u128 & AugmentedConst<ApiType>;
       /**
        * The amount of balance a caller has to pay for each storage item.
-       * 
+       *
        * # Note
-       * 
+       *
        * Changing this value for an existing chain might need a storage migration.
        **/
       depositPerItem: u128 & AugmentedConst<ApiType>;
@@ -130,7 +138,7 @@ declare module '@polkadot/api-base/types/consts' {
        * The maximum length of a contract code in bytes. This limit applies to the instrumented
        * version of the code. Therefore `instantiate_with_code` can fail even when supplying
        * a wasm binary below this maximum size.
-       * 
+       *
        * The value should be chosen carefully taking into the account the overall memory limit
        * your runtime has, as well as the [maximum allowed callstack
        * depth](#associatedtype.CallStack). Look into the `integrity_test()` for some insights.
@@ -150,13 +158,13 @@ declare module '@polkadot/api-base/types/consts' {
       schedule: PalletContractsSchedule & AugmentedConst<ApiType>;
       /**
        * Make contract callable functions marked as `#[unstable]` available.
-       * 
+       *
        * Contracts that use `#[unstable]` functions won't be able to be uploaded unless
        * this is set to `true`. This is only meant for testnets and dev nodes in order to
        * experiment with new features.
-       * 
+       *
        * # Warning
-       * 
+       *
        * Do **not** set to `true` on productions chains.
        **/
       unsafeUnstableInterface: bool & AugmentedConst<ApiType>;
@@ -195,7 +203,7 @@ declare module '@polkadot/api-base/types/consts' {
       /**
        * The maximum number of winners that can be elected by this `ElectionProvider`
        * implementation.
-       * 
+       *
        * Note: This must always be greater or equal to `T::DataProvider::desired_targets()`.
        **/
       maxWinners: u32 & AugmentedConst<ApiType>;
@@ -208,7 +216,7 @@ declare module '@polkadot/api-base/types/consts' {
       minerTxPriority: u64 & AugmentedConst<ApiType>;
       /**
        * The repeat threshold of the offchain worker.
-       * 
+       *
        * For example, if it is 5, that means that at least 5 blocks will elapse between attempts
        * to submit the worker's solution.
        **/
@@ -231,7 +239,7 @@ declare module '@polkadot/api-base/types/consts' {
       signedMaxRefunds: u32 & AugmentedConst<ApiType>;
       /**
        * Maximum number of signed submissions that can be queued.
-       * 
+       *
        * It is best to avoid adjusting this during an election, as it impacts downstream data
        * structures. In particular, `SignedSubmissionIndices<T>` is bounded on this value. If you
        * update this value during an election, you _must_ ensure that
@@ -241,7 +249,7 @@ declare module '@polkadot/api-base/types/consts' {
       signedMaxSubmissions: u32 & AugmentedConst<ApiType>;
       /**
        * Maximum weight of a signed solution.
-       * 
+       *
        * If [`Config::MinerConfig`] is being implemented to submit signed solutions (outside of
        * this pallet), then [`MinerConfig::solution_weight`] is used to compare against
        * this value.
@@ -267,7 +275,7 @@ declare module '@polkadot/api-base/types/consts' {
       maxAuthorities: u32 & AugmentedConst<ApiType>;
       /**
        * The maximum number of entries to keep in the set id to session index mapping.
-       * 
+       *
        * Since the `SetIdSession` map is only used for validating equivocations this
        * value should relate to the bonding duration of whatever staking system is
        * being used (if any). If equivocation handling is not enabled then this value
@@ -288,7 +296,7 @@ declare module '@polkadot/api-base/types/consts' {
     imOnline: {
       /**
        * A configuration for base priority of unsigned transactions.
-       * 
+       *
        * This is exposed so that it can be tuned for particular runtime, when
        * multiple pallets send unsigned transactions.
        **/
@@ -338,6 +346,10 @@ declare module '@polkadot/api-base/types/consts' {
     };
     settlement: {
       /**
+       * The maximum time period that an instruction can be held in the `LockedForExecution` status.
+       **/
+      maximumLockPeriod: u64 & AugmentedConst<ApiType>;
+      /**
        * Maximum number mediators in the instruction level (this does not include asset mediators).
        **/
       maxInstructionMediators: u32 & AugmentedConst<ApiType>;
@@ -377,20 +389,20 @@ declare module '@polkadot/api-base/types/consts' {
       fixedYearlyReward: u128 & AugmentedConst<ApiType>;
       /**
        * Number of eras to keep in history.
-       * 
+       *
        * Following information is kept for eras in `[current_era -
        * HistoryDepth, current_era]`: `ErasStakers`, `ErasStakersClipped`,
        * `ErasValidatorPrefs`, `ErasValidatorReward`, `ErasRewardPoints`,
        * `ErasTotalStake`, `ErasStartSessionIndex`,
        * `StakingLedger.claimed_rewards`.
-       * 
+       *
        * Must be more than the number of eras delayed by session.
        * I.e. active era must always be in history. I.e. `active_era >
        * current_era - history_depth` must be guaranteed.
-       * 
+       *
        * If migrating an existing pallet from storage value to config value,
        * this should be set to same value or greater as in storage.
-       * 
+       *
        * Note: `HistoryDepth` is used as the upper bound for the `BoundedVec`
        * item `StakingLedger.claimed_rewards`. Setting this value lower than
        * the existing value can lead to inconsistencies in the
@@ -404,7 +416,7 @@ declare module '@polkadot/api-base/types/consts' {
       maxNominations: u32 & AugmentedConst<ApiType>;
       /**
        * The maximum number of nominators rewarded for each validator.
-       * 
+       *
        * For each validator only the `$MaxNominatorRewardedPerValidator` biggest stakers can
        * claim their reward. This used to limit the i/o cost for the nominator payout.
        **/
@@ -413,7 +425,7 @@ declare module '@polkadot/api-base/types/consts' {
        * The maximum number of `unlocking` chunks a [`StakingLedger`] can
        * have. Effectively determines how many unique eras a staker may be
        * unbonding in.
-       * 
+       *
        * Note: `MaxUnlockingChunks` is used as the upper bound for the
        * `BoundedVec` item `StakingLedger.unlocking`. Setting this value
        * lower than the existing value can lead to inconsistencies in the
@@ -437,7 +449,7 @@ declare module '@polkadot/api-base/types/consts' {
       sessionsPerEra: u32 & AugmentedConst<ApiType>;
       /**
        * Number of eras that slashes are deferred by, after computation.
-       * 
+       *
        * This should be less than the bonding duration. Set to 0 if slashes
        * should be applied immediately, without opportunity for intervention.
        **/
@@ -472,7 +484,7 @@ declare module '@polkadot/api-base/types/consts' {
       dbWeight: SpWeightsRuntimeDbWeight & AugmentedConst<ApiType>;
       /**
        * The designated SS58 prefix of this chain.
-       * 
+       *
        * This replaces the "ss58Format" property declared in the chain spec. Reason is
        * that the runtime should know about the prefix in order to make use of it as
        * an identifier of the chain.

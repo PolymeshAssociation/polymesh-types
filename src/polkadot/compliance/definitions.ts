@@ -5,19 +5,19 @@ export default {
       params: [
         {
           name: 'asset_id',
-          type: 'PolymeshAssetId'
+          type: 'PolymeshAssetId',
         },
         {
           name: 'sender_identity',
-          type: 'IdentityId'
+          type: 'IdentityId',
         },
         {
           name: 'receiver_identity',
-          type: 'IdentityId'
-        }
+          type: 'IdentityId',
+        },
       ],
-      type: 'Result<ComplianceReport, DispatchError>'
-    }
+      type: 'Result<ComplianceReport, DispatchError>',
+    },
   },
-  types: {}
-}
+  types: {},
+};
