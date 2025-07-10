@@ -5136,6 +5136,7 @@ export default {
       'LockTimestampNotFound',
       'ExceededMaximumLockingPeriod',
       'FailedAssetTransferringConditions',
+      'InvalidInstructionStatusForWithdrawal',
     ],
   },
   /**

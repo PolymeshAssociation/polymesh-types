@@ -6995,6 +6995,7 @@ declare module '@polkadot/types/lookup' {
     readonly isLockTimestampNotFound: boolean;
     readonly isExceededMaximumLockingPeriod: boolean;
     readonly isFailedAssetTransferringConditions: boolean;
+    readonly isInvalidInstructionStatusForWithdrawal: boolean;
     readonly type:
       | 'InvalidVenue'
       | 'Unauthorized'
@@ -7044,7 +7045,8 @@ declare module '@polkadot/types/lookup' {
       | 'InvalidInstructionStatusForRejection'
       | 'LockTimestampNotFound'
       | 'ExceededMaximumLockingPeriod'
-      | 'FailedAssetTransferringConditions';
+      | 'FailedAssetTransferringConditions'
+      | 'InvalidInstructionStatusForWithdrawal';
   }
 
   /** @name PolymeshPrimitivesStatisticsStat1stKey (698) */

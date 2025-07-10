@@ -1662,6 +1662,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       InvalidInstructionStatusForRejection: AugmentedError<ApiType>;
       /**
+       * Locked instructions can't have affirmations withdrawn.
+       **/
+      InvalidInstructionStatusForWithdrawal: AugmentedError<ApiType>;
+      /**
        * Offchain signature is invalid.
        **/
       InvalidSignature: AugmentedError<ApiType>;
