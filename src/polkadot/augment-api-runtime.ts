@@ -7,6 +7,7 @@ import '@polkadot/api-base/types/calls';
 
 import type {
   AffirmationCount,
+  AssetCount,
   Authorization,
   AuthorizationType,
   CappedFee,
@@ -66,6 +67,7 @@ import type {
   KeyTypeId,
   Perbill,
   Slot,
+  Weight,
   WeightV2,
 } from '@polkadot/types/interfaces/runtime';
 import type { RuntimeVersion } from '@polkadot/types/interfaces/state';
@@ -582,6 +584,22 @@ declare module '@polkadot/api-base/types/calls' {
             | Uint8Array,
           skip_locked_check: bool | boolean | Uint8Array
         ) => Observable<Vec<DispatchError>>
+      >;
+      /**
+       * Returns the AssetCount for the given instruction.
+       **/
+      instructionAssetCount: AugmentedCall<
+        ApiType,
+        (instruction_id: InstructionId | AnyNumber | Uint8Array) => Observable<AssetCount>
+      >;
+      /**
+       * Returns the weight for executing lock_instruction.
+       **/
+      lockInstructionWeight: AugmentedCall<
+        ApiType,
+        (
+          instruction_id: InstructionId | AnyNumber | Uint8Array
+        ) => Observable<Result<Weight, DispatchError>>
       >;
     };
     /** 0x18ef58a3b67ba770/1 */

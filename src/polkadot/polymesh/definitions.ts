@@ -1135,6 +1135,26 @@ export default {
             ],
             type: 'Vec<DispatchError>',
           },
+          instruction_asset_count: {
+            description: 'Returns the AssetCount for the given instruction.',
+            params: [
+              {
+                name: 'instruction_id',
+                type: 'InstructionId',
+              },
+            ],
+            type: 'AssetCount',
+          },
+          lock_instruction_weight: {
+            description: 'Returns the weight for executing lock_instruction.',
+            params: [
+              {
+                name: 'instruction_id',
+                type: 'InstructionId',
+              },
+            ],
+            type: 'Result<Weight, DispatchError>',
+          },
         },
         version: 2,
       },
