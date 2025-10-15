@@ -50,6 +50,7 @@ import type {
   ContractInstantiateResult,
 } from '@polkadot/types/interfaces/contracts';
 import type { Extrinsic } from '@polkadot/types/interfaces/extrinsics';
+import type { GenesisBuildErr } from '@polkadot/types/interfaces/genesisBuilder';
 import type {
   AuthorityList,
   GrandpaEquivocationProof,
@@ -62,6 +63,7 @@ import type {
   Balance,
   Block,
   Call,
+  ExtrinsicInclusionMode,
   Header,
   Index,
   KeyTypeId,
@@ -270,7 +272,7 @@ declare module '@polkadot/api-base/types/calls' {
         ) => Observable<CodeUploadResult>
       >;
     };
-    /** 0xdf6acb689907609b/4 */
+    /** 0xdf6acb689907609b/5 */
     core: {
       /**
        * Execute the given block.
@@ -298,12 +300,26 @@ declare module '@polkadot/api-base/types/calls' {
               }
             | string
             | Uint8Array
-        ) => Observable<Null>
+        ) => Observable<ExtrinsicInclusionMode>
       >;
       /**
        * Returns the version of the runtime.
        **/
       version: AugmentedCall<ApiType, () => Observable<RuntimeVersion>>;
+    };
+    /** 0xfbc577b9d747efd6/1 */
+    genesisBuilder: {
+      /**
+       * Build `RuntimeGenesisConfig` from a JSON blob not using any defaults and store it in the storage.
+       **/
+      buildConfig: AugmentedCall<
+        ApiType,
+        (json: Bytes | string | Uint8Array) => Observable<Result<ITuple<[]>, GenesisBuildErr>>
+      >;
+      /**
+       * Creates the default `RuntimeGenesisConfig` and returns it as a JSON blob.
+       **/
+      createDefaultConfig: AugmentedCall<ApiType, () => Observable<Bytes>>;
     };
     /** 0xed99c5acb25eedf5/3 */
     grandpaApi: {
@@ -421,12 +437,23 @@ declare module '@polkadot/api-base/types/calls' {
         ) => Observable<Vec<IdentityClaim>>
       >;
     };
-    /** 0x37e397fc7c91f5e4/1 */
+    /** 0x37e397fc7c91f5e4/2 */
     metadata: {
       /**
        * Returns the metadata of a runtime
        **/
       metadata: AugmentedCall<ApiType, () => Observable<OpaqueMetadata>>;
+      /**
+       * Returns the metadata at a given version.
+       **/
+      metadataAtVersion: AugmentedCall<
+        ApiType,
+        (version: u32 | AnyNumber | Uint8Array) => Observable<Option<OpaqueMetadata>>
+      >;
+      /**
+       * Returns the supported metadata versions.
+       **/
+      metadataVersions: AugmentedCall<ApiType, () => Observable<Vec<u32>>>;
     };
     /** 0x9ea061a615cee2fe/2 */
     nftApi: {
