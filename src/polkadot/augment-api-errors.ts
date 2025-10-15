@@ -233,25 +233,65 @@ declare module '@polkadot/api-base/types/errors' {
     };
     balances: {
       /**
-       * Value too low to create account due to existential deposit
+       * Beneficiary account must pre-exist.
+       **/
+      DeadAccount: AugmentedError<ApiType>;
+      /**
+       * The delta cannot be zero.
+       **/
+      DeltaZero: AugmentedError<ApiType>;
+      /**
+       * Value too low to create account due to existential deposit.
        **/
       ExistentialDeposit: AugmentedError<ApiType>;
       /**
-       * Balance too low to send value
+       * A vesting schedule already exists for this account.
+       **/
+      ExistingVestingSchedule: AugmentedError<ApiType>;
+      /**
+       * Transfer/payment would kill account.
+       **/
+      Expendability: AugmentedError<ApiType>;
+      /**
+       * Balance too low to send value.
        **/
       InsufficientBalance: AugmentedError<ApiType>;
       /**
-       * Account liquidity restrictions prevent withdrawal
+       * The issuance cannot be modified since it is already deactivated.
+       **/
+      IssuanceDeactivated: AugmentedError<ApiType>;
+      /**
+       * Account liquidity restrictions prevent withdrawal.
        **/
       LiquidityRestrictions: AugmentedError<ApiType>;
       /**
-       * Got an overflow after adding
+       * Lock Identifier not Found
+       **/
+      LockIdentifierNotFound: AugmentedError<ApiType>;
+      /**
+       * Max Locks Exceeded
+       **/
+      MaxLocksExceeded: AugmentedError<ApiType>;
+      /**
+       * Balance Overflow
        **/
       Overflow: AugmentedError<ApiType>;
       /**
-       * Receiver does not have a valid CDD
+       * Number of freezes exceed `MaxFreezes`.
        **/
-      ReceiverCddMissing: AugmentedError<ApiType>;
+      TooManyFreezes: AugmentedError<ApiType>;
+      /**
+       * Number of holds exceed `VariantCountOf<T::RuntimeHoldReason>`.
+       **/
+      TooManyHolds: AugmentedError<ApiType>;
+      /**
+       * Number of named reserves exceed `MaxReserves`.
+       **/
+      TooManyReserves: AugmentedError<ApiType>;
+      /**
+       * Vesting balance too high to send value.
+       **/
+      VestingBalance: AugmentedError<ApiType>;
     };
     base: {
       /**
@@ -442,6 +482,14 @@ declare module '@polkadot/api-base/types/errors' {
     };
     contracts: {
       /**
+       * Can not add a delegate dependency to the code hash of the contract itself.
+       **/
+      CannotAddSelfAsDelegateDependency: AugmentedError<ApiType>;
+      /**
+       * No code info could be found at the supplied code hash.
+       **/
+      CodeInfoNotFound: AugmentedError<ApiType>;
+      /**
        * Code removal was denied because the code is still in use by at least one contract.
        **/
       CodeInUse: AugmentedError<ApiType>;
@@ -450,10 +498,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       CodeNotFound: AugmentedError<ApiType>;
       /**
-       * The contract's code was found to be invalid during validation or instrumentation.
+       * The contract's code was found to be invalid during validation.
        *
        * The most likely cause of this is that an API was used which is not supported by the
-       * node. This hapens if an older node is used with a new version of ink!. Try updating
+       * node. This happens if an older node is used with a new version of ink!. Try updating
        * your node to the newest available version.
        *
        * A more detailed error can be found on the node console if debug messages are enabled
@@ -485,19 +533,19 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       DecodingFailed: AugmentedError<ApiType>;
       /**
-       * Removal of a contract failed because the deletion queue is full.
-       *
-       * This can happen when calling `seal_terminate`.
-       * The queue is filled by deleting contracts and emptied by a fixed amount each block.
-       * Trying again during another block is the only way to resolve this issue.
+       * The contract already depends on the given delegate dependency.
        **/
-      DeletionQueueFull: AugmentedError<ApiType>;
+      DelegateDependencyAlreadyExists: AugmentedError<ApiType>;
+      /**
+       * The dependency was not found in the contract's delegate dependencies.
+       **/
+      DelegateDependencyNotFound: AugmentedError<ApiType>;
       /**
        * A contract with the same AccountId already exists.
        **/
       DuplicateContract: AugmentedError<ApiType>;
       /**
-       * An indetermistic code was used in a context where this is not permitted.
+       * An indeterministic code was used in a context where this is not permitted.
        **/
       Indeterministic: AugmentedError<ApiType>;
       /**
@@ -509,20 +557,32 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       InvalidCallFlags: AugmentedError<ApiType>;
       /**
-       * A new schedule must have a greater version than the current one.
+       * Invalid schedule supplied, e.g. with zero weight of a basic operation.
        **/
-      InvalidScheduleVersion: AugmentedError<ApiType>;
+      InvalidSchedule: AugmentedError<ApiType>;
       /**
        * Performing a call was denied because the calling depth reached the limit
        * of what is specified in the schedule.
        **/
       MaxCallDepthReached: AugmentedError<ApiType>;
       /**
+       * The contract has reached its maximum number of delegate dependencies.
+       **/
+      MaxDelegateDependenciesReached: AugmentedError<ApiType>;
+      /**
+       * A pending migration needs to complete before the extrinsic can be called.
+       **/
+      MigrationInProgress: AugmentedError<ApiType>;
+      /**
        * The chain does not provide a chain extension. Calling the chain extension results
        * in this error. Note that this usually  shouldn't happen as deploying such contracts
        * is rejected.
        **/
       NoChainExtension: AugmentedError<ApiType>;
+      /**
+       * Migrate dispatch call was attempted but no migration was performed.
+       **/
+      NoMigrationPerformed: AugmentedError<ApiType>;
       /**
        * A buffer outside of sandbox memory was passed to a contract API function.
        **/
@@ -531,6 +591,10 @@ declare module '@polkadot/api-base/types/errors' {
        * The executed contract exhausted its gas limit.
        **/
       OutOfGas: AugmentedError<ApiType>;
+      /**
+       * Can not add more data to transient storage.
+       **/
+      OutOfTransientStorage: AugmentedError<ApiType>;
       /**
        * The output buffer supplied to a contract API call was too small.
        **/
@@ -541,8 +605,15 @@ declare module '@polkadot/api-base/types/errors' {
       RandomSubjectTooLong: AugmentedError<ApiType>;
       /**
        * A call tried to invoke a contract that is flagged as non-reentrant.
+       * The only other cause is that a call from a contract into the runtime tried to call back
+       * into `pallet-contracts`. This would make the whole pallet reentrant with regard to
+       * contract code execution which is not supported.
        **/
       ReentranceDenied: AugmentedError<ApiType>;
+      /**
+       * A contract attempted to invoke a state modifying API while being in read-only mode.
+       **/
+      StateChangeDenied: AugmentedError<ApiType>;
       /**
        * More storage was created than allowed by the storage deposit limit.
        **/
@@ -575,6 +646,10 @@ declare module '@polkadot/api-base/types/errors' {
        * The size defined in `T::MaxValueSize` was exceeded.
        **/
       ValueTooLarge: AugmentedError<ApiType>;
+      /**
+       * Failed to decode the XCM program.
+       **/
+      XCMDecodeFailed: AugmentedError<ApiType>;
     };
     corporateAction: {
       /**
@@ -708,6 +783,10 @@ declare module '@polkadot/api-base/types/errors' {
        * OCW submitted solution for wrong round
        **/
       OcwCallWrongEra: AugmentedError<ApiType>;
+      /**
+       * Submission was prepared for a different round.
+       **/
+      PreDispatchDifferentRound: AugmentedError<ApiType>;
       /**
        * Submission was too early.
        **/
@@ -1249,6 +1328,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       InvalidPipId: AugmentedError<ApiType>;
       /**
+       * TaskName cannot exceed 32 bytes.
+       **/
+      InvalidTaskName: AugmentedError<ApiType>;
+      /**
        * The current DID is missing.
        **/
       MissingCurrentIdentity: AugmentedError<ApiType>;
@@ -1507,6 +1590,14 @@ declare module '@polkadot/api-base/types/errors' {
        * Preimage is too large to store on-chain.
        **/
       TooBig: AugmentedError<ApiType>;
+      /**
+       * Too few hashes were requested to be upgraded (i.e. zero).
+       **/
+      TooFew: AugmentedError<ApiType>;
+      /**
+       * More than `MAX_HASH_UPGRADE_BULK_COUNT` hashes were requested to be upgraded at once.
+       **/
+      TooMany: AugmentedError<ApiType>;
     };
     protocolFee: {
       /**
@@ -1670,6 +1761,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       InvalidSignature: AugmentedError<ApiType>;
       /**
+       * TaskName cannot exceed 32 bytes.
+       **/
+      InvalidTaskName: AugmentedError<ApiType>;
+      /**
        * Venue does not exist.
        **/
       InvalidVenue: AugmentedError<ApiType>;
@@ -1812,6 +1907,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       AlreadyClaimed: AugmentedError<ApiType>;
       /**
+       * The stake of this account is already migrated to `Fungible` holds.
+       **/
+      AlreadyMigrated: AugmentedError<ApiType>;
+      /**
        * Controller is already paired.
        **/
       AlreadyPaired: AugmentedError<ApiType>;
@@ -1832,17 +1931,21 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       CannotChillOther: AugmentedError<ApiType>;
       /**
-       * Validator commiission is above maximum.
+       * Stash could not be reaped as other pallet might depend on it.
        **/
-      CommissionTooHigh: AugmentedError<ApiType>;
+      CannotReapStash: AugmentedError<ApiType>;
+      /**
+       * Cannot reset a ledger.
+       **/
+      CannotRestoreLedger: AugmentedError<ApiType>;
       /**
        * Commission is too low. Must be at least `MinCommission`.
        **/
       CommissionTooLow: AugmentedError<ApiType>;
       /**
-       * New commission must be different from previous commission.
+       * Used when attempting to use deprecated controller account logic.
        **/
-      CommissionUnchanged: AugmentedError<ApiType>;
+      ControllerDeprecated: AugmentedError<ApiType>;
       /**
        * Duplicate index.
        **/
@@ -1855,18 +1958,6 @@ declare module '@polkadot/api-base/types/errors' {
        * Attempting to target a stash that still has funds.
        **/
       FundedTarget: AugmentedError<ApiType>;
-      /**
-       * Permissioned validator already exists.
-       **/
-      IdentityIsAlreadyPermissioned: AugmentedError<ApiType>;
-      /**
-       * Identity has not gone throught CDD.
-       **/
-      IdentityIsMissingCDD: AugmentedError<ApiType>;
-      /**
-       * Identity was not found in the permissioned identity pool.
-       **/
-      IdentityNotFound: AugmentedError<ApiType>;
       /**
        * Incorrect previous history depth input provided.
        **/
@@ -1882,10 +1973,6 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       InsufficientBond: AugmentedError<ApiType>;
       /**
-       * When the intended number of validators to run is >= 2/3 of `validator_count`.
-       **/
-      IntendedCountIsExceedingConsensusLimit: AugmentedError<ApiType>;
-      /**
        * Invalid era to reward.
        **/
       InvalidEraToReward: AugmentedError<ApiType>;
@@ -1893,6 +1980,10 @@ declare module '@polkadot/api-base/types/errors' {
        * Invalid number of nominations.
        **/
       InvalidNumberOfNominations: AugmentedError<ApiType>;
+      /**
+       * No nominators exist on this page.
+       **/
+      InvalidPage: AugmentedError<ApiType>;
       /**
        * Slash record index out of bounds.
        **/
@@ -1906,6 +1997,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       NotController: AugmentedError<ApiType>;
       /**
+       * Not enough funds available to withdraw.
+       **/
+      NotEnoughFunds: AugmentedError<ApiType>;
+      /**
        * Items are not sorted and unique.
        **/
       NotSortedAndUnique: AugmentedError<ApiType>;
@@ -1918,17 +2013,14 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       NoUnlockChunk: AugmentedError<ApiType>;
       /**
-       * Validator or nominator stash identity does not exist.
+       * Account is restricted from participation in staking. This may happen if the account is
+       * staking in another way already, such as via pool.
        **/
-      StashIdentityDoesNotExist: AugmentedError<ApiType>;
+      Restricted: AugmentedError<ApiType>;
       /**
-       * Nominator stash has not gone through CDD.
+       * Provided reward destination is not allowed.
        **/
-      StashIdentityNotCDDed: AugmentedError<ApiType>;
-      /**
-       * Validator's stash identity is not permissioned.
-       **/
-      StashIdentityNotPermissioned: AugmentedError<ApiType>;
+      RewardDestinationRestricted: AugmentedError<ApiType>;
       /**
        * There are too many nominators in the system. Governance needs to adjust the staking
        * settings to keep things safe for the runtime.
@@ -1939,13 +2031,14 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       TooManyTargets: AugmentedError<ApiType>;
       /**
-       * There are too many validator candidates in the system.
+       * There are too many validator candidates in the system. Governance needs to adjust the
+       * staking settings to keep things safe for the runtime.
        **/
       TooManyValidators: AugmentedError<ApiType>;
       /**
-       * No validator was found for the given key.
+       * Operation not allowed for virtual stakers.
        **/
-      ValidatorNotFound: AugmentedError<ApiType>;
+      VirtualStakerNotAllowed: AugmentedError<ApiType>;
     };
     statistics: {
       /**
@@ -2058,6 +2151,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       InvalidSpecName: AugmentedError<ApiType>;
       /**
+       * A multi-block migration is ongoing and prevents the current code from being replaced.
+       **/
+      MultiBlockMigrationsOngoing: AugmentedError<ApiType>;
+      /**
        * Suicide called when the account has non-default composite data.
        **/
       NonDefaultComposite: AugmentedError<ApiType>;
@@ -2066,10 +2163,18 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       NonZeroRefCount: AugmentedError<ApiType>;
       /**
+       * No upgrade authorized.
+       **/
+      NothingAuthorized: AugmentedError<ApiType>;
+      /**
        * The specification version is not allowed to decrease between the current runtime
        * and the new runtime.
        **/
       SpecVersionNeedsToIncrease: AugmentedError<ApiType>;
+      /**
+       * The submitted code is not authorized.
+       **/
+      Unauthorized: AugmentedError<ApiType>;
     };
     technicalCommittee: {
       /**
@@ -2241,6 +2346,44 @@ declare module '@polkadot/api-base/types/errors' {
        * Decoding derivative account Id failed.
        **/
       UnableToDeriveAccountId: AugmentedError<ApiType>;
+    };
+    validators: {
+      /**
+       * Validator commiission is above maximum.
+       **/
+      CommissionTooHigh: AugmentedError<ApiType>;
+      /**
+       * New commission must be different from previous commission.
+       **/
+      CommissionUnchanged: AugmentedError<ApiType>;
+      /**
+       * Permissioned validator already exists.
+       **/
+      IdentityIsAlreadyPermissioned: AugmentedError<ApiType>;
+      /**
+       * Identity has not gone throught CDD.
+       **/
+      IdentityIsMissingCDD: AugmentedError<ApiType>;
+      /**
+       * Identity was not found in the permissioned identity pool.
+       **/
+      IdentityNotFound: AugmentedError<ApiType>;
+      /**
+       * When the intended number of validators to run is >= 2/3 of `validator_count`.
+       **/
+      IntendedCountIsExceedingConsensusLimit: AugmentedError<ApiType>;
+      /**
+       * Validator or nominator stash identity does not exist.
+       **/
+      StashIdentityDoesNotExist: AugmentedError<ApiType>;
+      /**
+       * Validator's stash identity is not permissioned.
+       **/
+      StashIdentityNotPermissioned: AugmentedError<ApiType>;
+      /**
+       * No validator was found for the given key.
+       **/
+      ValidatorNotFound: AugmentedError<ApiType>;
     };
   } // AugmentedErrors
 } // declare module

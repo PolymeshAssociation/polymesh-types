@@ -23,8 +23,9 @@ import type {
 import type { ITuple } from '@polkadot/types-codec/types';
 import type { AccountId32, H256, Perbill, Permill } from '@polkadot/types/interfaces/runtime';
 import type {
-  FrameSupportDispatchDispatchInfo,
   FrameSupportTokensMiscBalanceStatus,
+  FrameSystemDispatchEventInfo,
+  PalletContractsOrigin,
   PalletCorporateActionsBallotBallotMeta,
   PalletCorporateActionsBallotBallotTimeRange,
   PalletCorporateActionsBallotBallotVote,
@@ -39,12 +40,12 @@ import type {
   PalletPipsProposalState,
   PalletPipsProposer,
   PalletPipsSnapshottedPip,
-  PalletStakingExposure,
   PalletStakingForcing,
-  PalletStakingSlashingSwitch,
+  PalletStakingRewardDestination,
   PalletStakingValidatorPrefs,
   PalletStoFundingAsset,
   PalletStoFundraiser,
+  PalletValidatorsSlashingSwitch,
   PolymeshCommonUtilitiesCheckpointScheduleCheckpoints,
   PolymeshContractsApi,
   PolymeshContractsChainExtensionExtrinsicId,
@@ -85,6 +86,7 @@ import type {
   SpConsensusGrandpaAppPublic,
   SpNposElectionsElectionScore,
   SpRuntimeDispatchError,
+  SpStakingExposure,
 } from '@polkadot/types/lookup';
 
 export type __AugmentedEvent<ApiType extends ApiTypes> = AugmentedEvent<ApiType>;
@@ -402,52 +404,189 @@ declare module '@polkadot/api-base/types/events' {
     };
     balances: {
       /**
-       * The account and the amount of unlocked balance of that account that was burned.
-       * (caller Id, caller account, amount)
+       * A balance was set by root.
        **/
-      AccountBalanceBurned: AugmentedEvent<
+      BalanceSet: AugmentedEvent<
         ApiType,
-        [PolymeshPrimitivesIdentityId, AccountId32, u128]
+        [who: AccountId32, free: u128],
+        { who: AccountId32; free: u128 }
       >;
       /**
-       * A balance was set by root (did, who, free, reserved).
+       * Some amount was burned from an account.
        **/
-      BalanceSet: AugmentedEvent<ApiType, [PolymeshPrimitivesIdentityId, AccountId32, u128, u128]>;
+      Burned: AugmentedEvent<
+        ApiType,
+        [who: AccountId32, amount: u128],
+        { who: AccountId32; amount: u128 }
+      >;
       /**
-       * An account was created with some free balance. \[did, account, free_balance]
+       * Some amount was deposited (e.g. for transaction fees).
        **/
-      Endowed: AugmentedEvent<ApiType, [Option<PolymeshPrimitivesIdentityId>, AccountId32, u128]>;
+      Deposit: AugmentedEvent<
+        ApiType,
+        [who: AccountId32, amount: u128],
+        { who: AccountId32; amount: u128 }
+      >;
       /**
-       * Some balance was reserved (moved from free to reserved). \[who, value]
+       * An account was removed whose balance was non-zero but below ExistentialDeposit,
+       * resulting in an outright loss.
        **/
-      Reserved: AugmentedEvent<ApiType, [AccountId32, u128]>;
+      DustLost: AugmentedEvent<
+        ApiType,
+        [account: AccountId32, amount: u128],
+        { account: AccountId32; amount: u128 }
+      >;
+      /**
+       * An account was created with some free balance.
+       **/
+      Endowed: AugmentedEvent<
+        ApiType,
+        [account: AccountId32, freeBalance: u128],
+        { account: AccountId32; freeBalance: u128 }
+      >;
+      /**
+       * Some balance was frozen.
+       **/
+      Frozen: AugmentedEvent<
+        ApiType,
+        [who: AccountId32, amount: u128],
+        { who: AccountId32; amount: u128 }
+      >;
+      /**
+       * Total issuance was increased by `amount`, creating a credit to be balanced.
+       **/
+      Issued: AugmentedEvent<ApiType, [amount: u128], { amount: u128 }>;
+      /**
+       * Some balance was locked.
+       **/
+      Locked: AugmentedEvent<
+        ApiType,
+        [who: AccountId32, amount: u128],
+        { who: AccountId32; amount: u128 }
+      >;
+      /**
+       * Some amount was minted into an account.
+       **/
+      Minted: AugmentedEvent<
+        ApiType,
+        [who: AccountId32, amount: u128],
+        { who: AccountId32; amount: u128 }
+      >;
+      /**
+       * Total issuance was decreased by `amount`, creating a debt to be balanced.
+       **/
+      Rescinded: AugmentedEvent<ApiType, [amount: u128], { amount: u128 }>;
+      /**
+       * Some balance was reserved (moved from free to reserved).
+       **/
+      Reserved: AugmentedEvent<
+        ApiType,
+        [who: AccountId32, amount: u128],
+        { who: AccountId32; amount: u128 }
+      >;
       /**
        * Some balance was moved from the reserve of the first account to the second account.
        * Final argument indicates the destination balance type.
-       * \[from, to, balance, destination_status]
        **/
       ReserveRepatriated: AugmentedEvent<
         ApiType,
-        [AccountId32, AccountId32, u128, FrameSupportTokensMiscBalanceStatus]
+        [
+          from: AccountId32,
+          to: AccountId32,
+          amount: u128,
+          destinationStatus: FrameSupportTokensMiscBalanceStatus
+        ],
+        {
+          from: AccountId32;
+          to: AccountId32;
+          amount: u128;
+          destinationStatus: FrameSupportTokensMiscBalanceStatus;
+        }
       >;
       /**
-       * Transfer succeeded (from_did, from, to_did, to, value, memo).
+       * Some amount was restored into an account.
+       **/
+      Restored: AugmentedEvent<
+        ApiType,
+        [who: AccountId32, amount: u128],
+        { who: AccountId32; amount: u128 }
+      >;
+      /**
+       * Some amount was removed from the account (e.g. for misbehavior).
+       **/
+      Slashed: AugmentedEvent<
+        ApiType,
+        [who: AccountId32, amount: u128],
+        { who: AccountId32; amount: u128 }
+      >;
+      /**
+       * Some amount was suspended from an account (it can be restored later).
+       **/
+      Suspended: AugmentedEvent<
+        ApiType,
+        [who: AccountId32, amount: u128],
+        { who: AccountId32; amount: u128 }
+      >;
+      /**
+       * Some balance was thawed.
+       **/
+      Thawed: AugmentedEvent<
+        ApiType,
+        [who: AccountId32, amount: u128],
+        { who: AccountId32; amount: u128 }
+      >;
+      /**
+       * The `TotalIssuance` was forcefully changed.
+       **/
+      TotalIssuanceForced: AugmentedEvent<
+        ApiType,
+        [old: u128, new_: u128],
+        { old: u128; new_: u128 }
+      >;
+      /**
+       * Transfer succeeded.
        **/
       Transfer: AugmentedEvent<
         ApiType,
-        [
-          Option<PolymeshPrimitivesIdentityId>,
-          AccountId32,
-          Option<PolymeshPrimitivesIdentityId>,
-          AccountId32,
-          u128,
-          Option<PolymeshPrimitivesMemo>
-        ]
+        [from: AccountId32, to: AccountId32, amount: u128],
+        { from: AccountId32; to: AccountId32; amount: u128 }
       >;
       /**
-       * Some balance was unreserved (moved from reserved to free). \[who, value]
+       * Transfer with memo succeeded.
        **/
-      Unreserved: AugmentedEvent<ApiType, [AccountId32, u128]>;
+      TransferMemo: AugmentedEvent<
+        ApiType,
+        [from: AccountId32, to: AccountId32, amount: u128, memo: Option<PolymeshPrimitivesMemo>],
+        { from: AccountId32; to: AccountId32; amount: u128; memo: Option<PolymeshPrimitivesMemo> }
+      >;
+      /**
+       * Some balance was unlocked.
+       **/
+      Unlocked: AugmentedEvent<
+        ApiType,
+        [who: AccountId32, amount: u128],
+        { who: AccountId32; amount: u128 }
+      >;
+      /**
+       * Some balance was unreserved (moved from reserved to free).
+       **/
+      Unreserved: AugmentedEvent<
+        ApiType,
+        [who: AccountId32, amount: u128],
+        { who: AccountId32; amount: u128 }
+      >;
+      /**
+       * An account was upgraded.
+       **/
+      Upgraded: AugmentedEvent<ApiType, [who: AccountId32], { who: AccountId32 }>;
+      /**
+       * Some amount was withdrawn from the account (e.g. for transaction fees).
+       **/
+      Withdraw: AugmentedEvent<
+        ApiType,
+        [who: AccountId32, amount: u128],
+        { who: AccountId32; amount: u128 }
+      >;
     };
     base: {
       /**
@@ -755,17 +894,25 @@ declare module '@polkadot/api-base/types/events' {
        **/
       Called: AugmentedEvent<
         ApiType,
-        [caller: AccountId32, contract: AccountId32],
-        { caller: AccountId32; contract: AccountId32 }
+        [caller: PalletContractsOrigin, contract: AccountId32],
+        { caller: PalletContractsOrigin; contract: AccountId32 }
       >;
       /**
        * A code with the specified hash was removed.
        **/
-      CodeRemoved: AugmentedEvent<ApiType, [codeHash: H256], { codeHash: H256 }>;
+      CodeRemoved: AugmentedEvent<
+        ApiType,
+        [codeHash: H256, depositReleased: u128, remover: AccountId32],
+        { codeHash: H256; depositReleased: u128; remover: AccountId32 }
+      >;
       /**
        * Code with the specified hash has been stored.
        **/
-      CodeStored: AugmentedEvent<ApiType, [codeHash: H256], { codeHash: H256 }>;
+      CodeStored: AugmentedEvent<
+        ApiType,
+        [codeHash: H256, depositHeld: u128, uploader: AccountId32],
+        { codeHash: H256; depositHeld: u128; uploader: AccountId32 }
+      >;
       /**
        * A contract's code was updated.
        **/
@@ -803,6 +950,22 @@ declare module '@polkadot/api-base/types/events' {
         ApiType,
         [deployer: AccountId32, contract: AccountId32],
         { deployer: AccountId32; contract: AccountId32 }
+      >;
+      /**
+       * Some funds have been transferred and held as storage deposit.
+       **/
+      StorageDepositTransferredAndHeld: AugmentedEvent<
+        ApiType,
+        [from: AccountId32, to: AccountId32, amount: u128],
+        { from: AccountId32; to: AccountId32; amount: u128 }
+      >;
+      /**
+       * Some storage deposit funds have been transferred and released.
+       **/
+      StorageDepositTransferredAndReleased: AugmentedEvent<
+        ApiType,
+        [from: AccountId32, to: AccountId32, amount: u128],
+        { from: AccountId32; to: AccountId32; amount: u128 }
       >;
       /**
        * Contract has been removed.
@@ -1023,7 +1186,7 @@ declare module '@polkadot/api-base/types/events' {
        * A solution was stored with the given compute.
        *
        * The `origin` indicates the origin of the solution. If `origin` is `Some(AccountId)`,
-       * the stored solution was submited in the signed phase by a miner with the `AccountId`.
+       * the stored solution was submitted in the signed phase by a miner with the `AccountId`.
        * Otherwise, the solution was stored either during the unsigned phase or by
        * `T::ForceOrigin`. The `bool` is `true` when a previous solution was ejected to make
        * room for this one.
@@ -1333,11 +1496,19 @@ declare module '@polkadot/api-base/types/events' {
        **/
       SomeOffline: AugmentedEvent<
         ApiType,
-        [offline: Vec<ITuple<[AccountId32, PalletStakingExposure]>>],
-        { offline: Vec<ITuple<[AccountId32, PalletStakingExposure]>> }
+        [offline: Vec<ITuple<[AccountId32, SpStakingExposure]>>],
+        { offline: Vec<ITuple<[AccountId32, SpStakingExposure]>> }
       >;
     };
     indices: {
+      /**
+       * A deposit to reserve an index has been poked/reconsidered.
+       **/
+      DepositPoked: AugmentedEvent<
+        ApiType,
+        [who: AccountId32, index: u32, oldDeposit: u128, newDeposit: u128],
+        { who: AccountId32; index: u32; oldDeposit: u128; newDeposit: u128 }
+      >;
       /**
        * A account index was assigned.
        **/
@@ -1602,8 +1773,8 @@ declare module '@polkadot/api-base/types/events' {
        *
        * Parameters:
        * - `IdentityId`: The DID of the caller.
-       * - `T::BlockNumber`: The old enactment period.
-       * - `T::BlockNumber`: The new enactment period.
+       * - `BlockNumber`: The old enactment period.
+       * - `BlockNumber`: The new enactment period.
        **/
       DefaultEnactmentPeriodChanged: AugmentedEvent<
         ApiType,
@@ -1622,7 +1793,7 @@ declare module '@polkadot/api-base/types/events' {
        * Parameters:
        * - `IdentityId`: The DID of the caller.
        * - `PipId`: The ID of the PIP.
-       * - `T::BlockNumber`: The block number at which the PIP is scheduled for execution.
+       * - `BlockNumber`: The block number at which the PIP is scheduled for execution.
        **/
       ExecutionScheduled: AugmentedEvent<ApiType, [PolymeshPrimitivesIdentityId, u32, u32]>;
       /**
@@ -1631,7 +1802,7 @@ declare module '@polkadot/api-base/types/events' {
        * Parameters:
        * - `IdentityId`: The DID of the caller.
        * - `PipId`: The ID of the PIP.
-       * - `T::BlockNumber`: The block number at which the PIP was scheduled for execution.
+       * - `BlockNumber`: The block number at which the PIP was scheduled for execution.
        **/
       ExecutionSchedulingFailed: AugmentedEvent<ApiType, [PolymeshPrimitivesIdentityId, u32, u32]>;
       /**
@@ -1640,7 +1811,7 @@ declare module '@polkadot/api-base/types/events' {
        * Parameters:
        * - `IdentityId`: The DID of the caller.
        * - `PipId`: The ID of the PIP.
-       * - `T::BlockNumber`: The block number at which the PIP is scheduled for expiry.
+       * - `BlockNumber`: The block number at which the PIP is scheduled for expiry.
        **/
       ExpiryScheduled: AugmentedEvent<ApiType, [PolymeshPrimitivesIdentityId, u32, u32]>;
       /**
@@ -1649,7 +1820,7 @@ declare module '@polkadot/api-base/types/events' {
        * Parameters:
        * - `IdentityId`: The DID of the caller.
        * - `PipId`: The ID of the PIP.
-       * - `T::BlockNumber`: The block number at which the PIP was scheduled for expiry.
+       * - `BlockNumber`: The block number at which the PIP was scheduled for expiry.
        **/
       ExpirySchedulingFailed: AugmentedEvent<ApiType, [PolymeshPrimitivesIdentityId, u32, u32]>;
       /**
@@ -2102,6 +2273,10 @@ declare module '@polkadot/api-base/types/events' {
     };
     scheduler: {
       /**
+       * Agenda is incomplete from `when`.
+       **/
+      AgendaIncomplete: AugmentedEvent<ApiType, [when: u32], { when: u32 }>;
+      /**
        * The call for the provided hash was not found so the task has been aborted.
        **/
       CallUnavailable: AugmentedEvent<
@@ -2146,6 +2321,31 @@ declare module '@polkadot/api-base/types/events' {
         { task: ITuple<[u32, u32]>; id: Option<U8aFixed> }
       >;
       /**
+       * Cancel a retry configuration for some task.
+       **/
+      RetryCancelled: AugmentedEvent<
+        ApiType,
+        [task: ITuple<[u32, u32]>, id: Option<U8aFixed>],
+        { task: ITuple<[u32, u32]>; id: Option<U8aFixed> }
+      >;
+      /**
+       * The given task was unable to be retried since the agenda is full at that block or there
+       * was not enough weight to reschedule it.
+       **/
+      RetryFailed: AugmentedEvent<
+        ApiType,
+        [task: ITuple<[u32, u32]>, id: Option<U8aFixed>],
+        { task: ITuple<[u32, u32]>; id: Option<U8aFixed> }
+      >;
+      /**
+       * Set a retry configuration for some task.
+       **/
+      RetrySet: AugmentedEvent<
+        ApiType,
+        [task: ITuple<[u32, u32]>, id: Option<U8aFixed>, period: u32, retries: u8],
+        { task: ITuple<[u32, u32]>; id: Option<U8aFixed>; period: u32; retries: u8 }
+      >;
+      /**
        * Scheduled some task.
        **/
       Scheduled: AugmentedEvent<ApiType, [when: u32, index: u32], { when: u32; index: u32 }>;
@@ -2156,6 +2356,22 @@ declare module '@polkadot/api-base/types/events' {
        * block number as the type might suggest.
        **/
       NewSession: AugmentedEvent<ApiType, [sessionIndex: u32], { sessionIndex: u32 }>;
+      /**
+       * Validator has been disabled.
+       **/
+      ValidatorDisabled: AugmentedEvent<
+        ApiType,
+        [validator: AccountId32],
+        { validator: AccountId32 }
+      >;
+      /**
+       * Validator has been re-enabled.
+       **/
+      ValidatorReenabled: AugmentedEvent<
+        ApiType,
+        [validator: AccountId32],
+        { validator: AccountId32 }
+      >;
     };
     settlement: {
       /**
@@ -2329,28 +2545,25 @@ declare module '@polkadot/api-base/types/events' {
        **/
       Bonded: AugmentedEvent<
         ApiType,
-        [identity: PolymeshPrimitivesIdentityId, stash: AccountId32, amount: u128],
-        { identity: PolymeshPrimitivesIdentityId; stash: AccountId32; amount: u128 }
+        [stash: AccountId32, amount: u128],
+        { stash: AccountId32; amount: u128 }
       >;
       /**
        * An account has stopped participating as either a validator or nominator.
        **/
       Chilled: AugmentedEvent<ApiType, [stash: AccountId32], { stash: AccountId32 }>;
       /**
-       * Commission cap has been updated.
+       * Report of a controller batch deprecation.
        **/
-      CommissionCapUpdated: AugmentedEvent<
+      ControllerBatchDeprecated: AugmentedEvent<ApiType, [failures: u32], { failures: u32 }>;
+      /**
+       * Staking balance migrated from locks to holds, with any balance that could not be held
+       * is force withdrawn.
+       **/
+      CurrencyMigrated: AugmentedEvent<
         ApiType,
-        [
-          governanceCouncillDid: PolymeshPrimitivesIdentityId,
-          oldCommissionCap: Perbill,
-          newCommissionCap: Perbill
-        ],
-        {
-          governanceCouncillDid: PolymeshPrimitivesIdentityId;
-          oldCommissionCap: Perbill;
-          newCommissionCap: Perbill;
-        }
+        [stash: AccountId32, forceWithdraw: u128],
+        { stash: AccountId32; forceWithdraw: u128 }
       >;
       /**
        * The era payout has been set; the first balance is the validator-payout; the second is
@@ -2370,44 +2583,12 @@ declare module '@polkadot/api-base/types/events' {
         { mode: PalletStakingForcing }
       >;
       /**
-       * Remove the nominators from the valid nominators when there CDD expired.
-       **/
-      InvalidatedNominators: AugmentedEvent<
-        ApiType,
-        [
-          governanceCouncillDid: PolymeshPrimitivesIdentityId,
-          governanceCouncillAccount: PolymeshPrimitivesIdentityId,
-          expiredNominators: Vec<AccountId32>
-        ],
-        {
-          governanceCouncillDid: PolymeshPrimitivesIdentityId;
-          governanceCouncillAccount: PolymeshPrimitivesIdentityId;
-          expiredNominators: Vec<AccountId32>;
-        }
-      >;
-      /**
        * A nominator has been kicked from a validator.
        **/
       Kicked: AugmentedEvent<
         ApiType,
         [nominator: AccountId32, stash: AccountId32],
         { nominator: AccountId32; stash: AccountId32 }
-      >;
-      /**
-       * User has updated their nominations.
-       **/
-      Nominated: AugmentedEvent<
-        ApiType,
-        [
-          nominatorIdentity: PolymeshPrimitivesIdentityId,
-          stash: AccountId32,
-          targets: Vec<AccountId32>
-        ],
-        {
-          nominatorIdentity: PolymeshPrimitivesIdentityId;
-          stash: AccountId32;
-          targets: Vec<AccountId32>;
-        }
       >;
       /**
        * An old slashing report from a prior era was discarded because it could
@@ -2419,56 +2600,20 @@ declare module '@polkadot/api-base/types/events' {
         { sessionIndex: u32 }
       >;
       /**
-       * The stakers' rewards are getting paid.
+       * A Page of stakers rewards are getting paid. `next` is `None` if all pages are claimed.
        **/
       PayoutStarted: AugmentedEvent<
         ApiType,
-        [eraIndex: u32, validatorStash: AccountId32],
-        { eraIndex: u32; validatorStash: AccountId32 }
+        [eraIndex: u32, validatorStash: AccountId32, page: u32, next: Option<u32>],
+        { eraIndex: u32; validatorStash: AccountId32; page: u32; next: Option<u32> }
       >;
       /**
-       * An identity has issued a candidacy for becoming a validator.
-       **/
-      PermissionedIdentityAdded: AugmentedEvent<
-        ApiType,
-        [
-          governanceCouncillDid: PolymeshPrimitivesIdentityId,
-          validatorsIdentity: PolymeshPrimitivesIdentityId
-        ],
-        {
-          governanceCouncillDid: PolymeshPrimitivesIdentityId;
-          validatorsIdentity: PolymeshPrimitivesIdentityId;
-        }
-      >;
-      /**
-       * An identity has been removed from the permissioned identities pool.
-       **/
-      PermissionedIdentityRemoved: AugmentedEvent<
-        ApiType,
-        [
-          governanceCouncillDid: PolymeshPrimitivesIdentityId,
-          validatorsIdentity: PolymeshPrimitivesIdentityId
-        ],
-        {
-          governanceCouncillDid: PolymeshPrimitivesIdentityId;
-          validatorsIdentity: PolymeshPrimitivesIdentityId;
-        }
-      >;
-      /**
-       * The nominator has been rewarded by this amount.
+       * The nominator has been rewarded by this amount to this destination.
        **/
       Rewarded: AugmentedEvent<
         ApiType,
-        [identity: PolymeshPrimitivesIdentityId, stash: AccountId32, amount: u128],
-        { identity: PolymeshPrimitivesIdentityId; stash: AccountId32; amount: u128 }
-      >;
-      /**
-       * Reward scheduling interrupted.
-       **/
-      RewardPaymentSchedulingInterrupted: AugmentedEvent<
-        ApiType,
-        [accountId: AccountId32, era: u32, error: SpRuntimeDispatchError],
-        { accountId: AccountId32; era: u32; error: SpRuntimeDispatchError }
+        [stash: AccountId32, dest: PalletStakingRewardDestination, amount: u128],
+        { stash: AccountId32; dest: PalletStakingRewardDestination; amount: u128 }
       >;
       /**
        * A staker (validator or nominator) has been slashed by the given amount.
@@ -2479,14 +2624,6 @@ declare module '@polkadot/api-base/types/events' {
         { staker: AccountId32; amount: u128 }
       >;
       /**
-       * Slashing allowed has been updated.
-       **/
-      SlashingAllowedForChanged: AugmentedEvent<
-        ApiType,
-        [slashingSwitch: PalletStakingSlashingSwitch],
-        { slashingSwitch: PalletStakingSlashingSwitch }
-      >;
-      /**
        * A slash for the given validator, for the given percentage of their stake, at the given
        * era as been reported.
        **/
@@ -2495,6 +2632,14 @@ declare module '@polkadot/api-base/types/events' {
         [validator: AccountId32, fraction: Perbill, slashEra: u32],
         { validator: AccountId32; fraction: Perbill; slashEra: u32 }
       >;
+      /**
+       * Targets size limit reached.
+       **/
+      SnapshotTargetsSizeExceeded: AugmentedEvent<ApiType, [size_: u32], { size_: u32 }>;
+      /**
+       * Voters size limit reached.
+       **/
+      SnapshotVotersSizeExceeded: AugmentedEvent<ApiType, [size_: u32], { size_: u32 }>;
       /**
        * A new set of stakers was elected.
        **/
@@ -2508,8 +2653,8 @@ declare module '@polkadot/api-base/types/events' {
        **/
       Unbonded: AugmentedEvent<
         ApiType,
-        [identity: PolymeshPrimitivesIdentityId, stash: AccountId32, amount: u128],
-        { identity: PolymeshPrimitivesIdentityId; stash: AccountId32; amount: u128 }
+        [stash: AccountId32, amount: u128],
+        { stash: AccountId32; amount: u128 }
       >;
       /**
        * A validator has set their preferences.
@@ -2796,16 +2941,16 @@ declare module '@polkadot/api-base/types/events' {
        **/
       ExtrinsicFailed: AugmentedEvent<
         ApiType,
-        [dispatchError: SpRuntimeDispatchError, dispatchInfo: FrameSupportDispatchDispatchInfo],
-        { dispatchError: SpRuntimeDispatchError; dispatchInfo: FrameSupportDispatchDispatchInfo }
+        [dispatchError: SpRuntimeDispatchError, dispatchInfo: FrameSystemDispatchEventInfo],
+        { dispatchError: SpRuntimeDispatchError; dispatchInfo: FrameSystemDispatchEventInfo }
       >;
       /**
        * An extrinsic completed successfully.
        **/
       ExtrinsicSuccess: AugmentedEvent<
         ApiType,
-        [dispatchInfo: FrameSupportDispatchDispatchInfo],
-        { dispatchInfo: FrameSupportDispatchDispatchInfo }
+        [dispatchInfo: FrameSystemDispatchEventInfo],
+        { dispatchInfo: FrameSystemDispatchEventInfo }
       >;
       /**
        * An account was reaped.
@@ -2816,12 +2961,28 @@ declare module '@polkadot/api-base/types/events' {
        **/
       NewAccount: AugmentedEvent<ApiType, [account: AccountId32], { account: AccountId32 }>;
       /**
+       * An invalid authorized upgrade was rejected while trying to apply it.
+       **/
+      RejectedInvalidAuthorizedUpgrade: AugmentedEvent<
+        ApiType,
+        [codeHash: H256, error: SpRuntimeDispatchError],
+        { codeHash: H256; error: SpRuntimeDispatchError }
+      >;
+      /**
        * On on-chain remark happened.
        **/
       Remarked: AugmentedEvent<
         ApiType,
         [sender: AccountId32, hash_: H256],
         { sender: AccountId32; hash_: H256 }
+      >;
+      /**
+       * An upgrade was authorized.
+       **/
+      UpgradeAuthorized: AugmentedEvent<
+        ApiType,
+        [codeHash: H256, checkVersion: bool],
+        { codeHash: H256; checkVersion: bool }
       >;
     };
     technicalCommittee: {
@@ -3175,6 +3336,100 @@ declare module '@polkadot/api-base/types/events' {
           target: AccountId32;
           result: Result<Null, SpRuntimeDispatchError>;
         }
+      >;
+    };
+    validators: {
+      /**
+       * Commission cap has been updated.
+       **/
+      CommissionCapUpdated: AugmentedEvent<
+        ApiType,
+        [
+          governanceCouncillDid: PolymeshPrimitivesIdentityId,
+          oldCommissionCap: Perbill,
+          newCommissionCap: Perbill
+        ],
+        {
+          governanceCouncillDid: PolymeshPrimitivesIdentityId;
+          oldCommissionCap: Perbill;
+          newCommissionCap: Perbill;
+        }
+      >;
+      /**
+       * Remove the nominators from the valid nominators when there CDD expired.
+       **/
+      InvalidatedNominators: AugmentedEvent<
+        ApiType,
+        [
+          governanceCouncillDid: PolymeshPrimitivesIdentityId,
+          governanceCouncillAccount: PolymeshPrimitivesIdentityId,
+          expiredNominators: Vec<AccountId32>
+        ],
+        {
+          governanceCouncillDid: PolymeshPrimitivesIdentityId;
+          governanceCouncillAccount: PolymeshPrimitivesIdentityId;
+          expiredNominators: Vec<AccountId32>;
+        }
+      >;
+      /**
+       * User has updated their nominations.
+       **/
+      Nominated: AugmentedEvent<
+        ApiType,
+        [
+          nominatorIdentity: PolymeshPrimitivesIdentityId,
+          stash: AccountId32,
+          targets: Vec<AccountId32>
+        ],
+        {
+          nominatorIdentity: PolymeshPrimitivesIdentityId;
+          stash: AccountId32;
+          targets: Vec<AccountId32>;
+        }
+      >;
+      /**
+       * An identity has issued a candidacy for becoming a validator.
+       **/
+      PermissionedIdentityAdded: AugmentedEvent<
+        ApiType,
+        [
+          governanceCouncillDid: PolymeshPrimitivesIdentityId,
+          validatorsIdentity: PolymeshPrimitivesIdentityId
+        ],
+        {
+          governanceCouncillDid: PolymeshPrimitivesIdentityId;
+          validatorsIdentity: PolymeshPrimitivesIdentityId;
+        }
+      >;
+      /**
+       * An identity has been removed from the permissioned identities pool.
+       **/
+      PermissionedIdentityRemoved: AugmentedEvent<
+        ApiType,
+        [
+          governanceCouncillDid: PolymeshPrimitivesIdentityId,
+          validatorsIdentity: PolymeshPrimitivesIdentityId
+        ],
+        {
+          governanceCouncillDid: PolymeshPrimitivesIdentityId;
+          validatorsIdentity: PolymeshPrimitivesIdentityId;
+        }
+      >;
+      /**
+       * Reward scheduling interrupted.
+       **/
+      RewardPaymentSchedulingInterrupted: AugmentedEvent<
+        ApiType,
+        [accountId: AccountId32, era: u32, error: SpRuntimeDispatchError],
+        { accountId: AccountId32; era: u32; error: SpRuntimeDispatchError }
+      >;
+      /**
+       * Slashing allowed has been updated.
+       **/
+      SlashingAllowedForChanged: AugmentedEvent<
+        ApiType,
+        [slashingSwitch: PalletValidatorsSlashingSwitch],
+        { slashingSwitch: PalletValidatorsSlashingSwitch }
       >;
     };
   } // AugmentedEvents

@@ -10,7 +10,10 @@
     "kill_storage": "kill_storage",
     "kill_prefix": "kill_prefix",
     "remark_with_event": "remark_with_event",
-    "placeholder_fill_block": "placeholder_fill_block"
+    "placeholder_fill_block": "placeholder_fill_block",
+    "authorize_upgrade": "authorize_upgrade",
+    "authorize_upgrade_without_checks": "authorize_upgrade_without_checks",
+    "apply_authorized_upgrade": "apply_authorized_upgrade"
   },
   "Babe": {
     "report_equivocation": "report_equivocation",
@@ -25,7 +28,8 @@
     "transfer": "transfer",
     "free": "free",
     "force_transfer": "force_transfer",
-    "freeze": "freeze"
+    "freeze": "freeze",
+    "poke_deposit": "poke_deposit"
   },
   "Authorship": {
     "set_uncles": "set_uncles"
@@ -36,7 +40,15 @@
     "deposit_block_reward_reserve_balance": "deposit_block_reward_reserve_balance",
     "set_balance": "set_balance",
     "force_transfer": "force_transfer",
-    "burn_account_balance": "burn_account_balance"
+    "burn_account_balance": "burn_account_balance",
+    "transfer_allow_death": "transfer_allow_death",
+    "transfer_keep_alive": "transfer_keep_alive",
+    "transfer_all": "transfer_all",
+    "force_unreserve": "force_unreserve",
+    "upgrade_accounts": "upgrade_accounts",
+    "force_set_balance": "force_set_balance",
+    "force_adjust_total_issuance": "force_adjust_total_issuance",
+    "burn": "burn"
   },
   "Identity": {
     "cdd_register_did": "cdd_register_did",
@@ -225,7 +237,13 @@
     "set_staking_configs": "set_staking_configs",
     "chill_other": "chill_other",
     "force_apply_min_commission": "force_apply_min_commission",
-    "set_min_commission": "set_min_commission"
+    "set_min_commission": "set_min_commission",
+    "payout_stakers_by_page": "payout_stakers_by_page",
+    "update_payee": "update_payee",
+    "deprecate_controller_batch": "deprecate_controller_batch",
+    "restore_ledger": "restore_ledger",
+    "migrate_currency": "migrate_currency",
+    "manual_slash": "manual_slash"
   },
   "Session": {
     "set_keys": "set_keys",
@@ -376,7 +394,11 @@
     "schedule_named": "schedule_named",
     "cancel_named": "cancel_named",
     "schedule_after": "schedule_after",
-    "schedule_named_after": "schedule_named_after"
+    "schedule_named_after": "schedule_named_after",
+    "set_retry": "set_retry",
+    "set_retry_named": "set_retry_named",
+    "cancel_retry": "cancel_retry",
+    "cancel_retry_named": "cancel_retry_named"
   },
   "Settlement": {
     "create_venue": "create_venue",
@@ -507,7 +529,8 @@
     "note_preimage": "note_preimage",
     "unnote_preimage": "unnote_preimage",
     "request_preimage": "request_preimage",
-    "unrequest_preimage": "unrequest_preimage"
+    "unrequest_preimage": "unrequest_preimage",
+    "ensure_updated": "ensure_updated"
   },
   "Contracts": {
     "call": "call",
@@ -518,7 +541,8 @@
     "call_old_weight": "call_old_weight",
     "instantiate_with_code_old_weight": "instantiate_with_code_old_weight",
     "instantiate_old_weight": "instantiate_old_weight",
-    "set_code": "set_code"
+    "set_code": "set_code",
+    "migrate": "migrate"
   },
   "Nft": {
     "create_nft_collection": "create_nft_collection",
@@ -543,5 +567,14 @@
   },
   "TransactionPayment": {
     "set_disable_fees": "set_disable_fees"
+  },
+  "Validators": {
+    "add_permissioned_validator": "add_permissioned_validator",
+    "remove_permissioned_validator": "remove_permissioned_validator",
+    "payout_stakers_by_system": "payout_stakers_by_system",
+    "change_slashing_allowed_for": "change_slashing_allowed_for",
+    "update_permissioned_validator_intended_count": "update_permissioned_validator_intended_count",
+    "chill_from_governance": "chill_from_governance",
+    "set_commission_cap": "set_commission_cap"
   }
 }

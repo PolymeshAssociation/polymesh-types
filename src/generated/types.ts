@@ -265,6 +265,9 @@ export enum SystemTx {
   KillPrefix = 'system.killPrefix',
   RemarkWithEvent = 'system.remarkWithEvent',
   PlaceholderFillBlock = 'system.placeholderFillBlock',
+  AuthorizeUpgrade = 'system.authorizeUpgrade',
+  AuthorizeUpgradeWithoutChecks = 'system.authorizeUpgradeWithoutChecks',
+  ApplyAuthorizedUpgrade = 'system.applyAuthorizedUpgrade',
 }
 
 export enum BabeTx {
@@ -283,6 +286,7 @@ export enum IndicesTx {
   Free = 'indices.free',
   ForceTransfer = 'indices.forceTransfer',
   Freeze = 'indices.freeze',
+  PokeDeposit = 'indices.pokeDeposit',
 }
 
 export enum AuthorshipTx {
@@ -296,6 +300,14 @@ export enum BalancesTx {
   SetBalance = 'balances.setBalance',
   ForceTransfer = 'balances.forceTransfer',
   BurnAccountBalance = 'balances.burnAccountBalance',
+  TransferAllowDeath = 'balances.transferAllowDeath',
+  TransferKeepAlive = 'balances.transferKeepAlive',
+  TransferAll = 'balances.transferAll',
+  ForceUnreserve = 'balances.forceUnreserve',
+  UpgradeAccounts = 'balances.upgradeAccounts',
+  ForceSetBalance = 'balances.forceSetBalance',
+  ForceAdjustTotalIssuance = 'balances.forceAdjustTotalIssuance',
+  Burn = 'balances.burn',
 }
 
 export enum IdentityTx {
@@ -496,6 +508,12 @@ export enum StakingTx {
   ChillOther = 'staking.chillOther',
   ForceApplyMinCommission = 'staking.forceApplyMinCommission',
   SetMinCommission = 'staking.setMinCommission',
+  PayoutStakersByPage = 'staking.payoutStakersByPage',
+  UpdatePayee = 'staking.updatePayee',
+  DeprecateControllerBatch = 'staking.deprecateControllerBatch',
+  RestoreLedger = 'staking.restoreLedger',
+  MigrateCurrency = 'staking.migrateCurrency',
+  ManualSlash = 'staking.manualSlash',
 }
 
 export enum SessionTx {
@@ -661,6 +679,10 @@ export enum SchedulerTx {
   CancelNamed = 'scheduler.cancelNamed',
   ScheduleAfter = 'scheduler.scheduleAfter',
   ScheduleNamedAfter = 'scheduler.scheduleNamedAfter',
+  SetRetry = 'scheduler.setRetry',
+  SetRetryNamed = 'scheduler.setRetryNamed',
+  CancelRetry = 'scheduler.cancelRetry',
+  CancelRetryNamed = 'scheduler.cancelRetryNamed',
 }
 
 export enum SettlementTx {
@@ -803,6 +825,7 @@ export enum PreimageTx {
   UnnotePreimage = 'preimage.unnotePreimage',
   RequestPreimage = 'preimage.requestPreimage',
   UnrequestPreimage = 'preimage.unrequestPreimage',
+  EnsureUpdated = 'preimage.ensureUpdated',
 }
 
 export enum ContractsTx {
@@ -815,6 +838,7 @@ export enum ContractsTx {
   InstantiateWithCodeOldWeight = 'contracts.instantiateWithCodeOldWeight',
   InstantiateOldWeight = 'contracts.instantiateOldWeight',
   SetCode = 'contracts.setCode',
+  Migrate = 'contracts.migrate',
 }
 
 export enum NftTx {
@@ -843,6 +867,16 @@ export enum ElectionProviderMultiPhaseTx {
 
 export enum TransactionPaymentTx {
   SetDisableFees = 'transactionPayment.setDisableFees',
+}
+
+export enum ValidatorsTx {
+  AddPermissionedValidator = 'validators.addPermissionedValidator',
+  RemovePermissionedValidator = 'validators.removePermissionedValidator',
+  PayoutStakersBySystem = 'validators.payoutStakersBySystem',
+  ChangeSlashingAllowedFor = 'validators.changeSlashingAllowedFor',
+  UpdatePermissionedValidatorIntendedCount = 'validators.updatePermissionedValidatorIntendedCount',
+  ChillFromGovernance = 'validators.chillFromGovernance',
+  SetCommissionCap = 'validators.setCommissionCap',
 }
 
 export enum ModuleName {
@@ -893,6 +927,7 @@ export enum ModuleName {
   StateTrieMigration = 'stateTrieMigration',
   ElectionProviderMultiPhase = 'electionProviderMultiPhase',
   TransactionPayment = 'transactionPayment',
+  Validators = 'validators',
 }
 
 export type TxTag =
@@ -942,7 +977,8 @@ export type TxTag =
   | NftTx
   | StateTrieMigrationTx
   | ElectionProviderMultiPhaseTx
-  | TransactionPaymentTx;
+  | TransactionPaymentTx
+  | ValidatorsTx;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const TxTags = {
@@ -993,4 +1029,5 @@ export const TxTags = {
   stateTrieMigration: StateTrieMigrationTx,
   electionProviderMultiPhase: ElectionProviderMultiPhaseTx,
   transactionPayment: TransactionPaymentTx,
+  validators: ValidatorsTx,
 };

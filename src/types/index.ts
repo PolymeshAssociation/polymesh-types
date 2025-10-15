@@ -13,6 +13,7 @@ import sevenZeroX from './7.0.x.json';
 import sevenThreeX from './7.3.x.json';
 
 export default [
+  { minmax: [8000000, 8999999], types: sevenThreeX },
   { minmax: [7003000, 7999999], types: sevenThreeX },
   { minmax: [7000000, 7002999], types: sevenZeroX },
   { minmax: [6003000, 6999999], types: sixThreeX },
