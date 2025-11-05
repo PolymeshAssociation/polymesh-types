@@ -14,12 +14,14 @@ jobs:
       CI: true
     steps:
       - uses: actions/checkout@v4
+      - name: Enable Corepack
+        run: corepack enable
       - uses: actions/setup-node@v4
         with:
           node-version: '22.x'
           cache: 'yarn'
       - name: install dependencies
-        run: yarn --frozen-lockfile
+        run: yarn --immutable
       - name: lint
         run: yarn lint
       - name: build
@@ -32,12 +34,14 @@ jobs:
     if: github.event_name == 'push'
     steps:
       - uses: actions/checkout@v4
+      - name: Enable Corepack
+        run: corepack enable
       - uses: actions/setup-node@v4
         with:
           node-version: '22.x'
           cache: 'yarn'
       - name: install dependencies
-        run: yarn --frozen-lockfile
+        run: yarn --immutable
       - name: build
         run: |
           yarn build:ts
@@ -48,7 +52,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.ASSOCIATION_NPM_TOKEN }}
         run: |
           cd dist
-          yarn --frozen-lockfile
+          yarn --immutable
           yarn semantic-release
 
   check-fast-forward:

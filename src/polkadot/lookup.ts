@@ -5971,31 +5971,374 @@ export default {
     ],
   },
   /**
-   * Lookup778: frame_system::extensions::check_spec_version::CheckSpecVersion<T>
+   * Lookup777: frame_system::extensions::check_spec_version::CheckSpecVersion<T>
    **/
   FrameSystemExtensionsCheckSpecVersion: 'Null',
   /**
-   * Lookup779: frame_system::extensions::check_tx_version::CheckTxVersion<T>
+   * Lookup778: frame_system::extensions::check_tx_version::CheckTxVersion<T>
    **/
   FrameSystemExtensionsCheckTxVersion: 'Null',
   /**
-   * Lookup780: frame_system::extensions::check_genesis::CheckGenesis<T>
+   * Lookup779: frame_system::extensions::check_genesis::CheckGenesis<T>
    **/
   FrameSystemExtensionsCheckGenesis: 'Null',
   /**
-   * Lookup783: frame_system::extensions::check_nonce::CheckNonce<T>
+   * Lookup782: frame_system::extensions::check_nonce::CheckNonce<T>
    **/
   FrameSystemExtensionsCheckNonce: 'Compact<u32>',
   /**
-   * Lookup784: frame_system::extensions::check_weight::CheckWeight<T>
+   * Lookup783: frame_system::extensions::check_weight::CheckWeight<T>
    **/
   FrameSystemExtensionsCheckWeight: 'Null',
   /**
-   * Lookup785: pallet_transaction_payment::ChargeTransactionPayment<T>
+   * Lookup784: pallet_transaction_payment::ChargeTransactionPayment<T>
    **/
   PalletTransactionPaymentChargeTransactionPayment: 'Compact<u128>',
   /**
-   * Lookup786: pallet_permissions::StoreCallMetadata<T>
+   * Lookup785: pallet_permissions::StoreCallMetadata<T>
    **/
   PalletPermissionsStoreCallMetadata: 'Null',
+  /**
+   * Lookup786: sp_runtime::generic::block::Block<sp_runtime::generic::header::Header<Number, Hash>, sp_runtime::generic::unchecked_extrinsic::UncheckedExtrinsic<sp_runtime::multiaddress::MultiAddress<sp_core::crypto::AccountId32, AccountIndex>, polymesh_runtime_develop::runtime::RuntimeCall, sp_runtime::MultiSignature, Extra>>
+   **/
+  SpRuntimeBlock: {
+    header: 'SpRuntimeHeader',
+    extrinsics: 'Vec<Bytes>',
+  },
+  /**
+   * Lookup789: sp_runtime::ExtrinsicInclusionMode
+   **/
+  SpRuntimeExtrinsicInclusionMode: {
+    _enum: ['AllExtrinsics', 'OnlyInherents'],
+  },
+  /**
+   * Lookup793: sp_runtime::transaction_validity::TransactionValidityError
+   **/
+  SpRuntimeTransactionValidityTransactionValidityError: {
+    _enum: {
+      Invalid: 'SpRuntimeTransactionValidityInvalidTransaction',
+      Unknown: 'SpRuntimeTransactionValidityUnknownTransaction',
+    },
+  },
+  /**
+   * Lookup794: sp_runtime::transaction_validity::InvalidTransaction
+   **/
+  SpRuntimeTransactionValidityInvalidTransaction: {
+    _enum: {
+      Call: 'Null',
+      Payment: 'Null',
+      Future: 'Null',
+      Stale: 'Null',
+      BadProof: 'Null',
+      AncientBirthBlock: 'Null',
+      ExhaustsResources: 'Null',
+      Custom: 'u8',
+      BadMandatory: 'Null',
+      MandatoryValidation: 'Null',
+      BadSigner: 'Null',
+      IndeterminateImplicit: 'Null',
+      UnknownOrigin: 'Null',
+    },
+  },
+  /**
+   * Lookup795: sp_runtime::transaction_validity::UnknownTransaction
+   **/
+  SpRuntimeTransactionValidityUnknownTransaction: {
+    _enum: {
+      CannotLookup: 'Null',
+      NoUnsignedValidator: 'Null',
+      Custom: 'u8',
+    },
+  },
+  /**
+   * Lookup796: sp_inherents::InherentData
+   **/
+  SpInherentsInherentData: {
+    data: 'BTreeMap<[u8;8], Bytes>',
+  },
+  /**
+   * Lookup800: sp_inherents::CheckInherentsResult
+   **/
+  SpInherentsCheckInherentsResult: {
+    okay: 'bool',
+    fatalError: 'bool',
+    errors: 'SpInherentsInherentData',
+  },
+  /**
+   * Lookup801: sp_runtime::transaction_validity::TransactionSource
+   **/
+  SpRuntimeTransactionValidityTransactionSource: {
+    _enum: ['InBlock', 'Local', 'External'],
+  },
+  /**
+   * Lookup803: sp_runtime::transaction_validity::ValidTransaction
+   **/
+  SpRuntimeTransactionValidityValidTransaction: {
+    priority: 'u64',
+    requires: 'Vec<Bytes>',
+    provides: 'Vec<Bytes>',
+    longevity: 'u64',
+    propagate: 'bool',
+  },
+  /**
+   * Lookup807: sp_consensus_babe::BabeConfiguration
+   **/
+  SpConsensusBabeBabeConfiguration: {
+    slotDuration: 'u64',
+    epochLength: 'u64',
+    c: '(u64,u64)',
+    authorities: 'Vec<(SpConsensusBabeAppPublic,u64)>',
+    randomness: '[u8;32]',
+    allowedSlots: 'SpConsensusBabeAllowedSlots',
+  },
+  /**
+   * Lookup808: sp_consensus_babe::Epoch
+   **/
+  SpConsensusBabeEpoch: {
+    epochIndex: 'u64',
+    startSlot: 'u64',
+    duration: 'u64',
+    authorities: 'Vec<(SpConsensusBabeAppPublic,u64)>',
+    randomness: '[u8;32]',
+    config: 'SpConsensusBabeBabeEpochConfiguration',
+  },
+  /**
+   * Lookup813: pallet_contracts::primitives::ExecReturnValue
+   **/
+  PalletContractsPrimitivesExecReturnValue: {
+    flags: 'PalletContractsUapiFlagsReturnFlags',
+    data: 'Bytes',
+  },
+  /**
+   * Lookup814: pallet_contracts_uapi::flags::ReturnFlags
+   **/
+  PalletContractsUapiFlagsReturnFlags: {
+    bits: 'u32',
+  },
+  /**
+   * Lookup815: pallet_contracts::primitives::StorageDeposit<Balance>
+   **/
+  PalletContractsPrimitivesStorageDeposit: {
+    _enum: {
+      Refund: 'u128',
+      Charge: 'u128',
+    },
+  },
+  /**
+   * Lookup818: pallet_contracts::primitives::Code<primitive_types::H256>
+   **/
+  PalletContractsPrimitivesCode: {
+    _enum: {
+      Upload: 'Bytes',
+      Existing: 'H256',
+    },
+  },
+  /**
+   * Lookup819: pallet_contracts::primitives::ContractResult<Result<pallet_contracts::primitives::InstantiateReturnValue<sp_core::crypto::AccountId32>, sp_runtime::DispatchError>, Balance, frame_system::EventRecord<polymesh_runtime_develop::runtime::RuntimeEvent, primitive_types::H256>>
+   **/
+  PalletContractsPrimitivesContractResult: {
+    gasConsumed: 'SpWeightsWeightV2Weight',
+    gasRequired: 'SpWeightsWeightV2Weight',
+    storageDeposit: 'PalletContractsPrimitivesStorageDeposit',
+    debugMessage: 'Bytes',
+    result: 'Result<PalletContractsPrimitivesInstantiateReturnValue, SpRuntimeDispatchError>',
+    events: 'Option<Vec<FrameSystemEventRecord>>',
+  },
+  /**
+   * Lookup821: pallet_contracts::primitives::InstantiateReturnValue<sp_core::crypto::AccountId32>
+   **/
+  PalletContractsPrimitivesInstantiateReturnValue: {
+    result: 'PalletContractsPrimitivesExecReturnValue',
+    accountId: 'AccountId32',
+  },
+  /**
+   * Lookup823: pallet_contracts::primitives::CodeUploadReturnValue<primitive_types::H256, Balance>
+   **/
+  PalletContractsPrimitivesCodeUploadReturnValue: {
+    codeHash: 'H256',
+    deposit: 'u128',
+  },
+  /**
+   * Lookup825: pallet_contracts::primitives::ContractAccessError
+   **/
+  PalletContractsPrimitivesContractAccessError: {
+    _enum: ['DoesntExist', 'KeyDecodingFailed', 'MigrationInProgress'],
+  },
+  /**
+   * Lookup826: pallet_transaction_payment::types::RuntimeDispatchInfo<Balance, sp_weights::weight_v2::Weight>
+   **/
+  PalletTransactionPaymentRuntimeDispatchInfo: {
+    weight: 'SpWeightsWeightV2Weight',
+    class: 'FrameSupportDispatchDispatchClass',
+    partialFee: 'u128',
+  },
+  /**
+   * Lookup827: pallet_transaction_payment::types::FeeDetails<Balance>
+   **/
+  PalletTransactionPaymentFeeDetails: {
+    inclusionFee: 'Option<PalletTransactionPaymentInclusionFee>',
+    tip: 'u128',
+  },
+  /**
+   * Lookup829: pallet_transaction_payment::types::InclusionFee<Balance>
+   **/
+  PalletTransactionPaymentInclusionFee: {
+    baseFee: 'u128',
+    lenFee: 'u128',
+    adjustedWeightFee: 'u128',
+  },
+  /**
+   * Lookup833: pallet_pips::types::VoteCount
+   **/
+  PalletPipsVoteCount: {
+    _enum: {
+      ProposalFound: {
+        ayes: 'u128',
+        nays: 'u128',
+      },
+      ProposalNotFound: 'Null',
+    },
+  },
+  /**
+   * Lookup836: pallet_identity::types::RpcDidRecords<sp_core::crypto::AccountId32>
+   **/
+  PalletIdentityRpcDidRecords: {
+    _enum: {
+      Success: {
+        primaryKey: 'AccountId32',
+        secondaryKeys: 'Vec<PolymeshPrimitivesSecondaryKey>',
+      },
+      IdNotFound: 'Null',
+    },
+  },
+  /**
+   * Lookup838: polymesh_primitives::authorization::AuthorizationType
+   **/
+  PolymeshPrimitivesAuthorizationAuthorizationType: {
+    _enum: [
+      'AttestPrimaryKeyRotation',
+      'RotatePrimaryKey',
+      'TransferTicker',
+      'AddMultiSigSigner',
+      'TransferAssetOwnership',
+      'JoinIdentity',
+      'PortfolioCustody',
+      'BecomeAgent',
+      'AddRelayerPayingKey',
+      'RotatePrimaryKeyToSecondary',
+    ],
+  },
+  /**
+   * Lookup841: pallet_identity::types::DidStatus
+   **/
+  PalletIdentityDidStatus: {
+    _enum: ['Unknown', 'Exists', 'CddVerified'],
+  },
+  /**
+   * Lookup843: pallet_identity::types::KeyIdentityData<polymesh_primitives::identity_id::IdentityId>
+   **/
+  PalletIdentityKeyIdentityData: {
+    identity: 'PolymeshPrimitivesIdentityId',
+    permissions: 'Option<PolymeshPrimitivesSecondaryKeyPermissions>',
+  },
+  /**
+   * Lookup847: pallet_group_rpc_runtime_api::Member
+   **/
+  PalletGroupRpcRuntimeApiMember: {
+    id: 'PolymeshPrimitivesIdentityId',
+    expiryAt: 'Option<u64>',
+    inactiveFrom: 'Option<u64>',
+  },
+  /**
+   * Lookup849: polymesh_primitives::settlement::ExecuteInstructionInfo
+   **/
+  PolymeshPrimitivesSettlementExecuteInstructionInfo: {
+    fungibleTokens: 'u32',
+    nonFungibleTokens: 'u32',
+    offChainAssets: 'u32',
+    consumedWeight: 'SpWeightsWeightV2Weight',
+    error: 'Option<Text>',
+  },
+  /**
+   * Lookup853: polymesh_primitives::compliance_manager::ComplianceReport
+   **/
+  PolymeshPrimitivesComplianceManagerComplianceReport: {
+    anyRequirementSatisfied: 'bool',
+    pausedCompliance: 'bool',
+    requirements: 'Vec<PolymeshPrimitivesComplianceManagerRequirementReport>',
+  },
+  /**
+   * Lookup855: polymesh_primitives::compliance_manager::RequirementReport
+   **/
+  PolymeshPrimitivesComplianceManagerRequirementReport: {
+    requirementSatisfied: 'bool',
+    id: 'u32',
+    senderConditions: 'Vec<PolymeshPrimitivesComplianceManagerConditionReport>',
+    receiverConditions: 'Vec<PolymeshPrimitivesComplianceManagerConditionReport>',
+  },
+  /**
+   * Lookup857: polymesh_primitives::compliance_manager::ConditionReport
+   **/
+  PolymeshPrimitivesComplianceManagerConditionReport: {
+    satisfied: 'bool',
+    condition: 'PolymeshPrimitivesCondition',
+  },
+  /**
+   * Lookup861: polymesh_runtime_develop::runtime::RuntimeError
+   **/
+  PolymeshRuntimeDevelopRuntimeRuntimeError: {
+    _enum: {
+      System: 'FrameSystemError',
+      Babe: 'PalletBabeError',
+      __Unused2: 'Null',
+      Indices: 'PalletIndicesError',
+      __Unused4: 'Null',
+      Balances: 'PalletBalancesError',
+      __Unused6: 'Null',
+      Identity: 'PalletIdentityError',
+      CddServiceProviders: 'PalletGroupError',
+      PolymeshCommittee: 'PalletCommitteeError',
+      CommitteeMembership: 'PalletGroupError',
+      TechnicalCommittee: 'PalletCommitteeError',
+      TechnicalCommitteeMembership: 'PalletGroupError',
+      UpgradeCommittee: 'PalletCommitteeError',
+      UpgradeCommitteeMembership: 'PalletGroupError',
+      MultiSig: 'PalletMultisigError',
+      Validators: 'PalletValidatorsError',
+      Staking: 'PalletStakingPalletError',
+      __Unused18: 'Null',
+      Session: 'PalletSessionError',
+      __Unused20: 'Null',
+      Grandpa: 'PalletGrandpaError',
+      __Unused22: 'Null',
+      ImOnline: 'PalletImOnlineError',
+      __Unused24: 'Null',
+      Sudo: 'PalletSudoError',
+      Asset: 'PalletAssetError',
+      CapitalDistribution: 'PalletCorporateActionsDistributionPalletError',
+      Checkpoint: 'PalletAssetCheckpointPalletError',
+      ComplianceManager: 'PalletComplianceManagerError',
+      CorporateAction: 'PalletCorporateActionsError',
+      CorporateBallot: 'PalletCorporateActionsBallotPalletError',
+      Permissions: 'PalletPermissionsError',
+      Pips: 'PalletPipsError',
+      Portfolio: 'PalletPortfolioError',
+      ProtocolFee: 'PalletProtocolFeeError',
+      Scheduler: 'PalletSchedulerError',
+      Settlement: 'PalletSettlementError',
+      Statistics: 'PalletStatisticsError',
+      Sto: 'PalletStoError',
+      Treasury: 'PalletTreasuryError',
+      Utility: 'PalletUtilityError',
+      Base: 'PalletBaseError',
+      ExternalAgents: 'PalletExternalAgentsError',
+      Relayer: 'PalletRelayerError',
+      __Unused45: 'Null',
+      Contracts: 'PalletContractsError',
+      PolymeshContracts: 'PolymeshContractsError',
+      Preimage: 'PalletPreimageError',
+      Nft: 'PalletNftError',
+      ElectionProviderMultiPhase: 'PalletElectionProviderMultiPhaseError',
+    },
+  },
 };

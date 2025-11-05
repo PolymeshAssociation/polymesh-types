@@ -120,7 +120,6 @@ import type {
   PolymeshPrimitivesMultisigProposalState,
   PolymeshPrimitivesMultisigProposalVoteCount,
   PolymeshPrimitivesNftNftCollection,
-  PolymeshPrimitivesPosRatio,
   PolymeshPrimitivesSecondaryKeyExtrinsicPermissions,
   PolymeshPrimitivesSecondaryKeyKeyRecord,
   PolymeshPrimitivesSecondaryKeySignatory,

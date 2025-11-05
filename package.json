@@ -1,6 +1,6 @@
 {
   "name": "@polymeshassociation/polymesh-types",
-  "version": "6.0.0",
+  "version": "7.0.0",
   "description": "Substrate types used in Polymesh chain",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -26,15 +26,18 @@
     "generate:types": "rimraf src/polkadot/* && yarn fetch:definitions && yarn generate:defs && yarn generate:meta && yarn generate:consts && yarn format"
   },
   "dependencies": {
-    "@polkadot/api": "^10.13.1",
-    "@polkadot/types": "^10.13.1"
+    "@polkadot/api": "16.5.2",
+    "@polkadot/api-base": "16.5.2",
+    "@polkadot/rpc-core": "16.5.2",
+    "@polkadot/types": "16.5.2",
+    "@polkadot/types-codec": "16.5.2"
   },
   "devDependencies": {
     "@commitlint/cli": "13.1.0",
     "@commitlint/config-conventional": "13.1.0",
     "@polkadot/dev": "^0.83.2",
     "@polkadot/dev-ts": "^0.83.2",
-    "@polkadot/typegen": "^10.13.1",
+    "@polkadot/typegen": "16.5.2",
     "@semantic-release/changelog": "^6.0.2",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/github": "^8.0.7",
@@ -80,5 +83,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
+  "packageManager": "yarn@4.9.2+sha512.1fc009bc09d13cfd0e19efa44cbfc2b9cf6ca61482725eb35bbc5e257e093ebf4130db6dfe15d604ff4b79efd8e1e8e99b25fa7d0a6197c9f9826358d4d65c3c"
 }

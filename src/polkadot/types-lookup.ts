@@ -8015,24 +8015,450 @@ declare module '@polkadot/types/lookup' {
       | 'PreDispatchDifferentRound';
   }
 
-  /** @name FrameSystemExtensionsCheckSpecVersion (778) */
+  /** @name FrameSystemExtensionsCheckSpecVersion (777) */
   type FrameSystemExtensionsCheckSpecVersion = Null;
 
-  /** @name FrameSystemExtensionsCheckTxVersion (779) */
+  /** @name FrameSystemExtensionsCheckTxVersion (778) */
   type FrameSystemExtensionsCheckTxVersion = Null;
 
-  /** @name FrameSystemExtensionsCheckGenesis (780) */
+  /** @name FrameSystemExtensionsCheckGenesis (779) */
   type FrameSystemExtensionsCheckGenesis = Null;
 
-  /** @name FrameSystemExtensionsCheckNonce (783) */
+  /** @name FrameSystemExtensionsCheckNonce (782) */
   interface FrameSystemExtensionsCheckNonce extends Compact<u32> {}
 
-  /** @name FrameSystemExtensionsCheckWeight (784) */
+  /** @name FrameSystemExtensionsCheckWeight (783) */
   type FrameSystemExtensionsCheckWeight = Null;
 
-  /** @name PalletTransactionPaymentChargeTransactionPayment (785) */
+  /** @name PalletTransactionPaymentChargeTransactionPayment (784) */
   interface PalletTransactionPaymentChargeTransactionPayment extends Compact<u128> {}
 
-  /** @name PalletPermissionsStoreCallMetadata (786) */
+  /** @name PalletPermissionsStoreCallMetadata (785) */
   type PalletPermissionsStoreCallMetadata = Null;
+
+  /** @name SpRuntimeBlock (786) */
+  interface SpRuntimeBlock extends Struct {
+    readonly header: SpRuntimeHeader;
+    readonly extrinsics: Vec<Bytes>;
+  }
+
+  /** @name SpRuntimeExtrinsicInclusionMode (789) */
+  interface SpRuntimeExtrinsicInclusionMode extends Enum {
+    readonly isAllExtrinsics: boolean;
+    readonly isOnlyInherents: boolean;
+    readonly type: 'AllExtrinsics' | 'OnlyInherents';
+  }
+
+  /** @name SpRuntimeTransactionValidityTransactionValidityError (793) */
+  interface SpRuntimeTransactionValidityTransactionValidityError extends Enum {
+    readonly isInvalid: boolean;
+    readonly asInvalid: SpRuntimeTransactionValidityInvalidTransaction;
+    readonly isUnknown: boolean;
+    readonly asUnknown: SpRuntimeTransactionValidityUnknownTransaction;
+    readonly type: 'Invalid' | 'Unknown';
+  }
+
+  /** @name SpRuntimeTransactionValidityInvalidTransaction (794) */
+  interface SpRuntimeTransactionValidityInvalidTransaction extends Enum {
+    readonly isCall: boolean;
+    readonly isPayment: boolean;
+    readonly isFuture: boolean;
+    readonly isStale: boolean;
+    readonly isBadProof: boolean;
+    readonly isAncientBirthBlock: boolean;
+    readonly isExhaustsResources: boolean;
+    readonly isCustom: boolean;
+    readonly asCustom: u8;
+    readonly isBadMandatory: boolean;
+    readonly isMandatoryValidation: boolean;
+    readonly isBadSigner: boolean;
+    readonly isIndeterminateImplicit: boolean;
+    readonly isUnknownOrigin: boolean;
+    readonly type:
+      | 'Call'
+      | 'Payment'
+      | 'Future'
+      | 'Stale'
+      | 'BadProof'
+      | 'AncientBirthBlock'
+      | 'ExhaustsResources'
+      | 'Custom'
+      | 'BadMandatory'
+      | 'MandatoryValidation'
+      | 'BadSigner'
+      | 'IndeterminateImplicit'
+      | 'UnknownOrigin';
+  }
+
+  /** @name SpRuntimeTransactionValidityUnknownTransaction (795) */
+  interface SpRuntimeTransactionValidityUnknownTransaction extends Enum {
+    readonly isCannotLookup: boolean;
+    readonly isNoUnsignedValidator: boolean;
+    readonly isCustom: boolean;
+    readonly asCustom: u8;
+    readonly type: 'CannotLookup' | 'NoUnsignedValidator' | 'Custom';
+  }
+
+  /** @name SpInherentsInherentData (796) */
+  interface SpInherentsInherentData extends Struct {
+    readonly data: BTreeMap<U8aFixed, Bytes>;
+  }
+
+  /** @name SpInherentsCheckInherentsResult (800) */
+  interface SpInherentsCheckInherentsResult extends Struct {
+    readonly okay: bool;
+    readonly fatalError: bool;
+    readonly errors: SpInherentsInherentData;
+  }
+
+  /** @name SpRuntimeTransactionValidityTransactionSource (801) */
+  interface SpRuntimeTransactionValidityTransactionSource extends Enum {
+    readonly isInBlock: boolean;
+    readonly isLocal: boolean;
+    readonly isExternal: boolean;
+    readonly type: 'InBlock' | 'Local' | 'External';
+  }
+
+  /** @name SpRuntimeTransactionValidityValidTransaction (803) */
+  interface SpRuntimeTransactionValidityValidTransaction extends Struct {
+    readonly priority: u64;
+    readonly requires: Vec<Bytes>;
+    readonly provides: Vec<Bytes>;
+    readonly longevity: u64;
+    readonly propagate: bool;
+  }
+
+  /** @name SpConsensusBabeBabeConfiguration (807) */
+  interface SpConsensusBabeBabeConfiguration extends Struct {
+    readonly slotDuration: u64;
+    readonly epochLength: u64;
+    readonly c: ITuple<[u64, u64]>;
+    readonly authorities: Vec<ITuple<[SpConsensusBabeAppPublic, u64]>>;
+    readonly randomness: U8aFixed;
+    readonly allowedSlots: SpConsensusBabeAllowedSlots;
+  }
+
+  /** @name SpConsensusBabeEpoch (808) */
+  interface SpConsensusBabeEpoch extends Struct {
+    readonly epochIndex: u64;
+    readonly startSlot: u64;
+    readonly duration: u64;
+    readonly authorities: Vec<ITuple<[SpConsensusBabeAppPublic, u64]>>;
+    readonly randomness: U8aFixed;
+    readonly config: SpConsensusBabeBabeEpochConfiguration;
+  }
+
+  /** @name PalletContractsPrimitivesExecReturnValue (813) */
+  interface PalletContractsPrimitivesExecReturnValue extends Struct {
+    readonly flags: PalletContractsUapiFlagsReturnFlags;
+    readonly data: Bytes;
+  }
+
+  /** @name PalletContractsUapiFlagsReturnFlags (814) */
+  interface PalletContractsUapiFlagsReturnFlags extends Struct {
+    readonly bits: u32;
+  }
+
+  /** @name PalletContractsPrimitivesStorageDeposit (815) */
+  interface PalletContractsPrimitivesStorageDeposit extends Enum {
+    readonly isRefund: boolean;
+    readonly asRefund: u128;
+    readonly isCharge: boolean;
+    readonly asCharge: u128;
+    readonly type: 'Refund' | 'Charge';
+  }
+
+  /** @name PalletContractsPrimitivesCode (818) */
+  interface PalletContractsPrimitivesCode extends Enum {
+    readonly isUpload: boolean;
+    readonly asUpload: Bytes;
+    readonly isExisting: boolean;
+    readonly asExisting: H256;
+    readonly type: 'Upload' | 'Existing';
+  }
+
+  /** @name PalletContractsPrimitivesContractResult (819) */
+  interface PalletContractsPrimitivesContractResult extends Struct {
+    readonly gasConsumed: SpWeightsWeightV2Weight;
+    readonly gasRequired: SpWeightsWeightV2Weight;
+    readonly storageDeposit: PalletContractsPrimitivesStorageDeposit;
+    readonly debugMessage: Bytes;
+    readonly result: Result<
+      PalletContractsPrimitivesInstantiateReturnValue,
+      SpRuntimeDispatchError
+    >;
+    readonly events: Option<Vec<FrameSystemEventRecord>>;
+  }
+
+  /** @name PalletContractsPrimitivesInstantiateReturnValue (821) */
+  interface PalletContractsPrimitivesInstantiateReturnValue extends Struct {
+    readonly result: PalletContractsPrimitivesExecReturnValue;
+    readonly accountId: AccountId32;
+  }
+
+  /** @name PalletContractsPrimitivesCodeUploadReturnValue (823) */
+  interface PalletContractsPrimitivesCodeUploadReturnValue extends Struct {
+    readonly codeHash: H256;
+    readonly deposit: u128;
+  }
+
+  /** @name PalletContractsPrimitivesContractAccessError (825) */
+  interface PalletContractsPrimitivesContractAccessError extends Enum {
+    readonly isDoesntExist: boolean;
+    readonly isKeyDecodingFailed: boolean;
+    readonly isMigrationInProgress: boolean;
+    readonly type: 'DoesntExist' | 'KeyDecodingFailed' | 'MigrationInProgress';
+  }
+
+  /** @name PalletTransactionPaymentRuntimeDispatchInfo (826) */
+  interface PalletTransactionPaymentRuntimeDispatchInfo extends Struct {
+    readonly weight: SpWeightsWeightV2Weight;
+    readonly class: FrameSupportDispatchDispatchClass;
+    readonly partialFee: u128;
+  }
+
+  /** @name PalletTransactionPaymentFeeDetails (827) */
+  interface PalletTransactionPaymentFeeDetails extends Struct {
+    readonly inclusionFee: Option<PalletTransactionPaymentInclusionFee>;
+    readonly tip: u128;
+  }
+
+  /** @name PalletTransactionPaymentInclusionFee (829) */
+  interface PalletTransactionPaymentInclusionFee extends Struct {
+    readonly baseFee: u128;
+    readonly lenFee: u128;
+    readonly adjustedWeightFee: u128;
+  }
+
+  /** @name PalletPipsVoteCount (833) */
+  interface PalletPipsVoteCount extends Enum {
+    readonly isProposalFound: boolean;
+    readonly asProposalFound: {
+      readonly ayes: u128;
+      readonly nays: u128;
+    } & Struct;
+    readonly isProposalNotFound: boolean;
+    readonly type: 'ProposalFound' | 'ProposalNotFound';
+  }
+
+  /** @name PalletIdentityRpcDidRecords (836) */
+  interface PalletIdentityRpcDidRecords extends Enum {
+    readonly isSuccess: boolean;
+    readonly asSuccess: {
+      readonly primaryKey: AccountId32;
+      readonly secondaryKeys: Vec<PolymeshPrimitivesSecondaryKey>;
+    } & Struct;
+    readonly isIdNotFound: boolean;
+    readonly type: 'Success' | 'IdNotFound';
+  }
+
+  /** @name PolymeshPrimitivesAuthorizationAuthorizationType (838) */
+  interface PolymeshPrimitivesAuthorizationAuthorizationType extends Enum {
+    readonly isAttestPrimaryKeyRotation: boolean;
+    readonly isRotatePrimaryKey: boolean;
+    readonly isTransferTicker: boolean;
+    readonly isAddMultiSigSigner: boolean;
+    readonly isTransferAssetOwnership: boolean;
+    readonly isJoinIdentity: boolean;
+    readonly isPortfolioCustody: boolean;
+    readonly isBecomeAgent: boolean;
+    readonly isAddRelayerPayingKey: boolean;
+    readonly isRotatePrimaryKeyToSecondary: boolean;
+    readonly type:
+      | 'AttestPrimaryKeyRotation'
+      | 'RotatePrimaryKey'
+      | 'TransferTicker'
+      | 'AddMultiSigSigner'
+      | 'TransferAssetOwnership'
+      | 'JoinIdentity'
+      | 'PortfolioCustody'
+      | 'BecomeAgent'
+      | 'AddRelayerPayingKey'
+      | 'RotatePrimaryKeyToSecondary';
+  }
+
+  /** @name PalletIdentityDidStatus (841) */
+  interface PalletIdentityDidStatus extends Enum {
+    readonly isUnknown: boolean;
+    readonly isExists: boolean;
+    readonly isCddVerified: boolean;
+    readonly type: 'Unknown' | 'Exists' | 'CddVerified';
+  }
+
+  /** @name PalletIdentityKeyIdentityData (843) */
+  interface PalletIdentityKeyIdentityData extends Struct {
+    readonly identity: PolymeshPrimitivesIdentityId;
+    readonly permissions: Option<PolymeshPrimitivesSecondaryKeyPermissions>;
+  }
+
+  /** @name PalletGroupRpcRuntimeApiMember (847) */
+  interface PalletGroupRpcRuntimeApiMember extends Struct {
+    readonly id: PolymeshPrimitivesIdentityId;
+    readonly expiryAt: Option<u64>;
+    readonly inactiveFrom: Option<u64>;
+  }
+
+  /** @name PolymeshPrimitivesSettlementExecuteInstructionInfo (849) */
+  interface PolymeshPrimitivesSettlementExecuteInstructionInfo extends Struct {
+    readonly fungibleTokens: u32;
+    readonly nonFungibleTokens: u32;
+    readonly offChainAssets: u32;
+    readonly consumedWeight: SpWeightsWeightV2Weight;
+    readonly error: Option<Text>;
+  }
+
+  /** @name PolymeshPrimitivesComplianceManagerComplianceReport (853) */
+  interface PolymeshPrimitivesComplianceManagerComplianceReport extends Struct {
+    readonly anyRequirementSatisfied: bool;
+    readonly pausedCompliance: bool;
+    readonly requirements: Vec<PolymeshPrimitivesComplianceManagerRequirementReport>;
+  }
+
+  /** @name PolymeshPrimitivesComplianceManagerRequirementReport (855) */
+  interface PolymeshPrimitivesComplianceManagerRequirementReport extends Struct {
+    readonly requirementSatisfied: bool;
+    readonly id: u32;
+    readonly senderConditions: Vec<PolymeshPrimitivesComplianceManagerConditionReport>;
+    readonly receiverConditions: Vec<PolymeshPrimitivesComplianceManagerConditionReport>;
+  }
+
+  /** @name PolymeshPrimitivesComplianceManagerConditionReport (857) */
+  interface PolymeshPrimitivesComplianceManagerConditionReport extends Struct {
+    readonly satisfied: bool;
+    readonly condition: PolymeshPrimitivesCondition;
+  }
+
+  /** @name PolymeshRuntimeDevelopRuntimeRuntimeError (861) */
+  interface PolymeshRuntimeDevelopRuntimeRuntimeError extends Enum {
+    readonly isSystem: boolean;
+    readonly asSystem: FrameSystemError;
+    readonly isBabe: boolean;
+    readonly asBabe: PalletBabeError;
+    readonly isIndices: boolean;
+    readonly asIndices: PalletIndicesError;
+    readonly isBalances: boolean;
+    readonly asBalances: PalletBalancesError;
+    readonly isIdentity: boolean;
+    readonly asIdentity: PalletIdentityError;
+    readonly isCddServiceProviders: boolean;
+    readonly asCddServiceProviders: PalletGroupError;
+    readonly isPolymeshCommittee: boolean;
+    readonly asPolymeshCommittee: PalletCommitteeError;
+    readonly isCommitteeMembership: boolean;
+    readonly asCommitteeMembership: PalletGroupError;
+    readonly isTechnicalCommittee: boolean;
+    readonly asTechnicalCommittee: PalletCommitteeError;
+    readonly isTechnicalCommitteeMembership: boolean;
+    readonly asTechnicalCommitteeMembership: PalletGroupError;
+    readonly isUpgradeCommittee: boolean;
+    readonly asUpgradeCommittee: PalletCommitteeError;
+    readonly isUpgradeCommitteeMembership: boolean;
+    readonly asUpgradeCommitteeMembership: PalletGroupError;
+    readonly isMultiSig: boolean;
+    readonly asMultiSig: PalletMultisigError;
+    readonly isValidators: boolean;
+    readonly asValidators: PalletValidatorsError;
+    readonly isStaking: boolean;
+    readonly asStaking: PalletStakingPalletError;
+    readonly isSession: boolean;
+    readonly asSession: PalletSessionError;
+    readonly isGrandpa: boolean;
+    readonly asGrandpa: PalletGrandpaError;
+    readonly isImOnline: boolean;
+    readonly asImOnline: PalletImOnlineError;
+    readonly isSudo: boolean;
+    readonly asSudo: PalletSudoError;
+    readonly isAsset: boolean;
+    readonly asAsset: PalletAssetError;
+    readonly isCapitalDistribution: boolean;
+    readonly asCapitalDistribution: PalletCorporateActionsDistributionPalletError;
+    readonly isCheckpoint: boolean;
+    readonly asCheckpoint: PalletAssetCheckpointPalletError;
+    readonly isComplianceManager: boolean;
+    readonly asComplianceManager: PalletComplianceManagerError;
+    readonly isCorporateAction: boolean;
+    readonly asCorporateAction: PalletCorporateActionsError;
+    readonly isCorporateBallot: boolean;
+    readonly asCorporateBallot: PalletCorporateActionsBallotPalletError;
+    readonly isPermissions: boolean;
+    readonly asPermissions: PalletPermissionsError;
+    readonly isPips: boolean;
+    readonly asPips: PalletPipsError;
+    readonly isPortfolio: boolean;
+    readonly asPortfolio: PalletPortfolioError;
+    readonly isProtocolFee: boolean;
+    readonly asProtocolFee: PalletProtocolFeeError;
+    readonly isScheduler: boolean;
+    readonly asScheduler: PalletSchedulerError;
+    readonly isSettlement: boolean;
+    readonly asSettlement: PalletSettlementError;
+    readonly isStatistics: boolean;
+    readonly asStatistics: PalletStatisticsError;
+    readonly isSto: boolean;
+    readonly asSto: PalletStoError;
+    readonly isTreasury: boolean;
+    readonly asTreasury: PalletTreasuryError;
+    readonly isUtility: boolean;
+    readonly asUtility: PalletUtilityError;
+    readonly isBase: boolean;
+    readonly asBase: PalletBaseError;
+    readonly isExternalAgents: boolean;
+    readonly asExternalAgents: PalletExternalAgentsError;
+    readonly isRelayer: boolean;
+    readonly asRelayer: PalletRelayerError;
+    readonly isContracts: boolean;
+    readonly asContracts: PalletContractsError;
+    readonly isPolymeshContracts: boolean;
+    readonly asPolymeshContracts: PolymeshContractsError;
+    readonly isPreimage: boolean;
+    readonly asPreimage: PalletPreimageError;
+    readonly isNft: boolean;
+    readonly asNft: PalletNftError;
+    readonly isElectionProviderMultiPhase: boolean;
+    readonly asElectionProviderMultiPhase: PalletElectionProviderMultiPhaseError;
+    readonly type:
+      | 'System'
+      | 'Babe'
+      | 'Indices'
+      | 'Balances'
+      | 'Identity'
+      | 'CddServiceProviders'
+      | 'PolymeshCommittee'
+      | 'CommitteeMembership'
+      | 'TechnicalCommittee'
+      | 'TechnicalCommitteeMembership'
+      | 'UpgradeCommittee'
+      | 'UpgradeCommitteeMembership'
+      | 'MultiSig'
+      | 'Validators'
+      | 'Staking'
+      | 'Session'
+      | 'Grandpa'
+      | 'ImOnline'
+      | 'Sudo'
+      | 'Asset'
+      | 'CapitalDistribution'
+      | 'Checkpoint'
+      | 'ComplianceManager'
+      | 'CorporateAction'
+      | 'CorporateBallot'
+      | 'Permissions'
+      | 'Pips'
+      | 'Portfolio'
+      | 'ProtocolFee'
+      | 'Scheduler'
+      | 'Settlement'
+      | 'Statistics'
+      | 'Sto'
+      | 'Treasury'
+      | 'Utility'
+      | 'Base'
+      | 'ExternalAgents'
+      | 'Relayer'
+      | 'Contracts'
+      | 'PolymeshContracts'
+      | 'Preimage'
+      | 'Nft'
+      | 'ElectionProviderMultiPhase';
+  }
 } // declare module
