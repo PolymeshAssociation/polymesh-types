@@ -2257,6 +2257,7 @@ __metadata:
     "@polkadot/types": "npm:16.5.2"
     "@polkadot/types-codec": "npm:16.5.2"
     "@semantic-release/changelog": "npm:^6.0.2"
+    "@semantic-release/commit-analyzer": "npm:^9.0.2"
     "@semantic-release/git": "npm:^10.0.1"
     "@semantic-release/github": "npm:^8.0.7"
     "@semantic-release/npm": "npm:^9.0.2"
