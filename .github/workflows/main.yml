@@ -46,6 +46,7 @@ jobs:
         run: |
           yarn build:ts
           sed 's/dist\//.\//' package.json > dist/package.json
+          cp yarn.lock dist/yarn.lock
       - name: release
         env:
           GITHUB_TOKEN: ${{ secrets.ASSOCIATION_RELEASE_TOKEN }}
