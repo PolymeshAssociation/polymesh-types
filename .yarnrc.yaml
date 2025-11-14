@@ -1,0 +1,3 @@
+pnpIgnorePatterns:
+  - './dist/.*'
+  - './dist/**'
