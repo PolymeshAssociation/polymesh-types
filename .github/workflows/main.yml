@@ -21,7 +21,7 @@ jobs:
           node-version: '22.x'
           cache: 'yarn'
       - name: install dependencies
-        run: yarn --immutable
+        run: yarn --frozen-lock
       - name: lint
         run: yarn lint
       - name: build
@@ -41,13 +41,12 @@ jobs:
           node-version: '22.x'
           cache: 'yarn'
       - name: install dependencies
-        run: yarn --immutable
+        run: yarn --frozen-lock
       - name: build
         run: |
           yarn build:ts
           sed 's/dist\//.\//' package.json > dist/package.json
           cp yarn.lock dist/yarn.lock
-          cp .yarnrc.yml dist/.yarnrc.yml
           cp README.md dist/README.md
       - name: release
         env:
@@ -55,7 +54,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.ASSOCIATION_NPM_TOKEN }}
         run: |
           cd dist
-          yarn --immutable
+          yarn --frozen-lock
           yarn semantic-release
 
   check-fast-forward:
