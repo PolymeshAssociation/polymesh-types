@@ -1,0 +1,21 @@
+- Expected
++ Received
+
+@@ -508,6 +508,8 @@
+    "PalletPermissions": Object {
+      "extrinsics": "ExtrinsicNames",
+    },
++   "PalletPipsPipId": "u32",
++   "PalletProtocolFeeRpcRuntimeApiCappedFee": "u64",
+    "Percentage": "Permill",
+    "Permissions": Object {
+      "asset": "AssetPermissions",
+@@ -517,6 +519,8 @@
+    "PipId": "u32",
+    "PolymeshAssetId": "[u8; 16]",
+    "PolymeshMoment": "u64",
++   "PolymeshPrimitivesSettlementInstructionId": "u64",
++   "PolymeshRuntimeDevelopRuntimeRuntimeCall": "Call",
+    "PortfolioId": Object {
+      "did": "IdentityId",
+      "kind": "PortfolioKind",

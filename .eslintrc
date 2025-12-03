@@ -18,7 +18,7 @@
     "no-useless-constructor": "off",
     "@typescript-eslint/no-useless-constructor": "error"
   },
-  "plugins": ["@typescript-eslint", "simple-import-sort", "node", "import", "prettier", "promise"],
+  "plugins": ["@typescript-eslint", "simple-import-sort", "n", "import", "prettier", "promise"],
   "parserOptions": {
     "sourceType": "module",
     "project": "./tsconfig.json"
