@@ -49,6 +49,7 @@ jobs:
           cp yarn.lock dist/yarn.lock
           cp .yarnrc.yml dist/.yarnrc.yml
           cp README.md dist/README.md
+          cp release.config.js dist/release.config.js
       - name: release
         env:
           GITHUB_TOKEN: ${{ secrets.ASSOCIATION_RELEASE_TOKEN }}

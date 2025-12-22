@@ -10,6 +10,8 @@ import type {
   FinalityGrandpaEquivocationPrevote,
   FinalityGrandpaPrecommit,
   FinalityGrandpaPrevote,
+  FrameElectionProviderSupportBoundedSupport,
+  FrameElectionProviderSupportBoundedSupports,
   FrameSupportDispatchDispatchClass,
   FrameSupportDispatchPays,
   FrameSupportDispatchPerDispatchClassU32,
@@ -55,9 +57,9 @@ import type {
   PalletBalancesEvent,
   PalletBalancesReasons,
   PalletBalancesReserveData,
+  PalletBalancesUnexpectedKind,
   PalletBaseCall,
   PalletBaseError,
-  PalletBaseEvent,
   PalletCommitteeCall,
   PalletCommitteeError,
   PalletCommitteeEvent,
@@ -204,6 +206,8 @@ import type {
   PalletSessionCall,
   PalletSessionError,
   PalletSessionEvent,
+  PalletSessionHistoricalPalletEvent,
+  PalletSessionHoldReason,
   PalletSettlementCall,
   PalletSettlementError,
   PalletSettlementEvent,
@@ -238,9 +242,6 @@ import type {
   PalletStoFundraiserStatus,
   PalletStoFundraiserTier,
   PalletStoPriceTier,
-  PalletSudoCall,
-  PalletSudoError,
-  PalletSudoEvent,
   PalletTimestampCall,
   PalletTransactionPaymentCall,
   PalletTransactionPaymentChargeTransactionPayment,
@@ -358,11 +359,11 @@ import type {
   PolymeshPrimitivesTransferComplianceTransferCondition,
   PolymeshPrimitivesTransferComplianceTransferConditionExemptKey,
   PolymeshRuntimeCommonNposSolution16,
-  PolymeshRuntimeDevelopRuntime,
-  PolymeshRuntimeDevelopRuntimeOriginCaller,
-  PolymeshRuntimeDevelopRuntimeRuntimeError,
-  PolymeshRuntimeDevelopRuntimeRuntimeHoldReason,
-  PolymeshRuntimeDevelopRuntimeSessionKeys,
+  PolymeshRuntimeTestnetRuntime,
+  PolymeshRuntimeTestnetRuntimeOriginCaller,
+  PolymeshRuntimeTestnetRuntimeRuntimeError,
+  PolymeshRuntimeTestnetRuntimeRuntimeHoldReason,
+  PolymeshRuntimeTestnetRuntimeSessionKeys,
   SpArithmeticArithmeticError,
   SpAuthorityDiscoveryAppPublic,
   SpConsensusBabeAllowedSlots,
@@ -388,6 +389,7 @@ import type {
   SpNposElectionsSupport,
   SpRuntimeBlakeTwo256,
   SpRuntimeBlock,
+  SpRuntimeBlockLazyBlock,
   SpRuntimeDigest,
   SpRuntimeDigestDigestItem,
   SpRuntimeDispatchError,
@@ -420,6 +422,8 @@ declare module '@polkadot/types/types/registry' {
     FinalityGrandpaEquivocationPrevote: FinalityGrandpaEquivocationPrevote;
     FinalityGrandpaPrecommit: FinalityGrandpaPrecommit;
     FinalityGrandpaPrevote: FinalityGrandpaPrevote;
+    FrameElectionProviderSupportBoundedSupport: FrameElectionProviderSupportBoundedSupport;
+    FrameElectionProviderSupportBoundedSupports: FrameElectionProviderSupportBoundedSupports;
     FrameSupportDispatchDispatchClass: FrameSupportDispatchDispatchClass;
     FrameSupportDispatchPays: FrameSupportDispatchPays;
     FrameSupportDispatchPerDispatchClassU32: FrameSupportDispatchPerDispatchClassU32;
@@ -465,9 +469,9 @@ declare module '@polkadot/types/types/registry' {
     PalletBalancesEvent: PalletBalancesEvent;
     PalletBalancesReasons: PalletBalancesReasons;
     PalletBalancesReserveData: PalletBalancesReserveData;
+    PalletBalancesUnexpectedKind: PalletBalancesUnexpectedKind;
     PalletBaseCall: PalletBaseCall;
     PalletBaseError: PalletBaseError;
-    PalletBaseEvent: PalletBaseEvent;
     PalletCommitteeCall: PalletCommitteeCall;
     PalletCommitteeError: PalletCommitteeError;
     PalletCommitteeEvent: PalletCommitteeEvent;
@@ -614,6 +618,8 @@ declare module '@polkadot/types/types/registry' {
     PalletSessionCall: PalletSessionCall;
     PalletSessionError: PalletSessionError;
     PalletSessionEvent: PalletSessionEvent;
+    PalletSessionHistoricalPalletEvent: PalletSessionHistoricalPalletEvent;
+    PalletSessionHoldReason: PalletSessionHoldReason;
     PalletSettlementCall: PalletSettlementCall;
     PalletSettlementError: PalletSettlementError;
     PalletSettlementEvent: PalletSettlementEvent;
@@ -648,9 +654,6 @@ declare module '@polkadot/types/types/registry' {
     PalletStoFundraiserStatus: PalletStoFundraiserStatus;
     PalletStoFundraiserTier: PalletStoFundraiserTier;
     PalletStoPriceTier: PalletStoPriceTier;
-    PalletSudoCall: PalletSudoCall;
-    PalletSudoError: PalletSudoError;
-    PalletSudoEvent: PalletSudoEvent;
     PalletTimestampCall: PalletTimestampCall;
     PalletTransactionPaymentCall: PalletTransactionPaymentCall;
     PalletTransactionPaymentChargeTransactionPayment: PalletTransactionPaymentChargeTransactionPayment;
@@ -768,11 +771,11 @@ declare module '@polkadot/types/types/registry' {
     PolymeshPrimitivesTransferComplianceTransferCondition: PolymeshPrimitivesTransferComplianceTransferCondition;
     PolymeshPrimitivesTransferComplianceTransferConditionExemptKey: PolymeshPrimitivesTransferComplianceTransferConditionExemptKey;
     PolymeshRuntimeCommonNposSolution16: PolymeshRuntimeCommonNposSolution16;
-    PolymeshRuntimeDevelopRuntime: PolymeshRuntimeDevelopRuntime;
-    PolymeshRuntimeDevelopRuntimeOriginCaller: PolymeshRuntimeDevelopRuntimeOriginCaller;
-    PolymeshRuntimeDevelopRuntimeRuntimeError: PolymeshRuntimeDevelopRuntimeRuntimeError;
-    PolymeshRuntimeDevelopRuntimeRuntimeHoldReason: PolymeshRuntimeDevelopRuntimeRuntimeHoldReason;
-    PolymeshRuntimeDevelopRuntimeSessionKeys: PolymeshRuntimeDevelopRuntimeSessionKeys;
+    PolymeshRuntimeTestnetRuntime: PolymeshRuntimeTestnetRuntime;
+    PolymeshRuntimeTestnetRuntimeOriginCaller: PolymeshRuntimeTestnetRuntimeOriginCaller;
+    PolymeshRuntimeTestnetRuntimeRuntimeError: PolymeshRuntimeTestnetRuntimeRuntimeError;
+    PolymeshRuntimeTestnetRuntimeRuntimeHoldReason: PolymeshRuntimeTestnetRuntimeRuntimeHoldReason;
+    PolymeshRuntimeTestnetRuntimeSessionKeys: PolymeshRuntimeTestnetRuntimeSessionKeys;
     SpArithmeticArithmeticError: SpArithmeticArithmeticError;
     SpAuthorityDiscoveryAppPublic: SpAuthorityDiscoveryAppPublic;
     SpConsensusBabeAllowedSlots: SpConsensusBabeAllowedSlots;
@@ -798,6 +801,7 @@ declare module '@polkadot/types/types/registry' {
     SpNposElectionsSupport: SpNposElectionsSupport;
     SpRuntimeBlakeTwo256: SpRuntimeBlakeTwo256;
     SpRuntimeBlock: SpRuntimeBlock;
+    SpRuntimeBlockLazyBlock: SpRuntimeBlockLazyBlock;
     SpRuntimeDigest: SpRuntimeDigest;
     SpRuntimeDigestDigestItem: SpRuntimeDigestDigestItem;
     SpRuntimeDispatchError: SpRuntimeDispatchError;

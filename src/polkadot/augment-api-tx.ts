@@ -111,8 +111,8 @@ import type {
   PolymeshPrimitivesTicker,
   PolymeshPrimitivesTransferComplianceTransferCondition,
   PolymeshPrimitivesTransferComplianceTransferConditionExemptKey,
-  PolymeshRuntimeDevelopRuntimeOriginCaller,
-  PolymeshRuntimeDevelopRuntimeSessionKeys,
+  PolymeshRuntimeTestnetRuntimeOriginCaller,
+  PolymeshRuntimeTestnetRuntimeSessionKeys,
   SpConsensusBabeDigestsNextConfigDescriptor,
   SpConsensusGrandpaEquivocationProof,
   SpConsensusSlotsEquivocationProof,
@@ -327,7 +327,7 @@ declare module '@polkadot/api-base/types/submittable' {
           bool,
           PolymeshPrimitivesAssetAssetType,
           Vec<PolymeshPrimitivesAssetIdentifier>,
-          Option<Bytes>
+          Option<Bytes>,
         ]
       >;
       /**
@@ -613,7 +613,7 @@ declare module '@polkadot/api-base/types/submittable' {
           Bytes,
           PolymeshPrimitivesAssetMetadataAssetMetadataSpec,
           Bytes,
-          Option<PolymeshPrimitivesAssetMetadataAssetMetadataValueDetail>
+          Option<PolymeshPrimitivesAssetMetadataAssetMetadataValueDetail>,
         ]
       >;
       /**
@@ -934,7 +934,7 @@ declare module '@polkadot/api-base/types/submittable' {
           PolymeshPrimitivesAssetAssetId,
           PolymeshPrimitivesAssetMetadataAssetMetadataKey,
           Bytes,
-          Option<PolymeshPrimitivesAssetMetadataAssetMetadataValueDetail>
+          Option<PolymeshPrimitivesAssetMetadataAssetMetadataValueDetail>,
         ]
       >;
       /**
@@ -977,7 +977,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           PolymeshPrimitivesAssetAssetId,
           PolymeshPrimitivesAssetMetadataAssetMetadataKey,
-          PolymeshPrimitivesAssetMetadataAssetMetadataValueDetail
+          PolymeshPrimitivesAssetMetadataAssetMetadataValueDetail,
         ]
       >;
       /**
@@ -1562,7 +1562,7 @@ declare module '@polkadot/api-base/types/submittable' {
           u128,
           u128,
           u64,
-          Option<u64>
+          Option<u64>,
         ]
       >;
       /**
@@ -1983,7 +1983,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           PolymeshPrimitivesAssetAssetId,
           Vec<PolymeshPrimitivesCondition>,
-          Vec<PolymeshPrimitivesCondition>
+          Vec<PolymeshPrimitivesCondition>,
         ]
       >;
       /**
@@ -2113,7 +2113,7 @@ declare module '@polkadot/api-base/types/submittable' {
         ) => SubmittableExtrinsic<ApiType>,
         [
           PolymeshPrimitivesAssetAssetId,
-          Vec<PolymeshPrimitivesComplianceManagerComplianceRequirement>
+          Vec<PolymeshPrimitivesComplianceManagerComplianceRequirement>,
         ]
       >;
       /**
@@ -2197,6 +2197,8 @@ declare module '@polkadot/api-base/types/submittable' {
       >;
       /**
        * Deprecated version if [`Self::call`] for use in an in-storage `Call`.
+       *
+       * @deprecated 1D weight is used in this extrinsic, please migrate to `call`
        **/
       callOldWeight: AugmentedSubmittable<
         (
@@ -2250,6 +2252,8 @@ declare module '@polkadot/api-base/types/submittable' {
       >;
       /**
        * Deprecated version if [`Self::instantiate`] for use in an in-storage `Call`.
+       *
+       * @deprecated 1D weight is used in this extrinsic, please migrate to `instantiate`
        **/
       instantiateOldWeight: AugmentedSubmittable<
         (
@@ -2316,6 +2320,8 @@ declare module '@polkadot/api-base/types/submittable' {
       >;
       /**
        * Deprecated version if [`Self::instantiate_with_code`] for use in an in-storage `Call`.
+       *
+       * @deprecated 1D weight is used in this extrinsic, please migrate to `instantiate_with_code`
        **/
       instantiateWithCodeOldWeight: AugmentedSubmittable<
         (
@@ -2529,7 +2535,7 @@ declare module '@polkadot/api-base/types/submittable' {
             | Vec<ITuple<[PolymeshPrimitivesIdentityId, Permill]>>
             | [
                 PolymeshPrimitivesIdentityId | string | Uint8Array,
-                Permill | AnyNumber | Uint8Array
+                Permill | AnyNumber | Uint8Array,
               ][]
         ) => SubmittableExtrinsic<ApiType>,
         [
@@ -2540,7 +2546,7 @@ declare module '@polkadot/api-base/types/submittable' {
           Bytes,
           Option<PalletCorporateActionsTargetIdentities>,
           Option<Permill>,
-          Option<Vec<ITuple<[PolymeshPrimitivesIdentityId, Permill]>>>
+          Option<Vec<ITuple<[PolymeshPrimitivesIdentityId, Permill]>>>,
         ]
       >;
       initiateCorporateActionAndBallot: AugmentedSubmittable<
@@ -2575,7 +2581,7 @@ declare module '@polkadot/api-base/types/submittable' {
           PalletCorporateActionsInitiateCorporateActionArgs,
           PalletCorporateActionsBallotBallotTimeRange,
           PalletCorporateActionsBallotBallotMeta,
-          bool
+          bool,
         ]
       >;
       /**
@@ -2611,7 +2617,7 @@ declare module '@polkadot/api-base/types/submittable' {
           u128,
           u128,
           u64,
-          Option<u64>
+          Option<u64>,
         ]
       >;
       /**
@@ -2797,7 +2803,7 @@ declare module '@polkadot/api-base/types/submittable' {
           PalletCorporateActionsCaId,
           PalletCorporateActionsBallotBallotTimeRange,
           PalletCorporateActionsBallotBallotMeta,
-          bool
+          bool,
         ]
       >;
       /**
@@ -2926,13 +2932,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * This can only be called when [`Phase::Emergency`] is enabled, as an alternative to
        * calling [`Call::set_emergency_election_result`].
        **/
-      governanceFallback: AugmentedSubmittable<
-        (
-          maybeMaxVoters: Option<u32> | null | Uint8Array | u32 | AnyNumber,
-          maybeMaxTargets: Option<u32> | null | Uint8Array | u32 | AnyNumber
-        ) => SubmittableExtrinsic<ApiType>,
-        [Option<u32>, Option<u32>]
-      >;
+      governanceFallback: AugmentedSubmittable<() => SubmittableExtrinsic<ApiType>, []>;
       /**
        * Set a solution in the queue, to be handed out to the client of this pallet in the next
        * call to `ElectionProvider::elect`.
@@ -2949,7 +2949,7 @@ declare module '@polkadot/api-base/types/submittable' {
             | Vec<ITuple<[AccountId32, SpNposElectionsSupport]>>
             | [
                 AccountId32 | string | Uint8Array,
-                SpNposElectionsSupport | { total?: any; voters?: any } | string | Uint8Array
+                SpNposElectionsSupport | { total?: any; voters?: any } | string | Uint8Array,
               ][]
         ) => SubmittableExtrinsic<ApiType>,
         [Vec<ITuple<[AccountId32, SpNposElectionsSupport]>>]
@@ -3025,7 +3025,7 @@ declare module '@polkadot/api-base/types/submittable' {
         ) => SubmittableExtrinsic<ApiType>,
         [
           PalletElectionProviderMultiPhaseRawSolution,
-          PalletElectionProviderMultiPhaseSolutionOrSnapshotSize
+          PalletElectionProviderMultiPhaseSolutionOrSnapshotSize,
         ]
       >;
     };
@@ -3106,7 +3106,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           PolymeshPrimitivesAssetAssetId,
           PolymeshPrimitivesIdentityId,
-          PolymeshPrimitivesAgentAgentGroup
+          PolymeshPrimitivesAgentAgentGroup,
         ]
       >;
       /**
@@ -3131,7 +3131,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           PolymeshPrimitivesAssetAssetId,
           PolymeshPrimitivesSecondaryKeyExtrinsicPermissions,
-          PolymeshPrimitivesIdentityId
+          PolymeshPrimitivesIdentityId,
         ]
       >;
       /**
@@ -3191,7 +3191,7 @@ declare module '@polkadot/api-base/types/submittable' {
           PolymeshPrimitivesAssetAssetId,
           PolymeshPrimitivesSecondaryKeyExtrinsicPermissions,
           PolymeshPrimitivesIdentityId,
-          Option<u64>
+          Option<u64>,
         ]
       >;
       /**
@@ -3372,7 +3372,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           PolymeshPrimitivesSecondaryKeySignatory,
           PolymeshPrimitivesAuthorizationAuthorizationData,
-          Option<u64>
+          Option<u64>,
         ]
       >;
       /**
@@ -3690,7 +3690,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesIdentityClaimClaimType,
-          Option<PolymeshPrimitivesIdentityClaimScope>
+          Option<PolymeshPrimitivesIdentityClaimScope>,
         ]
       >;
       /**
@@ -4164,7 +4164,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           PolymeshPrimitivesNftNfTs,
           PolymeshPrimitivesIdentityIdPortfolioId,
-          PolymeshPrimitivesIdentityIdPortfolioKind
+          PolymeshPrimitivesIdentityIdPortfolioKind,
         ]
       >;
       /**
@@ -4209,7 +4209,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           Option<PolymeshPrimitivesAssetAssetId>,
           Option<PolymeshPrimitivesAssetNonFungibleType>,
-          PolymeshPrimitivesNftNftCollectionKeys
+          PolymeshPrimitivesNftNftCollectionKeys,
         ]
       >;
       /**
@@ -4252,7 +4252,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           PolymeshPrimitivesAssetAssetId,
           Vec<PolymeshPrimitivesNftNftMetadataAttribute>,
-          PolymeshPrimitivesIdentityIdPortfolioKind
+          PolymeshPrimitivesIdentityIdPortfolioKind,
         ]
       >;
       /**
@@ -4359,7 +4359,7 @@ declare module '@polkadot/api-base/types/submittable' {
             | Vec<ITuple<[u32, PalletPipsSnapshotResult]>>
             | [
                 u32 | AnyNumber | Uint8Array,
-                PalletPipsSnapshotResult | 'Approve' | 'Reject' | 'Skip' | number | Uint8Array
+                PalletPipsSnapshotResult | 'Approve' | 'Reject' | 'Skip' | number | Uint8Array,
               ][]
         ) => SubmittableExtrinsic<ApiType>,
         [Vec<ITuple<[u32, PalletPipsSnapshotResult]>>]
@@ -4823,7 +4823,7 @@ declare module '@polkadot/api-base/types/submittable' {
           Bytes,
           Bytes,
           Bytes,
-          PolymeshPrimitivesSecondaryKeyPermissions
+          PolymeshPrimitivesSecondaryKeyPermissions,
         ]
       >;
       /**
@@ -4911,7 +4911,7 @@ declare module '@polkadot/api-base/types/submittable' {
           H256,
           Bytes,
           Bytes,
-          PolymeshPrimitivesSecondaryKeyPermissions
+          PolymeshPrimitivesSecondaryKeyPermissions,
         ]
       >;
       /**
@@ -5039,7 +5039,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           PolymeshPrimitivesIdentityIdPortfolioId,
           PolymeshPrimitivesIdentityIdPortfolioId,
-          Vec<PolymeshPrimitivesPortfolioFund>
+          Vec<PolymeshPrimitivesPortfolioFund>,
         ]
       >;
       /**
@@ -5529,13 +5529,13 @@ declare module '@polkadot/api-base/types/submittable' {
       setKeys: AugmentedSubmittable<
         (
           keys:
-            | PolymeshRuntimeDevelopRuntimeSessionKeys
+            | PolymeshRuntimeTestnetRuntimeSessionKeys
             | { grandpa?: any; babe?: any; imOnline?: any; authorityDiscovery?: any }
             | string
             | Uint8Array,
           proof: Bytes | string | Uint8Array
         ) => SubmittableExtrinsic<ApiType>,
-        [PolymeshRuntimeDevelopRuntimeSessionKeys, Bytes]
+        [PolymeshRuntimeTestnetRuntimeSessionKeys, Bytes]
       >;
     };
     settlement: {
@@ -5592,7 +5592,7 @@ declare module '@polkadot/api-base/types/submittable' {
           Option<u64>,
           Vec<PolymeshPrimitivesSettlementLeg>,
           BTreeSet<PolymeshPrimitivesIdentityIdPortfolioId>,
-          Option<PolymeshPrimitivesMemo>
+          Option<PolymeshPrimitivesMemo>,
         ]
       >;
       /**
@@ -5651,7 +5651,7 @@ declare module '@polkadot/api-base/types/submittable' {
           Vec<PolymeshPrimitivesSettlementLeg>,
           BTreeSet<PolymeshPrimitivesIdentityIdPortfolioId>,
           Option<PolymeshPrimitivesMemo>,
-          BTreeSet<PolymeshPrimitivesIdentityId>
+          BTreeSet<PolymeshPrimitivesIdentityId>,
         ]
       >;
       /**
@@ -5701,7 +5701,7 @@ declare module '@polkadot/api-base/types/submittable' {
           Option<u64>,
           Option<u64>,
           Vec<PolymeshPrimitivesSettlementLeg>,
-          Option<PolymeshPrimitivesMemo>
+          Option<PolymeshPrimitivesMemo>,
         ]
       >;
       /**
@@ -5754,7 +5754,7 @@ declare module '@polkadot/api-base/types/submittable' {
           Option<u64>,
           Vec<PolymeshPrimitivesSettlementLeg>,
           Option<PolymeshPrimitivesMemo>,
-          BTreeSet<PolymeshPrimitivesIdentityId>
+          BTreeSet<PolymeshPrimitivesIdentityId>,
         ]
       >;
       /**
@@ -5817,7 +5817,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           u64,
           BTreeSet<PolymeshPrimitivesIdentityIdPortfolioId>,
-          Option<PolymeshPrimitivesSettlementAffirmationCount>
+          Option<PolymeshPrimitivesSettlementAffirmationCount>,
         ]
       >;
       /**
@@ -5854,7 +5854,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           u64,
           Vec<PolymeshPrimitivesSettlementReceiptDetails>,
-          BTreeSet<PolymeshPrimitivesIdentityIdPortfolioId>
+          BTreeSet<PolymeshPrimitivesIdentityIdPortfolioId>,
         ]
       >;
       /**
@@ -5902,7 +5902,7 @@ declare module '@polkadot/api-base/types/submittable' {
           u64,
           Vec<PolymeshPrimitivesSettlementReceiptDetails>,
           BTreeSet<PolymeshPrimitivesIdentityIdPortfolioId>,
-          Option<PolymeshPrimitivesSettlementAffirmationCount>
+          Option<PolymeshPrimitivesSettlementAffirmationCount>,
         ]
       >;
       /**
@@ -6001,7 +6001,7 @@ declare module '@polkadot/api-base/types/submittable' {
           u32,
           u32,
           u32,
-          Option<SpWeightsWeightV2Weight>
+          Option<SpWeightsWeightV2Weight>,
         ]
       >;
       /**
@@ -6121,7 +6121,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           u64,
           PolymeshPrimitivesIdentityIdPortfolioId,
-          Option<PolymeshPrimitivesSettlementAssetCount>
+          Option<PolymeshPrimitivesSettlementAssetCount>,
         ]
       >;
       /**
@@ -6244,7 +6244,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           u64,
           BTreeSet<PolymeshPrimitivesIdentityIdPortfolioId>,
-          Option<PolymeshPrimitivesSettlementAffirmationCount>
+          Option<PolymeshPrimitivesSettlementAffirmationCount>,
         ]
       >;
     };
@@ -6308,6 +6308,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * Can be called by the `T::AdminOrigin`.
        *
        * Parameters: era and indices of the slashes for that era to kill.
+       * They **must** be sorted in ascending order, *and* unique.
        **/
       cancelDeferredSlash: AugmentedSubmittable<
         (
@@ -6836,7 +6837,7 @@ declare module '@polkadot/api-base/types/submittable' {
           PalletStakingPalletConfigOpU32,
           PalletStakingPalletConfigOpPercent,
           PalletStakingPalletConfigOpPerbill,
-          PalletStakingPalletConfigOpPercent
+          PalletStakingPalletConfigOpPercent,
         ]
       >;
       /**
@@ -6855,6 +6856,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * Schedule a portion of the stash to be unlocked ready for transfer out after the bond
        * period ends. If this leaves an amount actively bonded less than
        * [`asset::existential_deposit`], then it is increased to the full amount.
+       *
+       * The stash may be chilled if the ledger total amount falls to 0 after unbonding.
        *
        * The dispatch origin for this call must be _Signed_ by the controller, not the stash.
        *
@@ -6966,7 +6969,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           PolymeshPrimitivesAssetAssetId,
           PolymeshPrimitivesStatisticsStatType,
-          BTreeSet<PolymeshPrimitivesStatisticsStatUpdate>
+          BTreeSet<PolymeshPrimitivesStatisticsStatUpdate>,
         ]
       >;
       /**
@@ -7017,7 +7020,7 @@ declare module '@polkadot/api-base/types/submittable' {
         ) => SubmittableExtrinsic<ApiType>,
         [
           PolymeshPrimitivesAssetAssetId,
-          BTreeSet<PolymeshPrimitivesTransferComplianceTransferCondition>
+          BTreeSet<PolymeshPrimitivesTransferComplianceTransferCondition>,
         ]
       >;
       /**
@@ -7049,7 +7052,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           bool,
           PolymeshPrimitivesTransferComplianceTransferConditionExemptKey,
-          BTreeSet<PolymeshPrimitivesIdentityId>
+          BTreeSet<PolymeshPrimitivesIdentityId>,
         ]
       >;
     };
@@ -7117,7 +7120,7 @@ declare module '@polkadot/api-base/types/submittable' {
           Option<u64>,
           Option<u64>,
           u128,
-          Bytes
+          Bytes,
         ]
       >;
       /**
@@ -7234,7 +7237,7 @@ declare module '@polkadot/api-base/types/submittable' {
           PolymeshPrimitivesIdentityIdPortfolioId,
           PalletStoFundingMethod,
           u128,
-          Option<u128>
+          Option<u128>,
         ]
       >;
       /**
@@ -7323,84 +7326,6 @@ declare module '@polkadot/api-base/types/submittable' {
           fundraiserId: u64 | AnyNumber | Uint8Array
         ) => SubmittableExtrinsic<ApiType>,
         [PolymeshPrimitivesAssetAssetId, u64]
-      >;
-    };
-    sudo: {
-      /**
-       * Authenticates the current sudo key and sets the given AccountId (`new`) as the new sudo
-       * key.
-       *
-       * The dispatch origin for this call must be _Signed_.
-       *
-       * ## Complexity
-       * - O(1).
-       **/
-      setKey: AugmentedSubmittable<
-        (
-          updated:
-            | MultiAddress
-            | { Id: any }
-            | { Index: any }
-            | { Raw: any }
-            | { Address32: any }
-            | { Address20: any }
-            | string
-            | Uint8Array
-        ) => SubmittableExtrinsic<ApiType>,
-        [MultiAddress]
-      >;
-      /**
-       * Authenticates the sudo key and dispatches a function call with `Root` origin.
-       *
-       * The dispatch origin for this call must be _Signed_.
-       *
-       * ## Complexity
-       * - O(1).
-       **/
-      sudo: AugmentedSubmittable<
-        (call: Call | IMethod | string | Uint8Array) => SubmittableExtrinsic<ApiType>,
-        [Call]
-      >;
-      /**
-       * Authenticates the sudo key and dispatches a function call with `Signed` origin from
-       * a given account.
-       *
-       * The dispatch origin for this call must be _Signed_.
-       *
-       * ## Complexity
-       * - O(1).
-       **/
-      sudoAs: AugmentedSubmittable<
-        (
-          who:
-            | MultiAddress
-            | { Id: any }
-            | { Index: any }
-            | { Raw: any }
-            | { Address32: any }
-            | { Address20: any }
-            | string
-            | Uint8Array,
-          call: Call | IMethod | string | Uint8Array
-        ) => SubmittableExtrinsic<ApiType>,
-        [MultiAddress, Call]
-      >;
-      /**
-       * Authenticates the sudo key and dispatches a function call with `Root` origin.
-       * This function does not check the weight of the call, and instead allows the
-       * Sudo user to specify the weight of the call.
-       *
-       * The dispatch origin for this call must be _Signed_.
-       *
-       * ## Complexity
-       * - O(1).
-       **/
-      sudoUncheckedWeight: AugmentedSubmittable<
-        (
-          call: Call | IMethod | string | Uint8Array,
-          weight: SpWeightsWeightV2Weight | { refTime?: any; proofSize?: any } | string | Uint8Array
-        ) => SubmittableExtrinsic<ApiType>,
-        [Call, SpWeightsWeightV2Weight]
       >;
     };
     system: {
@@ -8048,7 +7973,7 @@ declare module '@polkadot/api-base/types/submittable' {
       dispatchAs: AugmentedSubmittable<
         (
           asOrigin:
-            | PolymeshRuntimeDevelopRuntimeOriginCaller
+            | PolymeshRuntimeTestnetRuntimeOriginCaller
             | { system: any }
             | { PolymeshCommittee: any }
             | { TechnicalCommittee: any }
@@ -8057,7 +7982,7 @@ declare module '@polkadot/api-base/types/submittable' {
             | Uint8Array,
           call: Call | IMethod | string | Uint8Array
         ) => SubmittableExtrinsic<ApiType>,
-        [PolymeshRuntimeDevelopRuntimeOriginCaller, Call]
+        [PolymeshRuntimeTestnetRuntimeOriginCaller, Call]
       >;
       /**
        * Send a batch of dispatch calls.
@@ -8103,6 +8028,7 @@ declare module '@polkadot/api-base/types/submittable' {
             | { Ed25519: any }
             | { Sr25519: any }
             | { Ecdsa: any }
+            | { Eth: any }
             | string
             | Uint8Array,
           call: PalletUtilityUniqueCall | { nonce?: any; call?: any } | string | Uint8Array

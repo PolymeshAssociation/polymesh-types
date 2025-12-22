@@ -138,8 +138,8 @@ import type {
   PolymeshPrimitivesTicker,
   PolymeshPrimitivesTransferComplianceAssetTransferCompliance,
   PolymeshPrimitivesTransferComplianceTransferConditionExemptKey,
-  PolymeshRuntimeDevelopRuntimeRuntimeHoldReason,
-  PolymeshRuntimeDevelopRuntimeSessionKeys,
+  PolymeshRuntimeTestnetRuntimeRuntimeHoldReason,
+  PolymeshRuntimeTestnetRuntimeSessionKeys,
   SpAuthorityDiscoveryAppPublic,
   SpConsensusBabeAppPublic,
   SpConsensusBabeBabeEpochConfiguration,
@@ -677,7 +677,7 @@ declare module '@polkadot/api-base/types/storage' {
         (arg: AccountId32 | string | Uint8Array) => Observable<
           Vec<
             {
-              readonly id: PolymeshRuntimeDevelopRuntimeRuntimeHoldReason;
+              readonly id: PolymeshRuntimeTestnetRuntimeRuntimeHoldReason;
               readonly amount: u128;
             } & Struct
           >
@@ -739,7 +739,7 @@ declare module '@polkadot/api-base/types/storage' {
             | ITuple<[PalletCorporateActionsCaId, PolymeshPrimitivesIdentityId]>
             | [
                 PalletCorporateActionsCaId | { assetId?: any; localId?: any } | string | Uint8Array,
-                PolymeshPrimitivesIdentityId | string | Uint8Array
+                PolymeshPrimitivesIdentityId | string | Uint8Array,
               ]
         ) => Observable<bool>,
         [ITuple<[PalletCorporateActionsCaId, PolymeshPrimitivesIdentityId]>]
@@ -2456,6 +2456,8 @@ declare module '@polkadot/api-base/types/storage' {
       >;
       /**
        * The request status of a given hash.
+       *
+       * @deprecated RequestStatusFor
        **/
       statusFor: AugmentedQuery<
         ApiType,
@@ -2592,7 +2594,7 @@ declare module '@polkadot/api-base/types/storage' {
         ApiType,
         (
           arg: AccountId32 | string | Uint8Array
-        ) => Observable<Option<PolymeshRuntimeDevelopRuntimeSessionKeys>>,
+        ) => Observable<Option<PolymeshRuntimeTestnetRuntimeSessionKeys>>,
         [AccountId32]
       >;
       /**
@@ -2606,7 +2608,7 @@ declare module '@polkadot/api-base/types/storage' {
        **/
       queuedKeys: AugmentedQuery<
         ApiType,
-        () => Observable<Vec<ITuple<[AccountId32, PolymeshRuntimeDevelopRuntimeSessionKeys]>>>,
+        () => Observable<Vec<ITuple<[AccountId32, PolymeshRuntimeTestnetRuntimeSessionKeys]>>>,
         []
       >;
       /**
@@ -3303,7 +3305,7 @@ declare module '@polkadot/api-base/types/storage' {
         ) => Observable<bool>,
         [
           PolymeshPrimitivesTransferComplianceTransferConditionExemptKey,
-          PolymeshPrimitivesIdentityId
+          PolymeshPrimitivesIdentityId,
         ]
       >;
     };
@@ -3355,12 +3357,6 @@ declare module '@polkadot/api-base/types/storage' {
        * Storage migration version.
        **/
       storageVersion: AugmentedQuery<ApiType, () => Observable<u8>, []>;
-    };
-    sudo: {
-      /**
-       * The `AccountId` of the sudo key.
-       **/
-      key: AugmentedQuery<ApiType, () => Observable<Option<AccountId32>>, []>;
     };
     system: {
       /**

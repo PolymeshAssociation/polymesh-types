@@ -5,12 +5,6 @@
 // this is required to allow for ambient/previous definitions
 import '@polkadot/api-base/types/calls';
 
-import type {
-  PalletPipsPipId,
-  PalletProtocolFeeRpcRuntimeApiCappedFee,
-  PolymeshPrimitivesSettlementInstructionId,
-  PolymeshRuntimeDevelopRuntimeRuntimeCall,
-} from './polymesh';
 import type { ApiTypes, AugmentedCall, DecoratedCallBase } from '@polkadot/api-base/types';
 import type {
   Bytes,
@@ -71,7 +65,7 @@ import type {
   SpCoreCryptoKeyTypeId,
   SpInherentsCheckInherentsResult,
   SpInherentsInherentData,
-  SpRuntimeBlock,
+  SpRuntimeBlockLazyBlock,
   SpRuntimeDispatchError,
   SpRuntimeExtrinsicInclusionMode,
   SpRuntimeHeader,
@@ -82,6 +76,12 @@ import type {
   SpWeightsWeightV2Weight,
 } from '@polkadot/types/lookup';
 import type { IExtrinsic, Observable } from '@polkadot/types/types';
+import type {
+  PalletPipsPipId,
+  PalletProtocolFeeRpcRuntimeApiCappedFee,
+  PolymeshPrimitivesSettlementInstructionId,
+  PolymeshRuntimeDevelopRuntimeRuntimeCall,
+} from './polymesh';
 
 export type __AugmentedCall<ApiType extends ApiTypes> = AugmentedCall<ApiType>;
 export type __DecoratedCallBase<ApiType extends ApiTypes> = DecoratedCallBase<ApiType>;
@@ -194,7 +194,7 @@ declare module '@polkadot/api-base/types/calls' {
       checkInherents: AugmentedCall<
         ApiType,
         (
-          block: SpRuntimeBlock | { header?: any; extrinsics?: any } | string | Uint8Array,
+          block: SpRuntimeBlockLazyBlock | { header?: any; extrinsics?: any } | string | Uint8Array,
           data: SpInherentsInherentData | { data?: any } | string | Uint8Array
         ) => Observable<SpInherentsCheckInherentsResult>
       >;
@@ -321,7 +321,7 @@ declare module '@polkadot/api-base/types/calls' {
       executeBlock: AugmentedCall<
         ApiType,
         (
-          block: SpRuntimeBlock | { header?: any; extrinsics?: any } | string | Uint8Array
+          block: SpRuntimeBlockLazyBlock | { header?: any; extrinsics?: any } | string | Uint8Array
         ) => Observable<Null>
       >;
       /**
@@ -736,7 +736,7 @@ declare module '@polkadot/api-base/types/calls' {
         (balance: u128 | AnyNumber | Uint8Array) => Observable<u32>
       >;
       /**
-       * Returns true if validator `account` has pages to be claimed for the given era.
+       * Returns true if a validator `account` has pages to be claimed for the given era.
        **/
       pendingRewards: AugmentedCall<
         ApiType,
