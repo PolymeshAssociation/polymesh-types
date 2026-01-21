@@ -656,10 +656,6 @@ export default {
       satisfied: 'bool',
       condition: 'Condition',
     },
-    PolymeshPrimitivesSettlementInstructionId: 'u64',
-    PalletPipsPipId: 'u32',
-    PalletProtocolFeeRpcRuntimeApiCappedFee: 'u64',
-    PolymeshRuntimeDevelopRuntimeRuntimeCall: 'Call',
   },
   rpc: {
     identity: {

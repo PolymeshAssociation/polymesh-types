@@ -53,15 +53,11 @@ import type {
   OffChainLeg,
   PalletName,
   PalletPermissions,
-  PalletPipsPipId,
-  PalletProtocolFeeRpcRuntimeApiCappedFee,
   Percentage,
   Permissions,
   PipId,
   PolymeshAssetId,
   PolymeshMoment,
-  PolymeshPrimitivesSettlementInstructionId,
-  PolymeshRuntimeDevelopRuntimeRuntimeCall,
   PortfolioId,
   PortfolioKind,
   PortfolioNumber,
@@ -2186,8 +2182,6 @@ declare module '@polkadot/types/types/registry' {
     PalletMetadataV16: PalletMetadataV16;
     PalletName: PalletName;
     PalletPermissions: PalletPermissions;
-    PalletPipsPipId: PalletPipsPipId;
-    PalletProtocolFeeRpcRuntimeApiCappedFee: PalletProtocolFeeRpcRuntimeApiCappedFee;
     PalletsOrigin: PalletsOrigin;
     PalletStorageMetadataLatest: PalletStorageMetadataLatest;
     PalletStorageMetadataV14: PalletStorageMetadataV14;
@@ -2240,8 +2234,6 @@ declare module '@polkadot/types/types/registry' {
     PipId: PipId;
     PolymeshAssetId: PolymeshAssetId;
     PolymeshMoment: PolymeshMoment;
-    PolymeshPrimitivesSettlementInstructionId: PolymeshPrimitivesSettlementInstructionId;
-    PolymeshRuntimeDevelopRuntimeRuntimeCall: PolymeshRuntimeDevelopRuntimeRuntimeCall;
     PortableType: PortableType;
     PortableTypeV14: PortableTypeV14;
     PortfolioId: PortfolioId;
