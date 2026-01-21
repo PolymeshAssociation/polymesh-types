@@ -879,6 +879,29 @@ export enum ValidatorsTx {
   SetCommissionCap = 'validators.setCommissionCap',
 }
 
+export enum ConfidentialAssetsTx {
+  RegisterAccounts = 'confidentialAssets.registerAccounts',
+  CreateAsset = 'confidentialAssets.createAsset',
+  RegisterAccountAssets = 'confidentialAssets.registerAccountAssets',
+  MintAsset = 'confidentialAssets.mintAsset',
+  CreateSettlement = 'confidentialAssets.createSettlement',
+  SenderAffirmation = 'confidentialAssets.senderAffirmation',
+  ReceiverAffirmation = 'confidentialAssets.receiverAffirmation',
+  MediatorAffirmation = 'confidentialAssets.mediatorAffirmation',
+  SenderUpdateCounter = 'confidentialAssets.senderUpdateCounter',
+  SenderRevert = 'confidentialAssets.senderRevert',
+  ReceiverClaim = 'confidentialAssets.receiverClaim',
+  BatchedSettlement = 'confidentialAssets.batchedSettlement',
+  RegisterFeeAccounts = 'confidentialAssets.registerFeeAccounts',
+  TopupFeeAccounts = 'confidentialAssets.topupFeeAccounts',
+  SubmitBatchedProofs = 'confidentialAssets.submitBatchedProofs',
+  RelayerSubmitBatchedProofs = 'confidentialAssets.relayerSubmitBatchedProofs',
+  RegisterEncryptionKeys = 'confidentialAssets.registerEncryptionKeys',
+  ExecuteInstantSettlement = 'confidentialAssets.executeInstantSettlement',
+  InstantSenderAffirmation = 'confidentialAssets.instantSenderAffirmation',
+  InstantReceiverAffirmation = 'confidentialAssets.instantReceiverAffirmation',
+}
+
 export enum ModuleName {
   System = 'system',
   Babe = 'babe',
@@ -928,6 +951,7 @@ export enum ModuleName {
   ElectionProviderMultiPhase = 'electionProviderMultiPhase',
   TransactionPayment = 'transactionPayment',
   Validators = 'validators',
+  ConfidentialAssets = 'confidentialAssets',
 }
 
 export type TxTag =
@@ -978,7 +1002,8 @@ export type TxTag =
   | StateTrieMigrationTx
   | ElectionProviderMultiPhaseTx
   | TransactionPaymentTx
-  | ValidatorsTx;
+  | ValidatorsTx
+  | ConfidentialAssetsTx;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const TxTags = {
@@ -1030,4 +1055,5 @@ export const TxTags = {
   electionProviderMultiPhase: ElectionProviderMultiPhaseTx,
   transactionPayment: TransactionPaymentTx,
   validators: ValidatorsTx,
+  confidentialAssets: ConfidentialAssetsTx,
 };

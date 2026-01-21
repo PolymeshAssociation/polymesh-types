@@ -576,5 +576,27 @@
     "update_permissioned_validator_intended_count": "update_permissioned_validator_intended_count",
     "chill_from_governance": "chill_from_governance",
     "set_commission_cap": "set_commission_cap"
+  },
+  "ConfidentialAssets": {
+    "register_accounts": "register_accounts",
+    "create_asset": "create_asset",
+    "register_account_assets": "register_account_assets",
+    "mint_asset": "mint_asset",
+    "create_settlement": "create_settlement",
+    "sender_affirmation": "sender_affirmation",
+    "receiver_affirmation": "receiver_affirmation",
+    "mediator_affirmation": "mediator_affirmation",
+    "sender_update_counter": "sender_update_counter",
+    "sender_revert": "sender_revert",
+    "receiver_claim": "receiver_claim",
+    "batched_settlement": "batched_settlement",
+    "register_fee_accounts": "register_fee_accounts",
+    "topup_fee_accounts": "topup_fee_accounts",
+    "submit_batched_proofs": "submit_batched_proofs",
+    "relayer_submit_batched_proofs": "relayer_submit_batched_proofs",
+    "register_encryption_keys": "register_encryption_keys",
+    "execute_instant_settlement": "execute_instant_settlement",
+    "instant_sender_affirmation": "instant_sender_affirmation",
+    "instant_receiver_affirmation": "instant_receiver_affirmation"
   }
 }

@@ -6,81 +6,73 @@
 import '@polkadot/api-base/types/calls';
 
 import type {
-  PalletPipsPipId,
-  PalletProtocolFeeRpcRuntimeApiCappedFee,
-  PolymeshPrimitivesSettlementInstructionId,
-  PolymeshRuntimeDevelopRuntimeRuntimeCall,
+  AffirmationCount,
+  AssetCount,
+  Authorization,
+  AuthorizationType,
+  CappedFee,
+  CddStatus,
+  ComplianceReport,
+  DidStatus,
+  ExecuteInstructionInfo,
+  IdentityClaim,
+  IdentityId,
+  InstructionId,
+  KeyIdentityData,
+  Leg,
+  Member,
+  NFTs,
+  PipId,
+  PolymeshAssetId,
+  PortfolioId,
+  ProtocolOp,
+  RpcDidRecords,
+  Signatory,
+  TransferCondition,
+  VoteCount,
 } from './polymesh';
 import type { ApiTypes, AugmentedCall, DecoratedCallBase } from '@polkadot/api-base/types';
-import type {
-  Bytes,
-  Null,
-  Option,
-  Result,
-  Struct,
-  Text,
-  Vec,
-  bool,
-  u128,
-  u32,
-  u64,
-} from '@polkadot/types-codec';
+import type { Bytes, Null, Option, Result, Vec, bool, u32, u64 } from '@polkadot/types-codec';
 import type { AnyNumber, IMethod, ITuple } from '@polkadot/types-codec/types';
-import type { OpaqueKeyOwnershipProof } from '@polkadot/types/interfaces/babe';
-import type { Extrinsic } from '@polkadot/types/interfaces/extrinsics';
-import type { OpaqueMetadata } from '@polkadot/types/interfaces/metadata';
-import type { AccountId32, H256, Slot } from '@polkadot/types/interfaces/runtime';
 import type {
-  FrameSystemEventRecord,
-  PalletContractsPrimitivesCode,
-  PalletContractsPrimitivesCodeUploadReturnValue,
-  PalletContractsPrimitivesContractAccessError,
-  PalletContractsPrimitivesContractResult,
-  PalletContractsPrimitivesExecReturnValue,
-  PalletContractsPrimitivesStorageDeposit,
-  PalletContractsWasmDeterminism,
-  PalletGroupRpcRuntimeApiMember,
-  PalletIdentityDidStatus,
-  PalletIdentityKeyIdentityData,
-  PalletIdentityRpcDidRecords,
-  PalletPipsVoteCount,
-  PalletTransactionPaymentFeeDetails,
-  PalletTransactionPaymentRuntimeDispatchInfo,
-  PolymeshCommonUtilitiesProtocolFeeProtocolOp,
-  PolymeshPrimitivesAssetAssetId,
-  PolymeshPrimitivesAuthorization,
-  PolymeshPrimitivesAuthorizationAuthorizationType,
-  PolymeshPrimitivesComplianceManagerComplianceReport,
-  PolymeshPrimitivesIdentityClaim,
-  PolymeshPrimitivesIdentityId,
-  PolymeshPrimitivesIdentityIdPortfolioId,
-  PolymeshPrimitivesNftNfTs,
-  PolymeshPrimitivesSecondaryKeySignatory,
-  PolymeshPrimitivesSettlementAffirmationCount,
-  PolymeshPrimitivesSettlementAssetCount,
-  PolymeshPrimitivesSettlementExecuteInstructionInfo,
-  PolymeshPrimitivesSettlementLeg,
-  PolymeshPrimitivesTransferComplianceTransferCondition,
-  SpAuthorityDiscoveryAppPublic,
-  SpConsensusBabeAppPublic,
-  SpConsensusBabeBabeConfiguration,
-  SpConsensusBabeEpoch,
-  SpConsensusGrandpaAppPublic,
-  SpConsensusGrandpaEquivocationProof,
-  SpConsensusSlotsEquivocationProof,
-  SpCoreCryptoKeyTypeId,
-  SpInherentsCheckInherentsResult,
-  SpInherentsInherentData,
-  SpRuntimeBlock,
-  SpRuntimeDispatchError,
-  SpRuntimeExtrinsicInclusionMode,
-  SpRuntimeHeader,
-  SpRuntimeTransactionValidityTransactionSource,
-  SpRuntimeTransactionValidityTransactionValidityError,
-  SpRuntimeTransactionValidityValidTransaction,
-  SpVersionRuntimeVersion,
-  SpWeightsWeightV2Weight,
-} from '@polkadot/types/lookup';
+  BabeEquivocationProof,
+  BabeGenesisConfiguration,
+  Epoch,
+  OpaqueKeyOwnershipProof,
+} from '@polkadot/types/interfaces/babe';
+import type { CheckInherentsResult, InherentData } from '@polkadot/types/interfaces/blockbuilder';
+import type { BlockHash } from '@polkadot/types/interfaces/chain';
+import type { AuthorityId } from '@polkadot/types/interfaces/consensus';
+import type {
+  CodeSource,
+  CodeUploadResult,
+  ContractExecResult,
+  ContractInstantiateResult,
+} from '@polkadot/types/interfaces/contracts';
+import type { Extrinsic } from '@polkadot/types/interfaces/extrinsics';
+import type {
+  AuthorityList,
+  GrandpaEquivocationProof,
+  SetId,
+} from '@polkadot/types/interfaces/grandpa';
+import type { OpaqueMetadata } from '@polkadot/types/interfaces/metadata';
+import type { FeeDetails, RuntimeDispatchInfo } from '@polkadot/types/interfaces/payment';
+import type {
+  AccountId,
+  Balance,
+  Block,
+  Call,
+  Header,
+  Index,
+  KeyTypeId,
+  Perbill,
+  Slot,
+  Weight,
+  WeightV2,
+} from '@polkadot/types/interfaces/runtime';
+import type { RuntimeVersion } from '@polkadot/types/interfaces/state';
+import type { ApplyExtrinsicResult, DispatchError } from '@polkadot/types/interfaces/system';
+import type { TransactionSource, TransactionValidity } from '@polkadot/types/interfaces/txqueue';
 import type { IExtrinsic, Observable } from '@polkadot/types/types';
 
 export type __AugmentedCall<ApiType extends ApiTypes> = AugmentedCall<ApiType>;
@@ -88,232 +80,197 @@ export type __DecoratedCallBase<ApiType extends ApiTypes> = DecoratedCallBase<Ap
 
 declare module '@polkadot/api-base/types/calls' {
   interface AugmentedCalls<ApiType extends ApiTypes> {
-    /** 0xbc9d89904f5b923f/ */
+    /** 0xbc9d89904f5b923f/1 */
     accountNonceApi: {
       /**
-       * Get current account nonce of given `AccountId`.
+       * The API to query account nonce (aka transaction index)
        **/
       accountNonce: AugmentedCall<
         ApiType,
-        (account: AccountId32 | string | Uint8Array) => Observable<u32>
+        (accountId: AccountId | string | Uint8Array) => Observable<Index>
       >;
     };
-    /** 0xbb6ba9053c5c9d78/ */
+    /** 0xbb6ba9053c5c9d78/4 */
     assetApi: {
       /**
-       * Returns a vector containing all errors for the transfer. An empty vec means there's no error.,, ```ignore, curl http://localhost:9933 -H "Content-Type: application/json" -d '{,     "id":1,,     "jsonrpc":"2.0",,     "method": "asset_transferReport",,     "params": [,        { "did": "0x0100000000000000000000000000000000000000000000000000000000000000", "kind": "Default"},,        { "did": "0x0100000000000000000000000000000000000000000000000000000000000000", "kind": "Default"},,        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],,        1,,        false,     ], }', ```
+       * Returns a vector containing all errors for the transfer. An empty vec means there's no error.
        **/
       transferReport: AugmentedCall<
         ApiType,
         (
-          sender_portfolio:
-            | PolymeshPrimitivesIdentityIdPortfolioId
-            | { did?: any; kind?: any }
-            | string
-            | Uint8Array,
-          receiver_portfolio:
-            | PolymeshPrimitivesIdentityIdPortfolioId
-            | { did?: any; kind?: any }
-            | string
-            | Uint8Array,
-          asset_id: PolymeshPrimitivesAssetAssetId | string | Uint8Array,
-          transfer_value: u128 | AnyNumber | Uint8Array,
+          sender_portfolio: PortfolioId | { did?: any; kind?: any } | string | Uint8Array,
+          receiver_portfolio: PortfolioId | { did?: any; kind?: any } | string | Uint8Array,
+          asset_id: PolymeshAssetId | string | Uint8Array,
+          transfer_value: Balance | AnyNumber | Uint8Array,
           skip_locked_check: bool | boolean | Uint8Array
-        ) => Observable<Vec<SpRuntimeDispatchError>>
+        ) => Observable<Vec<DispatchError>>
       >;
     };
-    /** 0x687ad44ad37f03c2/ */
+    /** 0x687ad44ad37f03c2/1 */
     authorityDiscoveryApi: {
       /**
        * Retrieve authority identifiers of the current and next authority set.
        **/
-      authorities: AugmentedCall<ApiType, () => Observable<Vec<SpAuthorityDiscoveryAppPublic>>>;
+      authorities: AugmentedCall<ApiType, () => Observable<Vec<AuthorityId>>>;
     };
-    /** 0xcbca25e39f142387/ */
+    /** 0xcbca25e39f142387/2 */
     babeApi: {
       /**
-       * Return the configuration for BABE.
+       * Return the genesis configuration for BABE. The configuration is only read on genesis.
        **/
-      configuration: AugmentedCall<ApiType, () => Observable<SpConsensusBabeBabeConfiguration>>;
+      configuration: AugmentedCall<ApiType, () => Observable<BabeGenesisConfiguration>>;
       /**
        * Returns information regarding the current epoch.
        **/
-      currentEpoch: AugmentedCall<ApiType, () => Observable<SpConsensusBabeEpoch>>;
+      currentEpoch: AugmentedCall<ApiType, () => Observable<Epoch>>;
       /**
        * Returns the slot that started the current epoch.
        **/
       currentEpochStart: AugmentedCall<ApiType, () => Observable<Slot>>;
       /**
-       * Generates a proof of key ownership for the given authority in the, current epoch. An example usage of this module is coupled with the, session historical module to prove that a given authority key is, tied to a given staking identity during a specific session. Proofs, of key ownership are necessary for submitting equivocation reports., NOTE: even though the API takes a `slot` as parameter the current, implementations ignores this parameter and instead relies on this, method being called at the correct block height, i.e. any point at, which the epoch for the given slot is live on-chain. Future, implementations will instead use indexed data through an offchain, worker, not requiring older states to be available.
+       * Generates a proof of key ownership for the given authority in the current epoch.
        **/
       generateKeyOwnershipProof: AugmentedCall<
         ApiType,
         (
           slot: Slot | AnyNumber | Uint8Array,
-          authority_id: SpConsensusBabeAppPublic | string | Uint8Array
-        ) => Observable<Option<Bytes>>
+          authorityId: AuthorityId | string | Uint8Array
+        ) => Observable<Option<OpaqueKeyOwnershipProof>>
       >;
       /**
-       * Returns information regarding the next epoch (which was already, previously announced).
+       * Returns information regarding the next epoch (which was already previously announced).
        **/
-      nextEpoch: AugmentedCall<ApiType, () => Observable<SpConsensusBabeEpoch>>;
+      nextEpoch: AugmentedCall<ApiType, () => Observable<Epoch>>;
       /**
-       * Submits an unsigned extrinsic to report an equivocation. The caller, must provide the equivocation proof and a key ownership proof, (should be obtained using `generate_key_ownership_proof`). The, extrinsic will be unsigned and should only be accepted for local, authorship (not to be broadcast to the network). This method returns, `None` when creation of the extrinsic fails, e.g. if equivocation, reporting is disabled for the given runtime (i.e. this method is, hardcoded to return `None`). Only useful in an offchain context.
+       * Submits an unsigned extrinsic to report an equivocation.
        **/
       submitReportEquivocationUnsignedExtrinsic: AugmentedCall<
         ApiType,
         (
-          equivocation_proof:
-            | SpConsensusSlotsEquivocationProof
-            | { offender?: any; slot?: any; firstHeader?: any; secondHeader?: any }
+          equivocationProof:
+            | BabeEquivocationProof
+            | { offender?: any; slotNumber?: any; firstHeader?: any; secondHeader?: any }
             | string
             | Uint8Array,
-          key_owner_proof: OpaqueKeyOwnershipProof | string | Uint8Array
+          keyOwnerProof: OpaqueKeyOwnershipProof | string | Uint8Array
         ) => Observable<Option<Null>>
       >;
     };
-    /** 0x40fe3ad401f8959a/ */
+    /** 0x40fe3ad401f8959a/6 */
     blockBuilder: {
       /**
-       * Apply the given extrinsic.,, Returns an inclusion outcome which specifies if this extrinsic is included in, this block or not.
+       * Apply the given extrinsic.
        **/
       applyExtrinsic: AugmentedCall<
         ApiType,
         (
           extrinsic: Extrinsic | IExtrinsic | string | Uint8Array
-        ) => Observable<
-          Result<
-            Result<Null, SpRuntimeDispatchError>,
-            SpRuntimeTransactionValidityTransactionValidityError
-          >
-        >
+        ) => Observable<ApplyExtrinsicResult>
       >;
       /**
-       * Check that the inherents are valid. The inherent data will vary from chain to chain.
+       * Check that the inherents are valid.
        **/
       checkInherents: AugmentedCall<
         ApiType,
         (
-          block: SpRuntimeBlock | { header?: any; extrinsics?: any } | string | Uint8Array,
-          data: SpInherentsInherentData | { data?: any } | string | Uint8Array
-        ) => Observable<SpInherentsCheckInherentsResult>
+          block: Block | { header?: any; extrinsics?: any } | string | Uint8Array,
+          data: InherentData | { data?: any } | string | Uint8Array
+        ) => Observable<CheckInherentsResult>
       >;
       /**
        * Finish the current block.
        **/
-      finalizeBlock: AugmentedCall<ApiType, () => Observable<SpRuntimeHeader>>;
+      finalizeBlock: AugmentedCall<ApiType, () => Observable<Header>>;
       /**
-       * Generate inherent extrinsics. The inherent data will vary from chain to chain.
+       * Generate inherent extrinsics.
        **/
       inherentExtrinsics: AugmentedCall<
         ApiType,
         (
-          inherent: SpInherentsInherentData | { data?: any } | string | Uint8Array
-        ) => Observable<Vec<Bytes>>
+          inherent: InherentData | { data?: any } | string | Uint8Array
+        ) => Observable<Vec<Extrinsic>>
       >;
     };
-    /** 0x98cf18c375950e1f/ */
+    /** 0x98cf18c375950e1f/2 */
     complianceApi: {
       /**
-       * Checks all compliance requirements for the given ticker,, ```ignore, curl http://localhost:9933 -H "Content-Type: application/json" -d '{,     "id":1,,     "jsonrpc":"2.0",,     "method": "compliance_complianceReport",,     "params":[,       { "did": "0x0100000000000000000000000000000000000000000000000000000000000000", "kind": "Default"},,       { "did": "0x0200000000000000000000000000000000000000000000000000000000000000", "kind": "Default"},,       { "ticker": "0x5449434B4552303030303031", "ids": [1]},     ],   }', ```
+       * Checks all compliance requirements for the given asset_id.
        **/
       complianceReport: AugmentedCall<
         ApiType,
         (
-          asset_id: PolymeshPrimitivesAssetAssetId | string | Uint8Array,
-          sender_identity: PolymeshPrimitivesIdentityId | string | Uint8Array,
-          receiver_identity: PolymeshPrimitivesIdentityId | string | Uint8Array
-        ) => Observable<
-          Result<PolymeshPrimitivesComplianceManagerComplianceReport, SpRuntimeDispatchError>
-        >
+          asset_id: PolymeshAssetId | string | Uint8Array,
+          sender_identity: IdentityId | string | Uint8Array,
+          receiver_identity: IdentityId | string | Uint8Array
+        ) => Observable<Result<ComplianceReport, DispatchError>>
       >;
     };
-    /** 0x68b66ba122c93fa7/ */
+    /** 0x68b66ba122c93fa7/2 */
     contractsApi: {
       /**
-       * Perform a call from a specified account to a given contract.,, See [`crate::Pallet::bare_call`].
+       * Perform a call from a specified account to a given contract.
        **/
       call: AugmentedCall<
         ApiType,
         (
-          origin: AccountId32 | string | Uint8Array,
-          dest: AccountId32 | string | Uint8Array,
-          value: u128 | AnyNumber | Uint8Array,
-          gas_limit:
-            | Option<SpWeightsWeightV2Weight>
+          origin: AccountId | string | Uint8Array,
+          dest: AccountId | string | Uint8Array,
+          value: Balance | AnyNumber | Uint8Array,
+          gasLimit:
+            | Option<WeightV2>
             | null
             | Uint8Array
-            | SpWeightsWeightV2Weight
+            | WeightV2
             | { refTime?: any; proofSize?: any }
             | string,
-          storage_deposit_limit: Option<u128> | null | Uint8Array | u128 | AnyNumber,
-          input_data: Bytes | string | Uint8Array
-        ) => Observable<
-          {
-            readonly gasConsumed: SpWeightsWeightV2Weight;
-            readonly gasRequired: SpWeightsWeightV2Weight;
-            readonly storageDeposit: PalletContractsPrimitivesStorageDeposit;
-            readonly debugMessage: Bytes;
-            readonly result: Result<
-              PalletContractsPrimitivesExecReturnValue,
-              SpRuntimeDispatchError
-            >;
-            readonly events: Option<Vec<FrameSystemEventRecord>>;
-          } & Struct
-        >
+          storageDepositLimit: Option<Balance> | null | Uint8Array | Balance | AnyNumber,
+          inputData: Bytes | string | Uint8Array
+        ) => Observable<ContractExecResult>
       >;
       /**
-       * Query a given storage key in a given contract.,, Returns `Ok(Some(Vec<u8>))` if the storage value exists under the given key in the, specified account and `Ok(None)` if it doesn't. If the account specified by the address, doesn't exist, or doesn't have a contract then `Err` is returned.
+       * Query a given storage key in a given contract.
        **/
       getStorage: AugmentedCall<
         ApiType,
         (
-          address: AccountId32 | string | Uint8Array,
+          address: AccountId | string | Uint8Array,
           key: Bytes | string | Uint8Array
-        ) => Observable<Result<Option<Bytes>, PalletContractsPrimitivesContractAccessError>>
+        ) => Observable<Option<Bytes>>
       >;
       /**
-       * Instantiate a new contract.,, See `[crate::Pallet::bare_instantiate]`.
+       * Instantiate a new contract.
        **/
       instantiate: AugmentedCall<
         ApiType,
         (
-          origin: AccountId32 | string | Uint8Array,
-          value: u128 | AnyNumber | Uint8Array,
-          gas_limit:
-            | Option<SpWeightsWeightV2Weight>
+          origin: AccountId | string | Uint8Array,
+          value: Balance | AnyNumber | Uint8Array,
+          gasLimit:
+            | Option<WeightV2>
             | null
             | Uint8Array
-            | SpWeightsWeightV2Weight
+            | WeightV2
             | { refTime?: any; proofSize?: any }
             | string,
-          storage_deposit_limit: Option<u128> | null | Uint8Array | u128 | AnyNumber,
-          code:
-            | PalletContractsPrimitivesCode
-            | { Upload: any }
-            | { Existing: any }
-            | string
-            | Uint8Array,
+          storageDepositLimit: Option<Balance> | null | Uint8Array | Balance | AnyNumber,
+          code: CodeSource | { Upload: any } | { Existing: any } | string | Uint8Array,
           data: Bytes | string | Uint8Array,
           salt: Bytes | string | Uint8Array
-        ) => Observable<PalletContractsPrimitivesContractResult>
+        ) => Observable<ContractInstantiateResult>
       >;
       /**
-       * Upload new code without instantiating a contract from it.,, See [`crate::Pallet::bare_upload_code`].
+       * Upload new code without instantiating a contract from it.
        **/
       uploadCode: AugmentedCall<
         ApiType,
         (
-          origin: AccountId32 | string | Uint8Array,
+          origin: AccountId | string | Uint8Array,
           code: Bytes | string | Uint8Array,
-          storage_deposit_limit: Option<u128> | null | Uint8Array | u128 | AnyNumber,
-          determinism: PalletContractsWasmDeterminism | 'Enforced' | 'Relaxed' | number | Uint8Array
-        ) => Observable<
-          Result<PalletContractsPrimitivesCodeUploadReturnValue, SpRuntimeDispatchError>
-        >
+          storageDepositLimit: Option<Balance> | null | Uint8Array | Balance | AnyNumber
+        ) => Observable<CodeUploadResult>
       >;
     };
-    /** 0xdf6acb689907609b/ */
+    /** 0xdf6acb689907609b/4 */
     core: {
       /**
        * Execute the given block.
@@ -321,17 +278,17 @@ declare module '@polkadot/api-base/types/calls' {
       executeBlock: AugmentedCall<
         ApiType,
         (
-          block: SpRuntimeBlock | { header?: any; extrinsics?: any } | string | Uint8Array
+          block: Block | { header?: any; extrinsics?: any } | string | Uint8Array
         ) => Observable<Null>
       >;
       /**
-       * Initialize a block with the given header and return the runtime executive mode.
+       * Initialize a block with the given header.
        **/
       initializeBlock: AugmentedCall<
         ApiType,
         (
           header:
-            | SpRuntimeHeader
+            | Header
             | {
                 parentHash?: any;
                 number?: any;
@@ -341,129 +298,88 @@ declare module '@polkadot/api-base/types/calls' {
               }
             | string
             | Uint8Array
-        ) => Observable<SpRuntimeExtrinsicInclusionMode>
+        ) => Observable<Null>
       >;
       /**
        * Returns the version of the runtime.
        **/
-      version: AugmentedCall<ApiType, () => Observable<SpVersionRuntimeVersion>>;
+      version: AugmentedCall<ApiType, () => Observable<RuntimeVersion>>;
     };
-    /** 0xfbc577b9d747efd6/ */
-    genesisBuilder: {
-      /**
-       * Build `RuntimeGenesisConfig` from a JSON blob not using any defaults and store it in the, storage.,, In the case of a FRAME-based runtime, this function deserializes the full, `RuntimeGenesisConfig` from the given JSON blob and puts it into the storage. If the, provided JSON blob is incorrect or incomplete or the deserialization fails, an error, is returned.,, Please note that provided JSON blob must contain all `RuntimeGenesisConfig` fields, no, defaults will be used.
-       **/
-      buildState: AugmentedCall<
-        ApiType,
-        (json: Bytes | string | Uint8Array) => Observable<Result<Null, Text>>
-      >;
-      /**
-       * Returns a JSON blob representation of the built-in `RuntimeGenesisConfig` identified by, `id`.,, If `id` is `None` the function should return JSON blob representation of the default, `RuntimeGenesisConfig` struct of the runtime. Implementation must provide default, `RuntimeGenesisConfig`.,, Otherwise function returns a JSON representation of the built-in, named, `RuntimeGenesisConfig` preset identified by `id`, or `None` if such preset does not, exist. Returned `Vec<u8>` contains bytes of JSON blob (patch) which comprises a list of, (potentially nested) key-value pairs that are intended for customizing the default, runtime genesis config. The patch shall be merged (rfc7386) with the JSON representation, of the default `RuntimeGenesisConfig` to create a comprehensive genesis config that can, be used in `build_state` method.
-       **/
-      getPreset: AugmentedCall<
-        ApiType,
-        (id: Option<Text> | null | Uint8Array | Text | string) => Observable<Option<Bytes>>
-      >;
-      /**
-       * Returns a list of identifiers for available builtin `RuntimeGenesisConfig` presets.,, The presets from the list can be queried with [`GenesisBuilder::get_preset`] method. If, no named presets are provided by the runtime the list is empty.
-       **/
-      presetNames: AugmentedCall<ApiType, () => Observable<Vec<Text>>>;
-    };
-    /** 0xed99c5acb25eedf5/ */
+    /** 0xed99c5acb25eedf5/3 */
     grandpaApi: {
       /**
        * Get current GRANDPA authority set id.
        **/
-      currentSetId: AugmentedCall<ApiType, () => Observable<u64>>;
+      currentSetId: AugmentedCall<ApiType, () => Observable<SetId>>;
       /**
-       * Generates a proof of key ownership for the given authority in the, given set. An example usage of this module is coupled with the, session historical module to prove that a given authority key is, tied to a given staking identity during a specific session. Proofs, of key ownership are necessary for submitting equivocation reports., NOTE: even though the API takes a `set_id` as parameter the current, implementations ignore this parameter and instead rely on this, method being called at the correct block height, i.e. any point at, which the given set id is live on-chain. Future implementations will, instead use indexed data through an offchain worker, not requiring, older states to be available.
+       * Generates a proof of key ownership for the given authority in the given set.
        **/
       generateKeyOwnershipProof: AugmentedCall<
         ApiType,
         (
-          set_id: u64 | AnyNumber | Uint8Array,
-          authority_id: SpConsensusGrandpaAppPublic | string | Uint8Array
-        ) => Observable<Option<Bytes>>
+          setId: SetId | AnyNumber | Uint8Array,
+          authorityId: AuthorityId | string | Uint8Array
+        ) => Observable<Option<OpaqueKeyOwnershipProof>>
       >;
       /**
-       * Get the current GRANDPA authorities and weights. This should not change except, for when changes are scheduled and the corresponding delay has passed.,, When called at block B, it will return the set of authorities that should be, used to finalize descendants of this block (B+1, B+2, ...). The block B itself, is finalized by the authorities from block B-1.
+       * Get the current GRANDPA authorities and weights. This should not change except for when changes are scheduled and the corresponding delay has passed.
        **/
-      grandpaAuthorities: AugmentedCall<
-        ApiType,
-        () => Observable<Vec<ITuple<[SpConsensusGrandpaAppPublic, u64]>>>
-      >;
+      grandpaAuthorities: AugmentedCall<ApiType, () => Observable<AuthorityList>>;
       /**
-       * Submits an unsigned extrinsic to report an equivocation. The caller, must provide the equivocation proof and a key ownership proof, (should be obtained using `generate_key_ownership_proof`). The, extrinsic will be unsigned and should only be accepted for local, authorship (not to be broadcast to the network). This method returns, `None` when creation of the extrinsic fails, e.g. if equivocation, reporting is disabled for the given runtime (i.e. this method is, hardcoded to return `None`). Only useful in an offchain context.
+       * Submits an unsigned extrinsic to report an equivocation.
        **/
       submitReportEquivocationUnsignedExtrinsic: AugmentedCall<
         ApiType,
         (
-          equivocation_proof:
-            | SpConsensusGrandpaEquivocationProof
+          equivocationProof:
+            | GrandpaEquivocationProof
             | { setId?: any; equivocation?: any }
             | string
             | Uint8Array,
-          key_owner_proof: Bytes | string | Uint8Array
+          keyOwnerProof: OpaqueKeyOwnershipProof | string | Uint8Array
         ) => Observable<Option<Null>>
       >;
     };
-    /** 0x595ac34c5ea1f5fe/ */
+    /** 0x595ac34c5ea1f5fe/1 */
     groupApi: {
       /**
-       *
+       * Get the CDD members
        **/
-      getCddValidMembers: AugmentedCall<
-        ApiType,
-        () => Observable<Vec<PalletGroupRpcRuntimeApiMember>>
-      >;
+      getCddValidMembers: AugmentedCall<ApiType, () => Observable<Vec<Member>>>;
       /**
-       *
+       * Get the GC members
        **/
-      getGcValidMembers: AugmentedCall<
-        ApiType,
-        () => Observable<Vec<PalletGroupRpcRuntimeApiMember>>
-      >;
+      getGcValidMembers: AugmentedCall<ApiType, () => Observable<Vec<Member>>>;
     };
-    /** 0xf28e8080b6e2dfd0/ */
+    /** 0xf28e8080b6e2dfd0/4 */
     identityApi: {
       /**
-       * Retrieve DidRecord for a given `did`.
+       * Used to get the did record values for a given DID
        **/
       getDidRecords: AugmentedCall<
         ApiType,
-        (
-          did: PolymeshPrimitivesIdentityId | string | Uint8Array
-        ) => Observable<PalletIdentityRpcDidRecords>
+        (did: IdentityId | string | Uint8Array) => Observable<RpcDidRecords>
       >;
       /**
-       * Retrieve the status of the DID
+       * Retrieve status of the DID
        **/
       getDidStatus: AugmentedCall<
         ApiType,
-        (
-          dids:
-            | Vec<PolymeshPrimitivesIdentityId>
-            | (PolymeshPrimitivesIdentityId | string | Uint8Array)[]
-        ) => Observable<Vec<PalletIdentityDidStatus>>
+        (did: Vec<IdentityId> | (IdentityId | string | Uint8Array)[]) => Observable<Vec<DidStatus>>
       >;
       /**
-       * Retrieve list of a authorization for a given signatory
+       * Retrieve authorizations data for a given signatory and filtered using the given authorization type
        **/
       getFilteredAuthorizations: AugmentedCall<
         ApiType,
         (
-          signatory:
-            | PolymeshPrimitivesSecondaryKeySignatory
-            | { Identity: any }
-            | { Account: any }
-            | string
-            | Uint8Array,
+          signatory: Signatory | { Identity: any } | { Account: any } | string | Uint8Array,
           allow_expired: bool | boolean | Uint8Array,
           auth_type:
-            | Option<PolymeshPrimitivesAuthorizationAuthorizationType>
+            | Option<AuthorizationType>
             | null
             | Uint8Array
-            | PolymeshPrimitivesAuthorizationAuthorizationType
+            | AuthorizationType
             | 'AttestPrimaryKeyRotation'
             | 'RotatePrimaryKey'
             | 'TransferTicker'
@@ -475,80 +391,59 @@ declare module '@polkadot/api-base/types/calls' {
             | 'AddRelayerPayingKey'
             | 'RotatePrimaryKeyToSecondary'
             | number
-        ) => Observable<Vec<PolymeshPrimitivesAuthorization>>
+        ) => Observable<Vec<Authorization>>
       >;
       /**
-       * Provide the `KeyIdentityData` from a given `AccountId`, including:, - the corresponding DID,, - whether the `AccountId` is a primary or secondary key,, - any permissions related to the key.,, This is an aggregate call provided for UX convenience.
+       * Query relation between a signing key and a DID
        **/
       getKeyIdentityData: AugmentedCall<
         ApiType,
-        (
-          acc: AccountId32 | string | Uint8Array
-        ) => Observable<Option<PalletIdentityKeyIdentityData>>
+        (acc: AccountId | string | Uint8Array) => Observable<Option<KeyIdentityData>>
       >;
       /**
-       * Returns CDD status of an identity
+       * use to tell whether the given did has valid cdd claim or not
        **/
       isIdentityHasValidCdd: AugmentedCall<
         ApiType,
         (
-          did: PolymeshPrimitivesIdentityId | string | Uint8Array,
+          did: IdentityId | string | Uint8Array,
           buffer_time: Option<u64> | null | Uint8Array | u64 | AnyNumber
-        ) => Observable<Result<PolymeshPrimitivesIdentityId, Bytes>>
+        ) => Observable<CddStatus>
       >;
       /**
-       * Returns all valid [`IdentityClaim`] of type `CustomerDueDiligence` for the given `target_identity`.,, ```ignore, curl http://localhost:9933 -H "Content-Type: application/json" -d '{,     "id":1,,     "jsonrpc":"2.0",,     "method": "identity_validCDDClaims",,     "params":[,         "0x0100000000000000000000000000000000000000000000000000000000000000",,         null,     ],   }', ```
+       * Returns all valid IdentityClaim of type CustomerDueDiligence for the given target_identity
        **/
       validCddClaims: AugmentedCall<
         ApiType,
         (
-          target_identity: PolymeshPrimitivesIdentityId | string | Uint8Array,
+          target_identity: IdentityId | string | Uint8Array,
           cdd_checker_leeway: Option<u64> | null | Uint8Array | u64 | AnyNumber
-        ) => Observable<Vec<PolymeshPrimitivesIdentityClaim>>
+        ) => Observable<Vec<IdentityClaim>>
       >;
     };
-    /** 0x37e397fc7c91f5e4/ */
+    /** 0x37e397fc7c91f5e4/1 */
     metadata: {
       /**
-       * Returns the metadata of a runtime.
+       * Returns the metadata of a runtime
        **/
       metadata: AugmentedCall<ApiType, () => Observable<OpaqueMetadata>>;
-      /**
-       * Returns the metadata at a given version.,, If the given `version` isn't supported, this will return `None`., Use [`Self::metadata_versions`] to find out about supported metadata version of the runtime.
-       **/
-      metadataAtVersion: AugmentedCall<
-        ApiType,
-        (version: u32 | AnyNumber | Uint8Array) => Observable<Option<OpaqueMetadata>>
-      >;
-      /**
-       * Returns the supported metadata versions.,, This can be used to call `metadata_at_version`.
-       **/
-      metadataVersions: AugmentedCall<ApiType, () => Observable<Vec<u32>>>;
     };
-    /** 0x9ea061a615cee2fe/ */
+    /** 0x9ea061a615cee2fe/2 */
     nftApi: {
       /**
-       * Returns a vector containing all errors for the transfer. An empty vec means there's no error.,, ```ignore, curl http://localhost:9933 -H "Content-Type: application/json" -d '{,     "id":1,,     "jsonrpc":"2.0",,     "method": "nft_transferReport",,     "params": [,        { "did": "0x0100000000000000000000000000000000000000000000000000000000000000", "kind": "Default"},,        { "did": "0x0100000000000000000000000000000000000000000000000000000000000000", "kind": "Default"},,        { "asset_id": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "ids": [1]},,        false,     ], }', ```
+       * Returns a vector containing all errors for the transfer. An empty vec means there's no error.
        **/
       transferReport: AugmentedCall<
         ApiType,
         (
-          sender_portfolio:
-            | PolymeshPrimitivesIdentityIdPortfolioId
-            | { did?: any; kind?: any }
-            | string
-            | Uint8Array,
-          receiver_portfolio:
-            | PolymeshPrimitivesIdentityIdPortfolioId
-            | { did?: any; kind?: any }
-            | string
-            | Uint8Array,
-          nfts: PolymeshPrimitivesNftNfTs | { assetId?: any; ids?: any } | string | Uint8Array,
+          sender_portfolio: PortfolioId | { did?: any; kind?: any } | string | Uint8Array,
+          receiver_portfolio: PortfolioId | { did?: any; kind?: any } | string | Uint8Array,
+          nfts: NFTs | { assetId?: any; ids?: any } | string | Uint8Array,
           skip_locked_check: bool | boolean | Uint8Array
-        ) => Observable<Vec<SpRuntimeDispatchError>>
+        ) => Observable<Vec<DispatchError>>
       >;
     };
-    /** 0xf78b278be53f454c/ */
+    /** 0xf78b278be53f454c/2 */
     offchainWorkerApi: {
       /**
        * Starts the off-chain task for given block header.
@@ -557,7 +452,7 @@ declare module '@polkadot/api-base/types/calls' {
         ApiType,
         (
           header:
-            | SpRuntimeHeader
+            | Header
             | {
                 parentHash?: any;
                 number?: any;
@@ -570,40 +465,40 @@ declare module '@polkadot/api-base/types/calls' {
         ) => Observable<Null>
       >;
     };
-    /** 0x329342994773047f/ */
+    /** 0x329342994773047f/1 */
     pipsApi: {
       /**
-       * Retrieve votes for a proposal for a given `id`.
+       * Summary of votes of a proposal given by index
        **/
       getVotes: AugmentedCall<
         ApiType,
-        (id: PalletPipsPipId | AnyNumber | Uint8Array) => Observable<PalletPipsVoteCount>
+        (index: PipId | AnyNumber | Uint8Array) => Observable<VoteCount>
       >;
       /**
-       * Retrieve proposals started by `address`.
+       * Retrieves proposal indices started by address
        **/
       proposedBy: AugmentedCall<
         ApiType,
-        (address: AccountId32 | string | Uint8Array) => Observable<Vec<u32>>
+        (address: AccountId | string | Uint8Array) => Observable<Vec<PipId>>
       >;
       /**
-       * Retrieve proposals `address` voted on.
+       * Retrieves proposal address indices voted on
        **/
       votedOn: AugmentedCall<
         ApiType,
-        (address: AccountId32 | string | Uint8Array) => Observable<Vec<u32>>
+        (address: AccountId | string | Uint8Array) => Observable<Vec<PipId>>
       >;
     };
-    /** 0x001a0b29f17d01f4/ */
+    /** 0x001a0b29f17d01f4/1 */
     protocolFeeApi: {
       /**
-       *
+       * Gets the fee of a chargeable extrinsic operation
        **/
       computeFee: AugmentedCall<
         ApiType,
         (
           op:
-            | PolymeshCommonUtilitiesProtocolFeeProtocolOp
+            | ProtocolOp
             | 'AssetRegisterTicker'
             | 'AssetIssue'
             | 'AssetAddDocuments'
@@ -622,216 +517,178 @@ declare module '@polkadot/api-base/types/calls' {
             | 'IdentityCreateChildIdentity'
             | number
             | Uint8Array
-        ) => Observable<PalletProtocolFeeRpcRuntimeApiCappedFee>
+        ) => Observable<CappedFee>
       >;
     };
-    /** 0xab3c0572291feb8b/ */
+    /** 0xab3c0572291feb8b/1 */
     sessionKeys: {
       /**
-       * Decode the given public session keys.,, Returns the list of public raw public keys + key type.
+       * Decode the given public session keys.
        **/
       decodeSessionKeys: AugmentedCall<
         ApiType,
         (
           encoded: Bytes | string | Uint8Array
-        ) => Observable<Option<Vec<ITuple<[Bytes, SpCoreCryptoKeyTypeId]>>>>
+        ) => Observable<Option<Vec<ITuple<[Bytes, KeyTypeId]>>>>
       >;
       /**
-       * Generate a set of session keys with optionally using the given seed., The keys should be stored within the keystore exposed via runtime, externalities.,, The seed needs to be a valid `utf8` string.,, Returns the concatenated SCALE encoded public keys.
+       * Generate a set of session keys with optionally using the given seed.
        **/
       generateSessionKeys: AugmentedCall<
         ApiType,
         (seed: Option<Bytes> | null | Uint8Array | Bytes | string) => Observable<Bytes>
       >;
     };
-    /** 0x53df5001418f3b46/ */
+    /** 0x53df5001418f3b46/2 */
     settlementApi: {
       /**
-       * Returns an [`AffirmationCount`] instance containing the number of assets being sent/received from `portfolios`,, and the number of off-chain assets in the instruction.,, ```ignore, curl http://localhost:9933 -H "Content-Type: application/json" -d '{,     "id":1,,     "jsonrpc":"2.0",,     "method": "settlement_getAffirmationCount",,     "params": [1, [{ "did": "0x0100000000000000000000000000000000000000000000000000000000000000", "kind": "Default"}]],   }', ```
+       * Returns an AffirmationCount instance containing the number of assets being sent/received from portfolios, and the number of off-chain assets in the instruction.
        **/
       getAffirmationCount: AugmentedCall<
         ApiType,
         (
-          instruction_id: PolymeshPrimitivesSettlementInstructionId | AnyNumber | Uint8Array,
+          instruction_id: InstructionId | AnyNumber | Uint8Array,
           portfolios:
-            | Vec<PolymeshPrimitivesIdentityIdPortfolioId>
-            | (
-                | PolymeshPrimitivesIdentityIdPortfolioId
-                | { did?: any; kind?: any }
-                | string
-                | Uint8Array
-              )[]
-        ) => Observable<PolymeshPrimitivesSettlementAffirmationCount>
+            | Vec<PortfolioId>
+            | (PortfolioId | { did?: any; kind?: any } | string | Uint8Array)[]
+        ) => Observable<AffirmationCount>
       >;
       /**
-       * Returns an [`ExecuteInstructionInfo`] instance containing the consumed weight and the number of fungible and non fungible, tokens in the instruction. Executing an instruction includes verifying the compliance and transfer restrictions of all assets, in the instruction, unlocking all assets, pruning the instruction, updating the statistics for each asset and more.,, ```ignore, curl http://localhost:9933 -H "Content-Type: application/json" -d '{,     "id":1,,     "jsonrpc":"2.0",,     "method": "settlement_getExecuteInstructionInfo",,     "params": [1],   }', ```
+       * Returns an ExecuteInstructionInfo instance containing the consumed weight and the number of tokens in the instruction.
        **/
       getExecuteInstructionInfo: AugmentedCall<
         ApiType,
         (
-          instruction_id: PolymeshPrimitivesSettlementInstructionId | AnyNumber | Uint8Array
-        ) => Observable<Option<PolymeshPrimitivesSettlementExecuteInstructionInfo>>
+          instruction_id: InstructionId | AnyNumber | Uint8Array
+        ) => Observable<Option<ExecuteInstructionInfo>>
       >;
       /**
-       * Returns a vector containing all errors for the execution. An empty vec means there's no error.,, ```ignore, curl http://localhost:9933 -H "Content-Type: application/json" -d '{,     "id":1,,     "jsonrpc":"2.0",,     "method": "settlement_getExecuteIntructionReport",,     "params": [1],   }', ```
+       * Returns a vector containing all errors for the execution. An empty vec means there's no error.
        **/
       getExecuteInstructionReport: AugmentedCall<
         ApiType,
-        (
-          instruction_id: PolymeshPrimitivesSettlementInstructionId | AnyNumber | Uint8Array
-        ) => Observable<Vec<SpRuntimeDispatchError>>
+        (instruction_id: InstructionId | AnyNumber | Uint8Array) => Observable<Vec<DispatchError>>
       >;
       /**
-       * Returns a vector containing all errors for the transfer. An empty vec means there's no error.,, ```ignore, curl http://localhost:9933 -H "Content-Type: application/json" -d '{,     "id":1,,     "jsonrpc":"2.0",,     "method": "settlement_getTransferReport",,     "params": [,         {,            "NonFungible":,                {,                    "sender": { "did": "0x0100000000000000000000000000000000000000000000000000000000000000", "kind": "Default"},,                    "receiver": { "did": "0x0100000000000000000000000000000000000000000000000000000000000000", "kind": "Default"},,                    "nfts": { "ticker": "0x5449434B4552303030303031", "ids": [1]},                },         },,         false,     ], }', ```
+       * Returns a vector containing all errors for the transfer. An empty vec means there's no error.
        **/
       getTransferReport: AugmentedCall<
         ApiType,
         (
           leg:
-            | PolymeshPrimitivesSettlementLeg
+            | Leg
             | { Fungible: any }
             | { NonFungible: any }
             | { OffChain: any }
             | string
             | Uint8Array,
           skip_locked_check: bool | boolean | Uint8Array
-        ) => Observable<Vec<SpRuntimeDispatchError>>
+        ) => Observable<Vec<DispatchError>>
       >;
       /**
-       * Returns the [`AssetCount`] for the given `instruction_id`.
+       * Returns the AssetCount for the given instruction.
        **/
       instructionAssetCount: AugmentedCall<
         ApiType,
-        (
-          instruction_id: PolymeshPrimitivesSettlementInstructionId | AnyNumber | Uint8Array
-        ) => Observable<PolymeshPrimitivesSettlementAssetCount>
+        (instruction_id: InstructionId | AnyNumber | Uint8Array) => Observable<AssetCount>
       >;
       /**
-       * Returns the weight for calling `lock_instruction` for the given `instruction_id`.
+       * Returns the weight for executing lock_instruction.
        **/
       lockInstructionWeight: AugmentedCall<
         ApiType,
         (
-          instruction_id: PolymeshPrimitivesSettlementInstructionId | AnyNumber | Uint8Array
-        ) => Observable<Result<SpWeightsWeightV2Weight, SpRuntimeDispatchError>>
+          instruction_id: InstructionId | AnyNumber | Uint8Array
+        ) => Observable<Result<Weight, DispatchError>>
       >;
     };
-    /** 0x18ef58a3b67ba770/ */
+    /** 0x18ef58a3b67ba770/1 */
     stakingApi: {
       /**
-       * Returns the page count of exposures for a validator `account` in a given era.
+       * Retrieves curves parameters
        **/
-      erasStakersPageCount: AugmentedCall<
-        ApiType,
-        (
-          era: u32 | AnyNumber | Uint8Array,
-          account: AccountId32 | string | Uint8Array
-        ) => Observable<u32>
-      >;
+      getCurve: AugmentedCall<ApiType, () => Observable<Vec<ITuple<[Perbill, Perbill]>>>>;
       /**
        * Returns the nominations quota for a nominator with a given balance.
        **/
       nominationsQuota: AugmentedCall<
         ApiType,
-        (balance: u128 | AnyNumber | Uint8Array) => Observable<u32>
-      >;
-      /**
-       * Returns true if validator `account` has pages to be claimed for the given era.
-       **/
-      pendingRewards: AugmentedCall<
-        ApiType,
-        (
-          era: u32 | AnyNumber | Uint8Array,
-          account: AccountId32 | string | Uint8Array
-        ) => Observable<bool>
+        (balance: Balance | AnyNumber | Uint8Array) => Observable<u32>
       >;
     };
-    /** 0x608339ce0e76adf3/ */
+    /** 0x608339ce0e76adf3/0 */
     statisticsApi: {
       /**
-       * Returns a vector containing all [`TransferCondition`] that are not being respected for the transfer. An empty vec means there's no error.
+       * Returns a vector containing all TransferCondition that are not being respected for the transfer. An empty vec means there's no error.
        **/
       transferRestrictionsReport: AugmentedCall<
         ApiType,
         (
-          asset_id: PolymeshPrimitivesAssetAssetId | string | Uint8Array,
-          sender_did: PolymeshPrimitivesIdentityId | string | Uint8Array,
-          receiver_did: PolymeshPrimitivesIdentityId | string | Uint8Array,
-          transfer_amount: u128 | AnyNumber | Uint8Array
-        ) => Observable<
-          Result<Vec<PolymeshPrimitivesTransferComplianceTransferCondition>, SpRuntimeDispatchError>
-        >
+          asset_id: PolymeshAssetId | string | Uint8Array,
+          sender_did: IdentityId | string | Uint8Array,
+          receiver_did: IdentityId | string | Uint8Array,
+          transfer_amount: Balance | AnyNumber | Uint8Array
+        ) => Observable<Result<Vec<TransferCondition>, DispatchError>>
       >;
     };
-    /** 0xd2bc9897eed08f15/ */
+    /** 0xd2bc9897eed08f15/3 */
     taggedTransactionQueue: {
       /**
-       * Validate the transaction.,, This method is invoked by the transaction pool to learn details about given transaction., The implementation should make sure to verify the correctness of the transaction, against current state. The given `block_hash` corresponds to the hash of the block, that is used as current state.,, Note that this call may be performed by the pool multiple times and transactions, might be verified in any possible order.
+       * Validate the transaction.
        **/
       validateTransaction: AugmentedCall<
         ApiType,
         (
-          source:
-            | SpRuntimeTransactionValidityTransactionSource
-            | 'InBlock'
-            | 'Local'
-            | 'External'
-            | number
-            | Uint8Array,
+          source: TransactionSource | 'InBlock' | 'Local' | 'External' | number | Uint8Array,
           tx: Extrinsic | IExtrinsic | string | Uint8Array,
-          block_hash: H256 | string | Uint8Array
-        ) => Observable<
-          Result<
-            SpRuntimeTransactionValidityValidTransaction,
-            SpRuntimeTransactionValidityTransactionValidityError
-          >
-        >
+          blockHash: BlockHash | string | Uint8Array
+        ) => Observable<TransactionValidity>
       >;
     };
-    /** 0x37c8bb1350a9a2a8/ */
+    /** 0x37c8bb1350a9a2a8/2 */
     transactionPaymentApi: {
       /**
-       *
+       * The transaction fee details
        **/
       queryFeeDetails: AugmentedCall<
         ApiType,
         (
           uxt: Extrinsic | IExtrinsic | string | Uint8Array,
           len: u32 | AnyNumber | Uint8Array
-        ) => Observable<PalletTransactionPaymentFeeDetails>
+        ) => Observable<FeeDetails>
       >;
       /**
-       *
+       * The transaction info
        **/
       queryInfo: AugmentedCall<
         ApiType,
         (
           uxt: Extrinsic | IExtrinsic | string | Uint8Array,
           len: u32 | AnyNumber | Uint8Array
-        ) => Observable<PalletTransactionPaymentRuntimeDispatchInfo>
+        ) => Observable<RuntimeDispatchInfo>
       >;
     };
-    /** 0xf3ff14d5ab527059/ */
+    /** 0xf3ff14d5ab527059/2 */
     transactionPaymentCallApi: {
       /**
-       * Query fee details of a given encoded `Call`.
+       * The call fee details
        **/
       queryCallFeeDetails: AugmentedCall<
         ApiType,
         (
-          call: PolymeshRuntimeDevelopRuntimeRuntimeCall | IMethod | string | Uint8Array,
+          call: Call | IMethod | string | Uint8Array,
           len: u32 | AnyNumber | Uint8Array
-        ) => Observable<PalletTransactionPaymentFeeDetails>
+        ) => Observable<FeeDetails>
       >;
       /**
-       * Query information of a dispatch class, weight, and fee of a given encoded `Call`.
+       * The call info
        **/
       queryCallInfo: AugmentedCall<
         ApiType,
         (
-          call: PolymeshRuntimeDevelopRuntimeRuntimeCall | IMethod | string | Uint8Array,
+          call: Call | IMethod | string | Uint8Array,
           len: u32 | AnyNumber | Uint8Array
-        ) => Observable<PalletTransactionPaymentRuntimeDispatchInfo>
+        ) => Observable<RuntimeDispatchInfo>
       >;
     };
   } // AugmentedCalls

@@ -11,18 +11,17 @@ import type {
   FinalityGrandpaPrecommit,
   FinalityGrandpaPrevote,
   FrameSupportDispatchDispatchClass,
+  FrameSupportDispatchDispatchInfo,
   FrameSupportDispatchPays,
   FrameSupportDispatchPerDispatchClassU32,
   FrameSupportDispatchPerDispatchClassWeight,
   FrameSupportDispatchPerDispatchClassWeightsPerClass,
   FrameSupportDispatchRawOrigin,
+  FrameSupportPalletId,
   FrameSupportPreimagesBounded,
   FrameSupportTokensMiscBalanceStatus,
-  FrameSupportTokensMiscIdAmount,
   FrameSystemAccountInfo,
   FrameSystemCall,
-  FrameSystemCodeUpgradeAuthorization,
-  FrameSystemDispatchEventInfo,
   FrameSystemError,
   FrameSystemEvent,
   FrameSystemEventRecord,
@@ -48,13 +47,11 @@ import type {
   PalletBabeCall,
   PalletBabeError,
   PalletBalancesAccountData,
-  PalletBalancesAdjustmentDirection,
   PalletBalancesBalanceLock,
   PalletBalancesCall,
   PalletBalancesError,
   PalletBalancesEvent,
   PalletBalancesReasons,
-  PalletBalancesReserveData,
   PalletBaseCall,
   PalletBaseError,
   PalletBaseEvent,
@@ -66,33 +63,25 @@ import type {
   PalletComplianceManagerCall,
   PalletComplianceManagerError,
   PalletComplianceManagerEvent,
+  PalletConfidentialAssetsCall,
+  PalletConfidentialAssetsDartAssetDetail,
+  PalletConfidentialAssetsError,
+  PalletConfidentialAssetsEvent,
+  PalletConfidentialAssetsSettlementAffirmationStatus,
+  PalletConfidentialAssetsSettlementLegAffirmParty,
+  PalletConfidentialAssetsSettlementSettlementStatus,
   PalletContractsCall,
-  PalletContractsEnvironment,
-  PalletContractsEnvironmentTypeAccountId32,
-  PalletContractsEnvironmentTypeBlakeTwo256,
-  PalletContractsEnvironmentTypeH256,
-  PalletContractsEnvironmentTypeU128,
-  PalletContractsEnvironmentTypeU32,
-  PalletContractsEnvironmentTypeU64,
   PalletContractsError,
   PalletContractsEvent,
-  PalletContractsHoldReason,
-  PalletContractsOrigin,
-  PalletContractsPrimitivesCode,
-  PalletContractsPrimitivesCodeUploadReturnValue,
-  PalletContractsPrimitivesContractAccessError,
-  PalletContractsPrimitivesContractResult,
-  PalletContractsPrimitivesExecReturnValue,
-  PalletContractsPrimitivesInstantiateReturnValue,
-  PalletContractsPrimitivesStorageDeposit,
   PalletContractsSchedule,
+  PalletContractsScheduleHostFnWeights,
   PalletContractsScheduleInstructionWeights,
   PalletContractsScheduleLimits,
   PalletContractsStorageContractInfo,
-  PalletContractsStorageDeletionQueueManager,
-  PalletContractsUapiFlagsReturnFlags,
-  PalletContractsWasmCodeInfo,
+  PalletContractsStorageDeletedContract,
   PalletContractsWasmDeterminism,
+  PalletContractsWasmOwnerInfo,
+  PalletContractsWasmPrefabWasmModule,
   PalletCorporateActionsBallotBallotMeta,
   PalletCorporateActionsBallotBallotTimeRange,
   PalletCorporateActionsBallotBallotVote,
@@ -137,15 +126,12 @@ import type {
   PalletGroupCall,
   PalletGroupError,
   PalletGroupEvent,
-  PalletGroupRpcRuntimeApiMember,
   PalletIdentityCall,
   PalletIdentityClaim1stKey,
   PalletIdentityClaim2ndKey,
-  PalletIdentityDidStatus,
   PalletIdentityError,
   PalletIdentityEvent,
-  PalletIdentityKeyIdentityData,
-  PalletIdentityRpcDidRecords,
+  PalletImOnlineBoundedOpaqueNetworkState,
   PalletImOnlineCall,
   PalletImOnlineError,
   PalletImOnlineEvent,
@@ -178,7 +164,6 @@ import type {
   PalletPipsSnapshotResult,
   PalletPipsSnapshottedPip,
   PalletPipsVote,
-  PalletPipsVoteCount,
   PalletPipsVotingResult,
   PalletPortfolioCall,
   PalletPortfolioError,
@@ -186,8 +171,6 @@ import type {
   PalletPreimageCall,
   PalletPreimageError,
   PalletPreimageEvent,
-  PalletPreimageHoldReason,
-  PalletPreimageOldRequestStatus,
   PalletPreimageRequestStatus,
   PalletProtocolFeeCall,
   PalletProtocolFeeError,
@@ -199,7 +182,6 @@ import type {
   PalletSchedulerCall,
   PalletSchedulerError,
   PalletSchedulerEvent,
-  PalletSchedulerRetryConfig,
   PalletSchedulerScheduled,
   PalletSessionCall,
   PalletSessionError,
@@ -209,7 +191,9 @@ import type {
   PalletSettlementEvent,
   PalletStakingActiveEraInfo,
   PalletStakingEraRewardPoints,
+  PalletStakingExposure,
   PalletStakingForcing,
+  PalletStakingIndividualExposure,
   PalletStakingNominations,
   PalletStakingPalletCall,
   PalletStakingPalletConfigOpPerbill,
@@ -218,10 +202,11 @@ import type {
   PalletStakingPalletConfigOpU32,
   PalletStakingPalletError,
   PalletStakingPalletEvent,
-  PalletStakingPalletHoldReason,
+  PalletStakingPermissionedIdentityPrefs,
   PalletStakingRewardDestination,
   PalletStakingSlashingSlashingSpans,
   PalletStakingSlashingSpanRecord,
+  PalletStakingSlashingSwitch,
   PalletStakingStakingLedger,
   PalletStakingUnappliedSlash,
   PalletStakingUnlockChunk,
@@ -245,10 +230,7 @@ import type {
   PalletTransactionPaymentCall,
   PalletTransactionPaymentChargeTransactionPayment,
   PalletTransactionPaymentEvent,
-  PalletTransactionPaymentFeeDetails,
-  PalletTransactionPaymentInclusionFee,
   PalletTransactionPaymentReleases,
-  PalletTransactionPaymentRuntimeDispatchInfo,
   PalletTreasuryCall,
   PalletTreasuryError,
   PalletTreasuryEvent,
@@ -256,11 +238,6 @@ import type {
   PalletUtilityError,
   PalletUtilityEvent,
   PalletUtilityUniqueCall,
-  PalletValidatorsCall,
-  PalletValidatorsError,
-  PalletValidatorsEvent,
-  PalletValidatorsPermissionedIdentityPrefs,
-  PalletValidatorsSlashingSwitch,
   PolymeshCommonUtilitiesCheckpointNextCheckpoints,
   PolymeshCommonUtilitiesCheckpointScheduleCheckpoints,
   PolymeshCommonUtilitiesIdentityCreateChildIdentityWithAuth,
@@ -274,6 +251,52 @@ import type {
   PolymeshContractsError,
   PolymeshContractsEvent,
   PolymeshContractsNextUpgrade,
+  PolymeshDartBpAccountAccountAssetRegistrationProof,
+  PolymeshDartBpAccountAccountStateCommitment,
+  PolymeshDartBpAccountAccountStateNullifier,
+  PolymeshDartBpAccountBatchedAccountAssetRegistrationProof,
+  PolymeshDartBpAssetAssetMintingProof,
+  PolymeshDartBpBatchedBatchedProof,
+  PolymeshDartBpBatchedBatchedProofs,
+  PolymeshDartBpBatchedProofHash,
+  PolymeshDartBpEncodeCompressedAffine,
+  PolymeshDartBpEncodeCompressedBaseField,
+  PolymeshDartBpFeeBatchedFeeAccountRegistrationProof,
+  PolymeshDartBpFeeBatchedFeeAccountTopupProof,
+  PolymeshDartBpFeeFeeAccountPaymentProof,
+  PolymeshDartBpFeeFeeAccountRegistrationProof,
+  PolymeshDartBpFeeFeeAccountStateCommitment,
+  PolymeshDartBpFeeFeeAccountStateNullifier,
+  PolymeshDartBpFeeFeeAccountTopupProof,
+  PolymeshDartBpFeeFeePaymentWithBatchedProofs,
+  PolymeshDartBpKeysAccountPublicKey,
+  PolymeshDartBpKeysAccountPublicKeys,
+  PolymeshDartBpKeysAccountRegistrationProof,
+  PolymeshDartBpKeysEncryptionKeyRegistrationProof,
+  PolymeshDartBpKeysEncryptionPublicKey,
+  PolymeshDartBpLegInstantInstantReceiverAffirmationProof,
+  PolymeshDartBpLegInstantInstantSenderAffirmationProof,
+  PolymeshDartBpLegInstantInstantSettlementLegAffirmations,
+  PolymeshDartBpLegInstantInstantSettlementProof,
+  PolymeshDartBpLegLegRef,
+  PolymeshDartBpLegProofsBatchedSettlementLegAffirmations,
+  PolymeshDartBpLegProofsBatchedSettlementProof,
+  PolymeshDartBpLegProofsMediatorAffirmationProof,
+  PolymeshDartBpLegProofsReceiverAffirmationProof,
+  PolymeshDartBpLegProofsReceiverClaimProof,
+  PolymeshDartBpLegProofsSenderAffirmationProof,
+  PolymeshDartBpLegProofsSenderCounterUpdateProof,
+  PolymeshDartBpLegProofsSenderReversalProof,
+  PolymeshDartBpLegSettlementLegProof,
+  PolymeshDartBpLegSettlementProof,
+  PolymeshDartBpLegSettlementRef,
+  PolymeshDartCurveTreeAccountTreeConfig,
+  PolymeshDartCurveTreeAssetTreeConfig,
+  PolymeshDartCurveTreeCommonCompressedInner,
+  PolymeshDartCurveTreeCommonCompressedLeafValue,
+  PolymeshDartCurveTreeCommonNodeLocation,
+  PolymeshDartCurveTreeCommonNodePosition,
+  PolymeshDartCurveTreeCompressedCurveTreeRoot,
   PolymeshPrimitivesAgentAgentGroup,
   PolymeshPrimitivesAssetAssetId,
   PolymeshPrimitivesAssetAssetType,
@@ -285,14 +308,10 @@ import type {
   PolymeshPrimitivesAssetNonFungibleType,
   PolymeshPrimitivesAuthorization,
   PolymeshPrimitivesAuthorizationAuthorizationData,
-  PolymeshPrimitivesAuthorizationAuthorizationType,
   PolymeshPrimitivesBeneficiary,
   PolymeshPrimitivesCddId,
   PolymeshPrimitivesComplianceManagerAssetCompliance,
-  PolymeshPrimitivesComplianceManagerComplianceReport,
   PolymeshPrimitivesComplianceManagerComplianceRequirement,
-  PolymeshPrimitivesComplianceManagerConditionReport,
-  PolymeshPrimitivesComplianceManagerRequirementReport,
   PolymeshPrimitivesCondition,
   PolymeshPrimitivesConditionConditionType,
   PolymeshPrimitivesConditionTargetIdentity,
@@ -332,7 +351,6 @@ import type {
   PolymeshPrimitivesSettlementAffirmationCount,
   PolymeshPrimitivesSettlementAffirmationStatus,
   PolymeshPrimitivesSettlementAssetCount,
-  PolymeshPrimitivesSettlementExecuteInstructionInfo,
   PolymeshPrimitivesSettlementInstruction,
   PolymeshPrimitivesSettlementInstructionStatus,
   PolymeshPrimitivesSettlementLeg,
@@ -360,57 +378,46 @@ import type {
   PolymeshRuntimeCommonNposSolution16,
   PolymeshRuntimeDevelopRuntime,
   PolymeshRuntimeDevelopRuntimeOriginCaller,
-  PolymeshRuntimeDevelopRuntimeRuntimeError,
-  PolymeshRuntimeDevelopRuntimeRuntimeHoldReason,
   PolymeshRuntimeDevelopRuntimeSessionKeys,
   SpArithmeticArithmeticError,
   SpAuthorityDiscoveryAppPublic,
   SpConsensusBabeAllowedSlots,
   SpConsensusBabeAppPublic,
-  SpConsensusBabeBabeConfiguration,
   SpConsensusBabeBabeEpochConfiguration,
   SpConsensusBabeDigestsNextConfigDescriptor,
   SpConsensusBabeDigestsPreDigest,
   SpConsensusBabeDigestsPrimaryPreDigest,
   SpConsensusBabeDigestsSecondaryPlainPreDigest,
   SpConsensusBabeDigestsSecondaryVRFPreDigest,
-  SpConsensusBabeEpoch,
   SpConsensusGrandpaAppPublic,
   SpConsensusGrandpaAppSignature,
   SpConsensusGrandpaEquivocation,
   SpConsensusGrandpaEquivocationProof,
   SpConsensusSlotsEquivocationProof,
   SpCoreCryptoKeyTypeId,
-  SpCoreSr25519VrfVrfSignature,
-  SpInherentsCheckInherentsResult,
-  SpInherentsInherentData,
+  SpCoreEcdsaSignature,
+  SpCoreEd25519Public,
+  SpCoreEd25519Signature,
+  SpCoreOffchainOpaqueNetworkState,
+  SpCoreSr25519Public,
+  SpCoreSr25519Signature,
+  SpCoreVoid,
   SpNposElectionsElectionScore,
   SpNposElectionsSupport,
   SpRuntimeBlakeTwo256,
-  SpRuntimeBlock,
   SpRuntimeDigest,
   SpRuntimeDigestDigestItem,
   SpRuntimeDispatchError,
-  SpRuntimeExtrinsicInclusionMode,
   SpRuntimeHeader,
   SpRuntimeModuleError,
   SpRuntimeMultiSignature,
-  SpRuntimeProvingTrieTrieError,
   SpRuntimeTokenError,
-  SpRuntimeTransactionValidityInvalidTransaction,
-  SpRuntimeTransactionValidityTransactionSource,
-  SpRuntimeTransactionValidityTransactionValidityError,
-  SpRuntimeTransactionValidityUnknownTransaction,
-  SpRuntimeTransactionValidityValidTransaction,
   SpRuntimeTransactionalError,
   SpSessionMembershipProof,
-  SpStakingExposure,
-  SpStakingExposurePage,
-  SpStakingIndividualExposure,
   SpStakingOffenceOffenceDetails,
-  SpStakingPagedExposureMetadata,
   SpVersionRuntimeVersion,
   SpWeightsRuntimeDbWeight,
+  SpWeightsWeightToFeeCoefficient,
   SpWeightsWeightV2Weight,
 } from '@polkadot/types/lookup';
 
@@ -421,18 +428,17 @@ declare module '@polkadot/types/types/registry' {
     FinalityGrandpaPrecommit: FinalityGrandpaPrecommit;
     FinalityGrandpaPrevote: FinalityGrandpaPrevote;
     FrameSupportDispatchDispatchClass: FrameSupportDispatchDispatchClass;
+    FrameSupportDispatchDispatchInfo: FrameSupportDispatchDispatchInfo;
     FrameSupportDispatchPays: FrameSupportDispatchPays;
     FrameSupportDispatchPerDispatchClassU32: FrameSupportDispatchPerDispatchClassU32;
     FrameSupportDispatchPerDispatchClassWeight: FrameSupportDispatchPerDispatchClassWeight;
     FrameSupportDispatchPerDispatchClassWeightsPerClass: FrameSupportDispatchPerDispatchClassWeightsPerClass;
     FrameSupportDispatchRawOrigin: FrameSupportDispatchRawOrigin;
+    FrameSupportPalletId: FrameSupportPalletId;
     FrameSupportPreimagesBounded: FrameSupportPreimagesBounded;
     FrameSupportTokensMiscBalanceStatus: FrameSupportTokensMiscBalanceStatus;
-    FrameSupportTokensMiscIdAmount: FrameSupportTokensMiscIdAmount;
     FrameSystemAccountInfo: FrameSystemAccountInfo;
     FrameSystemCall: FrameSystemCall;
-    FrameSystemCodeUpgradeAuthorization: FrameSystemCodeUpgradeAuthorization;
-    FrameSystemDispatchEventInfo: FrameSystemDispatchEventInfo;
     FrameSystemError: FrameSystemError;
     FrameSystemEvent: FrameSystemEvent;
     FrameSystemEventRecord: FrameSystemEventRecord;
@@ -458,13 +464,11 @@ declare module '@polkadot/types/types/registry' {
     PalletBabeCall: PalletBabeCall;
     PalletBabeError: PalletBabeError;
     PalletBalancesAccountData: PalletBalancesAccountData;
-    PalletBalancesAdjustmentDirection: PalletBalancesAdjustmentDirection;
     PalletBalancesBalanceLock: PalletBalancesBalanceLock;
     PalletBalancesCall: PalletBalancesCall;
     PalletBalancesError: PalletBalancesError;
     PalletBalancesEvent: PalletBalancesEvent;
     PalletBalancesReasons: PalletBalancesReasons;
-    PalletBalancesReserveData: PalletBalancesReserveData;
     PalletBaseCall: PalletBaseCall;
     PalletBaseError: PalletBaseError;
     PalletBaseEvent: PalletBaseEvent;
@@ -476,33 +480,25 @@ declare module '@polkadot/types/types/registry' {
     PalletComplianceManagerCall: PalletComplianceManagerCall;
     PalletComplianceManagerError: PalletComplianceManagerError;
     PalletComplianceManagerEvent: PalletComplianceManagerEvent;
+    PalletConfidentialAssetsCall: PalletConfidentialAssetsCall;
+    PalletConfidentialAssetsDartAssetDetail: PalletConfidentialAssetsDartAssetDetail;
+    PalletConfidentialAssetsError: PalletConfidentialAssetsError;
+    PalletConfidentialAssetsEvent: PalletConfidentialAssetsEvent;
+    PalletConfidentialAssetsSettlementAffirmationStatus: PalletConfidentialAssetsSettlementAffirmationStatus;
+    PalletConfidentialAssetsSettlementLegAffirmParty: PalletConfidentialAssetsSettlementLegAffirmParty;
+    PalletConfidentialAssetsSettlementSettlementStatus: PalletConfidentialAssetsSettlementSettlementStatus;
     PalletContractsCall: PalletContractsCall;
-    PalletContractsEnvironment: PalletContractsEnvironment;
-    PalletContractsEnvironmentTypeAccountId32: PalletContractsEnvironmentTypeAccountId32;
-    PalletContractsEnvironmentTypeBlakeTwo256: PalletContractsEnvironmentTypeBlakeTwo256;
-    PalletContractsEnvironmentTypeH256: PalletContractsEnvironmentTypeH256;
-    PalletContractsEnvironmentTypeU128: PalletContractsEnvironmentTypeU128;
-    PalletContractsEnvironmentTypeU32: PalletContractsEnvironmentTypeU32;
-    PalletContractsEnvironmentTypeU64: PalletContractsEnvironmentTypeU64;
     PalletContractsError: PalletContractsError;
     PalletContractsEvent: PalletContractsEvent;
-    PalletContractsHoldReason: PalletContractsHoldReason;
-    PalletContractsOrigin: PalletContractsOrigin;
-    PalletContractsPrimitivesCode: PalletContractsPrimitivesCode;
-    PalletContractsPrimitivesCodeUploadReturnValue: PalletContractsPrimitivesCodeUploadReturnValue;
-    PalletContractsPrimitivesContractAccessError: PalletContractsPrimitivesContractAccessError;
-    PalletContractsPrimitivesContractResult: PalletContractsPrimitivesContractResult;
-    PalletContractsPrimitivesExecReturnValue: PalletContractsPrimitivesExecReturnValue;
-    PalletContractsPrimitivesInstantiateReturnValue: PalletContractsPrimitivesInstantiateReturnValue;
-    PalletContractsPrimitivesStorageDeposit: PalletContractsPrimitivesStorageDeposit;
     PalletContractsSchedule: PalletContractsSchedule;
+    PalletContractsScheduleHostFnWeights: PalletContractsScheduleHostFnWeights;
     PalletContractsScheduleInstructionWeights: PalletContractsScheduleInstructionWeights;
     PalletContractsScheduleLimits: PalletContractsScheduleLimits;
     PalletContractsStorageContractInfo: PalletContractsStorageContractInfo;
-    PalletContractsStorageDeletionQueueManager: PalletContractsStorageDeletionQueueManager;
-    PalletContractsUapiFlagsReturnFlags: PalletContractsUapiFlagsReturnFlags;
-    PalletContractsWasmCodeInfo: PalletContractsWasmCodeInfo;
+    PalletContractsStorageDeletedContract: PalletContractsStorageDeletedContract;
     PalletContractsWasmDeterminism: PalletContractsWasmDeterminism;
+    PalletContractsWasmOwnerInfo: PalletContractsWasmOwnerInfo;
+    PalletContractsWasmPrefabWasmModule: PalletContractsWasmPrefabWasmModule;
     PalletCorporateActionsBallotBallotMeta: PalletCorporateActionsBallotBallotMeta;
     PalletCorporateActionsBallotBallotTimeRange: PalletCorporateActionsBallotBallotTimeRange;
     PalletCorporateActionsBallotBallotVote: PalletCorporateActionsBallotBallotVote;
@@ -547,15 +543,12 @@ declare module '@polkadot/types/types/registry' {
     PalletGroupCall: PalletGroupCall;
     PalletGroupError: PalletGroupError;
     PalletGroupEvent: PalletGroupEvent;
-    PalletGroupRpcRuntimeApiMember: PalletGroupRpcRuntimeApiMember;
     PalletIdentityCall: PalletIdentityCall;
     PalletIdentityClaim1stKey: PalletIdentityClaim1stKey;
     PalletIdentityClaim2ndKey: PalletIdentityClaim2ndKey;
-    PalletIdentityDidStatus: PalletIdentityDidStatus;
     PalletIdentityError: PalletIdentityError;
     PalletIdentityEvent: PalletIdentityEvent;
-    PalletIdentityKeyIdentityData: PalletIdentityKeyIdentityData;
-    PalletIdentityRpcDidRecords: PalletIdentityRpcDidRecords;
+    PalletImOnlineBoundedOpaqueNetworkState: PalletImOnlineBoundedOpaqueNetworkState;
     PalletImOnlineCall: PalletImOnlineCall;
     PalletImOnlineError: PalletImOnlineError;
     PalletImOnlineEvent: PalletImOnlineEvent;
@@ -588,7 +581,6 @@ declare module '@polkadot/types/types/registry' {
     PalletPipsSnapshotResult: PalletPipsSnapshotResult;
     PalletPipsSnapshottedPip: PalletPipsSnapshottedPip;
     PalletPipsVote: PalletPipsVote;
-    PalletPipsVoteCount: PalletPipsVoteCount;
     PalletPipsVotingResult: PalletPipsVotingResult;
     PalletPortfolioCall: PalletPortfolioCall;
     PalletPortfolioError: PalletPortfolioError;
@@ -596,8 +588,6 @@ declare module '@polkadot/types/types/registry' {
     PalletPreimageCall: PalletPreimageCall;
     PalletPreimageError: PalletPreimageError;
     PalletPreimageEvent: PalletPreimageEvent;
-    PalletPreimageHoldReason: PalletPreimageHoldReason;
-    PalletPreimageOldRequestStatus: PalletPreimageOldRequestStatus;
     PalletPreimageRequestStatus: PalletPreimageRequestStatus;
     PalletProtocolFeeCall: PalletProtocolFeeCall;
     PalletProtocolFeeError: PalletProtocolFeeError;
@@ -609,7 +599,6 @@ declare module '@polkadot/types/types/registry' {
     PalletSchedulerCall: PalletSchedulerCall;
     PalletSchedulerError: PalletSchedulerError;
     PalletSchedulerEvent: PalletSchedulerEvent;
-    PalletSchedulerRetryConfig: PalletSchedulerRetryConfig;
     PalletSchedulerScheduled: PalletSchedulerScheduled;
     PalletSessionCall: PalletSessionCall;
     PalletSessionError: PalletSessionError;
@@ -619,7 +608,9 @@ declare module '@polkadot/types/types/registry' {
     PalletSettlementEvent: PalletSettlementEvent;
     PalletStakingActiveEraInfo: PalletStakingActiveEraInfo;
     PalletStakingEraRewardPoints: PalletStakingEraRewardPoints;
+    PalletStakingExposure: PalletStakingExposure;
     PalletStakingForcing: PalletStakingForcing;
+    PalletStakingIndividualExposure: PalletStakingIndividualExposure;
     PalletStakingNominations: PalletStakingNominations;
     PalletStakingPalletCall: PalletStakingPalletCall;
     PalletStakingPalletConfigOpPerbill: PalletStakingPalletConfigOpPerbill;
@@ -628,10 +619,11 @@ declare module '@polkadot/types/types/registry' {
     PalletStakingPalletConfigOpU32: PalletStakingPalletConfigOpU32;
     PalletStakingPalletError: PalletStakingPalletError;
     PalletStakingPalletEvent: PalletStakingPalletEvent;
-    PalletStakingPalletHoldReason: PalletStakingPalletHoldReason;
+    PalletStakingPermissionedIdentityPrefs: PalletStakingPermissionedIdentityPrefs;
     PalletStakingRewardDestination: PalletStakingRewardDestination;
     PalletStakingSlashingSlashingSpans: PalletStakingSlashingSlashingSpans;
     PalletStakingSlashingSpanRecord: PalletStakingSlashingSpanRecord;
+    PalletStakingSlashingSwitch: PalletStakingSlashingSwitch;
     PalletStakingStakingLedger: PalletStakingStakingLedger;
     PalletStakingUnappliedSlash: PalletStakingUnappliedSlash;
     PalletStakingUnlockChunk: PalletStakingUnlockChunk;
@@ -655,10 +647,7 @@ declare module '@polkadot/types/types/registry' {
     PalletTransactionPaymentCall: PalletTransactionPaymentCall;
     PalletTransactionPaymentChargeTransactionPayment: PalletTransactionPaymentChargeTransactionPayment;
     PalletTransactionPaymentEvent: PalletTransactionPaymentEvent;
-    PalletTransactionPaymentFeeDetails: PalletTransactionPaymentFeeDetails;
-    PalletTransactionPaymentInclusionFee: PalletTransactionPaymentInclusionFee;
     PalletTransactionPaymentReleases: PalletTransactionPaymentReleases;
-    PalletTransactionPaymentRuntimeDispatchInfo: PalletTransactionPaymentRuntimeDispatchInfo;
     PalletTreasuryCall: PalletTreasuryCall;
     PalletTreasuryError: PalletTreasuryError;
     PalletTreasuryEvent: PalletTreasuryEvent;
@@ -666,11 +655,6 @@ declare module '@polkadot/types/types/registry' {
     PalletUtilityError: PalletUtilityError;
     PalletUtilityEvent: PalletUtilityEvent;
     PalletUtilityUniqueCall: PalletUtilityUniqueCall;
-    PalletValidatorsCall: PalletValidatorsCall;
-    PalletValidatorsError: PalletValidatorsError;
-    PalletValidatorsEvent: PalletValidatorsEvent;
-    PalletValidatorsPermissionedIdentityPrefs: PalletValidatorsPermissionedIdentityPrefs;
-    PalletValidatorsSlashingSwitch: PalletValidatorsSlashingSwitch;
     PolymeshCommonUtilitiesCheckpointNextCheckpoints: PolymeshCommonUtilitiesCheckpointNextCheckpoints;
     PolymeshCommonUtilitiesCheckpointScheduleCheckpoints: PolymeshCommonUtilitiesCheckpointScheduleCheckpoints;
     PolymeshCommonUtilitiesIdentityCreateChildIdentityWithAuth: PolymeshCommonUtilitiesIdentityCreateChildIdentityWithAuth;
@@ -684,6 +668,52 @@ declare module '@polkadot/types/types/registry' {
     PolymeshContractsError: PolymeshContractsError;
     PolymeshContractsEvent: PolymeshContractsEvent;
     PolymeshContractsNextUpgrade: PolymeshContractsNextUpgrade;
+    PolymeshDartBpAccountAccountAssetRegistrationProof: PolymeshDartBpAccountAccountAssetRegistrationProof;
+    PolymeshDartBpAccountAccountStateCommitment: PolymeshDartBpAccountAccountStateCommitment;
+    PolymeshDartBpAccountAccountStateNullifier: PolymeshDartBpAccountAccountStateNullifier;
+    PolymeshDartBpAccountBatchedAccountAssetRegistrationProof: PolymeshDartBpAccountBatchedAccountAssetRegistrationProof;
+    PolymeshDartBpAssetAssetMintingProof: PolymeshDartBpAssetAssetMintingProof;
+    PolymeshDartBpBatchedBatchedProof: PolymeshDartBpBatchedBatchedProof;
+    PolymeshDartBpBatchedBatchedProofs: PolymeshDartBpBatchedBatchedProofs;
+    PolymeshDartBpBatchedProofHash: PolymeshDartBpBatchedProofHash;
+    PolymeshDartBpEncodeCompressedAffine: PolymeshDartBpEncodeCompressedAffine;
+    PolymeshDartBpEncodeCompressedBaseField: PolymeshDartBpEncodeCompressedBaseField;
+    PolymeshDartBpFeeBatchedFeeAccountRegistrationProof: PolymeshDartBpFeeBatchedFeeAccountRegistrationProof;
+    PolymeshDartBpFeeBatchedFeeAccountTopupProof: PolymeshDartBpFeeBatchedFeeAccountTopupProof;
+    PolymeshDartBpFeeFeeAccountPaymentProof: PolymeshDartBpFeeFeeAccountPaymentProof;
+    PolymeshDartBpFeeFeeAccountRegistrationProof: PolymeshDartBpFeeFeeAccountRegistrationProof;
+    PolymeshDartBpFeeFeeAccountStateCommitment: PolymeshDartBpFeeFeeAccountStateCommitment;
+    PolymeshDartBpFeeFeeAccountStateNullifier: PolymeshDartBpFeeFeeAccountStateNullifier;
+    PolymeshDartBpFeeFeeAccountTopupProof: PolymeshDartBpFeeFeeAccountTopupProof;
+    PolymeshDartBpFeeFeePaymentWithBatchedProofs: PolymeshDartBpFeeFeePaymentWithBatchedProofs;
+    PolymeshDartBpKeysAccountPublicKey: PolymeshDartBpKeysAccountPublicKey;
+    PolymeshDartBpKeysAccountPublicKeys: PolymeshDartBpKeysAccountPublicKeys;
+    PolymeshDartBpKeysAccountRegistrationProof: PolymeshDartBpKeysAccountRegistrationProof;
+    PolymeshDartBpKeysEncryptionKeyRegistrationProof: PolymeshDartBpKeysEncryptionKeyRegistrationProof;
+    PolymeshDartBpKeysEncryptionPublicKey: PolymeshDartBpKeysEncryptionPublicKey;
+    PolymeshDartBpLegInstantInstantReceiverAffirmationProof: PolymeshDartBpLegInstantInstantReceiverAffirmationProof;
+    PolymeshDartBpLegInstantInstantSenderAffirmationProof: PolymeshDartBpLegInstantInstantSenderAffirmationProof;
+    PolymeshDartBpLegInstantInstantSettlementLegAffirmations: PolymeshDartBpLegInstantInstantSettlementLegAffirmations;
+    PolymeshDartBpLegInstantInstantSettlementProof: PolymeshDartBpLegInstantInstantSettlementProof;
+    PolymeshDartBpLegLegRef: PolymeshDartBpLegLegRef;
+    PolymeshDartBpLegProofsBatchedSettlementLegAffirmations: PolymeshDartBpLegProofsBatchedSettlementLegAffirmations;
+    PolymeshDartBpLegProofsBatchedSettlementProof: PolymeshDartBpLegProofsBatchedSettlementProof;
+    PolymeshDartBpLegProofsMediatorAffirmationProof: PolymeshDartBpLegProofsMediatorAffirmationProof;
+    PolymeshDartBpLegProofsReceiverAffirmationProof: PolymeshDartBpLegProofsReceiverAffirmationProof;
+    PolymeshDartBpLegProofsReceiverClaimProof: PolymeshDartBpLegProofsReceiverClaimProof;
+    PolymeshDartBpLegProofsSenderAffirmationProof: PolymeshDartBpLegProofsSenderAffirmationProof;
+    PolymeshDartBpLegProofsSenderCounterUpdateProof: PolymeshDartBpLegProofsSenderCounterUpdateProof;
+    PolymeshDartBpLegProofsSenderReversalProof: PolymeshDartBpLegProofsSenderReversalProof;
+    PolymeshDartBpLegSettlementLegProof: PolymeshDartBpLegSettlementLegProof;
+    PolymeshDartBpLegSettlementProof: PolymeshDartBpLegSettlementProof;
+    PolymeshDartBpLegSettlementRef: PolymeshDartBpLegSettlementRef;
+    PolymeshDartCurveTreeAccountTreeConfig: PolymeshDartCurveTreeAccountTreeConfig;
+    PolymeshDartCurveTreeAssetTreeConfig: PolymeshDartCurveTreeAssetTreeConfig;
+    PolymeshDartCurveTreeCommonCompressedInner: PolymeshDartCurveTreeCommonCompressedInner;
+    PolymeshDartCurveTreeCommonCompressedLeafValue: PolymeshDartCurveTreeCommonCompressedLeafValue;
+    PolymeshDartCurveTreeCommonNodeLocation: PolymeshDartCurveTreeCommonNodeLocation;
+    PolymeshDartCurveTreeCommonNodePosition: PolymeshDartCurveTreeCommonNodePosition;
+    PolymeshDartCurveTreeCompressedCurveTreeRoot: PolymeshDartCurveTreeCompressedCurveTreeRoot;
     PolymeshPrimitivesAgentAgentGroup: PolymeshPrimitivesAgentAgentGroup;
     PolymeshPrimitivesAssetAssetId: PolymeshPrimitivesAssetAssetId;
     PolymeshPrimitivesAssetAssetType: PolymeshPrimitivesAssetAssetType;
@@ -695,14 +725,10 @@ declare module '@polkadot/types/types/registry' {
     PolymeshPrimitivesAssetNonFungibleType: PolymeshPrimitivesAssetNonFungibleType;
     PolymeshPrimitivesAuthorization: PolymeshPrimitivesAuthorization;
     PolymeshPrimitivesAuthorizationAuthorizationData: PolymeshPrimitivesAuthorizationAuthorizationData;
-    PolymeshPrimitivesAuthorizationAuthorizationType: PolymeshPrimitivesAuthorizationAuthorizationType;
     PolymeshPrimitivesBeneficiary: PolymeshPrimitivesBeneficiary;
     PolymeshPrimitivesCddId: PolymeshPrimitivesCddId;
     PolymeshPrimitivesComplianceManagerAssetCompliance: PolymeshPrimitivesComplianceManagerAssetCompliance;
-    PolymeshPrimitivesComplianceManagerComplianceReport: PolymeshPrimitivesComplianceManagerComplianceReport;
     PolymeshPrimitivesComplianceManagerComplianceRequirement: PolymeshPrimitivesComplianceManagerComplianceRequirement;
-    PolymeshPrimitivesComplianceManagerConditionReport: PolymeshPrimitivesComplianceManagerConditionReport;
-    PolymeshPrimitivesComplianceManagerRequirementReport: PolymeshPrimitivesComplianceManagerRequirementReport;
     PolymeshPrimitivesCondition: PolymeshPrimitivesCondition;
     PolymeshPrimitivesConditionConditionType: PolymeshPrimitivesConditionConditionType;
     PolymeshPrimitivesConditionTargetIdentity: PolymeshPrimitivesConditionTargetIdentity;
@@ -742,7 +768,6 @@ declare module '@polkadot/types/types/registry' {
     PolymeshPrimitivesSettlementAffirmationCount: PolymeshPrimitivesSettlementAffirmationCount;
     PolymeshPrimitivesSettlementAffirmationStatus: PolymeshPrimitivesSettlementAffirmationStatus;
     PolymeshPrimitivesSettlementAssetCount: PolymeshPrimitivesSettlementAssetCount;
-    PolymeshPrimitivesSettlementExecuteInstructionInfo: PolymeshPrimitivesSettlementExecuteInstructionInfo;
     PolymeshPrimitivesSettlementInstruction: PolymeshPrimitivesSettlementInstruction;
     PolymeshPrimitivesSettlementInstructionStatus: PolymeshPrimitivesSettlementInstructionStatus;
     PolymeshPrimitivesSettlementLeg: PolymeshPrimitivesSettlementLeg;
@@ -770,57 +795,46 @@ declare module '@polkadot/types/types/registry' {
     PolymeshRuntimeCommonNposSolution16: PolymeshRuntimeCommonNposSolution16;
     PolymeshRuntimeDevelopRuntime: PolymeshRuntimeDevelopRuntime;
     PolymeshRuntimeDevelopRuntimeOriginCaller: PolymeshRuntimeDevelopRuntimeOriginCaller;
-    PolymeshRuntimeDevelopRuntimeRuntimeError: PolymeshRuntimeDevelopRuntimeRuntimeError;
-    PolymeshRuntimeDevelopRuntimeRuntimeHoldReason: PolymeshRuntimeDevelopRuntimeRuntimeHoldReason;
     PolymeshRuntimeDevelopRuntimeSessionKeys: PolymeshRuntimeDevelopRuntimeSessionKeys;
     SpArithmeticArithmeticError: SpArithmeticArithmeticError;
     SpAuthorityDiscoveryAppPublic: SpAuthorityDiscoveryAppPublic;
     SpConsensusBabeAllowedSlots: SpConsensusBabeAllowedSlots;
     SpConsensusBabeAppPublic: SpConsensusBabeAppPublic;
-    SpConsensusBabeBabeConfiguration: SpConsensusBabeBabeConfiguration;
     SpConsensusBabeBabeEpochConfiguration: SpConsensusBabeBabeEpochConfiguration;
     SpConsensusBabeDigestsNextConfigDescriptor: SpConsensusBabeDigestsNextConfigDescriptor;
     SpConsensusBabeDigestsPreDigest: SpConsensusBabeDigestsPreDigest;
     SpConsensusBabeDigestsPrimaryPreDigest: SpConsensusBabeDigestsPrimaryPreDigest;
     SpConsensusBabeDigestsSecondaryPlainPreDigest: SpConsensusBabeDigestsSecondaryPlainPreDigest;
     SpConsensusBabeDigestsSecondaryVRFPreDigest: SpConsensusBabeDigestsSecondaryVRFPreDigest;
-    SpConsensusBabeEpoch: SpConsensusBabeEpoch;
     SpConsensusGrandpaAppPublic: SpConsensusGrandpaAppPublic;
     SpConsensusGrandpaAppSignature: SpConsensusGrandpaAppSignature;
     SpConsensusGrandpaEquivocation: SpConsensusGrandpaEquivocation;
     SpConsensusGrandpaEquivocationProof: SpConsensusGrandpaEquivocationProof;
     SpConsensusSlotsEquivocationProof: SpConsensusSlotsEquivocationProof;
     SpCoreCryptoKeyTypeId: SpCoreCryptoKeyTypeId;
-    SpCoreSr25519VrfVrfSignature: SpCoreSr25519VrfVrfSignature;
-    SpInherentsCheckInherentsResult: SpInherentsCheckInherentsResult;
-    SpInherentsInherentData: SpInherentsInherentData;
+    SpCoreEcdsaSignature: SpCoreEcdsaSignature;
+    SpCoreEd25519Public: SpCoreEd25519Public;
+    SpCoreEd25519Signature: SpCoreEd25519Signature;
+    SpCoreOffchainOpaqueNetworkState: SpCoreOffchainOpaqueNetworkState;
+    SpCoreSr25519Public: SpCoreSr25519Public;
+    SpCoreSr25519Signature: SpCoreSr25519Signature;
+    SpCoreVoid: SpCoreVoid;
     SpNposElectionsElectionScore: SpNposElectionsElectionScore;
     SpNposElectionsSupport: SpNposElectionsSupport;
     SpRuntimeBlakeTwo256: SpRuntimeBlakeTwo256;
-    SpRuntimeBlock: SpRuntimeBlock;
     SpRuntimeDigest: SpRuntimeDigest;
     SpRuntimeDigestDigestItem: SpRuntimeDigestDigestItem;
     SpRuntimeDispatchError: SpRuntimeDispatchError;
-    SpRuntimeExtrinsicInclusionMode: SpRuntimeExtrinsicInclusionMode;
     SpRuntimeHeader: SpRuntimeHeader;
     SpRuntimeModuleError: SpRuntimeModuleError;
     SpRuntimeMultiSignature: SpRuntimeMultiSignature;
-    SpRuntimeProvingTrieTrieError: SpRuntimeProvingTrieTrieError;
     SpRuntimeTokenError: SpRuntimeTokenError;
-    SpRuntimeTransactionValidityInvalidTransaction: SpRuntimeTransactionValidityInvalidTransaction;
-    SpRuntimeTransactionValidityTransactionSource: SpRuntimeTransactionValidityTransactionSource;
-    SpRuntimeTransactionValidityTransactionValidityError: SpRuntimeTransactionValidityTransactionValidityError;
-    SpRuntimeTransactionValidityUnknownTransaction: SpRuntimeTransactionValidityUnknownTransaction;
-    SpRuntimeTransactionValidityValidTransaction: SpRuntimeTransactionValidityValidTransaction;
     SpRuntimeTransactionalError: SpRuntimeTransactionalError;
     SpSessionMembershipProof: SpSessionMembershipProof;
-    SpStakingExposure: SpStakingExposure;
-    SpStakingExposurePage: SpStakingExposurePage;
-    SpStakingIndividualExposure: SpStakingIndividualExposure;
     SpStakingOffenceOffenceDetails: SpStakingOffenceOffenceDetails;
-    SpStakingPagedExposureMetadata: SpStakingPagedExposureMetadata;
     SpVersionRuntimeVersion: SpVersionRuntimeVersion;
     SpWeightsRuntimeDbWeight: SpWeightsRuntimeDbWeight;
+    SpWeightsWeightToFeeCoefficient: SpWeightsWeightToFeeCoefficient;
     SpWeightsWeightV2Weight: SpWeightsWeightV2Weight;
   } // InterfaceTypes
 } // declare module

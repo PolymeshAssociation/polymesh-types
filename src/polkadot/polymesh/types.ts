@@ -21,7 +21,6 @@ import type {
   AccountId,
   AccountId32,
   Balance,
-  Call,
   Permill,
   Weight,
 } from '@polkadot/types/interfaces/runtime';
@@ -946,12 +945,6 @@ export interface PalletPermissions extends Struct {
   readonly extrinsics: ExtrinsicNames;
 }
 
-/** @name PalletPipsPipId */
-export interface PalletPipsPipId extends u32 {}
-
-/** @name PalletProtocolFeeRpcRuntimeApiCappedFee */
-export interface PalletProtocolFeeRpcRuntimeApiCappedFee extends u64 {}
-
 /** @name Percentage */
 export interface Percentage extends Permill {}
 
@@ -970,12 +963,6 @@ export interface PolymeshAssetId extends U8aFixed {}
 
 /** @name PolymeshMoment */
 export interface PolymeshMoment extends u64 {}
-
-/** @name PolymeshPrimitivesSettlementInstructionId */
-export interface PolymeshPrimitivesSettlementInstructionId extends u64 {}
-
-/** @name PolymeshRuntimeDevelopRuntimeRuntimeCall */
-export interface PolymeshRuntimeDevelopRuntimeRuntimeCall extends Call {}
 
 /** @name PortfolioId */
 export interface PortfolioId extends Struct {

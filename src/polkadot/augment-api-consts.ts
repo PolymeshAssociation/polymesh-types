@@ -6,15 +6,16 @@
 import '@polkadot/api-base/types/consts';
 
 import type { ApiTypes, AugmentedConst } from '@polkadot/api-base/types';
-import type { bool, u128, u16, u32, u64, u8 } from '@polkadot/types-codec';
-import type { Perbill, Permill } from '@polkadot/types/interfaces/runtime';
+import type { Vec, bool, u128, u16, u32, u64, u8 } from '@polkadot/types-codec';
+import type { AccountId32, Perbill, Permill } from '@polkadot/types/interfaces/runtime';
 import type {
+  FrameSupportPalletId,
   FrameSystemLimitsBlockLength,
   FrameSystemLimitsBlockWeights,
-  PalletContractsEnvironment,
   PalletContractsSchedule,
   SpVersionRuntimeVersion,
   SpWeightsRuntimeDbWeight,
+  SpWeightsWeightToFeeCoefficient,
   SpWeightsWeightV2Weight,
 } from '@polkadot/types/lookup';
 
@@ -67,40 +68,13 @@ declare module '@polkadot/api-base/types/consts' {
        * Max number of authorities allowed
        **/
       maxAuthorities: u32 & AugmentedConst<ApiType>;
-      /**
-       * The maximum number of nominators for each validator.
-       **/
-      maxNominators: u32 & AugmentedConst<ApiType>;
     };
     balances: {
       /**
-       * The minimum amount required to keep an account open. MUST BE GREATER THAN ZERO!
-       *
-       * If you *really* need it to be zero, you can enable the feature `insecure_zero_ed` for
-       * this pallet. However, you do so at your own risk: this will open up a major DoS vector.
-       * In case you have multiple sources of provider references, you may also get unexpected
-       * behaviour if you set this to zero.
-       *
-       * Bottom line: Do yourself a favour and make it at least one!
+       * This type is no longer needed but kept for compatibility reasons.
+       * The minimum amount required to keep an account open.
        **/
       existentialDeposit: u128 & AugmentedConst<ApiType>;
-      /**
-       * The maximum number of individual freeze locks that can exist on an account at any time.
-       **/
-      maxFreezes: u32 & AugmentedConst<ApiType>;
-      /**
-       * The maximum number of locks that should exist on an account.
-       * Not strictly enforced, but used for weight estimation.
-       *
-       * Use of locks is deprecated in favour of freezes. See `https://github.com/paritytech/substrate/pull/12951/`
-       **/
-      maxLocks: u32 & AugmentedConst<ApiType>;
-      /**
-       * The maximum number of named reserves that can exist on an account.
-       *
-       * Use of reserves is deprecated in favour of holds. See `https://github.com/paritytech/substrate/pull/12951/`
-       **/
-      maxReserves: u32 & AugmentedConst<ApiType>;
     };
     base: {
       /**
@@ -117,24 +91,88 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       maxConditionComplexity: u32 & AugmentedConst<ApiType>;
     };
+    confidentialAssets: {
+      /**
+       * Get the Confidential Assets fee account id.
+       **/
+      feeAccountId: AccountId32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum number of account asset registration proofs in a single transaction.
+       **/
+      maxAccountAssetRegProofs: u32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum number of asset auditors.
+       **/
+      maxAssetAuditors: u32 & AugmentedConst<ApiType>;
+      /**
+       * Maximum asset data length.
+       **/
+      maxAssetDataLength: u32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum number of asset mediators.
+       **/
+      maxAssetMediators: u32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum number of proofs in a single batched proof.
+       **/
+      maxBatchedProofs: u32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum number of fee account registration proofs in a single transaction.
+       **/
+      maxFeeAccountRegProofs: u32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum number of fee account topup proofs in a single transaction.
+       **/
+      maxFeeAccountTopupProofs: u32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum number of keys in an account registration proof.
+       **/
+      maxKeysPerRegProof: u32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum number of legs in a settlement.
+       **/
+      maxSettlementLegs: u32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum settlement memo length.
+       **/
+      maxSettlementMemoLength: u32 & AugmentedConst<ApiType>;
+      /**
+       * Maximum total supply.
+       **/
+      maxTotalSupply: u128 & AugmentedConst<ApiType>;
+      /**
+       * Get the Confidential Assets fee pallet id.
+       **/
+      palletFeeId: FrameSupportPalletId & AugmentedConst<ApiType>;
+    };
     contracts: {
       /**
-       * The version of the HostFn APIs that are available in the runtime.
+       * The maximum number of contracts that can be pending for deletion.
        *
-       * Only valid value is `()`.
+       * When a contract is deleted by calling `seal_terminate` it becomes inaccessible
+       * immediately, but the deletion of the storage items it has accumulated is performed
+       * later. The contract is put into the deletion queue. This defines how many
+       * contracts can be queued up at the same time. If that limit is reached `seal_terminate`
+       * will fail. The action must be retried in a later block in that case.
+       *
+       * The reasons for limiting the queue depth are:
+       *
+       * 1. The queue is in storage in order to be persistent between blocks. We want to limit
+       * the amount of storage that can be consumed.
+       * 2. The queue is stored in a vector and needs to be decoded as a whole when reading
+       * it at the end of each block. Longer queues take more weight to decode and hence
+       * limit the amount of items that can be deleted per block.
        **/
-      apiVersion: u16 & AugmentedConst<ApiType>;
+      deletionQueueDepth: u32 & AugmentedConst<ApiType>;
       /**
-       * The percentage of the storage deposit that should be held for using a code hash.
-       * Instantiating a contract, or calling [`chain_extension::Ext::lock_delegate_dependency`]
-       * protects the code from being removed. In order to prevent abuse these actions are
-       * protected with a percentage of the code deposit.
+       * The maximum amount of weight that can be consumed per block for lazy trie removal.
+       *
+       * The amount of weight that is dedicated per block to work on the deletion queue. Larger
+       * values allow more trie keys to be deleted in each block but reduce the amount of
+       * weight that is left for transactions. See [`Self::DeletionQueueDepth`] for more
+       * information about the deletion queue.
        **/
-      codeHashLockupDepositPercent: Perbill & AugmentedConst<ApiType>;
-      /**
-       * Fallback value to limit the storage deposit if it's not being set by the caller.
-       **/
-      defaultDepositLimit: u128 & AugmentedConst<ApiType>;
+      deletionWeightLimit: SpWeightsWeightV2Weight & AugmentedConst<ApiType>;
       /**
        * The amount of balance a caller has to pay for each byte of storage.
        *
@@ -152,14 +190,9 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       depositPerItem: u128 & AugmentedConst<ApiType>;
       /**
-       * Type that bundles together all the runtime configurable interface types.
-       *
-       * This is not a real config. We just mention the type here as constant so that
-       * its type appears in the metadata. Only valid value is `()`.
-       **/
-      environment: PalletContractsEnvironment & AugmentedConst<ApiType>;
-      /**
-       * The maximum length of a contract code in bytes.
+       * The maximum length of a contract code in bytes. This limit applies to the instrumented
+       * version of the code. Therefore `instantiate_with_code` can fail even when supplying
+       * a wasm binary below this maximum size.
        *
        * The value should be chosen carefully taking into the account the overall memory limit
        * your runtime has, as well as the [maximum allowed callstack
@@ -171,19 +204,9 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       maxDebugBufferLen: u32 & AugmentedConst<ApiType>;
       /**
-       * The maximum number of delegate_dependencies that a contract can lock with
-       * [`chain_extension::Ext::lock_delegate_dependency`].
-       **/
-      maxDelegateDependencies: u32 & AugmentedConst<ApiType>;
-      /**
        * The maximum allowable length in bytes for storage keys.
        **/
       maxStorageKeyLen: u32 & AugmentedConst<ApiType>;
-      /**
-       * The maximum size of the transient storage in bytes.
-       * This includes keys, values, and previous entries used for storage rollback.
-       **/
-      maxTransientStorageSize: u32 & AugmentedConst<ApiType>;
       /**
        * Cost schedule and limits.
        **/
@@ -218,6 +241,21 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       betterSignedThreshold: Perbill & AugmentedConst<ApiType>;
       /**
+       * The minimum amount of improvement to the solution score that defines a solution as
+       * "better" in the Unsigned phase.
+       **/
+      betterUnsignedThreshold: Perbill & AugmentedConst<ApiType>;
+      /**
+       * The maximum number of electable targets to put in the snapshot.
+       **/
+      maxElectableTargets: u16 & AugmentedConst<ApiType>;
+      /**
+       * The maximum number of electing voters to put in the snapshot. At the moment, snapshots
+       * are only over a single block, but once multi-block elections are introduced they will
+       * take place over multiple blocks.
+       **/
+      maxElectingVoters: u32 & AugmentedConst<ApiType>;
+      /**
        * The maximum number of winners that can be elected by this `ElectionProvider`
        * implementation.
        *
@@ -227,7 +265,6 @@ declare module '@polkadot/api-base/types/consts' {
       minerMaxLength: u32 & AugmentedConst<ApiType>;
       minerMaxVotesPerVoter: u32 & AugmentedConst<ApiType>;
       minerMaxWeight: SpWeightsWeightV2Weight & AugmentedConst<ApiType>;
-      minerMaxWinners: u32 & AugmentedConst<ApiType>;
       /**
        * The priority of the unsigned transaction submitted in the unsigned-phase
        **/
@@ -239,6 +276,10 @@ declare module '@polkadot/api-base/types/consts' {
        * to submit the worker's solution.
        **/
       offchainRepeat: u32 & AugmentedConst<ApiType>;
+      /**
+       * Base deposit for a signed solution.
+       **/
+      signedDepositBase: u128 & AugmentedConst<ApiType>;
       /**
        * Per-byte deposit for a signed solution.
        **/
@@ -270,19 +311,23 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       signedMaxWeight: SpWeightsWeightV2Weight & AugmentedConst<ApiType>;
       /**
+       * Duration of the signed phase.
+       **/
+      signedPhase: u32 & AugmentedConst<ApiType>;
+      /**
        * Base reward for a signed solution
        **/
       signedRewardBase: u128 & AugmentedConst<ApiType>;
+      /**
+       * Duration of the unsigned phase.
+       **/
+      unsignedPhase: u32 & AugmentedConst<ApiType>;
     };
     grandpa: {
       /**
        * Max Authorities in use
        **/
       maxAuthorities: u32 & AugmentedConst<ApiType>;
-      /**
-       * The maximum number of nominators for each validator.
-       **/
-      maxNominators: u32 & AugmentedConst<ApiType>;
       /**
        * The maximum number of entries to keep in the set id to session index mapping.
        *
@@ -351,10 +396,6 @@ declare module '@polkadot/api-base/types/consts' {
       maximumWeight: SpWeightsWeightV2Weight & AugmentedConst<ApiType>;
       /**
        * The maximum number of scheduled calls in the queue for a single block.
-       *
-       * NOTE:
-       * + Dependent pallets' benchmarks might require a higher limit for the setting. Set a
-       * higher limit under `runtime-benchmarks` feature.
        **/
       maxScheduledPerBlock: u32 & AugmentedConst<ApiType>;
     };
@@ -398,13 +439,17 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       bondingDuration: u32 & AugmentedConst<ApiType>;
       /**
+       * Yearly total reward amount that gets distributed when fixed rewards kicks in.
+       **/
+      fixedYearlyReward: u128 & AugmentedConst<ApiType>;
+      /**
        * Number of eras to keep in history.
        *
        * Following information is kept for eras in `[current_era -
        * HistoryDepth, current_era]`: `ErasStakers`, `ErasStakersClipped`,
        * `ErasValidatorPrefs`, `ErasValidatorReward`, `ErasRewardPoints`,
-       * `ErasTotalStake`, `ErasStartSessionIndex`, `ClaimedRewards`, `ErasStakersPaged`,
-       * `ErasStakersOverview`.
+       * `ErasTotalStake`, `ErasStartSessionIndex`,
+       * `StakingLedger.claimed_rewards`.
        *
        * Must be more than the number of eras delayed by session.
        * I.e. active era must always be in history. I.e. `active_era >
@@ -414,26 +459,23 @@ declare module '@polkadot/api-base/types/consts' {
        * this should be set to same value or greater as in storage.
        *
        * Note: `HistoryDepth` is used as the upper bound for the `BoundedVec`
-       * item `StakingLedger.legacy_claimed_rewards`. Setting this value lower than
+       * item `StakingLedger.claimed_rewards`. Setting this value lower than
        * the existing value can lead to inconsistencies in the
        * `StakingLedger` and will need to be handled properly in a migration.
        * The test `reducing_history_depth_abrupt` shows this effect.
        **/
       historyDepth: u32 & AugmentedConst<ApiType>;
       /**
-       * The maximum size of each `T::ExposurePage`.
-       *
-       * An `ExposurePage` is weakly bounded to a maximum of `MaxExposurePageSize`
-       * nominators.
-       *
-       * For older non-paged exposure, a reward payout was restricted to the top
-       * `MaxExposurePageSize` nominators. This is to limit the i/o cost for the
-       * nominator payout.
-       *
-       * Note: `MaxExposurePageSize` is used to bound `ClaimedRewards` and is unsafe to reduce
-       * without handling it in a migration.
+       * Maximum number of nominations per nominator.
        **/
-      maxExposurePageSize: u32 & AugmentedConst<ApiType>;
+      maxNominations: u32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum number of nominators rewarded for each validator.
+       *
+       * For each validator only the `$MaxNominatorRewardedPerValidator` biggest stakers can
+       * claim their reward. This used to limit the i/o cost for the nominator payout.
+       **/
+      maxNominatorRewardedPerValidator: u32 & AugmentedConst<ApiType>;
       /**
        * The maximum number of `unlocking` chunks a [`StakingLedger`] can
        * have. Effectively determines how many unique eras a staker may be
@@ -447,6 +489,15 @@ declare module '@polkadot/api-base/types/consts' {
        * this effect.
        **/
       maxUnlockingChunks: u32 & AugmentedConst<ApiType>;
+      /**
+       * Maximum amount of validators that can run by an identity.
+       * It will be MaxValidatorPerIdentity * Self::validator_count().
+       **/
+      maxValidatorPerIdentity: Permill & AugmentedConst<ApiType>;
+      /**
+       * Maximum amount of total issuance after which fixed rewards kicks in.
+       **/
+      maxVariableInflationTotalIssuance: u128 & AugmentedConst<ApiType>;
       /**
        * Number of sessions per era.
        **/
@@ -495,67 +546,34 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       ss58Prefix: u16 & AugmentedConst<ApiType>;
       /**
-       * Get the chain's in-code version.
+       * Get the chain's current version.
        **/
       version: SpVersionRuntimeVersion & AugmentedConst<ApiType>;
     };
     timestamp: {
       /**
-       * The minimum period between blocks.
-       *
-       * Be aware that this is different to the *expected* period that the block production
-       * apparatus provides. Your chosen consensus system will generally work with this to
-       * determine a sensible block time. For example, in the Aura pallet it will be double this
-       * period on default settings.
+       * The minimum period between blocks. Beware that this is different to the *expected*
+       * period that the block production apparatus provides. Your chosen consensus system will
+       * generally work with this to determine a sensible block time. e.g. For Aura, it will be
+       * double this period on default settings.
        **/
       minimumPeriod: u64 & AugmentedConst<ApiType>;
     };
     transactionPayment: {
       /**
-       * A fee multiplier for `Operational` extrinsics to compute "virtual tip" to boost their
-       * `priority`
-       *
-       * This value is multiplied by the `final_fee` to obtain a "virtual tip" that is later
-       * added to a tip component in regular `priority` calculations.
-       * It means that a `Normal` transaction can front-run a similarly-sized `Operational`
-       * extrinsic (with no tip), by including a tip value greater than the virtual tip.
-       *
-       * ```rust,ignore
-       * // For `Normal`
-       * let priority = priority_calc(tip);
-       *
-       * // For `Operational`
-       * let virtual_tip = (inclusion_fee + tip) * OperationalFeeMultiplier;
-       * let priority = priority_calc(tip + virtual_tip);
-       * ```
-       *
-       * Note that since we use `final_fee` the multiplier applies also to the regular `tip`
-       * sent with the transaction. So, not only does the transaction get a priority bump based
-       * on the `inclusion_fee`, but we also amplify the impact of tips applied to `Operational`
-       * transactions.
+       * The fee to be paid for making a transaction; the per-byte portion.
        **/
-      operationalFeeMultiplier: u8 & AugmentedConst<ApiType>;
+      transactionByteFee: u128 & AugmentedConst<ApiType>;
+      /**
+       * The polynomial that is applied in order to derive fee from weight.
+       **/
+      weightToFeeConst: Vec<SpWeightsWeightToFeeCoefficient> & AugmentedConst<ApiType>;
     };
     utility: {
       /**
        * The limit on the number of batched calls.
        **/
       batchedCallsLimit: u32 & AugmentedConst<ApiType>;
-    };
-    validators: {
-      /**
-       * Yearly total reward amount that gets distributed when fixed rewards kicks in.
-       **/
-      fixedYearlyReward: u128 & AugmentedConst<ApiType>;
-      /**
-       * Maximum amount of validators that can run by an identity.
-       * It will be MaxValidatorPerIdentity * Self::validator_count().
-       **/
-      maxValidatorPerIdentity: Permill & AugmentedConst<ApiType>;
-      /**
-       * Maximum amount of total issuance after which fixed rewards kicks in.
-       **/
-      maxVariableInflationTotalIssuance: u128 & AugmentedConst<ApiType>;
     };
   } // AugmentedConsts
 } // declare module

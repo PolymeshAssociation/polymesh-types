@@ -1,9 +1,23 @@
 {
   "name": "@polymeshassociation/polymesh-types",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "description": "Substrate types used in Polymesh chain",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./generated/types": {
+      "types": "./dist/generated/types.d.ts",
+      "default": "./dist/generated/types.js"
+    },
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "default": "./dist/*.js"
+    }
+  },
   "repository": "https://github.com/PolymeshAssociation/polymesh-types",
   "author": "Polymesh Association",
   "license": "Apache-2.0",
