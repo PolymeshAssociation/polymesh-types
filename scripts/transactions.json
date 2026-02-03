@@ -287,7 +287,10 @@
     "remove_asset_pre_approval": "remove_asset_pre_approval",
     "link_ticker_to_asset_id": "link_ticker_to_asset_id",
     "unlink_ticker_from_asset_id": "unlink_ticker_from_asset_id",
-    "update_global_metadata_spec": "update_global_metadata_spec"
+    "update_global_metadata_spec": "update_global_metadata_spec",
+    "transfer_asset": "transfer_asset",
+    "receiver_affirm_asset_transfer": "receiver_affirm_asset_transfer",
+    "reject_asset_transfer": "reject_asset_transfer"
   },
   "CapitalDistribution": {
     "distribute": "distribute",

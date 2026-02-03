@@ -244,6 +244,7 @@ import type {
   PolymeshContractsEvent,
   PolymeshContractsNextUpgrade,
   PolymeshPrimitivesAgentAgentGroup,
+  PolymeshPrimitivesAssetAssetHolder,
   PolymeshPrimitivesAssetAssetId,
   PolymeshPrimitivesAssetAssetType,
   PolymeshPrimitivesAssetIdentifier,
@@ -284,6 +285,7 @@ import type {
   PolymeshPrimitivesNftNftCollection,
   PolymeshPrimitivesNftNftCollectionKeys,
   PolymeshPrimitivesNftNftMetadataAttribute,
+  PolymeshPrimitivesNftNftOwnerStatus,
   PolymeshPrimitivesPortfolioFund,
   PolymeshPrimitivesPortfolioFundDescription,
   PolymeshPrimitivesPortfolioPortfolioUpdateReason,
@@ -607,6 +609,7 @@ declare module '@polkadot/types/types/registry' {
     PolymeshContractsEvent: PolymeshContractsEvent;
     PolymeshContractsNextUpgrade: PolymeshContractsNextUpgrade;
     PolymeshPrimitivesAgentAgentGroup: PolymeshPrimitivesAgentAgentGroup;
+    PolymeshPrimitivesAssetAssetHolder: PolymeshPrimitivesAssetAssetHolder;
     PolymeshPrimitivesAssetAssetId: PolymeshPrimitivesAssetAssetId;
     PolymeshPrimitivesAssetAssetType: PolymeshPrimitivesAssetAssetType;
     PolymeshPrimitivesAssetIdentifier: PolymeshPrimitivesAssetIdentifier;
@@ -647,6 +650,7 @@ declare module '@polkadot/types/types/registry' {
     PolymeshPrimitivesNftNftCollection: PolymeshPrimitivesNftNftCollection;
     PolymeshPrimitivesNftNftCollectionKeys: PolymeshPrimitivesNftNftCollectionKeys;
     PolymeshPrimitivesNftNftMetadataAttribute: PolymeshPrimitivesNftNftMetadataAttribute;
+    PolymeshPrimitivesNftNftOwnerStatus: PolymeshPrimitivesNftNftOwnerStatus;
     PolymeshPrimitivesPortfolioFund: PolymeshPrimitivesPortfolioFund;
     PolymeshPrimitivesPortfolioFundDescription: PolymeshPrimitivesPortfolioFundDescription;
     PolymeshPrimitivesPortfolioPortfolioUpdateReason: PolymeshPrimitivesPortfolioPortfolioUpdateReason;

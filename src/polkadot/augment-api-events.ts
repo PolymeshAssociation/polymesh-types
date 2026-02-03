@@ -110,7 +110,7 @@ declare module '@polkadot/api-base/types/events' {
           u128,
           Option<PolymeshPrimitivesIdentityIdPortfolioId>,
           Option<PolymeshPrimitivesIdentityIdPortfolioId>,
-          PolymeshPrimitivesPortfolioPortfolioUpdateReason
+          PolymeshPrimitivesPortfolioPortfolioUpdateReason,
         ]
       >;
       /**
@@ -127,7 +127,7 @@ declare module '@polkadot/api-base/types/events' {
           PolymeshPrimitivesIdentityId,
           Bytes,
           Vec<PolymeshPrimitivesAssetIdentifier>,
-          Option<Bytes>
+          Option<Bytes>,
         ]
       >;
       /**
@@ -147,7 +147,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesAssetAssetId,
-          BTreeSet<PolymeshPrimitivesIdentityId>
+          BTreeSet<PolymeshPrimitivesIdentityId>,
         ]
       >;
       /**
@@ -159,7 +159,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesAssetAssetId,
-          BTreeSet<PolymeshPrimitivesIdentityId>
+          BTreeSet<PolymeshPrimitivesIdentityId>,
         ]
       >;
       /**
@@ -187,7 +187,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesAssetAssetId,
-          PolymeshPrimitivesAssetAssetType
+          PolymeshPrimitivesAssetAssetType,
         ]
       >;
       /**
@@ -208,8 +208,30 @@ declare module '@polkadot/api-base/types/events' {
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesAssetAssetId,
           PolymeshPrimitivesIdentityIdPortfolioId,
-          u128
+          u128,
         ]
+      >;
+      /**
+       * An asset transfer has been created.
+       **/
+      CreatedAssetTransfer: AugmentedEvent<
+        ApiType,
+        [
+          assetId: PolymeshPrimitivesAssetAssetId,
+          from: AccountId32,
+          to: AccountId32,
+          amount: u128,
+          memo: Option<PolymeshPrimitivesMemo>,
+          pendingTransferId: Option<u64>,
+        ],
+        {
+          assetId: PolymeshPrimitivesAssetAssetId;
+          from: AccountId32;
+          to: AccountId32;
+          amount: u128;
+          memo: Option<PolymeshPrimitivesMemo>;
+          pendingTransferId: Option<u64>;
+        }
       >;
       /**
        * A custom asset type already exists on-chain.
@@ -241,7 +263,7 @@ declare module '@polkadot/api-base/types/events' {
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesAssetAssetId,
           u32,
-          PolymeshPrimitivesDocument
+          PolymeshPrimitivesDocument,
         ]
       >;
       /**
@@ -276,7 +298,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesAssetAssetId,
-          Vec<PolymeshPrimitivesAssetIdentifier>
+          Vec<PolymeshPrimitivesAssetIdentifier>,
         ]
       >;
       /**
@@ -296,7 +318,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesAssetAssetId,
-          PolymeshPrimitivesAssetMetadataAssetMetadataKey
+          PolymeshPrimitivesAssetMetadataAssetMetadataKey,
         ]
       >;
       /**
@@ -326,7 +348,7 @@ declare module '@polkadot/api-base/types/events' {
           PolymeshPrimitivesAssetAssetId,
           Bytes,
           u64,
-          PolymeshPrimitivesAssetMetadataAssetMetadataSpec
+          PolymeshPrimitivesAssetMetadataAssetMetadataSpec,
         ]
       >;
       /**
@@ -352,7 +374,7 @@ declare module '@polkadot/api-base/types/events' {
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesAssetAssetId,
           Bytes,
-          Option<PolymeshPrimitivesAssetMetadataAssetMetadataValueDetail>
+          Option<PolymeshPrimitivesAssetMetadataAssetMetadataValueDetail>,
         ]
       >;
       /**
@@ -364,7 +386,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesAssetAssetId,
-          PolymeshPrimitivesAssetMetadataAssetMetadataValueDetail
+          PolymeshPrimitivesAssetMetadataAssetMetadataValueDetail,
         ]
       >;
       /**
@@ -441,8 +463,16 @@ declare module '@polkadot/api-base/types/events' {
           Option<PolymeshPrimitivesIdentityId>,
           AccountId32,
           u128,
-          Option<PolymeshPrimitivesMemo>
+          Option<PolymeshPrimitivesMemo>,
         ]
+      >;
+      /**
+       * Transfer with memo succeeded.
+       **/
+      TransferWithMemo: AugmentedEvent<
+        ApiType,
+        [from: AccountId32, to: AccountId32, amount: u128, memo: Option<PolymeshPrimitivesMemo>],
+        { from: AccountId32; to: AccountId32; amount: u128; memo: Option<PolymeshPrimitivesMemo> }
       >;
       /**
        * Some balance was unreserved (moved from reserved to free). \[who, value]
@@ -470,7 +500,7 @@ declare module '@polkadot/api-base/types/events' {
           PalletCorporateActionsCaId,
           PalletCorporateActionsDistribution,
           u128,
-          Permill
+          Permill,
         ]
       >;
       /**
@@ -484,7 +514,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           PolymeshPrimitivesEventOnly,
           PalletCorporateActionsCaId,
-          PalletCorporateActionsDistribution
+          PalletCorporateActionsDistribution,
         ]
       >;
       /**
@@ -584,7 +614,7 @@ declare module '@polkadot/api-base/types/events' {
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesAssetAssetId,
           u64,
-          PolymeshCommonUtilitiesCheckpointScheduleCheckpoints
+          PolymeshCommonUtilitiesCheckpointScheduleCheckpoints,
         ]
       >;
       /**
@@ -598,7 +628,7 @@ declare module '@polkadot/api-base/types/events' {
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesAssetAssetId,
           u64,
-          PolymeshCommonUtilitiesCheckpointScheduleCheckpoints
+          PolymeshCommonUtilitiesCheckpointScheduleCheckpoints,
         ]
       >;
     };
@@ -671,7 +701,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesAssetAssetId,
-          Vec<PolymeshPrimitivesComplianceManagerComplianceRequirement>
+          Vec<PolymeshPrimitivesComplianceManagerComplianceRequirement>,
         ]
       >;
       /**
@@ -699,7 +729,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesAssetAssetId,
-          PolymeshPrimitivesComplianceManagerComplianceRequirement
+          PolymeshPrimitivesComplianceManagerComplianceRequirement,
         ]
       >;
       /**
@@ -711,7 +741,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesAssetAssetId,
-          PolymeshPrimitivesComplianceManagerComplianceRequirement
+          PolymeshPrimitivesComplianceManagerComplianceRequirement,
         ]
       >;
       /**
@@ -731,7 +761,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesAssetAssetId,
-          PolymeshPrimitivesConditionTrustedIssuer
+          PolymeshPrimitivesConditionTrustedIssuer,
         ]
       >;
       /**
@@ -829,7 +859,7 @@ declare module '@polkadot/api-base/types/events' {
           PolymeshPrimitivesEventOnly,
           PalletCorporateActionsCaId,
           PalletCorporateActionsCorporateAction,
-          Bytes
+          Bytes,
         ]
       >;
       /**
@@ -854,7 +884,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesAssetAssetId,
-          PalletCorporateActionsTargetIdentities
+          PalletCorporateActionsTargetIdentities,
         ]
       >;
       /**
@@ -875,7 +905,7 @@ declare module '@polkadot/api-base/types/events' {
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesAssetAssetId,
           PolymeshPrimitivesIdentityId,
-          Option<Permill>
+          Option<Permill>,
         ]
       >;
       /**
@@ -891,7 +921,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           PolymeshPrimitivesEventOnly,
           PalletCorporateActionsCaId,
-          PalletCorporateActionsCorporateAction
+          PalletCorporateActionsCorporateAction,
         ]
       >;
     };
@@ -908,7 +938,7 @@ declare module '@polkadot/api-base/types/events' {
           PalletCorporateActionsCaId,
           PalletCorporateActionsBallotBallotTimeRange,
           PalletCorporateActionsBallotBallotMeta,
-          bool
+          bool,
         ]
       >;
       /**
@@ -921,7 +951,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           PolymeshPrimitivesIdentityId,
           PalletCorporateActionsCaId,
-          PalletCorporateActionsBallotBallotMeta
+          PalletCorporateActionsBallotBallotMeta,
         ]
       >;
       /**
@@ -934,7 +964,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           PolymeshPrimitivesIdentityId,
           PalletCorporateActionsCaId,
-          PalletCorporateActionsBallotBallotTimeRange
+          PalletCorporateActionsBallotBallotTimeRange,
         ]
       >;
       /**
@@ -962,7 +992,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           PolymeshPrimitivesIdentityId,
           PalletCorporateActionsCaId,
-          Vec<PalletCorporateActionsBallotBallotVote>
+          Vec<PalletCorporateActionsBallotBallotVote>,
         ]
       >;
     };
@@ -980,7 +1010,7 @@ declare module '@polkadot/api-base/types/events' {
         ApiType,
         [
           compute: PalletElectionProviderMultiPhaseElectionCompute,
-          score: SpNposElectionsElectionScore
+          score: SpNposElectionsElectionScore,
         ],
         {
           compute: PalletElectionProviderMultiPhaseElectionCompute;
@@ -995,7 +1025,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           from: PalletElectionProviderMultiPhasePhase,
           to: PalletElectionProviderMultiPhasePhase,
-          round: u32
+          round: u32,
         ],
         {
           from: PalletElectionProviderMultiPhasePhase;
@@ -1033,7 +1063,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           compute: PalletElectionProviderMultiPhaseElectionCompute,
           origin: Option<AccountId32>,
-          prevEjected: bool
+          prevEjected: bool,
         ],
         {
           compute: PalletElectionProviderMultiPhaseElectionCompute;
@@ -1053,7 +1083,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           PolymeshPrimitivesEventOnly,
           PolymeshPrimitivesAssetAssetId,
-          PolymeshPrimitivesAgentAgentGroup
+          PolymeshPrimitivesAgentAgentGroup,
         ]
       >;
       /**
@@ -1076,7 +1106,7 @@ declare module '@polkadot/api-base/types/events' {
           PolymeshPrimitivesEventOnly,
           PolymeshPrimitivesAssetAssetId,
           PolymeshPrimitivesIdentityId,
-          PolymeshPrimitivesAgentAgentGroup
+          PolymeshPrimitivesAgentAgentGroup,
         ]
       >;
       /**
@@ -1090,7 +1120,7 @@ declare module '@polkadot/api-base/types/events' {
           PolymeshPrimitivesEventOnly,
           PolymeshPrimitivesAssetAssetId,
           u32,
-          PolymeshPrimitivesSecondaryKeyExtrinsicPermissions
+          PolymeshPrimitivesSecondaryKeyExtrinsicPermissions,
         ]
       >;
       /**
@@ -1104,7 +1134,7 @@ declare module '@polkadot/api-base/types/events' {
           PolymeshPrimitivesEventOnly,
           PolymeshPrimitivesAssetAssetId,
           u32,
-          PolymeshPrimitivesSecondaryKeyExtrinsicPermissions
+          PolymeshPrimitivesSecondaryKeyExtrinsicPermissions,
         ]
       >;
     };
@@ -1149,7 +1179,7 @@ declare module '@polkadot/api-base/types/events' {
           Option<AccountId32>,
           u64,
           PolymeshPrimitivesAuthorizationAuthorizationData,
-          Option<u64>
+          Option<u64>,
         ]
       >;
       /**
@@ -1281,7 +1311,7 @@ declare module '@polkadot/api-base/types/events' {
           PolymeshPrimitivesIdentityId,
           AccountId32,
           PolymeshPrimitivesSecondaryKeyPermissions,
-          PolymeshPrimitivesSecondaryKeyPermissions
+          PolymeshPrimitivesSecondaryKeyPermissions,
         ]
       >;
       /**
@@ -1368,7 +1398,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           callerDid: PolymeshPrimitivesIdentityId,
           multisig: AccountId32,
-          adminDid: PolymeshPrimitivesIdentityId
+          adminDid: PolymeshPrimitivesIdentityId,
         ],
         {
           callerDid: PolymeshPrimitivesIdentityId;
@@ -1386,7 +1416,7 @@ declare module '@polkadot/api-base/types/events' {
           multisig: AccountId32,
           caller: AccountId32,
           signers: Vec<AccountId32>,
-          sigsRequired: u64
+          sigsRequired: u64,
         ],
         {
           callerDid: PolymeshPrimitivesIdentityId;
@@ -1404,7 +1434,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           callerDid: PolymeshPrimitivesIdentityId,
           multisig: AccountId32,
-          adminDid: PolymeshPrimitivesIdentityId
+          adminDid: PolymeshPrimitivesIdentityId,
         ],
         {
           callerDid: PolymeshPrimitivesIdentityId;
@@ -1420,7 +1450,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           callerDid: PolymeshPrimitivesIdentityId,
           multisig: AccountId32,
-          payingDid: PolymeshPrimitivesIdentityId
+          payingDid: PolymeshPrimitivesIdentityId,
         ],
         {
           callerDid: PolymeshPrimitivesIdentityId;
@@ -1489,7 +1519,7 @@ declare module '@polkadot/api-base/types/events' {
           callerDid: Option<PolymeshPrimitivesIdentityId>,
           multisig: AccountId32,
           signer: AccountId32,
-          proposalId: u64
+          proposalId: u64,
         ],
         {
           callerDid: Option<PolymeshPrimitivesIdentityId>;
@@ -1515,7 +1545,7 @@ declare module '@polkadot/api-base/types/events' {
           callerDid: Option<PolymeshPrimitivesIdentityId>,
           multisig: AccountId32,
           proposalId: u64,
-          result: Result<Null, SpRuntimeDispatchError>
+          result: Result<Null, SpRuntimeDispatchError>,
         ],
         {
           callerDid: Option<PolymeshPrimitivesIdentityId>;
@@ -1541,7 +1571,7 @@ declare module '@polkadot/api-base/types/events' {
           callerDid: Option<PolymeshPrimitivesIdentityId>,
           multisig: AccountId32,
           signer: AccountId32,
-          proposalId: u64
+          proposalId: u64,
         ],
         {
           callerDid: Option<PolymeshPrimitivesIdentityId>;
@@ -1571,7 +1601,7 @@ declare module '@polkadot/api-base/types/events' {
           PolymeshPrimitivesNftNfTs,
           Option<PolymeshPrimitivesIdentityIdPortfolioId>,
           Option<PolymeshPrimitivesIdentityIdPortfolioId>,
-          PolymeshPrimitivesPortfolioPortfolioUpdateReason
+          PolymeshPrimitivesPortfolioPortfolioUpdateReason,
         ]
       >;
     };
@@ -1735,7 +1765,7 @@ declare module '@polkadot/api-base/types/events' {
           Option<Bytes>,
           Option<Bytes>,
           PolymeshPrimitivesMaybeBlock,
-          PalletPipsProposalData
+          PalletPipsProposalData,
         ]
       >;
       /**
@@ -1842,7 +1872,7 @@ declare module '@polkadot/api-base/types/events' {
           u32,
           H256,
           Vec<PolymeshPrimitivesIdentityId>,
-          Vec<PolymeshPrimitivesIdentityId>
+          Vec<PolymeshPrimitivesIdentityId>,
         ]
       >;
       /**
@@ -1931,7 +1961,7 @@ declare module '@polkadot/api-base/types/events' {
           PolymeshPrimitivesIdentityIdPortfolioId,
           PolymeshPrimitivesIdentityIdPortfolioId,
           PolymeshPrimitivesPortfolioFundDescription,
-          Option<PolymeshPrimitivesMemo>
+          Option<PolymeshPrimitivesMemo>,
         ]
       >;
       /**
@@ -1956,7 +1986,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesIdentityIdPortfolioId,
-          PolymeshPrimitivesIdentityId
+          PolymeshPrimitivesIdentityId,
         ]
       >;
       /**
@@ -1989,7 +2019,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesIdentityIdPortfolioId,
-          PolymeshPrimitivesAssetAssetId
+          PolymeshPrimitivesAssetAssetId,
         ]
       >;
       /**
@@ -2016,7 +2046,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesIdentityIdPortfolioId,
-          PolymeshPrimitivesAssetAssetId
+          PolymeshPrimitivesAssetAssetId,
         ]
       >;
       /**
@@ -2121,7 +2151,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           task: ITuple<[u32, u32]>,
           id: Option<U8aFixed>,
-          result: Result<Null, SpRuntimeDispatchError>
+          result: Result<Null, SpRuntimeDispatchError>,
         ],
         {
           task: ITuple<[u32, u32]>;
@@ -2198,7 +2228,7 @@ declare module '@polkadot/api-base/types/events' {
           Option<u64>,
           Option<u64>,
           Vec<PolymeshPrimitivesSettlementLeg>,
-          Option<PolymeshPrimitivesMemo>
+          Option<PolymeshPrimitivesMemo>,
         ]
       >;
       /**
@@ -2255,7 +2285,7 @@ declare module '@polkadot/api-base/types/events' {
           u64,
           u64,
           AccountId32,
-          Option<PolymeshPrimitivesSettlementReceiptMetadata>
+          Option<PolymeshPrimitivesSettlementReceiptMetadata>,
         ]
       >;
       /**
@@ -2344,7 +2374,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           governanceCouncillDid: PolymeshPrimitivesIdentityId,
           oldCommissionCap: Perbill,
-          newCommissionCap: Perbill
+          newCommissionCap: Perbill,
         ],
         {
           governanceCouncillDid: PolymeshPrimitivesIdentityId;
@@ -2377,7 +2407,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           governanceCouncillDid: PolymeshPrimitivesIdentityId,
           governanceCouncillAccount: PolymeshPrimitivesIdentityId,
-          expiredNominators: Vec<AccountId32>
+          expiredNominators: Vec<AccountId32>,
         ],
         {
           governanceCouncillDid: PolymeshPrimitivesIdentityId;
@@ -2401,7 +2431,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           nominatorIdentity: PolymeshPrimitivesIdentityId,
           stash: AccountId32,
-          targets: Vec<AccountId32>
+          targets: Vec<AccountId32>,
         ],
         {
           nominatorIdentity: PolymeshPrimitivesIdentityId;
@@ -2433,7 +2463,7 @@ declare module '@polkadot/api-base/types/events' {
         ApiType,
         [
           governanceCouncillDid: PolymeshPrimitivesIdentityId,
-          validatorsIdentity: PolymeshPrimitivesIdentityId
+          validatorsIdentity: PolymeshPrimitivesIdentityId,
         ],
         {
           governanceCouncillDid: PolymeshPrimitivesIdentityId;
@@ -2447,7 +2477,7 @@ declare module '@polkadot/api-base/types/events' {
         ApiType,
         [
           governanceCouncillDid: PolymeshPrimitivesIdentityId,
-          validatorsIdentity: PolymeshPrimitivesIdentityId
+          validatorsIdentity: PolymeshPrimitivesIdentityId,
         ],
         {
           governanceCouncillDid: PolymeshPrimitivesIdentityId;
@@ -2541,7 +2571,7 @@ declare module '@polkadot/api-base/types/events' {
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesAssetAssetId,
           PolymeshPrimitivesStatisticsStatType,
-          Vec<PolymeshPrimitivesStatisticsStatUpdate>
+          Vec<PolymeshPrimitivesStatisticsStatUpdate>,
         ]
       >;
       /**
@@ -2554,7 +2584,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesAssetAssetId,
-          Vec<PolymeshPrimitivesTransferComplianceTransferCondition>
+          Vec<PolymeshPrimitivesTransferComplianceTransferCondition>,
         ]
       >;
       /**
@@ -2567,7 +2597,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesAssetAssetId,
-          Vec<PolymeshPrimitivesStatisticsStatType>
+          Vec<PolymeshPrimitivesStatisticsStatType>,
         ]
       >;
       /**
@@ -2580,7 +2610,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesAssetAssetId,
-          Vec<PolymeshPrimitivesStatisticsStatType>
+          Vec<PolymeshPrimitivesStatisticsStatType>,
         ]
       >;
       /**
@@ -2593,7 +2623,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesTransferComplianceTransferConditionExemptKey,
-          Vec<PolymeshPrimitivesIdentityId>
+          Vec<PolymeshPrimitivesIdentityId>,
         ]
       >;
       /**
@@ -2606,7 +2636,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesTransferComplianceTransferConditionExemptKey,
-          Vec<PolymeshPrimitivesIdentityId>
+          Vec<PolymeshPrimitivesIdentityId>,
         ]
       >;
     };
@@ -2621,7 +2651,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           agentDid: PolymeshPrimitivesIdentityId,
           offeringAsset: PolymeshPrimitivesAssetAssetId,
-          fundraiserId: u64
+          fundraiserId: u64,
         ],
         {
           agentDid: PolymeshPrimitivesIdentityId;
@@ -2642,7 +2672,7 @@ declare module '@polkadot/api-base/types/events' {
           raisingAsset: PolymeshPrimitivesAssetAssetId,
           fundraiserId: u64,
           fundraiserName: Bytes,
-          fundraiser: PalletStoFundraiser
+          fundraiser: PalletStoFundraiser,
         ],
         {
           agentDid: PolymeshPrimitivesIdentityId;
@@ -2663,7 +2693,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           agentDid: PolymeshPrimitivesIdentityId,
           offeringAsset: PolymeshPrimitivesAssetAssetId,
-          fundraiserId: u64
+          fundraiserId: u64,
         ],
         {
           agentDid: PolymeshPrimitivesIdentityId;
@@ -2682,7 +2712,7 @@ declare module '@polkadot/api-base/types/events' {
           agentDid: PolymeshPrimitivesIdentityId,
           offeringAsset: PolymeshPrimitivesAssetAssetId,
           fundraiserId: u64,
-          ticker: PolymeshPrimitivesTicker
+          ticker: PolymeshPrimitivesTicker,
         ],
         {
           agentDid: PolymeshPrimitivesIdentityId;
@@ -2701,7 +2731,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           agentDid: PolymeshPrimitivesIdentityId,
           offeringAsset: PolymeshPrimitivesAssetAssetId,
-          fundraiserId: u64
+          fundraiserId: u64,
         ],
         {
           agentDid: PolymeshPrimitivesIdentityId;
@@ -2723,7 +2753,7 @@ declare module '@polkadot/api-base/types/events' {
           oldStart: u64,
           oldEnd: Option<u64>,
           newStart: u64,
-          newEnd: Option<u64>
+          newEnd: Option<u64>,
         ],
         {
           agentDid: PolymeshPrimitivesEventOnly;
@@ -2748,7 +2778,7 @@ declare module '@polkadot/api-base/types/events' {
           fundraiserId: u64,
           fundingAsset: PalletStoFundingAsset,
           offeringAmount: u128,
-          raiseAmount: u128
+          raiseAmount: u128,
         ],
         {
           investorDid: PolymeshPrimitivesIdentityId;
@@ -2861,7 +2891,7 @@ declare module '@polkadot/api-base/types/events' {
           u32,
           H256,
           Vec<PolymeshPrimitivesIdentityId>,
-          Vec<PolymeshPrimitivesIdentityId>
+          Vec<PolymeshPrimitivesIdentityId>,
         ]
       >;
       /**
@@ -3028,7 +3058,7 @@ declare module '@polkadot/api-base/types/events' {
           u32,
           H256,
           Vec<PolymeshPrimitivesIdentityId>,
-          Vec<PolymeshPrimitivesIdentityId>
+          Vec<PolymeshPrimitivesIdentityId>,
         ]
       >;
       /**
@@ -3168,7 +3198,7 @@ declare module '@polkadot/api-base/types/events' {
         [
           callerDid: PolymeshPrimitivesIdentityId,
           target: AccountId32,
-          result: Result<Null, SpRuntimeDispatchError>
+          result: Result<Null, SpRuntimeDispatchError>,
         ],
         {
           callerDid: PolymeshPrimitivesIdentityId;

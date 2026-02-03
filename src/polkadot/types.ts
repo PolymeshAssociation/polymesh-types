@@ -11,3 +11,5 @@ export * from './polymesh/types.js';
 export * from './protocolFee/types.js';
 export * from './settlement/types.js';
 export * from './staking/types.js';
+
+export type PHANTOM_GENERATED = 'generated';

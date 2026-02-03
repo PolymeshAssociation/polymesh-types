@@ -563,6 +563,9 @@ export enum AssetTx {
   LinkTickerToAssetId = 'asset.linkTickerToAssetId',
   UnlinkTickerFromAssetId = 'asset.unlinkTickerFromAssetId',
   UpdateGlobalMetadataSpec = 'asset.updateGlobalMetadataSpec',
+  TransferAsset = 'asset.transferAsset',
+  ReceiverAffirmAssetTransfer = 'asset.receiverAffirmAssetTransfer',
+  RejectAssetTransfer = 'asset.rejectAssetTransfer',
 }
 
 export enum CapitalDistributionTx {

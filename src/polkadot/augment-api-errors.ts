@@ -264,6 +264,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       CounterOverflow: AugmentedError<ApiType>;
       /**
+       * Invalid account ID.
+       **/
+      InvalidAccountId: AugmentedError<ApiType>;
+      /**
        * Exceeded a generic length limit.
        * The limit could be for any sort of lists of things, including a string.
        **/
@@ -751,6 +755,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       BadAuthorizationType: AugmentedError<ApiType>;
       /**
+       * Except `ExtrinsicPermissions` are not allowed for external agents.
+       **/
+      ExceptPermissionsNotAllowed: AugmentedError<ApiType>;
+      /**
        * An AG with the given `AGId` did not exist for the `AssetId`.
        **/
       NoSuchAG: AugmentedError<ApiType>;
@@ -805,6 +813,10 @@ declare module '@polkadot/api-base/types/errors' {
       TooSoon: AugmentedError<ApiType>;
     };
     identity: {
+      /**
+       * Account based portfolios cannot have custodians.
+       **/
+      AccountBasedPortfoliosCannotHaveCustodians: AugmentedError<ApiType>;
       /**
        * The account key is being used, it can't be unlinked.
        **/
@@ -1398,6 +1410,10 @@ declare module '@polkadot/api-base/types/errors' {
     };
     portfolio: {
       /**
+       * Account based portfolios cannot have custodians.
+       **/
+      AccountBasedPortfoliosCannotHaveCustodians: AugmentedError<ApiType>;
+      /**
        * The extrinsic expected a different `AuthorizationType` than what the `data.auth_type()` is.
        **/
       BadAuthorizationType: AugmentedError<ApiType>;
@@ -1418,6 +1434,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       EmptyTransfer: AugmentedError<ApiType>;
       /**
+       * Insufficient balance (tokens might not exist or are locked).
+       **/
+      InsufficientBalance: AugmentedError<ApiType>;
+      /**
        * Insufficient balance for a transaction.
        **/
       InsufficientPortfolioBalance: AugmentedError<ApiType>;
@@ -1437,6 +1457,10 @@ declare module '@polkadot/api-base/types/errors' {
        * The sender identity can't be the same as the receiver identity.
        **/
       InvalidTransferSenderIdMatchesReceiverId: AugmentedError<ApiType>;
+      /**
+       * Key not found for caller.
+       **/
+      KeyNotFoundForCaller: AugmentedError<ApiType>;
       /**
        * The caller doesn't have permission to create portfolios on the owner's behalf.
        **/
@@ -1481,6 +1505,10 @@ declare module '@polkadot/api-base/types/errors' {
        * The porfolio's custody is with someone other than the caller.
        **/
       UnauthorizedCustodian: AugmentedError<ApiType>;
+      /**
+       * The key does not have permission to access the portfolio.
+       **/
+      UnauthorizedPortfolioKey: AugmentedError<ApiType>;
     };
     preimage: {
       /**
@@ -1527,6 +1555,10 @@ declare module '@polkadot/api-base/types/errors' {
        * The extrinsic expected a different `AuthorizationType` than what the `data.auth_type()` is.
        **/
       BadAuthorizationType: AugmentedError<ApiType>;
+      /**
+       * The caller's identity was not found.
+       **/
+      IdentityNotFound: AugmentedError<ApiType>;
       /**
        * The `user_key` doesn't have a `paying_key`.
        **/
@@ -1650,6 +1682,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       InstructionSettleBlockPassed: AugmentedError<ApiType>;
       /**
+       * Invalid account id.
+       **/
+      InvalidAccountId: AugmentedError<ApiType>;
+      /**
        * The mediator's expiry date must be in the future.
        **/
       InvalidExpiryDate: AugmentedError<ApiType>;
@@ -1745,6 +1781,10 @@ declare module '@polkadot/api-base/types/errors' {
        * The instruction id in all receipts must match the extrinsic parameter.
        **/
       ReceiptInstructionIdMissmatch: AugmentedError<ApiType>;
+      /**
+       * Receiver identity not found.
+       **/
+      ReceiverIdentityNotFound: AugmentedError<ApiType>;
       /**
        * Sender and receiver are the same.
        **/

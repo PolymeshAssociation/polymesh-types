@@ -975,7 +975,9 @@ export interface PortfolioKind extends Enum {
   readonly isDefault: boolean;
   readonly isUser: boolean;
   readonly asUser: PortfolioNumber;
-  readonly type: 'Default' | 'User';
+  readonly isAccountId: boolean;
+  readonly asAccountId: AccountId32;
+  readonly type: 'Default' | 'User' | 'AccountId';
 }
 
 /** @name PortfolioNumber */

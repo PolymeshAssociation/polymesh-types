@@ -289,6 +289,11 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       initialPOLYX: u128 & AugmentedConst<ApiType>;
       /**
+       * Maximum number of retry attempts allowed for an authorization
+       * before it is considered unusable.
+       **/
+      maxAuthRetries: u8 & AugmentedConst<ApiType>;
+      /**
        * Maximum number of authorizations an identity can give.
        **/
       maxGivenAuths: u32 & AugmentedConst<ApiType>;
