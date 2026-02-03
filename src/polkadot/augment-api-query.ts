@@ -97,6 +97,7 @@ import type {
   PolymeshContractsChainExtensionExtrinsicId,
   PolymeshContractsNextUpgrade,
   PolymeshPrimitivesAgentAgentGroup,
+  PolymeshPrimitivesAssetAssetHolder,
   PolymeshPrimitivesAssetAssetId,
   PolymeshPrimitivesAssetIdentifier,
   PolymeshPrimitivesAssetMetadataAssetMetadataKey,
@@ -116,7 +117,7 @@ import type {
   PolymeshPrimitivesMultisigProposalState,
   PolymeshPrimitivesMultisigProposalVoteCount,
   PolymeshPrimitivesNftNftCollection,
-  PolymeshPrimitivesPosRatio,
+  PolymeshPrimitivesNftNftOwnerStatus,
   PolymeshPrimitivesSecondaryKeyExtrinsicPermissions,
   PolymeshPrimitivesSecondaryKeyKeyRecord,
   PolymeshPrimitivesSecondaryKeySignatory,
@@ -153,6 +154,17 @@ export type __QueryableStorageEntry<ApiType extends ApiTypes> = QueryableStorage
 declare module '@polkadot/api-base/types/storage' {
   interface AugmentedQueries<ApiType extends ApiTypes> {
     asset: {
+      /**
+       * Tracks the total [`Balance`] held by the account for each [`AssetId`].
+       **/
+      assetBalance: AugmentedQuery<
+        ApiType,
+        (
+          arg1: AccountId32 | string | Uint8Array,
+          arg2: PolymeshPrimitivesAssetAssetId | string | Uint8Array
+        ) => Observable<u128>,
+        [AccountId32, PolymeshPrimitivesAssetAssetId]
+      >;
       /**
        * All [`Document`] attached to an asset.
        **/
@@ -389,6 +401,17 @@ declare module '@polkadot/api-base/types/storage' {
             | [PolymeshPrimitivesAssetAssetId | string | Uint8Array, Bytes | string | Uint8Array]
         ) => Observable<u128>,
         [ITuple<[PolymeshPrimitivesAssetAssetId, Bytes]>]
+      >;
+      /**
+       * Tracks the [`Balance`] of locked tokens for assets that are held by the key (i.e., not in a portfolio).
+       **/
+      lockedBalance: AugmentedQuery<
+        ApiType,
+        (
+          arg1: AccountId32 | string | Uint8Array,
+          arg2: PolymeshPrimitivesAssetAssetId | string | Uint8Array
+        ) => Observable<u128>,
+        [AccountId32, PolymeshPrimitivesAssetAssetId]
       >;
       /**
        * The list of mandatory mediators for every ticker.
@@ -649,7 +672,7 @@ declare module '@polkadot/api-base/types/storage' {
             | ITuple<[PalletCorporateActionsCaId, PolymeshPrimitivesIdentityId]>
             | [
                 PalletCorporateActionsCaId | { assetId?: any; localId?: any } | string | Uint8Array,
-                PolymeshPrimitivesIdentityId | string | Uint8Array
+                PolymeshPrimitivesIdentityId | string | Uint8Array,
               ]
         ) => Observable<bool>,
         [ITuple<[PalletCorporateActionsCaId, PolymeshPrimitivesIdentityId]>]
@@ -1365,6 +1388,8 @@ declare module '@polkadot/api-base/types/storage' {
        *
        * Pallets using "strong" references to account keys:
        * * Relayer: For `user_key` and `paying_key`
+       * * Assets: Updated when an account holds an asset with non-zero balance.
+       * * NFT: Updated when an account owns an NFT.
        *
        **/
       accountKeyRefCount: AugmentedQuery<
@@ -1847,7 +1872,21 @@ declare module '@polkadot/api-base/types/storage' {
         [ITuple<[u64, u64]>, PolymeshPrimitivesAssetMetadataAssetMetadataKey]
       >;
       /**
+       * All NFTs associated to the account Key.
+       **/
+      nftHolder: AugmentedQuery<
+        ApiType,
+        (
+          arg1: AccountId32 | string | Uint8Array,
+          arg2:
+            | ITuple<[PolymeshPrimitivesAssetAssetId, u64]>
+            | [PolymeshPrimitivesAssetAssetId | string | Uint8Array, u64 | AnyNumber | Uint8Array]
+        ) => Observable<PolymeshPrimitivesNftNftOwnerStatus>,
+        [AccountId32, ITuple<[PolymeshPrimitivesAssetAssetId, u64]>]
+      >;
+      /**
        * Tracks the owner of an NFT
+       * This will be deprecated in the future release.
        **/
       nftOwner: AugmentedQuery<
         ApiType,
@@ -1875,6 +1914,17 @@ declare module '@polkadot/api-base/types/storage' {
           arg2: PolymeshPrimitivesIdentityId | string | Uint8Array
         ) => Observable<u64>,
         [PolymeshPrimitivesAssetAssetId, PolymeshPrimitivesIdentityId]
+      >;
+      /**
+       * Reverse mapping for allowing to find the owner of a specific NFT.
+       **/
+      owner: AugmentedQuery<
+        ApiType,
+        (
+          arg1: PolymeshPrimitivesAssetAssetId | string | Uint8Array,
+          arg2: u64 | AnyNumber | Uint8Array
+        ) => Observable<Option<PolymeshPrimitivesAssetAssetHolder>>,
+        [PolymeshPrimitivesAssetAssetId, u64]
       >;
     };
     offences: {
@@ -3105,7 +3155,7 @@ declare module '@polkadot/api-base/types/storage' {
         ) => Observable<bool>,
         [
           PolymeshPrimitivesTransferComplianceTransferConditionExemptKey,
-          PolymeshPrimitivesIdentityId
+          PolymeshPrimitivesIdentityId,
         ]
       >;
     };

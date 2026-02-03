@@ -325,7 +325,7 @@ declare module '@polkadot/api-base/types/submittable' {
           bool,
           PolymeshPrimitivesAssetAssetType,
           Vec<PolymeshPrimitivesAssetIdentifier>,
-          Option<Bytes>
+          Option<Bytes>,
         ]
       >;
       /**
@@ -447,6 +447,7 @@ declare module '@polkadot/api-base/types/submittable' {
             | PolymeshPrimitivesIdentityIdPortfolioKind
             | { Default: any }
             | { User: any }
+            | { AccountId: any }
             | string
             | Uint8Array
         ) => SubmittableExtrinsic<ApiType>,
@@ -528,6 +529,33 @@ declare module '@polkadot/api-base/types/submittable' {
         [PolymeshPrimitivesAssetAssetId]
       >;
       /**
+       * Receiver affirms a pending asset transfer.
+       *
+       * If someone tries to transfer asset to an account that requires receiver affirmations, then the receiver will need to affirm the transfer
+       * before the transfer is executed.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call, which will be the receiver of the assets.
+       * * `transfer_id` - The [`InstructionId`] associated to the pending transfer.
+       *
+       * # Permissions
+       * * Asset
+       * * Portfolio
+       *
+       * # Events
+       * * `InstructionAffirmed` - The asset transfer settlement was affirmed by the caller as the receiver.
+       * * `InstructionExecuted` - The asset transfer settlement was executed successfully.
+       * * `AssetBalanceUpdated` - The asset balance was updated for both the sender and receiver portfolios.
+       *
+       * # Errors
+       * * `UnknownInstruction` - If the instruction associated to the given transfer ID does not exist.
+       * * `InvalidTransfer` - If the transfer validation check fails.
+       **/
+      receiverAffirmAssetTransfer: AugmentedSubmittable<
+        (transferId: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>,
+        [u64]
+      >;
+      /**
        * Redeems (i.e burns) existing tokens by reducing the balance of the caller's portfolio and the total supply of the asset.
        *
        * This function allows the asset issuer or an external agent to redeem tokens from a given asset.
@@ -558,6 +586,7 @@ declare module '@polkadot/api-base/types/submittable' {
             | PolymeshPrimitivesIdentityIdPortfolioKind
             | { Default: any }
             | { User: any }
+            | { AccountId: any }
             | string
             | Uint8Array
         ) => SubmittableExtrinsic<ApiType>,
@@ -611,7 +640,7 @@ declare module '@polkadot/api-base/types/submittable' {
           Bytes,
           PolymeshPrimitivesAssetMetadataAssetMetadataSpec,
           Bytes,
-          Option<PolymeshPrimitivesAssetMetadataAssetMetadataValueDetail>
+          Option<PolymeshPrimitivesAssetMetadataAssetMetadataValueDetail>,
         ]
       >;
       /**
@@ -716,6 +745,30 @@ declare module '@polkadot/api-base/types/submittable' {
       registerUniqueTicker: AugmentedSubmittable<
         (ticker: PolymeshPrimitivesTicker | string | Uint8Array) => SubmittableExtrinsic<ApiType>,
         [PolymeshPrimitivesTicker]
+      >;
+      /**
+       * Reject a pending asset transfer.
+       *
+       * If someone tries to transfer asset to an account that requires receiver affirmations, then the receiver can reject the transfer.
+       * The sender can also reject the transfer before the receiver affirms it.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call, which can be either the sender or receiver.
+       * * `transfer_id` - The [`InstructionId`] associated to the pending transfer.
+       *
+       * # Permissions
+       * * Asset
+       * * Portfolio
+       *
+       * # Events
+       * * `InstructionRejected` - The asset transfer settlement was rejected by the caller.
+       *
+       * # Errors
+       * * `InvalidInstructionStatusForRejection` - Either the instruction doesn't exist or it has already been executed or rejected.
+       **/
+      rejectAssetTransfer: AugmentedSubmittable<
+        (transferId: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>,
+        [u64]
       >;
       /**
        * Removes the pre-approval of the asset for all identities.
@@ -932,7 +985,7 @@ declare module '@polkadot/api-base/types/submittable' {
           PolymeshPrimitivesAssetAssetId,
           PolymeshPrimitivesAssetMetadataAssetMetadataKey,
           Bytes,
-          Option<PolymeshPrimitivesAssetMetadataAssetMetadataValueDetail>
+          Option<PolymeshPrimitivesAssetMetadataAssetMetadataValueDetail>,
         ]
       >;
       /**
@@ -975,7 +1028,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           PolymeshPrimitivesAssetAssetId,
           PolymeshPrimitivesAssetMetadataAssetMetadataKey,
-          PolymeshPrimitivesAssetMetadataAssetMetadataValueDetail
+          PolymeshPrimitivesAssetMetadataAssetMetadataValueDetail,
         ]
       >;
       /**
@@ -1003,6 +1056,45 @@ declare module '@polkadot/api-base/types/submittable' {
           fundingRoundName: Bytes | string | Uint8Array
         ) => SubmittableExtrinsic<ApiType>,
         [PolymeshPrimitivesAssetAssetId, Bytes]
+      >;
+      /**
+       * Transfer assets from the caller's default portfolio to the target address's default portfolio.
+       *
+       * The settlement engine is used to perform the asset transfer.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call, which will be the sender of the assets.
+       * * `asset_id` - The [`AssetId`] associated to the asset.
+       * * `to` - The target address to which the assets will be sent.
+       * * `amount` - The [`Balance`] of tokens that will be transferred.
+       * * `memo` - An optional [`Memo`] that can be attached to the transfer instruction.
+       *
+       * # Permissions
+       * * Asset
+       * * Portfolio
+       *
+       * # Events
+       * * `CreatedAssetTransfer` - When an asset transfer instruction is created.
+       * * `InstructionCreated` - The asset transfer settlement was created.
+       * * `InstructionAffirmed` - The asset transfer settlement was affirmed by the caller as the sender.
+       * * `InstructionAutomaticallyAffirmed` - If the receiver pre-approved the asset, the instruction is automatically affirmed for the receiver.
+       * * `InstructionExecuted` - The asset transfer settlement was executed successfully (if the receiver pre-approved the asset).
+       *
+       * # Errors
+       * * `InsufficientBalance` - If the sender's balance is not sufficient to cover the transfer amount.
+       * * `InvalidTransfer` - If the transfer validation check fails.
+       * * `ReceiverIdentityNotFound` - If the receiver's identity is not found.
+       * * `UnexpectedOFFChainAsset` - If the asset could not be found on-chain.
+       * * `MissingIdentity` - The caller doesn't have an identity.
+       **/
+      transferAsset: AugmentedSubmittable<
+        (
+          assetId: PolymeshPrimitivesAssetAssetId | string | Uint8Array,
+          to: AccountId32 | string | Uint8Array,
+          amount: u128 | AnyNumber | Uint8Array,
+          memo: Option<PolymeshPrimitivesMemo> | null | Uint8Array | PolymeshPrimitivesMemo | string
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshPrimitivesAssetAssetId, AccountId32, u128, Option<PolymeshPrimitivesMemo>]
       >;
       /**
        * Unfreezes transfers of a given asset.
@@ -1458,7 +1550,7 @@ declare module '@polkadot/api-base/types/submittable' {
           u128,
           u128,
           u64,
-          Option<u64>
+          Option<u64>,
         ]
       >;
       /**
@@ -1879,7 +1971,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           PolymeshPrimitivesAssetAssetId,
           Vec<PolymeshPrimitivesCondition>,
-          Vec<PolymeshPrimitivesCondition>
+          Vec<PolymeshPrimitivesCondition>,
         ]
       >;
       /**
@@ -2009,7 +2101,7 @@ declare module '@polkadot/api-base/types/submittable' {
         ) => SubmittableExtrinsic<ApiType>,
         [
           PolymeshPrimitivesAssetAssetId,
-          Vec<PolymeshPrimitivesComplianceManagerComplianceRequirement>
+          Vec<PolymeshPrimitivesComplianceManagerComplianceRequirement>,
         ]
       >;
       /**
@@ -2411,7 +2503,7 @@ declare module '@polkadot/api-base/types/submittable' {
             | Vec<ITuple<[PolymeshPrimitivesIdentityId, Permill]>>
             | [
                 PolymeshPrimitivesIdentityId | string | Uint8Array,
-                Permill | AnyNumber | Uint8Array
+                Permill | AnyNumber | Uint8Array,
               ][]
         ) => SubmittableExtrinsic<ApiType>,
         [
@@ -2422,7 +2514,7 @@ declare module '@polkadot/api-base/types/submittable' {
           Bytes,
           Option<PalletCorporateActionsTargetIdentities>,
           Option<Permill>,
-          Option<Vec<ITuple<[PolymeshPrimitivesIdentityId, Permill]>>>
+          Option<Vec<ITuple<[PolymeshPrimitivesIdentityId, Permill]>>>,
         ]
       >;
       initiateCorporateActionAndBallot: AugmentedSubmittable<
@@ -2457,7 +2549,7 @@ declare module '@polkadot/api-base/types/submittable' {
           PalletCorporateActionsInitiateCorporateActionArgs,
           PalletCorporateActionsBallotBallotTimeRange,
           PalletCorporateActionsBallotBallotMeta,
-          bool
+          bool,
         ]
       >;
       /**
@@ -2493,7 +2585,7 @@ declare module '@polkadot/api-base/types/submittable' {
           u128,
           u128,
           u64,
-          Option<u64>
+          Option<u64>,
         ]
       >;
       /**
@@ -2679,7 +2771,7 @@ declare module '@polkadot/api-base/types/submittable' {
           PalletCorporateActionsCaId,
           PalletCorporateActionsBallotBallotTimeRange,
           PalletCorporateActionsBallotBallotMeta,
-          bool
+          bool,
         ]
       >;
       /**
@@ -2831,7 +2923,7 @@ declare module '@polkadot/api-base/types/submittable' {
             | Vec<ITuple<[AccountId32, SpNposElectionsSupport]>>
             | [
                 AccountId32 | string | Uint8Array,
-                SpNposElectionsSupport | { total?: any; voters?: any } | string | Uint8Array
+                SpNposElectionsSupport | { total?: any; voters?: any } | string | Uint8Array,
               ][]
         ) => SubmittableExtrinsic<ApiType>,
         [Vec<ITuple<[AccountId32, SpNposElectionsSupport]>>]
@@ -2907,7 +2999,7 @@ declare module '@polkadot/api-base/types/submittable' {
         ) => SubmittableExtrinsic<ApiType>,
         [
           PalletElectionProviderMultiPhaseRawSolution,
-          PalletElectionProviderMultiPhaseSolutionOrSnapshotSize
+          PalletElectionProviderMultiPhaseSolutionOrSnapshotSize,
         ]
       >;
     };
@@ -2988,7 +3080,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           PolymeshPrimitivesAssetAssetId,
           PolymeshPrimitivesIdentityId,
-          PolymeshPrimitivesAgentAgentGroup
+          PolymeshPrimitivesAgentAgentGroup,
         ]
       >;
       /**
@@ -3013,7 +3105,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           PolymeshPrimitivesAssetAssetId,
           PolymeshPrimitivesSecondaryKeyExtrinsicPermissions,
-          PolymeshPrimitivesIdentityId
+          PolymeshPrimitivesIdentityId,
         ]
       >;
       /**
@@ -3073,7 +3165,7 @@ declare module '@polkadot/api-base/types/submittable' {
           PolymeshPrimitivesAssetAssetId,
           PolymeshPrimitivesSecondaryKeyExtrinsicPermissions,
           PolymeshPrimitivesIdentityId,
-          Option<u64>
+          Option<u64>,
         ]
       >;
       /**
@@ -3254,7 +3346,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           PolymeshPrimitivesSecondaryKeySignatory,
           PolymeshPrimitivesAuthorizationAuthorizationData,
-          Option<u64>
+          Option<u64>,
         ]
       >;
       /**
@@ -3572,7 +3664,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesIdentityClaimClaimType,
-          Option<PolymeshPrimitivesIdentityClaimScope>
+          Option<PolymeshPrimitivesIdentityClaimScope>,
         ]
       >;
       /**
@@ -4032,13 +4124,14 @@ declare module '@polkadot/api-base/types/submittable' {
             | PolymeshPrimitivesIdentityIdPortfolioKind
             | { Default: any }
             | { User: any }
+            | { AccountId: any }
             | string
             | Uint8Array
         ) => SubmittableExtrinsic<ApiType>,
         [
           PolymeshPrimitivesNftNfTs,
           PolymeshPrimitivesIdentityIdPortfolioId,
-          PolymeshPrimitivesIdentityIdPortfolioKind
+          PolymeshPrimitivesIdentityIdPortfolioKind,
         ]
       >;
       /**
@@ -4083,7 +4176,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           Option<PolymeshPrimitivesAssetAssetId>,
           Option<PolymeshPrimitivesAssetNonFungibleType>,
-          PolymeshPrimitivesNftNftCollectionKeys
+          PolymeshPrimitivesNftNftCollectionKeys,
         ]
       >;
       /**
@@ -4120,13 +4213,14 @@ declare module '@polkadot/api-base/types/submittable' {
             | PolymeshPrimitivesIdentityIdPortfolioKind
             | { Default: any }
             | { User: any }
+            | { AccountId: any }
             | string
             | Uint8Array
         ) => SubmittableExtrinsic<ApiType>,
         [
           PolymeshPrimitivesAssetAssetId,
           Vec<PolymeshPrimitivesNftNftMetadataAttribute>,
-          PolymeshPrimitivesIdentityIdPortfolioKind
+          PolymeshPrimitivesIdentityIdPortfolioKind,
         ]
       >;
       /**
@@ -4154,6 +4248,7 @@ declare module '@polkadot/api-base/types/submittable' {
             | PolymeshPrimitivesIdentityIdPortfolioKind
             | { Default: any }
             | { User: any }
+            | { AccountId: any }
             | string
             | Uint8Array,
           numberOfKeys: Option<u8> | null | Uint8Array | u8 | AnyNumber
@@ -4233,7 +4328,7 @@ declare module '@polkadot/api-base/types/submittable' {
             | Vec<ITuple<[u32, PalletPipsSnapshotResult]>>
             | [
                 u32 | AnyNumber | Uint8Array,
-                PalletPipsSnapshotResult | 'Approve' | 'Reject' | 'Skip' | number | Uint8Array
+                PalletPipsSnapshotResult | 'Approve' | 'Reject' | 'Skip' | number | Uint8Array,
               ][]
         ) => SubmittableExtrinsic<ApiType>,
         [Vec<ITuple<[u32, PalletPipsSnapshotResult]>>]
@@ -4697,7 +4792,7 @@ declare module '@polkadot/api-base/types/submittable' {
           Bytes,
           Bytes,
           Bytes,
-          PolymeshPrimitivesSecondaryKeyPermissions
+          PolymeshPrimitivesSecondaryKeyPermissions,
         ]
       >;
       /**
@@ -4785,7 +4880,7 @@ declare module '@polkadot/api-base/types/submittable' {
           H256,
           Bytes,
           Bytes,
-          PolymeshPrimitivesSecondaryKeyPermissions
+          PolymeshPrimitivesSecondaryKeyPermissions,
         ]
       >;
       /**
@@ -4913,7 +5008,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           PolymeshPrimitivesIdentityIdPortfolioId,
           PolymeshPrimitivesIdentityIdPortfolioId,
-          Vec<PolymeshPrimitivesPortfolioFund>
+          Vec<PolymeshPrimitivesPortfolioFund>,
         ]
       >;
       /**
@@ -5397,7 +5492,7 @@ declare module '@polkadot/api-base/types/submittable' {
           Option<u64>,
           Vec<PolymeshPrimitivesSettlementLeg>,
           BTreeSet<PolymeshPrimitivesIdentityIdPortfolioId>,
-          Option<PolymeshPrimitivesMemo>
+          Option<PolymeshPrimitivesMemo>,
         ]
       >;
       /**
@@ -5456,7 +5551,7 @@ declare module '@polkadot/api-base/types/submittable' {
           Vec<PolymeshPrimitivesSettlementLeg>,
           BTreeSet<PolymeshPrimitivesIdentityIdPortfolioId>,
           Option<PolymeshPrimitivesMemo>,
-          BTreeSet<PolymeshPrimitivesIdentityId>
+          BTreeSet<PolymeshPrimitivesIdentityId>,
         ]
       >;
       /**
@@ -5506,7 +5601,7 @@ declare module '@polkadot/api-base/types/submittable' {
           Option<u64>,
           Option<u64>,
           Vec<PolymeshPrimitivesSettlementLeg>,
-          Option<PolymeshPrimitivesMemo>
+          Option<PolymeshPrimitivesMemo>,
         ]
       >;
       /**
@@ -5559,7 +5654,7 @@ declare module '@polkadot/api-base/types/submittable' {
           Option<u64>,
           Vec<PolymeshPrimitivesSettlementLeg>,
           Option<PolymeshPrimitivesMemo>,
-          BTreeSet<PolymeshPrimitivesIdentityId>
+          BTreeSet<PolymeshPrimitivesIdentityId>,
         ]
       >;
       /**
@@ -5622,7 +5717,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           u64,
           BTreeSet<PolymeshPrimitivesIdentityIdPortfolioId>,
-          Option<PolymeshPrimitivesSettlementAffirmationCount>
+          Option<PolymeshPrimitivesSettlementAffirmationCount>,
         ]
       >;
       /**
@@ -5659,7 +5754,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           u64,
           Vec<PolymeshPrimitivesSettlementReceiptDetails>,
-          BTreeSet<PolymeshPrimitivesIdentityIdPortfolioId>
+          BTreeSet<PolymeshPrimitivesIdentityIdPortfolioId>,
         ]
       >;
       /**
@@ -5707,7 +5802,7 @@ declare module '@polkadot/api-base/types/submittable' {
           u64,
           Vec<PolymeshPrimitivesSettlementReceiptDetails>,
           BTreeSet<PolymeshPrimitivesIdentityIdPortfolioId>,
-          Option<PolymeshPrimitivesSettlementAffirmationCount>
+          Option<PolymeshPrimitivesSettlementAffirmationCount>,
         ]
       >;
       /**
@@ -5806,7 +5901,7 @@ declare module '@polkadot/api-base/types/submittable' {
           u32,
           u32,
           u32,
-          Option<SpWeightsWeightV2Weight>
+          Option<SpWeightsWeightV2Weight>,
         ]
       >;
       /**
@@ -5926,7 +6021,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           u64,
           PolymeshPrimitivesIdentityIdPortfolioId,
-          Option<PolymeshPrimitivesSettlementAssetCount>
+          Option<PolymeshPrimitivesSettlementAssetCount>,
         ]
       >;
       /**
@@ -6049,7 +6144,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           u64,
           BTreeSet<PolymeshPrimitivesIdentityIdPortfolioId>,
-          Option<PolymeshPrimitivesSettlementAffirmationCount>
+          Option<PolymeshPrimitivesSettlementAffirmationCount>,
         ]
       >;
     };
@@ -6595,7 +6690,7 @@ declare module '@polkadot/api-base/types/submittable' {
           PalletStakingPalletConfigOpU32,
           PalletStakingPalletConfigOpU32,
           PalletStakingPalletConfigOpPercent,
-          PalletStakingPalletConfigOpPerbill
+          PalletStakingPalletConfigOpPerbill,
         ]
       >;
       /**
@@ -6714,7 +6809,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           PolymeshPrimitivesAssetAssetId,
           PolymeshPrimitivesStatisticsStatType,
-          BTreeSet<PolymeshPrimitivesStatisticsStatUpdate>
+          BTreeSet<PolymeshPrimitivesStatisticsStatUpdate>,
         ]
       >;
       /**
@@ -6765,7 +6860,7 @@ declare module '@polkadot/api-base/types/submittable' {
         ) => SubmittableExtrinsic<ApiType>,
         [
           PolymeshPrimitivesAssetAssetId,
-          BTreeSet<PolymeshPrimitivesTransferComplianceTransferCondition>
+          BTreeSet<PolymeshPrimitivesTransferComplianceTransferCondition>,
         ]
       >;
       /**
@@ -6797,7 +6892,7 @@ declare module '@polkadot/api-base/types/submittable' {
         [
           bool,
           PolymeshPrimitivesTransferComplianceTransferConditionExemptKey,
-          BTreeSet<PolymeshPrimitivesIdentityId>
+          BTreeSet<PolymeshPrimitivesIdentityId>,
         ]
       >;
     };
@@ -6865,7 +6960,7 @@ declare module '@polkadot/api-base/types/submittable' {
           Option<u64>,
           Option<u64>,
           u128,
-          Bytes
+          Bytes,
         ]
       >;
       /**
@@ -6982,7 +7077,7 @@ declare module '@polkadot/api-base/types/submittable' {
           PolymeshPrimitivesIdentityIdPortfolioId,
           PalletStoFundingMethod,
           u128,
-          Option<u128>
+          Option<u128>,
         ]
       >;
       /**

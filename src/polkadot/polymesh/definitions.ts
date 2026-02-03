@@ -533,6 +533,7 @@ export default {
       _enum: {
         Default: '',
         User: 'PortfolioNumber',
+        AccountId: 'AccountId32',
       },
     },
     PortfolioId: {
