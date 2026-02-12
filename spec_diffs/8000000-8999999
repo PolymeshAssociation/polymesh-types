@@ -10,7 +10,7 @@
     "Percentage": "Permill",
     "Permissions": Object {
       "asset": "AssetPermissions",
-@@ -517,6 +519,8 @@
+@@ -517,13 +519,14 @@
     "PipId": "u32",
     "PolymeshAssetId": "[u8; 16]",
     "PolymeshMoment": "u64",
@@ -19,3 +19,10 @@
     "PortfolioId": Object {
       "did": "IdentityId",
       "kind": "PortfolioKind",
+    },
+    "PortfolioKind": Object {
+      "_enum": Object {
+-       "AccountId": "AccountId32",
+        "Default": "",
+        "User": "PortfolioNumber",
+      },

@@ -1,0 +1,11 @@
+- Expected
++ Received
+
+@@ -523,6 +523,7 @@
+    },
+    "PortfolioKind": Object {
+      "_enum": Object {
++       "AccountId": "AccountId32",
+        "Default": "",
+        "User": "PortfolioNumber",
+      },
