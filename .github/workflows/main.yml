@@ -45,6 +45,8 @@ jobs:
         with:
           node-version: '22.x'
           cache: 'yarn'
+      - name: Upgrade npm
+        run: npm install -g npm@latest  # OIDC trusted publishing requires npm >= 11.5.1
       - name: install dependencies
         run: yarn --immutable
       - name: build
