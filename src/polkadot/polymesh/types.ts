@@ -22,7 +22,9 @@ import type {
   AccountId32,
   Balance,
   Call,
+  Hash,
   Permill,
+  RuntimeCall,
   Weight,
 } from '@polkadot/types/interfaces/runtime';
 import type { DispatchError } from '@polkadot/types/interfaces/system';
@@ -71,6 +73,25 @@ export interface AssetDidResult extends Enum {
   readonly type: 'Ok' | 'Err';
 }
 
+/** @name AssetHolder */
+export interface AssetHolder extends Enum {
+  readonly isPortfolio: boolean;
+  readonly asPortfolio: PortfolioId;
+  readonly isAccount: boolean;
+  readonly asAccount: AccountId32;
+  readonly type: 'Portfolio' | 'Account';
+}
+
+/** @name AssetHolderKind */
+export interface AssetHolderKind extends Enum {
+  readonly isAccount: boolean;
+  readonly asAccount: AccountId32;
+  readonly isDefaultPortfolio: boolean;
+  readonly isUserPortfolio: boolean;
+  readonly asUserPortfolio: PortfolioNumber;
+  readonly type: 'Account' | 'DefaultPortfolio' | 'UserPortfolio';
+}
+
 /** @name AssetPermissions */
 export interface AssetPermissions extends Enum {
   readonly isWhole: boolean;
@@ -107,8 +128,8 @@ export interface AuthorizationData extends Enum {
   readonly asPortfolioCustody: PortfolioId;
   readonly isBecomeAgent: boolean;
   readonly asBecomeAgent: ITuple<[PolymeshAssetId, AgentGroup]>;
-  readonly isAddRelayerPayingKey: boolean;
-  readonly asAddRelayerPayingKey: ITuple<[AccountId32, AccountId32, u128]>;
+  readonly isOldAddRelayerPayingKey: boolean;
+  readonly asOldAddRelayerPayingKey: ITuple<[AccountId32, AccountId32, u128]>;
   readonly isRotatePrimaryKeyToSecondary: boolean;
   readonly asRotatePrimaryKeyToSecondary: Permissions;
   readonly type:
@@ -120,7 +141,7 @@ export interface AuthorizationData extends Enum {
     | 'JoinIdentity'
     | 'PortfolioCustody'
     | 'BecomeAgent'
-    | 'AddRelayerPayingKey'
+    | 'OldAddRelayerPayingKey'
     | 'RotatePrimaryKeyToSecondary';
 }
 
@@ -167,13 +188,49 @@ export interface CappedFee extends u64 {}
 /** @name CddId */
 export interface CddId extends U8aFixed {}
 
-/** @name CddStatus */
-export interface CddStatus extends Enum {
-  readonly isOk: boolean;
-  readonly asOk: IdentityId;
-  readonly isErr: boolean;
-  readonly asErr: Bytes;
-  readonly type: 'Ok' | 'Err';
+/** @name ChainScopedMessage<Message> */
+export interface ChainScopedMessage<Message> extends Struct {
+  readonly genesisHash: Hash;
+  readonly nonceOrId: u64;
+  readonly label: Text;
+  readonly expiresAt: PolymeshMoment;
+  readonly message: Message;
+}
+
+/** @name ChainScopedMessageFundraiserReceipt */
+export interface ChainScopedMessageFundraiserReceipt extends Struct {
+  readonly genesisHash: Hash;
+  readonly nonceOrId: u64;
+  readonly label: Text;
+  readonly expiresAt: PolymeshMoment;
+  readonly message: FundraiserReceipt;
+}
+
+/** @name ChainScopedMessageIdentityId */
+export interface ChainScopedMessageIdentityId extends Struct {
+  readonly genesisHash: Hash;
+  readonly nonceOrId: u64;
+  readonly label: Text;
+  readonly expiresAt: PolymeshMoment;
+  readonly message: IdentityId;
+}
+
+/** @name ChainScopedMessageReceipt */
+export interface ChainScopedMessageReceipt extends Struct {
+  readonly genesisHash: Hash;
+  readonly nonceOrId: u64;
+  readonly label: Text;
+  readonly expiresAt: PolymeshMoment;
+  readonly message: Receipt;
+}
+
+/** @name ChainScopedMessageRuntimeCall */
+export interface ChainScopedMessageRuntimeCall extends Struct {
+  readonly genesisHash: Hash;
+  readonly nonceOrId: u64;
+  readonly label: Text;
+  readonly expiresAt: PolymeshMoment;
+  readonly message: RuntimeCall;
 }
 
 /** @name Claim */
@@ -790,15 +847,27 @@ export interface CountryCode extends Enum {
     | 'Sx';
 }
 
+/** @name CreateChildIdentityAuthMessage */
+export interface CreateChildIdentityAuthMessage extends ChainScopedMessageIdentityId {}
+
 /** @name CustomClaimTypeId */
 export interface CustomClaimTypeId extends u32 {}
+
+/** @name DidActiveStatus */
+export interface DidActiveStatus extends Enum {
+  readonly isOk: boolean;
+  readonly asOk: IdentityId;
+  readonly isErr: boolean;
+  readonly asErr: Bytes;
+  readonly type: 'Ok' | 'Err';
+}
 
 /** @name DidStatus */
 export interface DidStatus extends Enum {
   readonly isUnknown: boolean;
   readonly isExists: boolean;
-  readonly isCddVerified: boolean;
-  readonly type: 'Unknown' | 'Exists' | 'CddVerified';
+  readonly isActive: boolean;
+  readonly type: 'Unknown' | 'Exists' | 'Active';
 }
 
 /** @name ExecuteInstructionInfo */
@@ -838,7 +907,6 @@ export interface FundraiserId extends u64 {}
 
 /** @name FundraiserReceipt */
 export interface FundraiserReceipt extends Struct {
-  readonly uid: u64;
   readonly fundraiserId: FundraiserId;
   readonly legId: LegId;
   readonly senderIdentity: IdentityId;
@@ -847,10 +915,21 @@ export interface FundraiserReceipt extends Struct {
   readonly amount: Balance;
 }
 
+/** @name FundraiserReceiptMessage */
+export interface FundraiserReceiptMessage extends ChainScopedMessageFundraiserReceipt {}
+
 /** @name FungibleLeg */
 export interface FungibleLeg extends Struct {
-  readonly sender: PortfolioId;
-  readonly receiver: PortfolioId;
+  readonly sender: AssetHolder;
+  readonly receiver: AssetHolder;
+  readonly assetId: PolymeshAssetId;
+  readonly amount: Balance;
+}
+
+/** @name FungibleLegV7 */
+export interface FungibleLegV7 extends Struct {
+  readonly sender: PortfolioIdV7;
+  readonly receiver: PortfolioIdV7;
   readonly assetId: PolymeshAssetId;
   readonly amount: Balance;
 }
@@ -907,6 +986,17 @@ export interface Leg extends Enum {
 /** @name LegId */
 export interface LegId extends u64 {}
 
+/** @name LegV7 */
+export interface LegV7 extends Enum {
+  readonly isFungible: boolean;
+  readonly asFungible: FungibleLegV7;
+  readonly isNonFungible: boolean;
+  readonly asNonFungible: NonFungibleLegV7;
+  readonly isOffChain: boolean;
+  readonly asOffChain: OffChainLeg;
+  readonly type: 'Fungible' | 'NonFungible' | 'OffChain';
+}
+
 /** @name Member */
 export interface Member extends Struct {
   readonly id: IdentityId;
@@ -925,8 +1015,15 @@ export interface NFTs extends Struct {
 
 /** @name NonFungibleLeg */
 export interface NonFungibleLeg extends Struct {
-  readonly sender: PortfolioId;
-  readonly receiver: PortfolioId;
+  readonly sender: AssetHolder;
+  readonly receiver: AssetHolder;
+  readonly nfts: NFTs;
+}
+
+/** @name NonFungibleLegV7 */
+export interface NonFungibleLegV7 extends Struct {
+  readonly sender: PortfolioIdV7;
+  readonly receiver: PortfolioIdV7;
   readonly nfts: NFTs;
 }
 
@@ -983,12 +1080,28 @@ export interface PortfolioId extends Struct {
   readonly kind: PortfolioKind;
 }
 
+/** @name PortfolioIdV7 */
+export interface PortfolioIdV7 extends Struct {
+  readonly did: IdentityId;
+  readonly kind: PortfolioKindV7;
+}
+
 /** @name PortfolioKind */
 export interface PortfolioKind extends Enum {
   readonly isDefault: boolean;
   readonly isUser: boolean;
   readonly asUser: PortfolioNumber;
   readonly type: 'Default' | 'User';
+}
+
+/** @name PortfolioKindV7 */
+export interface PortfolioKindV7 extends Enum {
+  readonly isDefault: boolean;
+  readonly isUser: boolean;
+  readonly asUser: PortfolioNumber;
+  readonly isAccountId: boolean;
+  readonly asAccountId: AccountId32;
+  readonly type: 'Default' | 'User' | 'AccountId';
 }
 
 /** @name PortfolioNumber */
@@ -1052,7 +1165,6 @@ export interface ProtocolOp extends Enum {
 
 /** @name Receipt */
 export interface Receipt extends Struct {
-  readonly uid: u64;
   readonly instructionId: InstructionId;
   readonly legId: LegId;
   readonly senderIdentity: IdentityId;
@@ -1060,6 +1172,12 @@ export interface Receipt extends Struct {
   readonly ticker: Ticker;
   readonly amount: Balance;
 }
+
+/** @name ReceiptMessage */
+export interface ReceiptMessage extends ChainScopedMessageReceipt {}
+
+/** @name RelayTxMessage */
+export interface RelayTxMessage extends ChainScopedMessageRuntimeCall {}
 
 /** @name RequirementReport */
 export interface RequirementReport extends Struct {
@@ -1101,6 +1219,9 @@ export interface SecondaryKey extends Struct {
   readonly permissions: Permissions;
 }
 
+/** @name SecondaryKeyAuthMessage */
+export interface SecondaryKeyAuthMessage extends ChainScopedMessageIdentityId {}
+
 /** @name Signatory */
 export interface Signatory extends Enum {
   readonly isIdentity: boolean;
@@ -1119,13 +1240,6 @@ export interface StatClaim extends Enum {
   readonly isJurisdiction: boolean;
   readonly asJurisdiction: Option<CountryCode>;
   readonly type: 'Accredited' | 'Affiliate' | 'Jurisdiction';
-}
-
-/** @name TargetIdAuthorization */
-export interface TargetIdAuthorization extends Struct {
-  readonly targetId: IdentityId;
-  readonly nonce: AuthorizationNonce;
-  readonly expiresAt: PolymeshMoment;
 }
 
 /** @name TargetIdentity */

@@ -33,6 +33,7 @@ import type {
 } from '@polkadot/types/interfaces/runtime';
 import type {
   FrameSupportDispatchPerDispatchClassWeight,
+  FrameSupportTokensFungibleImbalance,
   FrameSupportTokensMiscIdAmount,
   FrameSystemAccountInfo,
   FrameSystemCodeUpgradeAuthorization,
@@ -93,20 +94,20 @@ import type {
   PalletTransactionPaymentReleases,
   PalletValidatorsPermissionedIdentityPrefs,
   PalletValidatorsSlashingSwitch,
-  PolymeshCommonUtilitiesCheckpointNextCheckpoints,
-  PolymeshCommonUtilitiesCheckpointScheduleCheckpoints,
-  PolymeshCommonUtilitiesProtocolFeeProtocolOp,
   PolymeshContractsApi,
   PolymeshContractsApiCodeHash,
   PolymeshContractsChainExtensionExtrinsicId,
   PolymeshContractsNextUpgrade,
   PolymeshPrimitivesAgentAgentGroup,
+  PolymeshPrimitivesAssetAssetHolder,
   PolymeshPrimitivesAssetAssetId,
   PolymeshPrimitivesAssetIdentifier,
   PolymeshPrimitivesAssetMetadataAssetMetadataKey,
   PolymeshPrimitivesAssetMetadataAssetMetadataSpec,
   PolymeshPrimitivesAssetMetadataAssetMetadataValueDetail,
   PolymeshPrimitivesAuthorization,
+  PolymeshPrimitivesCheckpointNextCheckpoints,
+  PolymeshPrimitivesCheckpointScheduleCheckpoints,
   PolymeshPrimitivesComplianceManagerAssetCompliance,
   PolymeshPrimitivesConditionTrustedIssuer,
   PolymeshPrimitivesDocument,
@@ -120,6 +121,8 @@ import type {
   PolymeshPrimitivesMultisigProposalState,
   PolymeshPrimitivesMultisigProposalVoteCount,
   PolymeshPrimitivesNftNftCollection,
+  PolymeshPrimitivesNftNftOwnerStatus,
+  PolymeshPrimitivesProtocolFeeProtocolOp,
   PolymeshPrimitivesSecondaryKeyExtrinsicPermissions,
   PolymeshPrimitivesSecondaryKeyKeyRecord,
   PolymeshPrimitivesSecondaryKeySignatory,
@@ -138,13 +141,15 @@ import type {
   PolymeshPrimitivesTicker,
   PolymeshPrimitivesTransferComplianceAssetTransferCompliance,
   PolymeshPrimitivesTransferComplianceTransferConditionExemptKey,
-  PolymeshRuntimeTestnetRuntimeRuntimeHoldReason,
-  PolymeshRuntimeTestnetRuntimeSessionKeys,
+  PolymeshRuntimeDevelopRuntimeRuntimeHoldReason,
+  PolymeshRuntimeDevelopRuntimeSessionKeys,
   SpAuthorityDiscoveryAppPublic,
   SpConsensusBabeAppPublic,
   SpConsensusBabeBabeEpochConfiguration,
   SpConsensusBabeDigestsNextConfigDescriptor,
   SpConsensusBabeDigestsPreDigest,
+  SpConsensusBeefyEcdsaCryptoPublic,
+  SpConsensusBeefyMmrBeefyAuthoritySet,
   SpConsensusGrandpaAppPublic,
   SpCoreCryptoKeyTypeId,
   SpNposElectionsElectionScore,
@@ -163,6 +168,17 @@ export type __QueryableStorageEntry<ApiType extends ApiTypes> = QueryableStorage
 declare module '@polkadot/api-base/types/storage' {
   interface AugmentedQueries<ApiType extends ApiTypes> {
     asset: {
+      /**
+       * Tracks the total [`Balance`] held by the account for each [`AssetId`].
+       **/
+      assetBalance: AugmentedQuery<
+        ApiType,
+        (
+          arg1: AccountId32 | string | Uint8Array,
+          arg2: PolymeshPrimitivesAssetAssetId | string | Uint8Array
+        ) => Observable<u128>,
+        [AccountId32, PolymeshPrimitivesAssetAssetId]
+      >;
       /**
        * All [`Document`] attached to an asset.
        **/
@@ -401,6 +417,18 @@ declare module '@polkadot/api-base/types/storage' {
         [ITuple<[PolymeshPrimitivesAssetAssetId, Bytes]>]
       >;
       /**
+       * Tracks the [`Balance`] of locked tokens for assets that are held by the key (i.e., not in a portfolio).
+       **/
+      lockedBalance: AugmentedQuery<
+        ApiType,
+        (
+          arg1: AccountId32 | string | Uint8Array,
+          arg2: PolymeshPrimitivesAssetAssetId | string | Uint8Array
+        ) => Observable<u128>,
+        [AccountId32, PolymeshPrimitivesAssetAssetId]
+      >;
+      /**
+       * Identities that require receiver affirmation for all incoming transfers.
        * The list of mandatory mediators for every ticker.
        **/
       mandatoryMediators: AugmentedQuery<
@@ -677,7 +705,7 @@ declare module '@polkadot/api-base/types/storage' {
         (arg: AccountId32 | string | Uint8Array) => Observable<
           Vec<
             {
-              readonly id: PolymeshRuntimeTestnetRuntimeRuntimeHoldReason;
+              readonly id: PolymeshRuntimeDevelopRuntimeRuntimeHoldReason;
               readonly amount: u128;
             } & Struct
           >
@@ -714,6 +742,51 @@ declare module '@polkadot/api-base/types/storage' {
        **/
       totalIssuance: AugmentedQuery<ApiType, () => Observable<u128>, []>;
     };
+    beefy: {
+      /**
+       * The current authorities set
+       **/
+      authorities: AugmentedQuery<
+        ApiType,
+        () => Observable<Vec<SpConsensusBeefyEcdsaCryptoPublic>>,
+        []
+      >;
+      /**
+       * Block number where BEEFY consensus is enabled/started.
+       * By changing this (through privileged `set_new_genesis()`), BEEFY consensus is effectively
+       * restarted from the newly set block number.
+       **/
+      genesisBlock: AugmentedQuery<ApiType, () => Observable<Option<u32>>, []>;
+      /**
+       * Authorities set scheduled to be used with the next session
+       **/
+      nextAuthorities: AugmentedQuery<
+        ApiType,
+        () => Observable<Vec<SpConsensusBeefyEcdsaCryptoPublic>>,
+        []
+      >;
+      /**
+       * A mapping from BEEFY set ID to the index of the *most recent* session for which its
+       * members were responsible.
+       *
+       * This is only used for validating equivocation proofs. An equivocation proof must
+       * contains a key-ownership proof for a given session, therefore we need a way to tie
+       * together sessions and BEEFY set ids, i.e. we need to validate that a validator
+       * was the owner of a given key on a given session, and what the active set ID was
+       * during that session.
+       *
+       * TWOX-NOTE: `ValidatorSetId` is not under user control.
+       **/
+      setIdSession: AugmentedQuery<
+        ApiType,
+        (arg: u64 | AnyNumber | Uint8Array) => Observable<Option<u32>>,
+        [u64]
+      >;
+      /**
+       * The current validator set id
+       **/
+      validatorSetId: AugmentedQuery<ApiType, () => Observable<u64>, []>;
+    };
     capitalDistribution: {
       /**
        * All capital distributions, tied to their respective corporate actions (CAs).
@@ -748,28 +821,6 @@ declare module '@polkadot/api-base/types/storage' {
        * Storage version.
        **/
       storageVersion: AugmentedQuery<ApiType, () => Observable<u8>, []>;
-    };
-    cddServiceProviders: {
-      /**
-       * The current "active" membership, stored as an ordered Vec.
-       **/
-      activeMembers: AugmentedQuery<
-        ApiType,
-        () => Observable<Vec<PolymeshPrimitivesIdentityId>>,
-        []
-      >;
-      /**
-       * Limit of how many "active" members there can be.
-       **/
-      activeMembersLimit: AugmentedQuery<ApiType, () => Observable<u32>, []>;
-      /**
-       * The current "inactive" membership, stored as an ordered Vec.
-       **/
-      inactiveMembers: AugmentedQuery<
-        ApiType,
-        () => Observable<Vec<PolymeshPrimitivesGroupInactiveMember>>,
-        []
-      >;
     };
     checkpoint: {
       /**
@@ -810,7 +861,7 @@ declare module '@polkadot/api-base/types/storage' {
         ApiType,
         (
           arg: PolymeshPrimitivesAssetAssetId | string | Uint8Array
-        ) => Observable<Option<PolymeshCommonUtilitiesCheckpointNextCheckpoints>>,
+        ) => Observable<Option<PolymeshPrimitivesCheckpointNextCheckpoints>>,
         [PolymeshPrimitivesAssetAssetId]
       >;
       /**
@@ -834,7 +885,7 @@ declare module '@polkadot/api-base/types/storage' {
         (
           arg1: PolymeshPrimitivesAssetAssetId | string | Uint8Array,
           arg2: u64 | AnyNumber | Uint8Array
-        ) => Observable<Option<PolymeshCommonUtilitiesCheckpointScheduleCheckpoints>>,
+        ) => Observable<Option<PolymeshPrimitivesCheckpointScheduleCheckpoints>>,
         [PolymeshPrimitivesAssetAssetId, u64]
       >;
       /**
@@ -1244,6 +1295,28 @@ declare module '@polkadot/api-base/types/storage' {
         [PalletCorporateActionsCaId, PolymeshPrimitivesIdentityId]
       >;
     };
+    didRegistrars: {
+      /**
+       * The current "active" membership, stored as an ordered Vec.
+       **/
+      activeMembers: AugmentedQuery<
+        ApiType,
+        () => Observable<Vec<PolymeshPrimitivesIdentityId>>,
+        []
+      >;
+      /**
+       * Limit of how many "active" members there can be.
+       **/
+      activeMembersLimit: AugmentedQuery<ApiType, () => Observable<u32>, []>;
+      /**
+       * The current "inactive" membership, stored as an ordered Vec.
+       **/
+      inactiveMembers: AugmentedQuery<
+        ApiType,
+        () => Observable<Vec<PolymeshPrimitivesGroupInactiveMember>>,
+        []
+      >;
+    };
     electionProviderMultiPhase: {
       /**
        * Current phase.
@@ -1485,7 +1558,8 @@ declare module '@polkadot/api-base/types/storage' {
        * Strong references will block a key from leaving it's identity.
        *
        * Pallets using "strong" references to account keys:
-       * * Relayer: For `user_key` and `paying_key`
+       * * Assets: Updated when an account holds an asset with non-zero balance.
+       * * NFT: Updated when an account owns an NFT.
        *
        **/
       accountKeyRefCount: AugmentedQuery<
@@ -1521,11 +1595,6 @@ declare module '@polkadot/api-base/types/storage' {
         [PolymeshPrimitivesIdentityId, u64]
       >;
       /**
-       * A config flag that, if set, instructs an authorization from a CDD provider in order to
-       * change the primary key of an identity.
-       **/
-      cddAuthForPrimaryKeyRotation: AugmentedQuery<ApiType, () => Observable<bool>, []>;
-      /**
        * All child identities of a parent (i.e ParentDID, ChildDID, true)
        **/
       childDid: AugmentedQuery<
@@ -1551,10 +1620,6 @@ declare module '@polkadot/api-base/types/storage' {
        * Controls the authorization id.
        **/
       currentAuthId: AugmentedQuery<ApiType, () => Observable<u64>, []>;
-      /**
-       * It stores the current gas fee payer for the current transaction.
-       **/
-      currentPayer: AugmentedQuery<ApiType, () => Observable<Option<AccountId32>>, []>;
       /**
        * The next `CustomClaimTypeId`.
        **/
@@ -1751,6 +1816,47 @@ declare module '@polkadot/api-base/types/storage' {
           arg: u32 | AnyNumber | Uint8Array
         ) => Observable<Option<ITuple<[AccountId32, u128, bool]>>>,
         [u32]
+      >;
+    };
+    mmr: {
+      /**
+       * Hashes of the nodes in the MMR.
+       *
+       * Note this collection only contains MMR peaks, the inner nodes (and leaves)
+       * are pruned and only stored in the Offchain DB.
+       **/
+      nodes: AugmentedQuery<
+        ApiType,
+        (arg: u64 | AnyNumber | Uint8Array) => Observable<Option<H256>>,
+        [u64]
+      >;
+      /**
+       * Current size of the MMR (number of leaves).
+       **/
+      numberOfLeaves: AugmentedQuery<ApiType, () => Observable<u64>, []>;
+      /**
+       * Latest MMR Root hash.
+       **/
+      rootHash: AugmentedQuery<ApiType, () => Observable<H256>, []>;
+    };
+    mmrLeaf: {
+      /**
+       * Details of current BEEFY authority set.
+       **/
+      beefyAuthorities: AugmentedQuery<
+        ApiType,
+        () => Observable<SpConsensusBeefyMmrBeefyAuthoritySet>,
+        []
+      >;
+      /**
+       * Details of next BEEFY authority set.
+       *
+       * This storage entry is used as cache for calls to `update_beefy_next_authority_set`.
+       **/
+      beefyNextAuthorities: AugmentedQuery<
+        ApiType,
+        () => Observable<SpConsensusBeefyMmrBeefyAuthoritySet>,
+        []
       >;
     };
     multiSig: {
@@ -1967,15 +2073,17 @@ declare module '@polkadot/api-base/types/storage' {
         [ITuple<[u64, u64]>, PolymeshPrimitivesAssetMetadataAssetMetadataKey]
       >;
       /**
-       * Tracks the owner of an NFT
+       * All NFTs associated to the account Key.
        **/
-      nftOwner: AugmentedQuery<
+      nftHolder: AugmentedQuery<
         ApiType,
         (
-          arg1: PolymeshPrimitivesAssetAssetId | string | Uint8Array,
-          arg2: u64 | AnyNumber | Uint8Array
-        ) => Observable<Option<PolymeshPrimitivesIdentityIdPortfolioId>>,
-        [PolymeshPrimitivesAssetAssetId, u64]
+          arg1: AccountId32 | string | Uint8Array,
+          arg2:
+            | ITuple<[PolymeshPrimitivesAssetAssetId, u64]>
+            | [PolymeshPrimitivesAssetAssetId | string | Uint8Array, u64 | AnyNumber | Uint8Array]
+        ) => Observable<PolymeshPrimitivesNftNftOwnerStatus>,
+        [AccountId32, ITuple<[PolymeshPrimitivesAssetAssetId, u64]>]
       >;
       /**
        * The total number of NFTs in a collection.
@@ -1995,6 +2103,17 @@ declare module '@polkadot/api-base/types/storage' {
           arg2: PolymeshPrimitivesIdentityId | string | Uint8Array
         ) => Observable<u64>,
         [PolymeshPrimitivesAssetAssetId, PolymeshPrimitivesIdentityId]
+      >;
+      /**
+       * Reverse mapping for allowing to find the owner of a specific NFT.
+       **/
+      owner: AugmentedQuery<
+        ApiType,
+        (
+          arg1: PolymeshPrimitivesAssetAssetId | string | Uint8Array,
+          arg2: u64 | AnyNumber | Uint8Array
+        ) => Observable<Option<PolymeshPrimitivesAssetAssetHolder>>,
+        [PolymeshPrimitivesAssetAssetId, u64]
       >;
     };
     offences: {
@@ -2263,6 +2382,12 @@ declare module '@polkadot/api-base/types/storage' {
        **/
       storageVersion: AugmentedQuery<ApiType, () => Observable<u8>, []>;
     };
+    polymeshTransactionPayment: {
+      /**
+       * It stores the current gas fee payer for the current transaction.
+       **/
+      currentPayer: AugmentedQuery<ApiType, () => Observable<Option<AccountId32>>, []>;
+    };
     portfolio: {
       /**
        * Custodians allowed to create and take custody of portfolios on an id's behalf.
@@ -2473,7 +2598,7 @@ declare module '@polkadot/api-base/types/storage' {
         ApiType,
         (
           arg:
-            | PolymeshCommonUtilitiesProtocolFeeProtocolOp
+            | PolymeshPrimitivesProtocolFeeProtocolOp
             | 'AssetRegisterTicker'
             | 'AssetIssue'
             | 'AssetAddDocuments'
@@ -2493,29 +2618,43 @@ declare module '@polkadot/api-base/types/storage' {
             | number
             | Uint8Array
         ) => Observable<u128>,
-        [PolymeshCommonUtilitiesProtocolFeeProtocolOp]
+        [PolymeshPrimitivesProtocolFeeProtocolOp]
       >;
       /**
        * The fee coefficient as a positive rational (numerator, denominator).
        **/
       coefficient: AugmentedQuery<ApiType, () => Observable<ITuple<[u32, u32]>>, []>;
     };
-    randomnessCollectiveFlip: {
-      /**
-       * Series of block headers from the last 81 blocks that acts as random seed material. This
-       * is arranged as a ring buffer with `block_number % 81` being the index into the `Vec` of
-       * the oldest hash.
-       **/
-      randomMaterial: AugmentedQuery<ApiType, () => Observable<Vec<H256>>, []>;
-    };
     relayer: {
+      /**
+       * Pending subsidies for a `user_key` from a `paying_key`.
+       *
+       * This is used to track subsidies that have been authorised but not yet accepted.
+       *
+       * The paying key can update or cancel the subsidy before it is accepted.
+       **/
+      pendingSubsidies: AugmentedQuery<
+        ApiType,
+        (
+          arg1: AccountId32 | string | Uint8Array,
+          arg2: AccountId32 | string | Uint8Array
+        ) => Observable<Option<u128>>,
+        [AccountId32, AccountId32]
+      >;
+      /**
+       * Nonce for `relay_tx`.
+       **/
+      relayTxNonces: AugmentedQuery<
+        ApiType,
+        (arg: AccountId32 | string | Uint8Array) => Observable<u64>,
+        [AccountId32]
+      >;
       /**
        * The subsidy for a `user_key` if they are being subsidised,
        * as a map `user_key` => `Subsidy`.
        *
-       * A key can only have one subsidy at a time.  To change subsidisers
-       * a key needs to call `remove_paying_key` to remove the current subsidy,
-       * before they can accept a new subsidiser.
+       * A key can only have one subsidy at a time.  Accepting a new subsidy
+       * will replace any existing subsidy.
        **/
       subsidies: AugmentedQuery<
         ApiType,
@@ -2594,7 +2733,7 @@ declare module '@polkadot/api-base/types/storage' {
         ApiType,
         (
           arg: AccountId32 | string | Uint8Array
-        ) => Observable<Option<PolymeshRuntimeTestnetRuntimeSessionKeys>>,
+        ) => Observable<Option<PolymeshRuntimeDevelopRuntimeSessionKeys>>,
         [AccountId32]
       >;
       /**
@@ -2608,7 +2747,7 @@ declare module '@polkadot/api-base/types/storage' {
        **/
       queuedKeys: AugmentedQuery<
         ApiType,
-        () => Observable<Vec<ITuple<[AccountId32, PolymeshRuntimeTestnetRuntimeSessionKeys]>>>,
+        () => Observable<Vec<ITuple<[AccountId32, PolymeshRuntimeDevelopRuntimeSessionKeys]>>>,
         []
       >;
       /**
@@ -2625,12 +2764,13 @@ declare module '@polkadot/api-base/types/storage' {
         (
           arg1: u64 | AnyNumber | Uint8Array,
           arg2:
-            | PolymeshPrimitivesIdentityIdPortfolioId
-            | { did?: any; kind?: any }
+            | PolymeshPrimitivesAssetAssetHolder
+            | { Portfolio: any }
+            | { Account: any }
             | string
             | Uint8Array
         ) => Observable<PolymeshPrimitivesSettlementAffirmationStatus>,
-        [u64, PolymeshPrimitivesIdentityIdPortfolioId]
+        [u64, PolymeshPrimitivesAssetAssetHolder]
       >;
       /**
        * Free-form text about a venue. venue_id -> `VenueDetails`
@@ -2721,6 +2861,15 @@ declare module '@polkadot/api-base/types/storage' {
         [u64]
       >;
       /**
+       * When `true`, the identity has opted in to mandatory receiver affirmation.
+       * Default is `false` (no affirmation required).
+       **/
+      mandatoryReceiverAffirmation: AugmentedQuery<
+        ApiType,
+        (arg: PolymeshPrimitivesIdentityId | string | Uint8Array) => Observable<bool>,
+        [PolymeshPrimitivesIdentityId]
+      >;
+      /**
        * Tracks the number of signers each venue has.
        **/
       numberOfVenueSigners: AugmentedQuery<
@@ -2751,10 +2900,6 @@ declare module '@polkadot/api-base/types/storage' {
         [AccountId32, u64]
       >;
       /**
-       * Storage version.
-       **/
-      storageVersion: AugmentedQuery<ApiType, () => Observable<u8>, []>;
-      /**
        * Helps a user track their pending instructions and affirmations (only needed for UI).
        * (counter_party, instruction_id) -> AffirmationStatus
        **/
@@ -2762,13 +2907,14 @@ declare module '@polkadot/api-base/types/storage' {
         ApiType,
         (
           arg1:
-            | PolymeshPrimitivesIdentityIdPortfolioId
-            | { did?: any; kind?: any }
+            | PolymeshPrimitivesAssetAssetHolder
+            | { Portfolio: any }
+            | { Account: any }
             | string
             | Uint8Array,
           arg2: u64 | AnyNumber | Uint8Array
         ) => Observable<PolymeshPrimitivesSettlementAffirmationStatus>,
-        [PolymeshPrimitivesIdentityIdPortfolioId, u64]
+        [PolymeshPrimitivesAssetAssetHolder, u64]
       >;
       /**
        * Venues create by an identity.
@@ -3358,6 +3504,12 @@ declare module '@polkadot/api-base/types/storage' {
        **/
       storageVersion: AugmentedQuery<ApiType, () => Observable<u8>, []>;
     };
+    sudo: {
+      /**
+       * The `AccountId` of the sudo key.
+       **/
+      key: AugmentedQuery<ApiType, () => Observable<Option<AccountId32>>, []>;
+    };
     system: {
       /**
        * The full account information for a particular account ID.
@@ -3574,6 +3726,16 @@ declare module '@polkadot/api-base/types/storage' {
         () => Observable<PalletTransactionPaymentReleases>,
         []
       >;
+      /**
+       * The `OnChargeTransaction` stores the withdrawn tx fee here.
+       *
+       * Use `withdraw_txfee` and `remaining_txfee` to access from outside the crate.
+       **/
+      txPaymentCredit: AugmentedQuery<
+        ApiType,
+        () => Observable<Option<FrameSupportTokensFungibleImbalance>>,
+        []
+      >;
     };
     upgradeCommittee: {
       /**
@@ -3637,17 +3799,6 @@ declare module '@polkadot/api-base/types/storage' {
         ApiType,
         () => Observable<Vec<PolymeshPrimitivesGroupInactiveMember>>,
         []
-      >;
-    };
-    utility: {
-      /**
-       * Nonce for `relay_tx`.
-       * POLYMESH: added.
-       **/
-      nonces: AugmentedQuery<
-        ApiType,
-        (arg: AccountId32 | string | Uint8Array) => Observable<u64>,
-        [AccountId32]
       >;
     };
     validators: {

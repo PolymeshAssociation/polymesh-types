@@ -2,6 +2,7 @@ import type { DefinitionsCall } from '@polkadot/types/types';
 
 import { AssetApiV3 } from './assetApi/v3';
 import { AssetApiV4 } from './assetApi/v4';
+import { AssetApiV5 } from './assetApi/v5';
 import { ComplianceApiV1 } from './complianceApi/v1';
 import { ComplianceApiV2 } from './complianceApi/v2';
 import { GroupApiV1 } from './groupApi/v1';
@@ -9,15 +10,18 @@ import { IdentityApiV3 } from './identityApi/v3';
 import { IdentityApiV4 } from './identityApi/v4';
 import { NFTApiV1 } from './nftApi/v1';
 import { NFTApiV2 } from './nftApi/v2';
+import { NFTApiV3 } from './nftApi/v3';
 import { PipsApiV1 } from './pipsApi/v1';
 import { ProtocolFeeApiV1 } from './protocolFeeApi/v1';
 import { SettlementApiV1 } from './settlementApi/v1';
 import { SettlementApiV2 } from './settlementApi/v2';
+import { SettlementApiV3 } from './settlementApi/v3';
 import { StakingApiV1 } from './stakingApi/v1';
 import { StatisticsApiV0 } from './statisticsApi/v0';
 
 export const runtime: DefinitionsCall = {
   AssetApi: [
+    { methods: AssetApiV5, version: 5 },
     { methods: AssetApiV4, version: 4 },
     { methods: AssetApiV3, version: 3 },
   ],
@@ -31,12 +35,14 @@ export const runtime: DefinitionsCall = {
     { methods: IdentityApiV3, version: 3 },
   ],
   NFTApi: [
+    { methods: NFTApiV3, version: 3 },
     { methods: NFTApiV2, version: 2 },
     { methods: NFTApiV1, version: 1 },
   ],
   PipsApi: [{ methods: PipsApiV1, version: 1 }],
   ProtocolFeeApi: [{ methods: ProtocolFeeApiV1, version: 1 }],
   SettlementApi: [
+    { methods: SettlementApiV3, version: 3 },
     { methods: SettlementApiV2, version: 2 },
     { methods: SettlementApiV1, version: 1 },
   ],

@@ -1,26 +1,5 @@
 export default {
   rpc: {
-    isIdentityHasValidCdd: {
-      description: 'use to tell whether the given did has valid cdd claim or not',
-      params: [
-        {
-          name: 'did',
-          type: 'IdentityId',
-          isOptional: false,
-        },
-        {
-          name: 'buffer_time',
-          type: 'u64',
-          isOptional: true,
-        },
-        {
-          name: 'blockHash',
-          type: 'Hash',
-          isOptional: true,
-        },
-      ],
-      type: 'CddStatus',
-    },
     getDidRecords: {
       description: 'Used to get the did record values for a given DID',
       params: [
@@ -95,28 +74,6 @@ export default {
         },
       ],
       type: 'Option<KeyIdentityData>',
-    },
-    validCDDClaims: {
-      description:
-        'Returns all valid IdentityClaim of type CustomerDueDiligence for the given target_identity',
-      params: [
-        {
-          name: 'target_identity',
-          type: 'IdentityId',
-          isOptional: false,
-        },
-        {
-          name: 'cdd_checker_leeway',
-          type: 'u64',
-          isOptional: true,
-        },
-        {
-          name: 'blockHash',
-          type: 'Hash',
-          isOptional: true,
-        },
-      ],
-      type: 'Vec<IdentityClaim>',
     },
   },
   types: {},

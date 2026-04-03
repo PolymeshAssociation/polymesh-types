@@ -1,26 +1,5 @@
 export default {
   identity: {
-    isIdentityHasValidCdd: {
-      description: 'use to tell whether the given did has valid cdd claim or not',
-      params: [
-        {
-          name: 'did',
-          type: 'IdentityId',
-          isOptional: false,
-        },
-        {
-          name: 'buffer_time',
-          type: 'u64',
-          isOptional: true,
-        },
-        {
-          name: 'blockHash',
-          type: 'Hash',
-          isOptional: true,
-        },
-      ],
-      type: 'CddStatus',
-    },
     getDidRecords: {
       description: 'Used to get the did record values for a given DID',
       params: [
@@ -95,28 +74,6 @@ export default {
         },
       ],
       type: 'Option<KeyIdentityData>',
-    },
-    validCDDClaims: {
-      description:
-        'Returns all valid IdentityClaim of type CustomerDueDiligence for the given target_identity',
-      params: [
-        {
-          name: 'target_identity',
-          type: 'IdentityId',
-          isOptional: false,
-        },
-        {
-          name: 'cdd_checker_leeway',
-          type: 'u64',
-          isOptional: true,
-        },
-        {
-          name: 'blockHash',
-          type: 'Hash',
-          isOptional: true,
-        },
-      ],
-      type: 'Vec<IdentityClaim>',
     },
   },
   pips: {
@@ -206,13 +163,13 @@ export default {
         "Returns a vector containing all errors for the transfer. An empty vec means there's no error.",
       params: [
         {
-          name: 'sender_portfolio',
-          type: 'PortfolioId',
+          name: 'sender',
+          type: 'AssetHolder',
           isOptional: false,
         },
         {
-          name: 'receiver_portfolio',
-          type: 'PortfolioId',
+          name: 'receiver',
+          type: 'AssetHolder',
           isOptional: false,
         },
         {
@@ -269,13 +226,13 @@ export default {
         "Returns a vector containing all errors for the transfer. An empty vec means there's no error.",
       params: [
         {
-          name: 'sender_portfolio',
-          type: 'PortfolioId',
+          name: 'sender',
+          type: 'AssetHolder',
           isOptional: false,
         },
         {
-          name: 'receiver_portfolio',
-          type: 'PortfolioId',
+          name: 'receiver',
+          type: 'AssetHolder',
           isOptional: false,
         },
         {
@@ -325,8 +282,8 @@ export default {
           isOptional: false,
         },
         {
-          name: 'portfolios',
-          type: 'Vec<PortfolioId>',
+          name: 'holder_set',
+          type: 'Vec<AssetHolder>',
           isOptional: false,
         },
         {

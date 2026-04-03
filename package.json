@@ -23,7 +23,8 @@
     "generate:meta": "node --loader @polkadot/dev-ts node_modules/.bin/polkadot-types-from-chain --endpoint metadata.json --package . --output ./src/polkadot --strict",
     "fetch:definitions": "ts-node scripts/fetchDefinitions.ts",
     "generate:consts": "ts-node scripts/generateConsts.ts",
-    "generate:types": "rimraf src/polkadot/* && yarn fetch:definitions && yarn generate:defs && yarn generate:meta && yarn generate:consts && yarn format"
+    "process:types": "ts-node scripts/fixAugmentTypes.ts",
+    "generate:types": "rimraf src/polkadot/* && yarn fetch:definitions && yarn generate:defs && yarn generate:meta && yarn process:types && yarn generate:consts && yarn format"
   },
   "dependencies": {
     "@polkadot/api": "16.5.2",

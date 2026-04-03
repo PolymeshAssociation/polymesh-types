@@ -81,7 +81,8 @@
     "cdd_register_did_with_cdd": "cdd_register_did_with_cdd",
     "create_child_identity": "create_child_identity",
     "create_child_identities": "create_child_identities",
-    "unlink_child_identity": "unlink_child_identity"
+    "unlink_child_identity": "unlink_child_identity",
+    "register_did": "register_did"
   },
   "CddServiceProviders": {
     "set_active_members_limit": "set_active_members_limit",
@@ -261,7 +262,8 @@
     "sudo": "sudo",
     "sudo_unchecked_weight": "sudo_unchecked_weight",
     "set_key": "set_key",
-    "sudo_as": "sudo_as"
+    "sudo_as": "sudo_as",
+    "remove_key": "remove_key"
   },
   "Asset": {
     "register_ticker": "register_ticker",
@@ -305,7 +307,10 @@
     "remove_asset_pre_approval": "remove_asset_pre_approval",
     "link_ticker_to_asset_id": "link_ticker_to_asset_id",
     "unlink_ticker_from_asset_id": "unlink_ticker_from_asset_id",
-    "update_global_metadata_spec": "update_global_metadata_spec"
+    "update_global_metadata_spec": "update_global_metadata_spec",
+    "transfer_asset": "transfer_asset",
+    "receiver_affirm_asset_transfer": "receiver_affirm_asset_transfer",
+    "reject_asset_transfer": "reject_asset_transfer"
   },
   "CapitalDistribution": {
     "distribute": "distribute",
@@ -447,7 +452,8 @@
     "affirm_instruction_as_mediator": "affirm_instruction_as_mediator",
     "withdraw_affirmation_as_mediator": "withdraw_affirmation_as_mediator",
     "reject_instruction_as_mediator": "reject_instruction_as_mediator",
-    "lock_instruction": "lock_instruction"
+    "lock_instruction": "lock_instruction",
+    "set_mandatory_receiver_affirmation": "set_mandatory_receiver_affirmation"
   },
   "Statistics": {
     "add_transfer_manager": "add_transfer_manager",
@@ -500,7 +506,12 @@
     "remove_paying_key": "remove_paying_key",
     "update_polyx_limit": "update_polyx_limit",
     "increase_polyx_limit": "increase_polyx_limit",
-    "decrease_polyx_limit": "decrease_polyx_limit"
+    "decrease_polyx_limit": "decrease_polyx_limit",
+    "approve_subsidy": "approve_subsidy",
+    "revoke_subsidy": "revoke_subsidy",
+    "accept_subsidy": "accept_subsidy",
+    "remove_subsidy": "remove_subsidy",
+    "relay_tx": "relay_tx"
   },
   "Rewards": {
     "claim_itn_reward": "claim_itn_reward",
@@ -576,5 +587,26 @@
     "update_permissioned_validator_intended_count": "update_permissioned_validator_intended_count",
     "chill_from_governance": "chill_from_governance",
     "set_commission_cap": "set_commission_cap"
+  },
+  "DidRegistrars": {
+    "set_active_members_limit": "set_active_members_limit",
+    "disable_member": "disable_member",
+    "add_member": "add_member",
+    "remove_member": "remove_member",
+    "swap_member": "swap_member",
+    "reset_members": "reset_members",
+    "abdicate_membership": "abdicate_membership"
+  },
+  "PolymeshTransactionPayment": {
+    "set_disable_fees": "set_disable_fees"
+  },
+  "Beefy": {
+    "report_double_voting": "report_double_voting",
+    "report_double_voting_unsigned": "report_double_voting_unsigned",
+    "set_new_genesis": "set_new_genesis",
+    "report_fork_voting": "report_fork_voting",
+    "report_fork_voting_unsigned": "report_fork_voting_unsigned",
+    "report_future_block_voting": "report_future_block_voting",
+    "report_future_block_voting_unsigned": "report_future_block_voting_unsigned"
   }
 }

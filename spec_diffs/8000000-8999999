@@ -1,7 +1,131 @@
 - Expected
 + Received
 
-@@ -508,6 +508,8 @@
+@@ -30,6 +30,19 @@
+        "Ok": "IdentityId",
+      },
+    },
++   "AssetHolder": Object {
++     "_enum": Object {
++       "Account": "AccountId32",
++       "Portfolio": "PortfolioId",
++     },
++   },
++   "AssetHolderKind": Object {
++     "_enum": Object {
++       "Account": "",
++       "DefaultPortfolio": "",
++       "UserPortfolio": "PortfolioNumber",
++     },
++   },
+    "AssetPermissions": Object {
+      "_enum": Object {
+        "Except": "BTreeSet<PolymeshAssetId>",
+@@ -47,10 +60,10 @@
+    "AuthorizationData": Object {
+      "_enum": Object {
+        "AddMultiSigSigner": "AccountId",
+-       "AddRelayerPayingKey": "(AccountId32, AccountId32, u128)",
+        "AttestPrimaryKeyRotation": "IdentityId",
+        "BecomeAgent": "(PolymeshAssetId, AgentGroup)",
+        "JoinIdentity": "Permissions",
++       "OldAddRelayerPayingKey": "(AccountId32, AccountId32, u128)",
+        "PortfolioCustody": "PortfolioId",
+        "RotatePrimaryKey": "",
+        "RotatePrimaryKeyToSecondary": "Permissions",
+@@ -81,11 +94,40 @@
+    },
+    "CappedFee": "u64",
+    "CddId": "[u8; 32]",
+-   "CddStatus": Object {
+-     "_enum": Object {
+-       "Err": "Vec<u8>",
+-       "Ok": "IdentityId",
++   "ChainScopedMessage<Message>": Object {
++     "expiresAt": "PolymeshMoment",
++     "genesisHash": "Hash",
++     "label": "Text",
++     "message": "Message",
++     "nonceOrId": "u64",
++   },
++   "ChainScopedMessageFundraiserReceipt": Object {
++     "expiresAt": "PolymeshMoment",
++     "genesisHash": "Hash",
++     "label": "Text",
++     "message": "FundraiserReceipt",
++     "nonceOrId": "u64",
++   },
++   "ChainScopedMessageIdentityId": Object {
++     "expiresAt": "PolymeshMoment",
++     "genesisHash": "Hash",
++     "label": "Text",
++     "message": "IdentityId",
++     "nonceOrId": "u64",
++   },
++   "ChainScopedMessageReceipt": Object {
++     "expiresAt": "PolymeshMoment",
++     "genesisHash": "Hash",
++     "label": "Text",
++     "message": "Receipt",
++     "nonceOrId": "u64",
+    },
++   "ChainScopedMessageRuntimeCall": Object {
++     "expiresAt": "PolymeshMoment",
++     "genesisHash": "Hash",
++     "label": "Text",
++     "message": "RuntimeCall",
++     "nonceOrId": "u64",
+    },
+    "Claim": Object {
+      "_enum": Object {
+@@ -401,10 +443,17 @@
+        "SX",
+      ],
+    },
++   "CreateChildIdentityAuthMessage": "ChainScopedMessageIdentityId",
+    "CustomClaimTypeId": "u32",
++   "DidActiveStatus": Object {
++     "_enum": Object {
++       "Err": "Vec<u8>",
++       "Ok": "IdentityId",
++     },
++   },
+    "DidStatus": Object {
+      "_enum": Object {
+-       "CddVerified": "",
++       "Active": "",
+        "Exists": "",
+        "Unknown": "",
+      },
+@@ -439,13 +488,13 @@
+      "receiverIdentity": "IdentityId",
+      "senderIdentity": "IdentityId",
+      "ticker": "Ticker",
+-     "uid": "u64",
+    },
++   "FundraiserReceiptMessage": "ChainScopedMessageFundraiserReceipt",
+    "FungibleLeg": Object {
+      "amount": "Balance",
+      "assetId": "PolymeshAssetId",
+-     "receiver": "PortfolioId",
+-     "sender": "PortfolioId",
++     "receiver": "AssetHolder",
++     "sender": "AssetHolder",
+    },
+    "GranularCanTransferResult": Object {
+      "assetFrozen": "bool",
+@@ -495,8 +544,8 @@
+    },
+    "NonFungibleLeg": Object {
+      "nfts": "NFTs",
+-     "receiver": "PortfolioId",
+-     "sender": "PortfolioId",
++     "receiver": "AssetHolder",
++     "sender": "AssetHolder",
+    },
+    "OffChainLeg": Object {
+      "amount": "Balance",
+@@ -508,6 +557,8 @@
     "PalletPermissions": Object {
       "extrinsics": "ExtrinsicNames",
     },
@@ -10,7 +134,7 @@
     "Percentage": "Permill",
     "Permissions": Object {
       "asset": "AssetPermissions",
-@@ -517,13 +519,14 @@
+@@ -517,6 +568,8 @@
     "PipId": "u32",
     "PolymeshAssetId": "[u8; 16]",
     "PolymeshMoment": "u64",
@@ -19,10 +143,34 @@
     "PortfolioId": Object {
       "did": "IdentityId",
       "kind": "PortfolioKind",
+@@ -570,8 +623,9 @@
+      "receiverIdentity": "IdentityId",
+      "senderIdentity": "IdentityId",
+      "ticker": "Ticker",
+-     "uid": "u64",
     },
-    "PortfolioKind": Object {
++   "ReceiptMessage": "ChainScopedMessageReceipt",
++   "RelayTxMessage": "ChainScopedMessageRuntimeCall",
+    "RequirementReport": Object {
+      "id": "u32",
+      "receiverConditions": "Vec<ConditionReport>",
+@@ -599,6 +653,7 @@
+      "key": "AccountId",
+      "permissions": "Permissions",
+    },
++   "SecondaryKeyAuthMessage": "ChainScopedMessageIdentityId",
+    "Signatory": Object {
       "_enum": Object {
--       "AccountId": "AccountId32",
-        "Default": "",
-        "User": "PortfolioNumber",
+        "Account": "AccountId",
+@@ -611,11 +666,6 @@
+        "Affiliate": "bool",
+        "Jurisdiction": "Option<CountryCode>",
       },
+-   },
+-   "TargetIdAuthorization": Object {
+-     "expiresAt": "PolymeshMoment",
+-     "nonce": "AuthorizationNonce",
+-     "targetId": "IdentityId",
+    },
+    "TargetIdentity": Object {
+      "_enum": Object {

@@ -5,6 +5,12 @@
 // this is required to allow for ambient/previous definitions
 import '@polkadot/api-base/types/calls';
 
+import type {
+  PalletPipsPipId,
+  PalletProtocolFeeRpcRuntimeApiCappedFee,
+  PolymeshPrimitivesSettlementInstructionId,
+  PolymeshRuntimeDevelopRuntimeRuntimeCall,
+} from './polymesh';
 import type { ApiTypes, AugmentedCall, DecoratedCallBase } from '@polkadot/api-base/types';
 import type {
   Bytes,
@@ -40,17 +46,17 @@ import type {
   PalletPipsVoteCount,
   PalletTransactionPaymentFeeDetails,
   PalletTransactionPaymentRuntimeDispatchInfo,
-  PolymeshCommonUtilitiesProtocolFeeProtocolOp,
+  PolymeshPrimitivesAssetAssetHolder,
   PolymeshPrimitivesAssetAssetId,
   PolymeshPrimitivesAuthorization,
   PolymeshPrimitivesAuthorizationAuthorizationType,
   PolymeshPrimitivesComplianceManagerComplianceReport,
-  PolymeshPrimitivesIdentityClaim,
   PolymeshPrimitivesIdentityId,
-  PolymeshPrimitivesIdentityIdPortfolioId,
   PolymeshPrimitivesNftNfTs,
+  PolymeshPrimitivesProtocolFeeProtocolOp,
   PolymeshPrimitivesSecondaryKeySignatory,
   PolymeshPrimitivesSettlementAffirmationCount,
+  PolymeshPrimitivesSettlementAffirmationRequirement,
   PolymeshPrimitivesSettlementAssetCount,
   PolymeshPrimitivesSettlementExecuteInstructionInfo,
   PolymeshPrimitivesSettlementLeg,
@@ -59,12 +65,20 @@ import type {
   SpConsensusBabeAppPublic,
   SpConsensusBabeBabeConfiguration,
   SpConsensusBabeEpoch,
+  SpConsensusBeefyDoubleVotingProof,
+  SpConsensusBeefyEcdsaCryptoPublic,
+  SpConsensusBeefyForkVotingProofOpaqueValue,
+  SpConsensusBeefyFutureBlockVotingProof,
+  SpConsensusBeefyValidatorSet,
   SpConsensusGrandpaAppPublic,
   SpConsensusGrandpaEquivocationProof,
   SpConsensusSlotsEquivocationProof,
   SpCoreCryptoKeyTypeId,
   SpInherentsCheckInherentsResult,
   SpInherentsInherentData,
+  SpMmrPrimitivesAncestryProof,
+  SpMmrPrimitivesError,
+  SpMmrPrimitivesLeafProof,
   SpRuntimeBlockLazyBlock,
   SpRuntimeDispatchError,
   SpRuntimeExtrinsicInclusionMode,
@@ -76,12 +90,6 @@ import type {
   SpWeightsWeightV2Weight,
 } from '@polkadot/types/lookup';
 import type { IExtrinsic, Observable } from '@polkadot/types/types';
-import type {
-  PalletPipsPipId,
-  PalletProtocolFeeRpcRuntimeApiCappedFee,
-  PolymeshPrimitivesSettlementInstructionId,
-  PolymeshRuntimeDevelopRuntimeRuntimeCall,
-} from './polymesh';
 
 export type __AugmentedCall<ApiType extends ApiTypes> = AugmentedCall<ApiType>;
 export type __DecoratedCallBase<ApiType extends ApiTypes> = DecoratedCallBase<ApiType>;
@@ -101,19 +109,21 @@ declare module '@polkadot/api-base/types/calls' {
     /** 0xbb6ba9053c5c9d78/ */
     assetApi: {
       /**
-       * Returns a vector containing all errors for the transfer. An empty vec means there's no error.,, ```ignore, curl http://localhost:9933 -H "Content-Type: application/json" -d '{,     "id":1,,     "jsonrpc":"2.0",,     "method": "asset_transferReport",,     "params": [,        { "did": "0x0100000000000000000000000000000000000000000000000000000000000000", "kind": "Default"},,        { "did": "0x0100000000000000000000000000000000000000000000000000000000000000", "kind": "Default"},,        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],,        1,,        false,     ], }', ```
+       * Returns a vector containing all errors for the transfer. An empty vec means there's no error.
        **/
       transferReport: AugmentedCall<
         ApiType,
         (
-          sender_portfolio:
-            | PolymeshPrimitivesIdentityIdPortfolioId
-            | { did?: any; kind?: any }
+          sender:
+            | PolymeshPrimitivesAssetAssetHolder
+            | { Portfolio: any }
+            | { Account: any }
             | string
             | Uint8Array,
-          receiver_portfolio:
-            | PolymeshPrimitivesIdentityIdPortfolioId
-            | { did?: any; kind?: any }
+          receiver:
+            | PolymeshPrimitivesAssetAssetHolder
+            | { Portfolio: any }
+            | { Account: any }
             | string
             | Uint8Array,
           asset_id: PolymeshPrimitivesAssetAssetId | string | Uint8Array,
@@ -171,6 +181,69 @@ declare module '@polkadot/api-base/types/calls' {
           key_owner_proof: OpaqueKeyOwnershipProof | string | Uint8Array
         ) => Observable<Option<Null>>
       >;
+    };
+    /** 0x49eaaf1b548a0cb0/ */
+    beefyApi: {
+      /**
+       * Return the block number where BEEFY consensus is enabled/started
+       **/
+      beefyGenesis: AugmentedCall<ApiType, () => Observable<Option<u32>>>;
+      /**
+       * Generates a proof of key ownership for the given authority in the, given set. An example usage of this module is coupled with the, session historical module to prove that a given authority key is, tied to a given staking identity during a specific session. Proofs, of key ownership are necessary for submitting equivocation reports., NOTE: even though the API takes a `set_id` as parameter the current, implementations ignores this parameter and instead relies on this, method being called at the correct block height, i.e. any point at, which the given set id is live on-chain. Future implementations will, instead use indexed data through an offchain worker, not requiring, older states to be available.
+       **/
+      generateKeyOwnershipProof: AugmentedCall<
+        ApiType,
+        (
+          set_id: u64 | AnyNumber | Uint8Array,
+          authority_id: SpConsensusBeefyEcdsaCryptoPublic | string | Uint8Array
+        ) => Observable<Option<Bytes>>
+      >;
+      /**
+       * Submits an unsigned extrinsic to report a double voting equivocation. The caller, must provide the double voting proof and a key ownership proof, (should be obtained using `generate_key_ownership_proof`). The, extrinsic will be unsigned and should only be accepted for local, authorship (not to be broadcast to the network). This method returns, `None` when creation of the extrinsic fails, e.g. if equivocation, reporting is disabled for the given runtime (i.e. this method is, hardcoded to return `None`). Only useful in an offchain context.
+       **/
+      submitReportDoubleVotingUnsignedExtrinsic: AugmentedCall<
+        ApiType,
+        (
+          equivocation_proof:
+            | SpConsensusBeefyDoubleVotingProof
+            | { first?: any; second?: any }
+            | string
+            | Uint8Array,
+          key_owner_proof: Bytes | string | Uint8Array
+        ) => Observable<Option<Null>>
+      >;
+      /**
+       * Submits an unsigned extrinsic to report a fork voting equivocation. The caller, must provide the fork voting proof (the ancestry proof should be obtained using, `generate_ancestry_proof`) and a key ownership proof (should be obtained using, `generate_key_ownership_proof`). The extrinsic will be unsigned and should only, be accepted for local authorship (not to be broadcast to the network). This method, returns `None` when creation of the extrinsic fails, e.g. if equivocation, reporting is disabled for the given runtime (i.e. this method is, hardcoded to return `None`). Only useful in an offchain context.
+       **/
+      submitReportForkVotingUnsignedExtrinsic: AugmentedCall<
+        ApiType,
+        (
+          equivocation_proof:
+            | SpConsensusBeefyForkVotingProofOpaqueValue
+            | { vote?: any; ancestryProof?: any; header?: any }
+            | string
+            | Uint8Array,
+          key_owner_proof: Bytes | string | Uint8Array
+        ) => Observable<Option<Null>>
+      >;
+      /**
+       * Submits an unsigned extrinsic to report a future block voting equivocation. The caller, must provide the future block voting proof and a key ownership proof, (should be obtained using `generate_key_ownership_proof`)., The extrinsic will be unsigned and should only be accepted for local, authorship (not to be broadcast to the network). This method returns, `None` when creation of the extrinsic fails, e.g. if equivocation, reporting is disabled for the given runtime (i.e. this method is, hardcoded to return `None`). Only useful in an offchain context.
+       **/
+      submitReportFutureBlockVotingUnsignedExtrinsic: AugmentedCall<
+        ApiType,
+        (
+          equivocation_proof:
+            | SpConsensusBeefyFutureBlockVotingProof
+            | { vote?: any }
+            | string
+            | Uint8Array,
+          key_owner_proof: Bytes | string | Uint8Array
+        ) => Observable<Option<Null>>
+      >;
+      /**
+       * Return the current active BEEFY validator set
+       **/
+      validatorSet: AugmentedCall<ApiType, () => Observable<Option<SpConsensusBeefyValidatorSet>>>;
     };
     /** 0x40fe3ad401f8959a/ */
     blockBuilder: {
@@ -472,7 +545,7 @@ declare module '@polkadot/api-base/types/calls' {
             | 'JoinIdentity'
             | 'PortfolioCustody'
             | 'BecomeAgent'
-            | 'AddRelayerPayingKey'
+            | 'OldAddRelayerPayingKey'
             | 'RotatePrimaryKeyToSecondary'
             | number
         ) => Observable<Vec<PolymeshPrimitivesAuthorization>>
@@ -485,26 +558,6 @@ declare module '@polkadot/api-base/types/calls' {
         (
           acc: AccountId32 | string | Uint8Array
         ) => Observable<Option<PalletIdentityKeyIdentityData>>
-      >;
-      /**
-       * Returns CDD status of an identity
-       **/
-      isIdentityHasValidCdd: AugmentedCall<
-        ApiType,
-        (
-          did: PolymeshPrimitivesIdentityId | string | Uint8Array,
-          buffer_time: Option<u64> | null | Uint8Array | u64 | AnyNumber
-        ) => Observable<Result<PolymeshPrimitivesIdentityId, Bytes>>
-      >;
-      /**
-       * Returns all valid [`IdentityClaim`] of type `CustomerDueDiligence` for the given `target_identity`.,, ```ignore, curl http://localhost:9933 -H "Content-Type: application/json" -d '{,     "id":1,,     "jsonrpc":"2.0",,     "method": "identity_validCDDClaims",,     "params":[,         "0x0100000000000000000000000000000000000000000000000000000000000000",,         null,     ],   }', ```
-       **/
-      validCddClaims: AugmentedCall<
-        ApiType,
-        (
-          target_identity: PolymeshPrimitivesIdentityId | string | Uint8Array,
-          cdd_checker_leeway: Option<u64> | null | Uint8Array | u64 | AnyNumber
-        ) => Observable<Vec<PolymeshPrimitivesIdentityClaim>>
       >;
     };
     /** 0x37e397fc7c91f5e4/ */
@@ -525,22 +578,86 @@ declare module '@polkadot/api-base/types/calls' {
        **/
       metadataVersions: AugmentedCall<ApiType, () => Observable<Vec<u32>>>;
     };
+    /** 0x91d5df18b0d2cf58/ */
+    mmrApi: {
+      /**
+       * Generates a proof that the `prev_block_number` is part of the canonical chain at, `best_known_block_number`.
+       **/
+      generateAncestryProof: AugmentedCall<
+        ApiType,
+        (
+          prev_block_number: u32 | AnyNumber | Uint8Array,
+          best_known_block_number: Option<u32> | null | Uint8Array | u32 | AnyNumber
+        ) => Observable<Result<SpMmrPrimitivesAncestryProof, SpMmrPrimitivesError>>
+      >;
+      /**
+       * Generate MMR proof for a series of block numbers. If `best_known_block_number = Some(n)`,, use historical MMR state at given block height `n`. Else, use current MMR state.
+       **/
+      generateProof: AugmentedCall<
+        ApiType,
+        (
+          block_numbers: Vec<u32> | (u32 | AnyNumber | Uint8Array)[],
+          best_known_block_number: Option<u32> | null | Uint8Array | u32 | AnyNumber
+        ) => Observable<
+          Result<ITuple<[Vec<Bytes>, SpMmrPrimitivesLeafProof]>, SpMmrPrimitivesError>
+        >
+      >;
+      /**
+       * Return the number of MMR blocks in the chain.
+       **/
+      mmrLeafCount: AugmentedCall<ApiType, () => Observable<Result<u64, SpMmrPrimitivesError>>>;
+      /**
+       * Return the on-chain MMR root hash.
+       **/
+      mmrRoot: AugmentedCall<ApiType, () => Observable<Result<H256, SpMmrPrimitivesError>>>;
+      /**
+       * Verify MMR proof against on-chain MMR for a batch of leaves.,, Note this function will use on-chain MMR root hash and check if the proof matches the hash., Note, the leaves should be sorted such that corresponding leaves and leaf indices have the, same position in both the `leaves` vector and the `leaf_indices` vector contained in the [LeafProof]
+       **/
+      verifyProof: AugmentedCall<
+        ApiType,
+        (
+          leaves: Vec<Bytes> | (Bytes | string | Uint8Array)[],
+          proof:
+            | SpMmrPrimitivesLeafProof
+            | { leafIndices?: any; leafCount?: any; items?: any }
+            | string
+            | Uint8Array
+        ) => Observable<Result<Null, SpMmrPrimitivesError>>
+      >;
+      /**
+       * Verify MMR proof against given root hash for a batch of leaves.,, Note this function does not require any on-chain storage - the, proof is verified against given MMR root hash.,, Note, the leaves should be sorted such that corresponding leaves and leaf indices have the, same position in both the `leaves` vector and the `leaf_indices` vector contained in the [LeafProof]
+       **/
+      verifyProofStateless: AugmentedCall<
+        ApiType,
+        (
+          root: H256 | string | Uint8Array,
+          leaves: Vec<Bytes> | (Bytes | string | Uint8Array)[],
+          proof:
+            | SpMmrPrimitivesLeafProof
+            | { leafIndices?: any; leafCount?: any; items?: any }
+            | string
+            | Uint8Array
+        ) => Observable<Result<Null, SpMmrPrimitivesError>>
+      >;
+    };
     /** 0x9ea061a615cee2fe/ */
     nftApi: {
       /**
-       * Returns a vector containing all errors for the transfer. An empty vec means there's no error.,, ```ignore, curl http://localhost:9933 -H "Content-Type: application/json" -d '{,     "id":1,,     "jsonrpc":"2.0",,     "method": "nft_transferReport",,     "params": [,        { "did": "0x0100000000000000000000000000000000000000000000000000000000000000", "kind": "Default"},,        { "did": "0x0100000000000000000000000000000000000000000000000000000000000000", "kind": "Default"},,        { "asset_id": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "ids": [1]},,        false,     ], }', ```
+       * Returns a vector containing all errors for the transfer. An empty vec means there's no error.
        **/
       transferReport: AugmentedCall<
         ApiType,
         (
-          sender_portfolio:
-            | PolymeshPrimitivesIdentityIdPortfolioId
-            | { did?: any; kind?: any }
+          sender:
+            | PolymeshPrimitivesAssetAssetHolder
+            | { Portfolio: any }
+            | { Account: any }
             | string
             | Uint8Array,
-          receiver_portfolio:
-            | PolymeshPrimitivesIdentityIdPortfolioId
-            | { did?: any; kind?: any }
+          receiver:
+            | PolymeshPrimitivesAssetAssetHolder
+            | { Portfolio: any }
+            | { Account: any }
             | string
             | Uint8Array,
           nfts: PolymeshPrimitivesNftNfTs | { assetId?: any; ids?: any } | string | Uint8Array,
@@ -603,7 +720,7 @@ declare module '@polkadot/api-base/types/calls' {
         ApiType,
         (
           op:
-            | PolymeshCommonUtilitiesProtocolFeeProtocolOp
+            | PolymeshPrimitivesProtocolFeeProtocolOp
             | 'AssetRegisterTicker'
             | 'AssetIssue'
             | 'AssetAddDocuments'
@@ -653,11 +770,12 @@ declare module '@polkadot/api-base/types/calls' {
         ApiType,
         (
           instruction_id: PolymeshPrimitivesSettlementInstructionId | AnyNumber | Uint8Array,
-          portfolios:
-            | Vec<PolymeshPrimitivesIdentityIdPortfolioId>
+          holder_set:
+            | Vec<PolymeshPrimitivesAssetAssetHolder>
             | (
-                | PolymeshPrimitivesIdentityIdPortfolioId
-                | { did?: any; kind?: any }
+                | PolymeshPrimitivesAssetAssetHolder
+                | { Portfolio: any }
+                | { Account: any }
                 | string
                 | Uint8Array
               )[]
@@ -680,6 +798,21 @@ declare module '@polkadot/api-base/types/calls' {
         (
           instruction_id: PolymeshPrimitivesSettlementInstructionId | AnyNumber | Uint8Array
         ) => Observable<Vec<SpRuntimeDispatchError>>
+      >;
+      /**
+       * Returns the [`AffirmationRequirement`] for the given `receiver` and `asset_id`.,, [`AffirmationRequirement::Required`] means a receiver affirmation is needed before the, instruction can execute. [`AffirmationRequirement::Automatic`] means the instruction, will execute without waiting for the receiver to affirm.,, Senders can call this before initiating a transfer to determine whether the resulting, instruction will auto-execute or enter a pending state awaiting receiver affirmation.
+       **/
+      getReceiverAffirmationRequirement: AugmentedCall<
+        ApiType,
+        (
+          receiver:
+            | PolymeshPrimitivesAssetAssetHolder
+            | { Portfolio: any }
+            | { Account: any }
+            | string
+            | Uint8Array,
+          asset_id: PolymeshPrimitivesAssetAssetId | string | Uint8Array
+        ) => Observable<PolymeshPrimitivesSettlementAffirmationRequirement>
       >;
       /**
        * Returns a vector containing all errors for the transfer. An empty vec means there's no error.,, ```ignore, curl http://localhost:9933 -H "Content-Type: application/json" -d '{,     "id":1,,     "jsonrpc":"2.0",,     "method": "settlement_getTransferReport",,     "params": [,         {,            "NonFungible":,                {,                    "sender": { "did": "0x0100000000000000000000000000000000000000000000000000000000000000", "kind": "Default"},,                    "receiver": { "did": "0x0100000000000000000000000000000000000000000000000000000000000000", "kind": "Default"},,                    "nfts": { "ticker": "0x5449434B4552303030303031", "ids": [1]},                },         },,         false,     ], }', ```

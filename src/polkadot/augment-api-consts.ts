@@ -111,6 +111,25 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       maxLen: u32 & AugmentedConst<ApiType>;
     };
+    beefy: {
+      /**
+       * The maximum number of authorities that can be added.
+       **/
+      maxAuthorities: u32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum number of nominators for each validator.
+       **/
+      maxNominators: u32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum number of entries to keep in the set id to session index mapping.
+       *
+       * Since the `SetIdSession` map is only used for validating equivocations this
+       * value should relate to the bonding duration of whatever staking system is
+       * being used (if any). If equivocation handling is not enabled then this value
+       * can be zero.
+       **/
+      maxSetIdSessionEntries: u64 & AugmentedConst<ApiType>;
+    };
     complianceManager: {
       /**
        * The maximum claim reads that are allowed to happen in worst case of a condition resolution
@@ -304,6 +323,11 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       initialPOLYX: u128 & AugmentedConst<ApiType>;
       /**
+       * Maximum number of retry attempts allowed for an authorization
+       * before it is considered unusable.
+       **/
+      maxAuthRetries: u8 & AugmentedConst<ApiType>;
+      /**
        * Maximum number of authorizations an identity can give.
        **/
       maxGivenAuths: u32 & AugmentedConst<ApiType>;
@@ -379,6 +403,10 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       maxInstructionMediators: u32 & AugmentedConst<ApiType>;
       /**
+       * Maximum number of portfolios.
+       **/
+      maxNumberOfAssetHolders: u32 & AugmentedConst<ApiType>;
+      /**
        * Maximum number of fungible assets that can be in a single instruction.
        **/
       maxNumberOfFungibleAssets: u32 & AugmentedConst<ApiType>;
@@ -394,10 +422,6 @@ declare module '@polkadot/api-base/types/consts' {
        * Maximum number of off-chain assets that can be transferred in a instruction.
        **/
       maxNumberOfOffChainAssets: u32 & AugmentedConst<ApiType>;
-      /**
-       * Maximum number of portfolios.
-       **/
-      maxNumberOfPortfolios: u32 & AugmentedConst<ApiType>;
       /**
        * Maximum number of venue signers.
        **/

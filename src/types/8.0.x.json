@@ -6,13 +6,47 @@
   "PalletName": "Text",
   "ExtrinsicName": "Text",
   "AuthorizationNonce": "u64",
-  "TargetIdAuthorization": {
-    "targetId": "IdentityId",
-    "nonce": "AuthorizationNonce",
-    "expiresAt": "PolymeshMoment"
+  "ChainScopedMessage<Message>": {
+    "genesisHash": "Hash",
+    "nonceOrId": "u64",
+    "label": "Text",
+    "expiresAt": "PolymeshMoment",
+    "message": "Message"
   },
+  "ChainScopedMessageIdentityId": {
+    "genesisHash": "Hash",
+    "nonceOrId": "u64",
+    "label": "Text",
+    "expiresAt": "PolymeshMoment",
+    "message": "IdentityId"
+  },
+  "ChainScopedMessageReceipt": {
+    "genesisHash": "Hash",
+    "nonceOrId": "u64",
+    "label": "Text",
+    "expiresAt": "PolymeshMoment",
+    "message": "Receipt"
+  },
+  "ChainScopedMessageFundraiserReceipt": {
+    "genesisHash": "Hash",
+    "nonceOrId": "u64",
+    "label": "Text",
+    "expiresAt": "PolymeshMoment",
+    "message": "FundraiserReceipt"
+  },
+  "ChainScopedMessageRuntimeCall": {
+    "genesisHash": "Hash",
+    "nonceOrId": "u64",
+    "label": "Text",
+    "expiresAt": "PolymeshMoment",
+    "message": "RuntimeCall"
+  },
+  "SecondaryKeyAuthMessage": "ChainScopedMessageIdentityId",
+  "CreateChildIdentityAuthMessage": "ChainScopedMessageIdentityId",
+  "FundraiserReceiptMessage": "ChainScopedMessageFundraiserReceipt",
+  "ReceiptMessage": "ChainScopedMessageReceipt",
+  "RelayTxMessage": "ChainScopedMessageRuntimeCall",
   "Receipt": {
-    "uid": "u64",
     "instructionId": "InstructionId",
     "legId": "LegId",
     "senderIdentity": "IdentityId",
@@ -22,7 +56,6 @@
   },
   "FundraiserId": "u64",
   "FundraiserReceipt": {
-    "uid": "u64",
     "fundraiserId": "FundraiserId",
     "legId": "LegId",
     "senderIdentity": "IdentityId",
@@ -428,7 +461,7 @@
       "JoinIdentity": "Permissions",
       "PortfolioCustody": "PortfolioId",
       "BecomeAgent": "(PolymeshAssetId, AgentGroup)",
-      "AddRelayerPayingKey": "(AccountId32, AccountId32, u128)",
+      "OldAddRelayerPayingKey": "(AccountId32, AccountId32, u128)",
       "RotatePrimaryKeyToSecondary": "Permissions"
     }
   },
@@ -473,7 +506,7 @@
       "IdentityCreateChildIdentity"
     ]
   },
-  "CddStatus": {
+  "DidActiveStatus": {
     "_enum": {
       "Ok": "IdentityId",
       "Err": "Vec<u8>"
@@ -524,7 +557,7 @@
     "_enum": {
       "Unknown": "",
       "Exists": "",
-      "CddVerified": ""
+      "Active": ""
     }
   },
   "PortfolioNumber": "u64",
@@ -600,14 +633,14 @@
     "ids": "Vec<NFTId>"
   },
   "FungibleLeg": {
-    "sender": "PortfolioId",
-    "receiver": "PortfolioId",
+    "sender": "AssetHolder",
+    "receiver": "AssetHolder",
     "assetId": "PolymeshAssetId",
     "amount": "Balance"
   },
   "NonFungibleLeg": {
-    "sender": "PortfolioId",
-    "receiver": "PortfolioId",
+    "sender": "AssetHolder",
+    "receiver": "AssetHolder",
     "nfts": "NFTs"
   },
   "OffChainLeg": {
@@ -658,5 +691,47 @@
   "PolymeshPrimitivesSettlementInstructionId": "u64",
   "PalletPipsPipId": "u32",
   "PalletProtocolFeeRpcRuntimeApiCappedFee": "u64",
-  "PolymeshRuntimeDevelopRuntimeRuntimeCall": "Call"
+  "PolymeshRuntimeDevelopRuntimeRuntimeCall": "Call",
+  "AssetHolderKind": {
+    "_enum": {
+      "Account": "AccountId32",
+      "DefaultPortfolio": "",
+      "UserPortfolio": "PortfolioNumber"
+    }
+  },
+  "AssetHolder": {
+    "_enum": {
+      "Portfolio": "PortfolioId",
+      "Account": "AccountId32"
+    }
+  },
+  "LegV7": {
+    "_enum": {
+      "Fungible": "FungibleLegV7",
+      "NonFungible": "NonFungibleLegV7",
+      "OffChain": "OffChainLeg"
+    }
+  },
+  "FungibleLegV7": {
+    "sender": "PortfolioIdV7",
+    "receiver": "PortfolioIdV7",
+    "assetId": "PolymeshAssetId",
+    "amount": "Balance"
+  },
+  "NonFungibleLegV7": {
+    "sender": "PortfolioIdV7",
+    "receiver": "PortfolioIdV7",
+    "nfts": "NFTs"
+  },
+  "PortfolioIdV7": {
+    "did": "IdentityId",
+    "kind": "PortfolioKindV7"
+  },
+  "PortfolioKindV7": {
+    "_enum": {
+      "Default": "",
+      "User": "PortfolioNumber",
+      "AccountId": "AccountId32"
+    }
+  }
 }

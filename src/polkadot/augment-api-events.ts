@@ -47,18 +47,20 @@ import type {
   PalletStoFundingAsset,
   PalletStoFundraiser,
   PalletValidatorsSlashingSwitch,
-  PolymeshCommonUtilitiesCheckpointScheduleCheckpoints,
   PolymeshContractsApi,
   PolymeshContractsChainExtensionExtrinsicId,
   PolymeshContractsChainVersion,
   PolymeshPrimitivesAgentAgentGroup,
+  PolymeshPrimitivesAssetAssetHolder,
   PolymeshPrimitivesAssetAssetId,
   PolymeshPrimitivesAssetAssetType,
+  PolymeshPrimitivesAssetHoldingsUpdateReason,
   PolymeshPrimitivesAssetIdentifier,
   PolymeshPrimitivesAssetMetadataAssetMetadataKey,
   PolymeshPrimitivesAssetMetadataAssetMetadataSpec,
   PolymeshPrimitivesAssetMetadataAssetMetadataValueDetail,
   PolymeshPrimitivesAuthorizationAuthorizationData,
+  PolymeshPrimitivesCheckpointScheduleCheckpoints,
   PolymeshPrimitivesComplianceManagerComplianceRequirement,
   PolymeshPrimitivesConditionTrustedIssuer,
   PolymeshPrimitivesDocument,
@@ -70,11 +72,11 @@ import type {
   PolymeshPrimitivesMemo,
   PolymeshPrimitivesNftNfTs,
   PolymeshPrimitivesPortfolioFundDescription,
-  PolymeshPrimitivesPortfolioPortfolioUpdateReason,
   PolymeshPrimitivesPosRatio,
   PolymeshPrimitivesSecondaryKey,
   PolymeshPrimitivesSecondaryKeyExtrinsicPermissions,
   PolymeshPrimitivesSecondaryKeyPermissions,
+  PolymeshPrimitivesSettlementAffirmationRequirement,
   PolymeshPrimitivesSettlementLeg,
   PolymeshPrimitivesSettlementReceiptMetadata,
   PolymeshPrimitivesSettlementSettlementType,
@@ -84,7 +86,7 @@ import type {
   PolymeshPrimitivesTicker,
   PolymeshPrimitivesTransferComplianceTransferCondition,
   PolymeshPrimitivesTransferComplianceTransferConditionExemptKey,
-  PolymeshRuntimeTestnetRuntimeRuntimeHoldReason,
+  PolymeshRuntimeDevelopRuntimeRuntimeHoldReason,
   SpConsensusGrandpaAppPublic,
   SpNposElectionsElectionScore,
   SpRuntimeDispatchError,
@@ -104,7 +106,7 @@ declare module '@polkadot/api-base/types/events' {
       /**
        * Emitted when Tokens were issued, redeemed or transferred.
        * Contains the [`IdentityId`] of the receiver/issuer/redeemer, the [`AssetId`] for the token, the balance that was issued/transferred/redeemed,
-       * the [`PortfolioId`] of the source, the [`PortfolioId`] of the destination and the [`PortfolioUpdateReason`].
+       * the [`AssetHolder`] of the source, the [`AssetHolder`] of the destination and the [`HoldingsUpdateReason`].
        **/
       AssetBalanceUpdated: AugmentedEvent<
         ApiType,
@@ -112,9 +114,9 @@ declare module '@polkadot/api-base/types/events' {
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesAssetAssetId,
           u128,
-          Option<PolymeshPrimitivesIdentityIdPortfolioId>,
-          Option<PolymeshPrimitivesIdentityIdPortfolioId>,
-          PolymeshPrimitivesPortfolioPortfolioUpdateReason,
+          Option<PolymeshPrimitivesAssetAssetHolder>,
+          Option<PolymeshPrimitivesAssetAssetHolder>,
+          PolymeshPrimitivesAssetHoldingsUpdateReason,
         ]
       >;
       /**
@@ -211,9 +213,31 @@ declare module '@polkadot/api-base/types/events' {
         [
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesAssetAssetId,
-          PolymeshPrimitivesIdentityIdPortfolioId,
+          PolymeshPrimitivesAssetAssetHolder,
           u128,
         ]
+      >;
+      /**
+       * An asset transfer has been created.
+       **/
+      CreatedAssetTransfer: AugmentedEvent<
+        ApiType,
+        [
+          assetId: PolymeshPrimitivesAssetAssetId,
+          from: AccountId32,
+          to: AccountId32,
+          amount: u128,
+          memo: Option<PolymeshPrimitivesMemo>,
+          pendingTransferId: Option<u64>,
+        ],
+        {
+          assetId: PolymeshPrimitivesAssetAssetId;
+          from: AccountId32;
+          to: AccountId32;
+          amount: u128;
+          memo: Option<PolymeshPrimitivesMemo>;
+          pendingTransferId: Option<u64>;
+        }
       >;
       /**
        * A custom asset type already exists on-chain.
@@ -430,8 +454,8 @@ declare module '@polkadot/api-base/types/events' {
        **/
       BurnedHeld: AugmentedEvent<
         ApiType,
-        [reason: PolymeshRuntimeTestnetRuntimeRuntimeHoldReason, who: AccountId32, amount: u128],
-        { reason: PolymeshRuntimeTestnetRuntimeRuntimeHoldReason; who: AccountId32; amount: u128 }
+        [reason: PolymeshRuntimeDevelopRuntimeRuntimeHoldReason, who: AccountId32, amount: u128],
+        { reason: PolymeshRuntimeDevelopRuntimeRuntimeHoldReason; who: AccountId32; amount: u128 }
       >;
       /**
        * Some amount was deposited (e.g. for transaction fees).
@@ -471,8 +495,8 @@ declare module '@polkadot/api-base/types/events' {
        **/
       Held: AugmentedEvent<
         ApiType,
-        [reason: PolymeshRuntimeTestnetRuntimeRuntimeHoldReason, who: AccountId32, amount: u128],
-        { reason: PolymeshRuntimeTestnetRuntimeRuntimeHoldReason; who: AccountId32; amount: u128 }
+        [reason: PolymeshRuntimeDevelopRuntimeRuntimeHoldReason, who: AccountId32, amount: u128],
+        { reason: PolymeshRuntimeDevelopRuntimeRuntimeHoldReason; who: AccountId32; amount: u128 }
       >;
       /**
        * Total issuance was increased by `amount`, creating a credit to be balanced.
@@ -503,8 +527,8 @@ declare module '@polkadot/api-base/types/events' {
        **/
       Released: AugmentedEvent<
         ApiType,
-        [reason: PolymeshRuntimeTestnetRuntimeRuntimeHoldReason, who: AccountId32, amount: u128],
-        { reason: PolymeshRuntimeTestnetRuntimeRuntimeHoldReason; who: AccountId32; amount: u128 }
+        [reason: PolymeshRuntimeDevelopRuntimeRuntimeHoldReason, who: AccountId32, amount: u128],
+        { reason: PolymeshRuntimeDevelopRuntimeRuntimeHoldReason; who: AccountId32; amount: u128 }
       >;
       /**
        * Total issuance was decreased by `amount`, creating a debt to be balanced.
@@ -591,13 +615,13 @@ declare module '@polkadot/api-base/types/events' {
       TransferAndHold: AugmentedEvent<
         ApiType,
         [
-          reason: PolymeshRuntimeTestnetRuntimeRuntimeHoldReason,
+          reason: PolymeshRuntimeDevelopRuntimeRuntimeHoldReason,
           source: AccountId32,
           dest: AccountId32,
           transferred: u128,
         ],
         {
-          reason: PolymeshRuntimeTestnetRuntimeRuntimeHoldReason;
+          reason: PolymeshRuntimeDevelopRuntimeRuntimeHoldReason;
           source: AccountId32;
           dest: AccountId32;
           transferred: u128;
@@ -609,13 +633,13 @@ declare module '@polkadot/api-base/types/events' {
       TransferOnHold: AugmentedEvent<
         ApiType,
         [
-          reason: PolymeshRuntimeTestnetRuntimeRuntimeHoldReason,
+          reason: PolymeshRuntimeDevelopRuntimeRuntimeHoldReason,
           source: AccountId32,
           dest: AccountId32,
           amount: u128,
         ],
         {
-          reason: PolymeshRuntimeTestnetRuntimeRuntimeHoldReason;
+          reason: PolymeshRuntimeDevelopRuntimeRuntimeHoldReason;
           source: AccountId32;
           dest: AccountId32;
           amount: u128;
@@ -709,52 +733,6 @@ declare module '@polkadot/api-base/types/events' {
        **/
       Removed: AugmentedEvent<ApiType, [PolymeshPrimitivesEventOnly, PalletCorporateActionsCaId]>;
     };
-    cddServiceProviders: {
-      /**
-       * The limit of how many active members there can be concurrently was changed.
-       **/
-      ActiveLimitChanged: AugmentedEvent<ApiType, [PolymeshPrimitivesIdentityId, u32, u32]>;
-      /**
-       * The given member was added; see the transaction for who.
-       * caller DID, New member DID.
-       **/
-      MemberAdded: AugmentedEvent<
-        ApiType,
-        [PolymeshPrimitivesIdentityId, PolymeshPrimitivesIdentityId]
-      >;
-      /**
-       * The given member was removed; see the transaction for who.
-       * caller DID, member DID that get removed.
-       **/
-      MemberRemoved: AugmentedEvent<
-        ApiType,
-        [PolymeshPrimitivesIdentityId, PolymeshPrimitivesIdentityId]
-      >;
-      /**
-       * The given member has been revoked at specific time-stamp.
-       * caller DID, member DID that get revoked.
-       **/
-      MemberRevoked: AugmentedEvent<
-        ApiType,
-        [PolymeshPrimitivesIdentityId, PolymeshPrimitivesIdentityId]
-      >;
-      /**
-       * The membership was reset; see the transaction for who the new set is.
-       * caller DID, List of new members.
-       **/
-      MembersReset: AugmentedEvent<
-        ApiType,
-        [PolymeshPrimitivesIdentityId, Vec<PolymeshPrimitivesIdentityId>]
-      >;
-      /**
-       * Two members were swapped; see the transaction for who.
-       * caller DID, Removed DID, New add DID.
-       **/
-      MembersSwapped: AugmentedEvent<
-        ApiType,
-        [PolymeshPrimitivesIdentityId, PolymeshPrimitivesIdentityId, PolymeshPrimitivesIdentityId]
-      >;
-    };
     checkpoint: {
       /**
        * A checkpoint was created.
@@ -785,7 +763,7 @@ declare module '@polkadot/api-base/types/events' {
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesAssetAssetId,
           u64,
-          PolymeshCommonUtilitiesCheckpointScheduleCheckpoints,
+          PolymeshPrimitivesCheckpointScheduleCheckpoints,
         ]
       >;
       /**
@@ -799,7 +777,7 @@ declare module '@polkadot/api-base/types/events' {
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesAssetAssetId,
           u64,
-          PolymeshCommonUtilitiesCheckpointScheduleCheckpoints,
+          PolymeshPrimitivesCheckpointScheduleCheckpoints,
         ]
       >;
     };
@@ -1186,6 +1164,52 @@ declare module '@polkadot/api-base/types/events' {
         ]
       >;
     };
+    didRegistrars: {
+      /**
+       * The limit of how many active members there can be concurrently was changed.
+       **/
+      ActiveLimitChanged: AugmentedEvent<ApiType, [PolymeshPrimitivesIdentityId, u32, u32]>;
+      /**
+       * The given member was added; see the transaction for who.
+       * caller DID, New member DID.
+       **/
+      MemberAdded: AugmentedEvent<
+        ApiType,
+        [PolymeshPrimitivesIdentityId, PolymeshPrimitivesIdentityId]
+      >;
+      /**
+       * The given member was removed; see the transaction for who.
+       * caller DID, member DID that get removed.
+       **/
+      MemberRemoved: AugmentedEvent<
+        ApiType,
+        [PolymeshPrimitivesIdentityId, PolymeshPrimitivesIdentityId]
+      >;
+      /**
+       * The given member has been revoked at specific time-stamp.
+       * caller DID, member DID that get revoked.
+       **/
+      MemberRevoked: AugmentedEvent<
+        ApiType,
+        [PolymeshPrimitivesIdentityId, PolymeshPrimitivesIdentityId]
+      >;
+      /**
+       * The membership was reset; see the transaction for who the new set is.
+       * caller DID, List of new members.
+       **/
+      MembersReset: AugmentedEvent<
+        ApiType,
+        [PolymeshPrimitivesIdentityId, Vec<PolymeshPrimitivesIdentityId>]
+      >;
+      /**
+       * Two members were swapped; see the transaction for who.
+       * caller DID, Removed DID, New add DID.
+       **/
+      MembersSwapped: AugmentedEvent<
+        ApiType,
+        [PolymeshPrimitivesIdentityId, PolymeshPrimitivesIdentityId, PolymeshPrimitivesIdentityId]
+      >;
+    };
     electionProviderMultiPhase: {
       /**
        * An election failed.
@@ -1358,15 +1382,6 @@ declare module '@polkadot/api-base/types/events' {
     };
     identity: {
       /**
-       * Asset's identity registered.
-       *
-       * (Asset DID, ticker)
-       **/
-      AssetDidRegistered: AugmentedEvent<
-        ApiType,
-        [PolymeshPrimitivesIdentityId, PolymeshPrimitivesTicker]
-      >;
-      /**
        * New authorization added.
        *
        * (authorised_by, target_did, target_key, auth_id, authorization_data, expiry)
@@ -1418,19 +1433,6 @@ declare module '@polkadot/api-base/types/events' {
         ApiType,
         [Option<PolymeshPrimitivesIdentityId>, Option<AccountId32>, u64]
       >;
-      /**
-       * CDD claims generated by `IdentityId` (a CDD Provider) have been invalidated from
-       * `Moment`.
-       *
-       * (CDD provider DID, disable from date)
-       **/
-      CddClaimsInvalidated: AugmentedEvent<ApiType, [PolymeshPrimitivesIdentityId, u64]>;
-      /**
-       * CDD requirement for updating primary key changed.
-       *
-       * (new_requirement)
-       **/
-      CddRequirementForPrimaryKeyUpdated: AugmentedEvent<ApiType, [bool]>;
       /**
        * Child identity created.
        *
@@ -1799,17 +1801,17 @@ declare module '@polkadot/api-base/types/events' {
       >;
       /**
        * Emitted when NFTs were issued, redeemed or transferred.
-       * Contains the [`IdentityId`] of the receiver/issuer/redeemer, the [`NFTs`], the [`PortfolioId`] of the source, the [`PortfolioId`]
-       * of the destination and the [`PortfolioUpdateReason`].
+       * Contains the [`IdentityId`] of the receiver/issuer/redeemer, the [`NFTs`], the [`AssetHolder`] of the source, the [`AssetHolder`]
+       * of the destination and the [`HoldingsUpdateReason`].
        **/
-      NFTPortfolioUpdated: AugmentedEvent<
+      NFTHoldingsUpdated: AugmentedEvent<
         ApiType,
         [
           PolymeshPrimitivesIdentityId,
           PolymeshPrimitivesNftNfTs,
-          Option<PolymeshPrimitivesIdentityIdPortfolioId>,
-          Option<PolymeshPrimitivesIdentityIdPortfolioId>,
-          PolymeshPrimitivesPortfolioPortfolioUpdateReason,
+          Option<PolymeshPrimitivesAssetAssetHolder>,
+          Option<PolymeshPrimitivesAssetAssetHolder>,
+          PolymeshPrimitivesAssetHoldingsUpdateReason,
         ]
       >;
     };
@@ -2302,40 +2304,60 @@ declare module '@polkadot/api-base/types/events' {
     };
     relayer: {
       /**
-       * Accepted paying key.
-       *
-       * (Caller DID, User Key, Paying Key)
+       * Accepted subsidy.
        **/
-      AcceptedPayingKey: AugmentedEvent<
+      AcceptedSubsidy: AugmentedEvent<
         ApiType,
-        [PolymeshPrimitivesEventOnly, AccountId32, AccountId32]
+        [userKey: AccountId32, payingKey: AccountId32, initialPolyxLimit: u128],
+        { userKey: AccountId32; payingKey: AccountId32; initialPolyxLimit: u128 }
       >;
       /**
-       * Authorization given for `paying_key` to `user_key`.
-       *
-       * (Caller DID, User Key, Paying Key, Initial POLYX limit, Auth ID)
+       * A `paying_key` has approved subsidy for a `user_key`.
        **/
-      AuthorizedPayingKey: AugmentedEvent<
+      ApprovedSubsidy: AugmentedEvent<
         ApiType,
-        [PolymeshPrimitivesEventOnly, AccountId32, AccountId32, u128, u64]
+        [userKey: AccountId32, payingKey: AccountId32, initialPolyxLimit: u128],
+        { userKey: AccountId32; payingKey: AccountId32; initialPolyxLimit: u128 }
       >;
       /**
-       * Removed paying key.
-       *
-       * (Caller DID, User Key, Paying Key)
+       * Relayed transaction.
        **/
-      RemovedPayingKey: AugmentedEvent<
+      RelayedTx: AugmentedEvent<
         ApiType,
-        [PolymeshPrimitivesEventOnly, AccountId32, AccountId32]
+        [caller: AccountId32, target: AccountId32, result: Result<Null, SpRuntimeDispatchError>],
+        { caller: AccountId32; target: AccountId32; result: Result<Null, SpRuntimeDispatchError> }
+      >;
+      /**
+       * Removed pending subsidy.
+       **/
+      RemovedPendingSubsidy: AugmentedEvent<
+        ApiType,
+        [userKey: AccountId32, payingKey: AccountId32, initialPolyxLimit: u128],
+        { userKey: AccountId32; payingKey: AccountId32; initialPolyxLimit: u128 }
+      >;
+      /**
+       * Removed subsidy.
+       **/
+      RemovedSubsidy: AugmentedEvent<
+        ApiType,
+        [userKey: AccountId32, payingKey: AccountId32, remaining: u128],
+        { userKey: AccountId32; payingKey: AccountId32; remaining: u128 }
+      >;
+      /**
+       * The subsidy fee has been used to pay for a transaction or protocol fee.
+       **/
+      SubsidyDebited: AugmentedEvent<
+        ApiType,
+        [userKey: AccountId32, payingKey: AccountId32, amount: u128],
+        { userKey: AccountId32; payingKey: AccountId32; amount: u128 }
       >;
       /**
        * Updated polyx limit.
-       *
-       * (Caller DID, User Key, Paying Key, POLYX limit, old remaining POLYX)
        **/
       UpdatedPolyxLimit: AugmentedEvent<
         ApiType,
-        [PolymeshPrimitivesEventOnly, AccountId32, AccountId32, u128, u128]
+        [userKey: AccountId32, payingKey: AccountId32, remaining: u128, oldRemaining: u128],
+        { userKey: AccountId32; payingKey: AccountId32; remaining: u128; oldRemaining: u128 }
       >;
     };
     scheduler: {
@@ -2447,30 +2469,30 @@ declare module '@polkadot/api-base/types/events' {
     };
     settlement: {
       /**
-       * An affirmation has been withdrawn (did, portfolio, instruction_id)
+       * An affirmation has been withdrawn (did, asset_holder, instruction_id)
        **/
       AffirmationWithdrawn: AugmentedEvent<
         ApiType,
-        [PolymeshPrimitivesIdentityId, PolymeshPrimitivesIdentityIdPortfolioId, u64]
+        [PolymeshPrimitivesIdentityId, PolymeshPrimitivesAssetAssetHolder, u64]
       >;
       /**
        * Failed to execute instruction.
        **/
       FailedToExecuteInstruction: AugmentedEvent<ApiType, [u64, SpRuntimeDispatchError]>;
       /**
-       * An instruction has been affirmed (did, portfolio, instruction_id)
+       * An instruction has been affirmed (did, asset_holder, instruction_id)
        **/
       InstructionAffirmed: AugmentedEvent<
         ApiType,
-        [PolymeshPrimitivesIdentityId, PolymeshPrimitivesIdentityIdPortfolioId, u64]
+        [PolymeshPrimitivesIdentityId, PolymeshPrimitivesAssetAssetHolder, u64]
       >;
       /**
        * An instruction has been automatically affirmed.
-       * Parameters: [`IdentityId`] of the caller, [`PortfolioId`] of the receiver, and [`InstructionId`] of the instruction.
+       * Parameters: [`IdentityId`] of the caller, [`AssetHolder`] of the receiver, and [`InstructionId`] of the instruction.
        **/
       InstructionAutomaticallyAffirmed: AugmentedEvent<
         ApiType,
-        [PolymeshPrimitivesIdentityId, PolymeshPrimitivesIdentityIdPortfolioId, u64]
+        [PolymeshPrimitivesIdentityId, PolymeshPrimitivesAssetAssetHolder, u64]
       >;
       /**
        * A new instruction has been created
@@ -2519,6 +2541,13 @@ declare module '@polkadot/api-base/types/events' {
        * Execution of a leg failed (did, instruction_id, leg_id)
        **/
       LegFailedExecution: AugmentedEvent<ApiType, [PolymeshPrimitivesIdentityId, u64, u64]>;
+      /**
+       * An identity's mandatory receiver affirmation policy has been updated.
+       **/
+      MandatoryReceiverAffirmationSet: AugmentedEvent<
+        ApiType,
+        [PolymeshPrimitivesIdentityId, PolymeshPrimitivesSettlementAffirmationRequirement]
+      >;
       /**
        * An instruction has affirmed by a mediator.
        * Parameters: [`IdentityId`] of the mediator and [`InstructionId`] of the instruction.
@@ -2977,6 +3006,36 @@ declare module '@polkadot/api-base/types/events' {
         }
       >;
     };
+    sudo: {
+      /**
+       * The sudo key has been updated.
+       **/
+      KeyChanged: AugmentedEvent<
+        ApiType,
+        [old: Option<AccountId32>, new_: AccountId32],
+        { old: Option<AccountId32>; new_: AccountId32 }
+      >;
+      /**
+       * The key was permanently removed.
+       **/
+      KeyRemoved: AugmentedEvent<ApiType, []>;
+      /**
+       * A sudo call just took place.
+       **/
+      Sudid: AugmentedEvent<
+        ApiType,
+        [sudoResult: Result<Null, SpRuntimeDispatchError>],
+        { sudoResult: Result<Null, SpRuntimeDispatchError> }
+      >;
+      /**
+       * A [sudo_as](Pallet::sudo_as) call just took place.
+       **/
+      SudoAsDone: AugmentedEvent<
+        ApiType,
+        [sudoResult: Result<Null, SpRuntimeDispatchError>],
+        { sudoResult: Result<Null, SpRuntimeDispatchError> }
+      >;
+    };
     system: {
       /**
        * `:code` was updated.
@@ -3355,23 +3414,6 @@ declare module '@polkadot/api-base/types/events' {
         ApiType,
         [error: SpRuntimeDispatchError],
         { error: SpRuntimeDispatchError }
-      >;
-      /**
-       * Relayed transaction.
-       * POLYMESH: event.
-       **/
-      RelayedTx: AugmentedEvent<
-        ApiType,
-        [
-          callerDid: PolymeshPrimitivesIdentityId,
-          target: AccountId32,
-          result: Result<Null, SpRuntimeDispatchError>,
-        ],
-        {
-          callerDid: PolymeshPrimitivesIdentityId;
-          target: AccountId32;
-          result: Result<Null, SpRuntimeDispatchError>;
-        }
       >;
     };
     validators: {

@@ -5,13 +5,13 @@ export default {
         "Returns a vector containing all errors for the transfer. An empty vec means there's no error.",
       params: [
         {
-          name: 'sender_portfolio',
-          type: 'PortfolioId',
+          name: 'sender',
+          type: 'AssetHolder',
           isOptional: false,
         },
         {
-          name: 'receiver_portfolio',
-          type: 'PortfolioId',
+          name: 'receiver',
+          type: 'AssetHolder',
           isOptional: false,
         },
         {

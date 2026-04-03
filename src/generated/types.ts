@@ -342,6 +342,7 @@ export enum IdentityTx {
   CreateChildIdentity = 'identity.createChildIdentity',
   CreateChildIdentities = 'identity.createChildIdentities',
   UnlinkChildIdentity = 'identity.unlinkChildIdentity',
+  RegisterDid = 'identity.registerDid',
 }
 
 export enum CddServiceProvidersTx {
@@ -536,6 +537,7 @@ export enum SudoTx {
   SudoUncheckedWeight = 'sudo.sudoUncheckedWeight',
   SetKey = 'sudo.setKey',
   SudoAs = 'sudo.sudoAs',
+  RemoveKey = 'sudo.removeKey',
 }
 
 export enum AssetTx {
@@ -581,6 +583,9 @@ export enum AssetTx {
   LinkTickerToAssetId = 'asset.linkTickerToAssetId',
   UnlinkTickerFromAssetId = 'asset.unlinkTickerFromAssetId',
   UpdateGlobalMetadataSpec = 'asset.updateGlobalMetadataSpec',
+  TransferAsset = 'asset.transferAsset',
+  ReceiverAffirmAssetTransfer = 'asset.receiverAffirmAssetTransfer',
+  RejectAssetTransfer = 'asset.rejectAssetTransfer',
 }
 
 export enum CapitalDistributionTx {
@@ -733,6 +738,7 @@ export enum SettlementTx {
   WithdrawAffirmationAsMediator = 'settlement.withdrawAffirmationAsMediator',
   RejectInstructionAsMediator = 'settlement.rejectInstructionAsMediator',
   LockInstruction = 'settlement.lockInstruction',
+  SetMandatoryReceiverAffirmation = 'settlement.setMandatoryReceiverAffirmation',
 }
 
 export enum StatisticsTx {
@@ -792,6 +798,11 @@ export enum RelayerTx {
   UpdatePolyxLimit = 'relayer.updatePolyxLimit',
   IncreasePolyxLimit = 'relayer.increasePolyxLimit',
   DecreasePolyxLimit = 'relayer.decreasePolyxLimit',
+  ApproveSubsidy = 'relayer.approveSubsidy',
+  RevokeSubsidy = 'relayer.revokeSubsidy',
+  AcceptSubsidy = 'relayer.acceptSubsidy',
+  RemoveSubsidy = 'relayer.removeSubsidy',
+  RelayTx = 'relayer.relayTx',
 }
 
 export enum RewardsTx {
@@ -879,6 +890,30 @@ export enum ValidatorsTx {
   SetCommissionCap = 'validators.setCommissionCap',
 }
 
+export enum DidRegistrarsTx {
+  SetActiveMembersLimit = 'didRegistrars.setActiveMembersLimit',
+  DisableMember = 'didRegistrars.disableMember',
+  AddMember = 'didRegistrars.addMember',
+  RemoveMember = 'didRegistrars.removeMember',
+  SwapMember = 'didRegistrars.swapMember',
+  ResetMembers = 'didRegistrars.resetMembers',
+  AbdicateMembership = 'didRegistrars.abdicateMembership',
+}
+
+export enum PolymeshTransactionPaymentTx {
+  SetDisableFees = 'polymeshTransactionPayment.setDisableFees',
+}
+
+export enum BeefyTx {
+  ReportDoubleVoting = 'beefy.reportDoubleVoting',
+  ReportDoubleVotingUnsigned = 'beefy.reportDoubleVotingUnsigned',
+  SetNewGenesis = 'beefy.setNewGenesis',
+  ReportForkVoting = 'beefy.reportForkVoting',
+  ReportForkVotingUnsigned = 'beefy.reportForkVotingUnsigned',
+  ReportFutureBlockVoting = 'beefy.reportFutureBlockVoting',
+  ReportFutureBlockVotingUnsigned = 'beefy.reportFutureBlockVotingUnsigned',
+}
+
 export enum ModuleName {
   System = 'system',
   Babe = 'babe',
@@ -928,6 +963,9 @@ export enum ModuleName {
   ElectionProviderMultiPhase = 'electionProviderMultiPhase',
   TransactionPayment = 'transactionPayment',
   Validators = 'validators',
+  DidRegistrars = 'didRegistrars',
+  PolymeshTransactionPayment = 'polymeshTransactionPayment',
+  Beefy = 'beefy',
 }
 
 export type TxTag =
@@ -978,7 +1016,10 @@ export type TxTag =
   | StateTrieMigrationTx
   | ElectionProviderMultiPhaseTx
   | TransactionPaymentTx
-  | ValidatorsTx;
+  | ValidatorsTx
+  | DidRegistrarsTx
+  | PolymeshTransactionPaymentTx
+  | BeefyTx;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const TxTags = {
@@ -1030,4 +1071,7 @@ export const TxTags = {
   electionProviderMultiPhase: ElectionProviderMultiPhaseTx,
   transactionPayment: TransactionPaymentTx,
   validators: ValidatorsTx,
+  didRegistrars: DidRegistrarsTx,
+  polymeshTransactionPayment: PolymeshTransactionPaymentTx,
+  beefy: BeefyTx,
 };

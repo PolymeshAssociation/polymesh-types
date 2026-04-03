@@ -7,13 +7,47 @@ export default {
     PalletName: 'Text',
     ExtrinsicName: 'Text',
     AuthorizationNonce: 'u64',
-    TargetIdAuthorization: {
-      targetId: 'IdentityId',
-      nonce: 'AuthorizationNonce',
+    'ChainScopedMessage<Message>': {
+      genesisHash: 'Hash',
+      nonceOrId: 'u64',
+      label: 'Text',
       expiresAt: 'PolymeshMoment',
+      message: 'Message',
     },
+    ChainScopedMessageIdentityId: {
+      genesisHash: 'Hash',
+      nonceOrId: 'u64',
+      label: 'Text',
+      expiresAt: 'PolymeshMoment',
+      message: 'IdentityId',
+    },
+    ChainScopedMessageReceipt: {
+      genesisHash: 'Hash',
+      nonceOrId: 'u64',
+      label: 'Text',
+      expiresAt: 'PolymeshMoment',
+      message: 'Receipt',
+    },
+    ChainScopedMessageFundraiserReceipt: {
+      genesisHash: 'Hash',
+      nonceOrId: 'u64',
+      label: 'Text',
+      expiresAt: 'PolymeshMoment',
+      message: 'FundraiserReceipt',
+    },
+    ChainScopedMessageRuntimeCall: {
+      genesisHash: 'Hash',
+      nonceOrId: 'u64',
+      label: 'Text',
+      expiresAt: 'PolymeshMoment',
+      message: 'RuntimeCall',
+    },
+    SecondaryKeyAuthMessage: 'ChainScopedMessageIdentityId',
+    CreateChildIdentityAuthMessage: 'ChainScopedMessageIdentityId',
+    FundraiserReceiptMessage: 'ChainScopedMessageFundraiserReceipt',
+    ReceiptMessage: 'ChainScopedMessageReceipt',
+    RelayTxMessage: 'ChainScopedMessageRuntimeCall',
     Receipt: {
-      uid: 'u64',
       instructionId: 'InstructionId',
       legId: 'LegId',
       senderIdentity: 'IdentityId',
@@ -23,7 +57,6 @@ export default {
     },
     FundraiserId: 'u64',
     FundraiserReceipt: {
-      uid: 'u64',
       fundraiserId: 'FundraiserId',
       legId: 'LegId',
       senderIdentity: 'IdentityId',
@@ -429,7 +462,7 @@ export default {
         JoinIdentity: 'Permissions',
         PortfolioCustody: 'PortfolioId',
         BecomeAgent: '(PolymeshAssetId, AgentGroup)',
-        AddRelayerPayingKey: '(AccountId32, AccountId32, u128)',
+        OldAddRelayerPayingKey: '(AccountId32, AccountId32, u128)',
         RotatePrimaryKeyToSecondary: 'Permissions',
       },
     },
@@ -474,7 +507,7 @@ export default {
         'IdentityCreateChildIdentity',
       ],
     },
-    CddStatus: {
+    DidActiveStatus: {
       _enum: {
         Ok: 'IdentityId',
         Err: 'Vec<u8>',
@@ -525,7 +558,7 @@ export default {
       _enum: {
         Unknown: '',
         Exists: '',
-        CddVerified: '',
+        Active: '',
       },
     },
     PortfolioNumber: 'u64',
@@ -601,14 +634,14 @@ export default {
       ids: 'Vec<NFTId>',
     },
     FungibleLeg: {
-      sender: 'PortfolioId',
-      receiver: 'PortfolioId',
+      sender: 'AssetHolder',
+      receiver: 'AssetHolder',
       assetId: 'PolymeshAssetId',
       amount: 'Balance',
     },
     NonFungibleLeg: {
-      sender: 'PortfolioId',
-      receiver: 'PortfolioId',
+      sender: 'AssetHolder',
+      receiver: 'AssetHolder',
       nfts: 'NFTs',
     },
     OffChainLeg: {
@@ -660,10 +693,84 @@ export default {
     PalletPipsPipId: 'u32',
     PalletProtocolFeeRpcRuntimeApiCappedFee: 'u64',
     PolymeshRuntimeDevelopRuntimeRuntimeCall: 'Call',
+    AssetHolderKind: {
+      _enum: {
+        Account: 'AccountId32',
+        DefaultPortfolio: '',
+        UserPortfolio: 'PortfolioNumber',
+      },
+    },
+    AssetHolder: {
+      _enum: {
+        Portfolio: 'PortfolioId',
+        Account: 'AccountId32',
+      },
+    },
+    LegV7: {
+      _enum: {
+        Fungible: 'FungibleLegV7',
+        NonFungible: 'NonFungibleLegV7',
+        OffChain: 'OffChainLeg',
+      },
+    },
+    FungibleLegV7: {
+      sender: 'PortfolioIdV7',
+      receiver: 'PortfolioIdV7',
+      assetId: 'PolymeshAssetId',
+      amount: 'Balance',
+    },
+    NonFungibleLegV7: {
+      sender: 'PortfolioIdV7',
+      receiver: 'PortfolioIdV7',
+      nfts: 'NFTs',
+    },
+    PortfolioIdV7: {
+      did: 'IdentityId',
+      kind: 'PortfolioKindV7',
+    },
+    PortfolioKindV7: {
+      _enum: {
+        Default: '',
+        User: 'PortfolioNumber',
+        AccountId: 'AccountId32',
+      },
+    },
   },
   rpc: {},
   runtime: {
     AssetApi: [
+      {
+        methods: {
+          transfer_report: {
+            description:
+              "Returns a vector containing all errors for the transfer. An empty vec means there's no error.",
+            params: [
+              {
+                name: 'sender',
+                type: 'AssetHolder',
+              },
+              {
+                name: 'receiver',
+                type: 'AssetHolder',
+              },
+              {
+                name: 'asset_id',
+                type: 'PolymeshAssetId',
+              },
+              {
+                name: 'transfer_value',
+                type: 'Balance',
+              },
+              {
+                name: 'skip_locked_check',
+                type: 'bool',
+              },
+            ],
+            type: 'Vec<DispatchError>',
+          },
+        },
+        version: 5,
+      },
       {
         methods: {
           transfer_report: {
@@ -984,6 +1091,34 @@ export default {
               "Returns a vector containing all errors for the transfer. An empty vec means there's no error.",
             params: [
               {
+                name: 'sender',
+                type: 'AssetHolder',
+              },
+              {
+                name: 'receiver',
+                type: 'AssetHolder',
+              },
+              {
+                name: 'nfts',
+                type: 'NFTs',
+              },
+              {
+                name: 'skip_locked_check',
+                type: 'bool',
+              },
+            ],
+            type: 'Vec<DispatchError>',
+          },
+        },
+        version: 3,
+      },
+      {
+        methods: {
+          transfer_report: {
+            description:
+              "Returns a vector containing all errors for the transfer. An empty vec means there's no error.",
+            params: [
+              {
                 name: 'sender_portfolio',
                 type: 'PortfolioId',
               },
@@ -1085,6 +1220,83 @@ export default {
       },
     ],
     SettlementApi: [
+      {
+        methods: {
+          get_execute_instruction_info: {
+            description:
+              'Returns an ExecuteInstructionInfo instance containing the consumed weight and the number of tokens in the instruction.',
+            params: [
+              {
+                name: 'instruction_id',
+                type: 'InstructionId',
+              },
+            ],
+            type: 'Option<ExecuteInstructionInfo>',
+          },
+          get_affirmation_count: {
+            description:
+              'Returns an AffirmationCount instance containing the number of assets being sent/received from portfolios, and the number of off-chain assets in the instruction.',
+            params: [
+              {
+                name: 'instruction_id',
+                type: 'InstructionId',
+              },
+              {
+                name: 'holder_set',
+                type: 'Vec<AssetHolder>',
+              },
+            ],
+            type: 'AffirmationCount',
+          },
+          get_transfer_report: {
+            description:
+              "Returns a vector containing all errors for the transfer. An empty vec means there's no error.",
+            params: [
+              {
+                name: 'leg',
+                type: 'Leg',
+              },
+              {
+                name: 'skip_locked_check',
+                type: 'bool',
+              },
+            ],
+            type: 'Vec<DispatchError>',
+          },
+          get_execute_instruction_report: {
+            description:
+              "Returns a vector containing all errors for the execution. An empty vec means there's no error.",
+            params: [
+              {
+                name: 'instruction_id',
+                type: 'InstructionId',
+              },
+            ],
+            type: 'Vec<DispatchError>',
+          },
+          instruction_asset_count: {
+            description: 'Returns the AssetCount for the given instruction.',
+            params: [
+              {
+                name: 'instruction_id',
+                type: 'InstructionId',
+              },
+            ],
+            type: 'AssetCount',
+          },
+          lock_instruction_weight: {
+            description: 'Returns the weight for executing lock_instruction.',
+            params: [
+              {
+                name: 'instruction_id',
+                type: 'InstructionId',
+              },
+            ],
+            type: 'Result<Weight, DispatchError>',
+          },
+        },
+        version: 3,
+      },
       {
         methods: {
           get_execute_instruction_info: {

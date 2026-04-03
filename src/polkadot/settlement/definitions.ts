@@ -27,8 +27,8 @@ export default {
           isOptional: false,
         },
         {
-          name: 'portfolios',
-          type: 'Vec<PortfolioId>',
+          name: 'holder_set',
+          type: 'Vec<AssetHolder>',
           isOptional: false,
         },
         {

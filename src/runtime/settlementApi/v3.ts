@@ -1,0 +1,76 @@
+import { DefinitionCall } from '@polkadot/types/types';
+
+export const SettlementApiV3: Record<string, DefinitionCall> = {
+  get_execute_instruction_info: {
+    description:
+      'Returns an ExecuteInstructionInfo instance containing the consumed weight and the number of tokens in the instruction.',
+    params: [
+      {
+        name: 'instruction_id',
+        type: 'InstructionId',
+      },
+    ],
+    type: 'Option<ExecuteInstructionInfo>',
+  },
+  get_affirmation_count: {
+    description:
+      'Returns an AffirmationCount instance containing the number of assets being sent/received from portfolios, and the number of off-chain assets in the instruction.',
+    params: [
+      {
+        name: 'instruction_id',
+        type: 'InstructionId',
+      },
+      {
+        name: 'holder_set',
+        type: 'Vec<AssetHolder>',
+      },
+    ],
+    type: 'AffirmationCount',
+  },
+  get_transfer_report: {
+    description:
+      "Returns a vector containing all errors for the transfer. An empty vec means there's no error.",
+    params: [
+      {
+        name: 'leg',
+        type: 'Leg',
+      },
+      {
+        name: 'skip_locked_check',
+        type: 'bool',
+      },
+    ],
+    type: 'Vec<DispatchError>',
+  },
+  get_execute_instruction_report: {
+    description:
+      "Returns a vector containing all errors for the execution. An empty vec means there's no error.",
+    params: [
+      {
+        name: 'instruction_id',
+        type: 'InstructionId',
+      },
+    ],
+    type: 'Vec<DispatchError>',
+  },
+  instruction_asset_count: {
+    description: 'Returns the AssetCount for the given instruction.',
+    params: [
+      {
+        name: 'instruction_id',
+        type: 'InstructionId',
+      },
+    ],
+    type: 'AssetCount',
+  },
+  lock_instruction_weight: {
+    description: 'Returns the weight for executing lock_instruction.',
+    params: [
+      {
+        name: 'instruction_id',
+        type: 'InstructionId',
+      },
+    ],
+    type: 'Result<Weight, DispatchError>',
+  },
+};

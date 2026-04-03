@@ -7,14 +7,13 @@ import '@polkadot/rpc-core/types/jsonrpc';
 
 import type {
   AffirmationCount,
+  AssetHolder,
   Authorization,
   AuthorizationType,
   CappedFee,
-  CddStatus,
   ComplianceReport,
   DidStatus,
   ExecuteInstructionInfo,
-  IdentityClaim,
   IdentityId,
   InstructionId,
   KeyIdentityData,
@@ -23,7 +22,6 @@ import type {
   NFTs,
   PipId,
   PolymeshAssetId,
-  PortfolioId,
   ProtocolOp,
   RpcDidRecords,
   Signatory,
@@ -135,8 +133,8 @@ declare module '@polkadot/rpc-core/types/jsonrpc' {
        **/
       transferReport: AugmentedRpc<
         (
-          sender_portfolio: PortfolioId | { did?: any; kind?: any } | string | Uint8Array,
-          receiver_portfolio: PortfolioId | { did?: any; kind?: any } | string | Uint8Array,
+          sender: AssetHolder | { Portfolio: any } | { Account: any } | string | Uint8Array,
+          receiver: AssetHolder | { Portfolio: any } | { Account: any } | string | Uint8Array,
           asset_id: PolymeshAssetId | string | Uint8Array,
           transfer_value: Balance | AnyNumber | Uint8Array,
           skip_locked_check: bool | boolean | Uint8Array,
@@ -841,26 +839,6 @@ declare module '@polkadot/rpc-core/types/jsonrpc' {
           blockHash?: Hash | string | Uint8Array
         ) => Observable<Option<KeyIdentityData>>
       >;
-      /**
-       * use to tell whether the given did has valid cdd claim or not
-       **/
-      isIdentityHasValidCdd: AugmentedRpc<
-        (
-          did: IdentityId | string | Uint8Array,
-          buffer_time?: u64 | AnyNumber | Uint8Array,
-          blockHash?: Hash | string | Uint8Array
-        ) => Observable<CddStatus>
-      >;
-      /**
-       * Returns all valid IdentityClaim of type CustomerDueDiligence for the given target_identity
-       **/
-      validCDDClaims: AugmentedRpc<
-        (
-          target_identity: IdentityId | string | Uint8Array,
-          cdd_checker_leeway?: u64 | AnyNumber | Uint8Array,
-          blockHash?: Hash | string | Uint8Array
-        ) => Observable<Vec<IdentityClaim>>
-      >;
     };
     mmr: {
       /**
@@ -923,8 +901,8 @@ declare module '@polkadot/rpc-core/types/jsonrpc' {
        **/
       transferReport: AugmentedRpc<
         (
-          sender_portfolio: PortfolioId | { did?: any; kind?: any } | string | Uint8Array,
-          receiver_portfolio: PortfolioId | { did?: any; kind?: any } | string | Uint8Array,
+          sender: AssetHolder | { Portfolio: any } | { Account: any } | string | Uint8Array,
+          receiver: AssetHolder | { Portfolio: any } | { Account: any } | string | Uint8Array,
           nfts: NFTs | { assetId?: any; ids?: any } | string | Uint8Array,
           skip_locked_check: bool | boolean | Uint8Array,
           blockHash?: Hash | string | Uint8Array
@@ -1055,9 +1033,9 @@ declare module '@polkadot/rpc-core/types/jsonrpc' {
       getAffirmationCount: AugmentedRpc<
         (
           instruction_id: InstructionId | AnyNumber | Uint8Array,
-          portfolios:
-            | Vec<PortfolioId>
-            | (PortfolioId | { did?: any; kind?: any } | string | Uint8Array)[],
+          holder_set:
+            | Vec<AssetHolder>
+            | (AssetHolder | { Portfolio: any } | { Account: any } | string | Uint8Array)[],
           blockHash?: Hash | string | Uint8Array
         ) => Observable<AffirmationCount>
       >;

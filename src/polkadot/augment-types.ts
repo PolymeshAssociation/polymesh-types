@@ -12,6 +12,8 @@ import type {
   AssetComplianceResult,
   AssetCount,
   AssetDidResult,
+  AssetHolder,
+  AssetHolderKind,
   AssetPermissions,
   Authorization,
   AuthorizationData,
@@ -20,7 +22,10 @@ import type {
   CanTransferGranularReturn,
   CappedFee,
   CddId,
-  CddStatus,
+  ChainScopedMessageFundraiserReceipt,
+  ChainScopedMessageIdentityId,
+  ChainScopedMessageReceipt,
+  ChainScopedMessageRuntimeCall,
   Claim,
   ClaimType,
   ComplianceReport,
@@ -30,7 +35,9 @@ import type {
   ConditionResult,
   ConditionType,
   CountryCode,
+  CreateChildIdentityAuthMessage,
   CustomClaimTypeId,
+  DidActiveStatus,
   DidStatus,
   ExecuteInstructionInfo,
   ExtrinsicName,
@@ -38,7 +45,9 @@ import type {
   ExtrinsicPermissions,
   FundraiserId,
   FundraiserReceipt,
+  FundraiserReceiptMessage,
   FungibleLeg,
+  FungibleLegV7,
   GranularCanTransferResult,
   IdentityClaim,
   IdentityId,
@@ -46,10 +55,12 @@ import type {
   KeyIdentityData,
   Leg,
   LegId,
+  LegV7,
   Member,
   NFTId,
   NFTs,
   NonFungibleLeg,
+  NonFungibleLegV7,
   OffChainLeg,
   PalletName,
   PalletPermissions,
@@ -63,20 +74,24 @@ import type {
   PolymeshPrimitivesSettlementInstructionId,
   PolymeshRuntimeDevelopRuntimeRuntimeCall,
   PortfolioId,
+  PortfolioIdV7,
   PortfolioKind,
+  PortfolioKindV7,
   PortfolioNumber,
   PortfolioPermissions,
   PortfolioValidityResult,
   ProtocolOp,
   Receipt,
+  ReceiptMessage,
+  RelayTxMessage,
   RequirementReport,
   RpcDidRecords,
   RpcDidRecordsSuccess,
   Scope,
   SecondaryKey,
+  SecondaryKeyAuthMessage,
   Signatory,
   StatClaim,
-  TargetIdAuthorization,
   TargetIdentity,
   Ticker,
   TransferCondition,
@@ -1424,6 +1439,8 @@ declare module '@polkadot/types/types/registry' {
     AssetDestroyWitness: AssetDestroyWitness;
     AssetDetails: AssetDetails;
     AssetDidResult: AssetDidResult;
+    AssetHolder: AssetHolder;
+    AssetHolderKind: AssetHolderKind;
     AssetId: AssetId;
     AssetIdV2: AssetIdV2;
     AssetIdV3: AssetIdV3;
@@ -1549,9 +1566,13 @@ declare module '@polkadot/types/types/registry' {
     CanTransferGranularReturn: CanTransferGranularReturn;
     CappedFee: CappedFee;
     CddId: CddId;
-    CddStatus: CddStatus;
     ChainId: ChainId;
     ChainProperties: ChainProperties;
+    'ChainScopedMessage<Message>': 'ChainScopedMessage<Message>';
+    ChainScopedMessageFundraiserReceipt: ChainScopedMessageFundraiserReceipt;
+    ChainScopedMessageIdentityId: ChainScopedMessageIdentityId;
+    ChainScopedMessageReceipt: ChainScopedMessageReceipt;
+    ChainScopedMessageRuntimeCall: ChainScopedMessageRuntimeCall;
     ChainType: ChainType;
     ChangesTrieConfiguration: ChangesTrieConfiguration;
     ChangesTrieSignal: ChangesTrieSignal;
@@ -1669,6 +1690,7 @@ declare module '@polkadot/types/types/registry' {
     CoreState: CoreState;
     CountryCode: CountryCode;
     CrateVersion: CrateVersion;
+    CreateChildIdentityAuthMessage: CreateChildIdentityAuthMessage;
     CreatedBlock: CreatedBlock;
     CustomClaimTypeId: CustomClaimTypeId;
     CustomMetadata15: CustomMetadata15;
@@ -1684,6 +1706,7 @@ declare module '@polkadot/types/types/registry' {
     DepositBalance: DepositBalance;
     DepositBalanceOf: DepositBalanceOf;
     DestroyWitness: DestroyWitness;
+    DidActiveStatus: DidActiveStatus;
     DidStatus: DidStatus;
     Digest: Digest;
     DigestItem: DigestItem;
@@ -1867,6 +1890,7 @@ declare module '@polkadot/types/types/registry' {
     FundInfo: FundInfo;
     FundraiserId: FundraiserId;
     FundraiserReceipt: FundraiserReceipt;
+    FundraiserReceiptMessage: FundraiserReceiptMessage;
     Fungibility: Fungibility;
     FungibilityV0: FungibilityV0;
     FungibilityV1: FungibilityV1;
@@ -1875,6 +1899,7 @@ declare module '@polkadot/types/types/registry' {
     FungibilityV4: FungibilityV4;
     FungibilityV5: FungibilityV5;
     FungibleLeg: FungibleLeg;
+    FungibleLegV7: FungibleLegV7;
     FungiblesAccessError: FungiblesAccessError;
     Gas: Gas;
     GenesisBuildErr: GenesisBuildErr;
@@ -2006,6 +2031,7 @@ declare module '@polkadot/types/types/registry' {
     Leg: Leg;
     LegacyTransaction: LegacyTransaction;
     LegId: LegId;
+    LegV7: LegV7;
     Limits: Limits;
     LimitsTo264: LimitsTo264;
     LocalValidationData: LocalValidationData;
@@ -2120,6 +2146,7 @@ declare module '@polkadot/types/types/registry' {
     NodeFeatures: NodeFeatures;
     NodeRole: NodeRole;
     NonFungibleLeg: NonFungibleLeg;
+    NonFungibleLegV7: NonFungibleLegV7;
     NotConnectedPeer: NotConnectedPeer;
     NpApiError: NpApiError;
     NpPoolId: NpPoolId;
@@ -2245,7 +2272,9 @@ declare module '@polkadot/types/types/registry' {
     PortableType: PortableType;
     PortableTypeV14: PortableTypeV14;
     PortfolioId: PortfolioId;
+    PortfolioIdV7: PortfolioIdV7;
     PortfolioKind: PortfolioKind;
+    PortfolioKindV7: PortfolioKindV7;
     PortfolioNumber: PortfolioNumber;
     PortfolioPermissions: PortfolioPermissions;
     PortfolioValidityResult: PortfolioValidityResult;
@@ -2293,6 +2322,7 @@ declare module '@polkadot/types/types/registry' {
     ReadProof: ReadProof;
     Reasons: Reasons;
     Receipt: Receipt;
+    ReceiptMessage: ReceiptMessage;
     RecoveryConfig: RecoveryConfig;
     RefCount: RefCount;
     RefCountTo259: RefCountTo259;
@@ -2307,6 +2337,7 @@ declare module '@polkadot/types/types/registry' {
     RelayChainHash: RelayChainHash;
     RelayerId: RelayerId;
     RelayHash: RelayHash;
+    RelayTxMessage: RelayTxMessage;
     Releases: Releases;
     Remark: Remark;
     Renouncing: Renouncing;
@@ -2365,6 +2396,7 @@ declare module '@polkadot/types/types/registry' {
     Seal: Seal;
     SealV0: SealV0;
     SecondaryKey: SecondaryKey;
+    SecondaryKeyAuthMessage: SecondaryKeyAuthMessage;
     SeedOf: SeedOf;
     ServiceQuality: ServiceQuality;
     SessionIndex: SessionIndex;
@@ -2511,7 +2543,6 @@ declare module '@polkadot/types/types/registry' {
     SystemInherentData: SystemInherentData;
     SystemOrigin: SystemOrigin;
     Tally: Tally;
-    TargetIdAuthorization: TargetIdAuthorization;
     TargetIdentity: TargetIdentity;
     TaskAddress: TaskAddress;
     TAssetBalance: TAssetBalance;
