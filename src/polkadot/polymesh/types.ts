@@ -158,7 +158,7 @@ export interface AuthorizationType extends Enum {
   readonly isJoinIdentity: boolean;
   readonly isPortfolioCustody: boolean;
   readonly isBecomeAgent: boolean;
-  readonly isAddRelayerPayingKey: boolean;
+  readonly isOldAddRelayerPayingKey: boolean;
   readonly isRotatePrimaryKeyToSecondary: boolean;
   readonly type:
     | 'AttestPrimaryKeyRotation'
@@ -169,7 +169,7 @@ export interface AuthorizationType extends Enum {
     | 'JoinIdentity'
     | 'PortfolioCustody'
     | 'BecomeAgent'
-    | 'AddRelayerPayingKey'
+    | 'OldAddRelayerPayingKey'
     | 'RotatePrimaryKeyToSecondary';
 }
 
@@ -187,6 +187,15 @@ export interface CappedFee extends u64 {}
 
 /** @name CddId */
 export interface CddId extends U8aFixed {}
+
+/** @name CddStatus */
+export interface CddStatus extends Enum {
+  readonly isOk: boolean;
+  readonly asOk: IdentityId;
+  readonly isErr: boolean;
+  readonly asErr: Bytes;
+  readonly type: 'Ok' | 'Err';
+}
 
 /** @name ChainScopedMessage<Message> */
 export interface ChainScopedMessage<Message> extends Struct {

@@ -22,6 +22,7 @@ import type {
   CanTransferGranularReturn,
   CappedFee,
   CddId,
+  CddStatus,
   ChainScopedMessageFundraiserReceipt,
   ChainScopedMessageIdentityId,
   ChainScopedMessageReceipt,
@@ -1566,6 +1567,7 @@ declare module '@polkadot/types/types/registry' {
     CanTransferGranularReturn: CanTransferGranularReturn;
     CappedFee: CappedFee;
     CddId: CddId;
+    CddStatus: CddStatus;
     ChainId: ChainId;
     ChainProperties: ChainProperties;
     'ChainScopedMessage<Message>': 'ChainScopedMessage<Message>';

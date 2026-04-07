@@ -507,6 +507,12 @@ export default {
         'IdentityCreateChildIdentity',
       ],
     },
+    CddStatus: {
+      _enum: {
+        Ok: 'IdentityId',
+        Err: 'Vec<u8>',
+      },
+    },
     DidActiveStatus: {
       _enum: {
         Ok: 'IdentityId',
@@ -550,7 +556,7 @@ export default {
         JoinIdentity: '',
         PortfolioCustody: '',
         BecomeAgent: '',
-        AddRelayerPayingKey: '',
+        OldAddRelayerPayingKey: '',
         RotatePrimaryKeyToSecondary: '',
       },
     },

@@ -823,7 +823,7 @@ declare module '@polkadot/rpc-core/types/jsonrpc' {
             | 'JoinIdentity'
             | 'PortfolioCustody'
             | 'BecomeAgent'
-            | 'AddRelayerPayingKey'
+            | 'OldAddRelayerPayingKey'
             | 'RotatePrimaryKeyToSecondary'
             | number
             | Uint8Array,

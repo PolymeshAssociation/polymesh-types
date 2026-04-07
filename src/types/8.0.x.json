@@ -506,6 +506,12 @@
       "IdentityCreateChildIdentity"
     ]
   },
+  "CddStatus": {
+    "_enum": {
+      "Ok": "IdentityId",
+      "Err": "Vec<u8>"
+    }
+  },
   "DidActiveStatus": {
     "_enum": {
       "Ok": "IdentityId",
@@ -549,7 +555,7 @@
       "JoinIdentity": "",
       "PortfolioCustody": "",
       "BecomeAgent": "",
-      "AddRelayerPayingKey": "",
+      "OldAddRelayerPayingKey": "",
       "RotatePrimaryKeyToSecondary": ""
     }
   },
