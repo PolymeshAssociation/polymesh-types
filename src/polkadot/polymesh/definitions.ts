@@ -1482,6 +1482,10 @@ export default {
     ],
   },
   signedExtensions: {
+    AuthorizeCall: {
+      extrinsic: {},
+      payload: {},
+    },
     StoreCallMetadata: {
       extrinsic: {},
       payload: {},
