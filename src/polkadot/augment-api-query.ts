@@ -26,6 +26,7 @@ import type { AnyNumber, ITuple } from '@polkadot/types-codec/types';
 import type {
   AccountId32,
   Call,
+  H160,
   H256,
   Perbill,
   Percent,
@@ -78,6 +79,13 @@ import type {
   PalletPreimageOldRequestStatus,
   PalletPreimageRequestStatus,
   PalletRelayerSubsidy,
+  PalletReviveDebugDebugSettings,
+  PalletReviveEvmApiRpcTypesGenBlock,
+  PalletReviveEvmBlockHashBlockBuilderEthereumBlockBuilderIR,
+  PalletReviveEvmBlockHashReceiptGasInfo,
+  PalletReviveStorageAccountInfo,
+  PalletReviveStorageDeletionQueueManager,
+  PalletReviveVmCodeInfo,
   PalletSchedulerRetryConfig,
   PalletSchedulerScheduled,
   PalletStakingActiveEraInfo,
@@ -168,6 +176,24 @@ export type __QueryableStorageEntry<ApiType extends ApiTypes> = QueryableStorage
 declare module '@polkadot/api-base/types/storage' {
   interface AugmentedQueries<ApiType extends ApiTypes> {
     asset: {
+      /**
+       * Maps (owner, spender, asset_id) to the approved allowance amount.
+       *
+       * A non-existent entry returns 0 (via `ValueQuery`), matching ERC-20 behavior.
+       * When an allowance is revoked (set to 0), the entry is removed to bound storage growth.
+       *
+       * Uses `StorageNMap` so that all allowances for a given owner can be iterated
+       * via prefix.
+       **/
+      allowances: AugmentedQuery<
+        ApiType,
+        (
+          arg1: AccountId32 | string | Uint8Array,
+          arg2: AccountId32 | string | Uint8Array,
+          arg3: PolymeshPrimitivesAssetAssetId | string | Uint8Array
+        ) => Observable<u128>,
+        [AccountId32, AccountId32, PolymeshPrimitivesAssetAssetId]
+      >;
       /**
        * Tracks the total [`Balance`] held by the account for each [`AssetId`].
        **/
@@ -1595,17 +1621,6 @@ declare module '@polkadot/api-base/types/storage' {
         [PolymeshPrimitivesIdentityId, u64]
       >;
       /**
-       * All child identities of a parent (i.e ParentDID, ChildDID, true)
-       **/
-      childDid: AugmentedQuery<
-        ApiType,
-        (
-          arg1: PolymeshPrimitivesIdentityId | string | Uint8Array,
-          arg2: PolymeshPrimitivesIdentityId | string | Uint8Array
-        ) => Observable<bool>,
-        [PolymeshPrimitivesIdentityId, PolymeshPrimitivesIdentityId]
-      >;
-      /**
        * (Target ID, claim type) (issuer,scope) -> Associated claims
        **/
       claims: AugmentedQuery<
@@ -1744,20 +1759,6 @@ declare module '@polkadot/api-base/types/storage' {
         ) => Observable<Option<u64>>,
         [PolymeshPrimitivesSecondaryKeySignatory]
       >;
-      /**
-       * Parent identity if the DID is a child Identity.
-       **/
-      parentDid: AugmentedQuery<
-        ApiType,
-        (
-          arg: PolymeshPrimitivesIdentityId | string | Uint8Array
-        ) => Observable<Option<PolymeshPrimitivesIdentityId>>,
-        [PolymeshPrimitivesIdentityId]
-      >;
-      /**
-       * Storage version.
-       **/
-      storageVersion: AugmentedQuery<ApiType, () => Observable<u8>, []>;
     };
     imOnline: {
       /**
@@ -2079,11 +2080,10 @@ declare module '@polkadot/api-base/types/storage' {
         ApiType,
         (
           arg1: AccountId32 | string | Uint8Array,
-          arg2:
-            | ITuple<[PolymeshPrimitivesAssetAssetId, u64]>
-            | [PolymeshPrimitivesAssetAssetId | string | Uint8Array, u64 | AnyNumber | Uint8Array]
+          arg2: PolymeshPrimitivesAssetAssetId | string | Uint8Array,
+          arg3: u64 | AnyNumber | Uint8Array
         ) => Observable<PolymeshPrimitivesNftNftOwnerStatus>,
-        [AccountId32, ITuple<[PolymeshPrimitivesAssetAssetId, u64]>]
+        [AccountId32, PolymeshPrimitivesAssetAssetId, u64]
       >;
       /**
        * The total number of NFTs in a collection.
@@ -2507,11 +2507,10 @@ declare module '@polkadot/api-base/types/storage' {
             | { did?: any; kind?: any }
             | string
             | Uint8Array,
-          arg2:
-            | ITuple<[PolymeshPrimitivesAssetAssetId, u64]>
-            | [PolymeshPrimitivesAssetAssetId | string | Uint8Array, u64 | AnyNumber | Uint8Array]
+          arg2: PolymeshPrimitivesAssetAssetId | string | Uint8Array,
+          arg3: u64 | AnyNumber | Uint8Array
         ) => Observable<bool>,
-        [PolymeshPrimitivesIdentityIdPortfolioId, ITuple<[PolymeshPrimitivesAssetAssetId, u64]>]
+        [PolymeshPrimitivesIdentityIdPortfolioId, PolymeshPrimitivesAssetAssetId, u64]
       >;
       /**
        * The set of existing portfolios with their names. If a certain pair of a DID and
@@ -2558,10 +2557,6 @@ declare module '@polkadot/api-base/types/storage' {
         ) => Observable<bool>,
         [PolymeshPrimitivesIdentityIdPortfolioId, PolymeshPrimitivesAssetAssetId]
       >;
-      /**
-       * Storage version.
-       **/
-      storageVersion: AugmentedQuery<ApiType, () => Observable<u8>, []>;
     };
     preimage: {
       preimageFor: AugmentedQuery<
@@ -2605,7 +2600,7 @@ declare module '@polkadot/api-base/types/storage' {
             | 'AssetCreateAsset'
             | 'CheckpointCreateSchedule'
             | 'ComplianceManagerAddComplianceRequirement'
-            | 'IdentityCddRegisterDid'
+            | 'IdentityRegisterDid'
             | 'IdentityAddClaim'
             | 'IdentityAddSecondaryKeysWithAuthorization'
             | 'PipsPropose'
@@ -2614,7 +2609,6 @@ declare module '@polkadot/api-base/types/storage' {
             | 'CapitalDistributionDistribute'
             | 'NFTCreateCollection'
             | 'NFTMint'
-            | 'IdentityCreateChildIdentity'
             | number
             | Uint8Array
         ) => Observable<u128>,
@@ -2660,6 +2654,141 @@ declare module '@polkadot/api-base/types/storage' {
         ApiType,
         (arg: AccountId32 | string | Uint8Array) => Observable<Option<PalletRelayerSubsidy>>,
         [AccountId32]
+      >;
+    };
+    revive: {
+      /**
+       * The data associated to a contract or externally owned account.
+       **/
+      accountInfoOf: AugmentedQuery<
+        ApiType,
+        (arg: H160 | string | Uint8Array) => Observable<Option<PalletReviveStorageAccountInfo>>,
+        [H160]
+      >;
+      /**
+       * Mapping for block number and hashes.
+       *
+       * The maximum number of elements stored is capped by the block hash count `BLOCK_HASH_COUNT`.
+       **/
+      blockHash: AugmentedQuery<
+        ApiType,
+        (arg: u32 | AnyNumber | Uint8Array) => Observable<H256>,
+        [u32]
+      >;
+      /**
+       * A mapping from a contract's code hash to its code info.
+       **/
+      codeInfoOf: AugmentedQuery<
+        ApiType,
+        (arg: H256 | string | Uint8Array) => Observable<Option<PalletReviveVmCodeInfo>>,
+        [H256]
+      >;
+      /**
+       * Debugging settings that can be configured when DebugEnabled config is true.
+       **/
+      debugSettingsOf: AugmentedQuery<
+        ApiType,
+        () => Observable<PalletReviveDebugDebugSettings>,
+        []
+      >;
+      /**
+       * Evicted contracts that await child trie deletion.
+       *
+       * Child trie deletion is a heavy operation depending on the amount of storage items
+       * stored in said trie. Therefore this operation is performed lazily in `on_idle`.
+       **/
+      deletionQueue: AugmentedQuery<
+        ApiType,
+        (arg: u32 | AnyNumber | Uint8Array) => Observable<Option<Bytes>>,
+        [u32]
+      >;
+      /**
+       * A pair of monotonic counters used to track the latest contract marked for deletion
+       * and the latest deleted contract in queue.
+       **/
+      deletionQueueCounter: AugmentedQuery<
+        ApiType,
+        () => Observable<PalletReviveStorageDeletionQueueManager>,
+        []
+      >;
+      /**
+       * The first transaction and receipt of the ethereum block.
+       *
+       * These values are moved out of the `EthBlockBuilderIR` to avoid serializing and
+       * deserializing them on every transaction. Instead, they are loaded when needed.
+       **/
+      ethBlockBuilderFirstValues: AugmentedQuery<
+        ApiType,
+        () => Observable<Option<ITuple<[Bytes, Bytes]>>>,
+        []
+      >;
+      /**
+       * Incremental ethereum block builder.
+       **/
+      ethBlockBuilderIR: AugmentedQuery<
+        ApiType,
+        () => Observable<PalletReviveEvmBlockHashBlockBuilderEthereumBlockBuilderIR>,
+        []
+      >;
+      /**
+       * The current Ethereum block that is stored in the `on_finalize` method.
+       *
+       * # Note
+       *
+       * This could be further optimized into the future to store only the minimum
+       * information needed to reconstruct the Ethereum block at the RPC level.
+       *
+       * Since the block is convenient to have around, and the extra details are capped
+       * by a few hashes and the vector of transaction hashes, we store the block here.
+       **/
+      ethereumBlock: AugmentedQuery<
+        ApiType,
+        () => Observable<PalletReviveEvmApiRpcTypesGenBlock>,
+        []
+      >;
+      /**
+       * The immutable data associated with a given account.
+       **/
+      immutableDataOf: AugmentedQuery<
+        ApiType,
+        (arg: H160 | string | Uint8Array) => Observable<Option<Bytes>>,
+        [H160]
+      >;
+      /**
+       * Map a Ethereum address to its original `AccountId32`.
+       *
+       * When deriving a `H160` from an `AccountId32` we use a hash function. In order to
+       * reconstruct the original account we need to store the reverse mapping here.
+       * Register your `AccountId32` using [`Pallet::map_account`] in order to
+       * use it with this pallet.
+       **/
+      originalAccount: AugmentedQuery<
+        ApiType,
+        (arg: H160 | string | Uint8Array) => Observable<Option<AccountId32>>,
+        [H160]
+      >;
+      /**
+       * A mapping from a contract's code hash to its code.
+       * The code's size is bounded by [`crate::limits::BLOB_BYTES`] for PVM and
+       * [`revm::primitives::eip170::MAX_CODE_SIZE`] for EVM bytecode.
+       **/
+      pristineCode: AugmentedQuery<
+        ApiType,
+        (arg: H256 | string | Uint8Array) => Observable<Option<Bytes>>,
+        [H256]
+      >;
+      /**
+       * The details needed to reconstruct the receipt info offchain.
+       *
+       * This contains valuable information about the gas used by the transaction.
+       *
+       * NOTE: The item is unbound and should therefore never be read on chain.
+       * It could otherwise inflate the PoV size of a block.
+       **/
+      receiptInfoData: AugmentedQuery<
+        ApiType,
+        () => Observable<Vec<PalletReviveEvmBlockHashReceiptGasInfo>>,
+        []
       >;
     };
     scheduler: {
@@ -2713,6 +2842,17 @@ declare module '@polkadot/api-base/types/storage' {
         ApiType,
         () => Observable<Vec<ITuple<[u32, Perbill]>>>,
         []
+      >;
+      /**
+       * Accounts whose keys were set via `SessionInterface` (external path) without
+       * incrementing the consumer reference or placing a key deposit. `do_purge_keys`
+       * only decrements consumers for accounts that were registered through the local
+       * session pallet.
+       **/
+      externallySetKeys: AugmentedQuery<
+        ApiType,
+        (arg: AccountId32 | string | Uint8Array) => Observable<Option<Null>>,
+        [AccountId32]
       >;
       /**
        * The owner of a key. The key is the `KeyTypeId` + the encoded key.
@@ -2843,6 +2983,14 @@ declare module '@polkadot/api-base/types/storage' {
         [u64]
       >;
       /**
+       * The number of times an instruction has been relocked.
+       **/
+      instructionRelockCount: AugmentedQuery<
+        ApiType,
+        (arg: u64 | AnyNumber | Uint8Array) => Observable<u32>,
+        [u64]
+      >;
+      /**
        * Instruction statuses. instruction_id -> InstructionStatus
        **/
       instructionStatuses: AugmentedQuery<
@@ -2898,6 +3046,14 @@ declare module '@polkadot/api-base/types/storage' {
           arg2: u64 | AnyNumber | Uint8Array
         ) => Observable<bool>,
         [AccountId32, u64]
+      >;
+      /**
+       * The moment the instruction was unlocked by a mediator. Used to enforce the relock cooldown.
+       **/
+      unlockedTimestamp: AugmentedQuery<
+        ApiType,
+        (arg: u64 | AnyNumber | Uint8Array) => Observable<Option<u64>>,
+        [u64]
       >;
       /**
        * Helps a user track their pending instructions and affirmations (only needed for UI).
@@ -3520,10 +3676,6 @@ declare module '@polkadot/api-base/types/storage' {
         [AccountId32]
       >;
       /**
-       * Total length (in bytes) for all extrinsics put together, for the current block.
-       **/
-      allExtrinsicsLen: AugmentedQuery<ApiType, () => Observable<Option<u32>>, []>;
-      /**
        * `Some` if a code upgrade has been authorized.
        **/
       authorizedUpgrade: AugmentedQuery<
@@ -3539,6 +3691,16 @@ declare module '@polkadot/api-base/types/storage' {
         (arg: u32 | AnyNumber | Uint8Array) => Observable<H256>,
         [u32]
       >;
+      /**
+       * Total size (in bytes) of the current block.
+       *
+       * Tracks the size of the header and all extrinsics.
+       **/
+      blockSize: AugmentedQuery<ApiType, () => Observable<Option<u32>>, []>;
+      /**
+       * Number of blocks till the pending code upgrade is applied.
+       **/
+      blocksTillUpgrade: AugmentedQuery<ApiType, () => Observable<Option<u8>>, []>;
       /**
        * The current weight for the block.
        **/

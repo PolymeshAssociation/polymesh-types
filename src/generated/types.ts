@@ -343,6 +343,7 @@ export enum IdentityTx {
   CreateChildIdentities = 'identity.createChildIdentities',
   UnlinkChildIdentity = 'identity.unlinkChildIdentity',
   RegisterDid = 'identity.registerDid',
+  SelfRegisterDid = 'identity.selfRegisterDid',
 }
 
 export enum CddServiceProvidersTx {
@@ -586,6 +587,7 @@ export enum AssetTx {
   TransferAsset = 'asset.transferAsset',
   ReceiverAffirmAssetTransfer = 'asset.receiverAffirmAssetTransfer',
   RejectAssetTransfer = 'asset.rejectAssetTransfer',
+  Approve = 'asset.approve',
 }
 
 export enum CapitalDistributionTx {
@@ -739,6 +741,8 @@ export enum SettlementTx {
   RejectInstructionAsMediator = 'settlement.rejectInstructionAsMediator',
   LockInstruction = 'settlement.lockInstruction',
   SetMandatoryReceiverAffirmation = 'settlement.setMandatoryReceiverAffirmation',
+  TransferFunds = 'settlement.transferFunds',
+  UnlockInstruction = 'settlement.unlockInstruction',
 }
 
 export enum StatisticsTx {
@@ -857,6 +861,7 @@ export enum NftTx {
   IssueNft = 'nft.issueNft',
   RedeemNft = 'nft.redeemNft',
   ControllerTransfer = 'nft.controllerTransfer',
+  TransferNft = 'nft.transferNft',
 }
 
 export enum StateTrieMigrationTx {
@@ -914,6 +919,22 @@ export enum BeefyTx {
   ReportFutureBlockVotingUnsigned = 'beefy.reportFutureBlockVotingUnsigned',
 }
 
+export enum ReviveTx {
+  EthTransact = 'revive.ethTransact',
+  Call = 'revive.call',
+  Instantiate = 'revive.instantiate',
+  InstantiateWithCode = 'revive.instantiateWithCode',
+  EthInstantiateWithCode = 'revive.ethInstantiateWithCode',
+  EthCall = 'revive.ethCall',
+  EthSubstrateCall = 'revive.ethSubstrateCall',
+  UploadCode = 'revive.uploadCode',
+  RemoveCode = 'revive.removeCode',
+  SetCode = 'revive.setCode',
+  MapAccount = 'revive.mapAccount',
+  UnmapAccount = 'revive.unmapAccount',
+  DispatchAsFallbackAccount = 'revive.dispatchAsFallbackAccount',
+}
+
 export enum ModuleName {
   System = 'system',
   Babe = 'babe',
@@ -966,6 +987,7 @@ export enum ModuleName {
   DidRegistrars = 'didRegistrars',
   PolymeshTransactionPayment = 'polymeshTransactionPayment',
   Beefy = 'beefy',
+  Revive = 'revive',
 }
 
 export type TxTag =
@@ -1019,7 +1041,8 @@ export type TxTag =
   | ValidatorsTx
   | DidRegistrarsTx
   | PolymeshTransactionPaymentTx
-  | BeefyTx;
+  | BeefyTx
+  | ReviveTx;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const TxTags = {
@@ -1074,4 +1097,5 @@ export const TxTags = {
   didRegistrars: DidRegistrarsTx,
   polymeshTransactionPayment: PolymeshTransactionPaymentTx,
   beefy: BeefyTx,
+  revive: ReviveTx,
 };

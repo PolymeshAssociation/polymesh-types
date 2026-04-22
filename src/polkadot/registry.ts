@@ -207,6 +207,69 @@ import type {
   PalletRelayerError,
   PalletRelayerEvent,
   PalletRelayerSubsidy,
+  PalletReviveCall,
+  PalletReviveDebugDebugSettings,
+  PalletReviveError,
+  PalletReviveEvent,
+  PalletReviveEvmApiByteBytes256,
+  PalletReviveEvmApiByteBytes8,
+  PalletReviveEvmApiDebugRpcTypesCallLog,
+  PalletReviveEvmApiDebugRpcTypesCallTrace,
+  PalletReviveEvmApiDebugRpcTypesCallTracerConfig,
+  PalletReviveEvmApiDebugRpcTypesCallType,
+  PalletReviveEvmApiDebugRpcTypesExecutionStep,
+  PalletReviveEvmApiDebugRpcTypesExecutionStepKind,
+  PalletReviveEvmApiDebugRpcTypesExecutionTrace,
+  PalletReviveEvmApiDebugRpcTypesExecutionTracerConfig,
+  PalletReviveEvmApiDebugRpcTypesPrestateTrace,
+  PalletReviveEvmApiDebugRpcTypesPrestateTraceInfo,
+  PalletReviveEvmApiDebugRpcTypesPrestateTracerConfig,
+  PalletReviveEvmApiDebugRpcTypesTrace,
+  PalletReviveEvmApiDebugRpcTypesTracerType,
+  PalletReviveEvmApiRpcTypesDryRunConfig,
+  PalletReviveEvmApiRpcTypesGenAccessListEntry,
+  PalletReviveEvmApiRpcTypesGenAuthorizationListEntry,
+  PalletReviveEvmApiRpcTypesGenBlock,
+  PalletReviveEvmApiRpcTypesGenGenericTransaction,
+  PalletReviveEvmApiRpcTypesGenHashesOrTransactionInfos,
+  PalletReviveEvmApiRpcTypesGenInputOrData,
+  PalletReviveEvmApiRpcTypesGenTransaction1559Signed,
+  PalletReviveEvmApiRpcTypesGenTransaction1559Unsigned,
+  PalletReviveEvmApiRpcTypesGenTransaction2930Signed,
+  PalletReviveEvmApiRpcTypesGenTransaction2930Unsigned,
+  PalletReviveEvmApiRpcTypesGenTransaction4844Signed,
+  PalletReviveEvmApiRpcTypesGenTransaction4844Unsigned,
+  PalletReviveEvmApiRpcTypesGenTransaction7702Signed,
+  PalletReviveEvmApiRpcTypesGenTransaction7702Unsigned,
+  PalletReviveEvmApiRpcTypesGenTransactionInfo,
+  PalletReviveEvmApiRpcTypesGenTransactionLegacySigned,
+  PalletReviveEvmApiRpcTypesGenTransactionLegacyUnsigned,
+  PalletReviveEvmApiRpcTypesGenTransactionSigned,
+  PalletReviveEvmApiRpcTypesGenWithdrawal,
+  PalletReviveEvmBlockHashBlockBuilderEthereumBlockBuilderIR,
+  PalletReviveEvmBlockHashHashBuilderIncrementalHashBuilderIR,
+  PalletReviveEvmBlockHashReceiptGasInfo,
+  PalletReviveEvmTxExtensionSetOrigin,
+  PalletReviveHoldReason,
+  PalletReviveOrigin,
+  PalletRevivePrimitivesBalanceConversionError,
+  PalletRevivePrimitivesCode,
+  PalletRevivePrimitivesCodeUploadReturnValue,
+  PalletRevivePrimitivesContractAccessError,
+  PalletRevivePrimitivesContractResultExecReturnValue,
+  PalletRevivePrimitivesContractResultInstantiateReturnValue,
+  PalletRevivePrimitivesEthTransactError,
+  PalletRevivePrimitivesEthTransactInfo,
+  PalletRevivePrimitivesExecReturnValue,
+  PalletRevivePrimitivesInstantiateReturnValue,
+  PalletRevivePrimitivesStorageDeposit,
+  PalletReviveStorageAccountInfo,
+  PalletReviveStorageAccountType,
+  PalletReviveStorageContractInfo,
+  PalletReviveStorageDeletionQueueManager,
+  PalletReviveUapiFlagsReturnFlags,
+  PalletReviveVmBytecodeType,
+  PalletReviveVmCodeInfo,
   PalletSchedulerCall,
   PalletSchedulerError,
   PalletSchedulerEvent,
@@ -316,7 +379,6 @@ import type {
   PolymeshPrimitivesIdentityClaimClaim,
   PolymeshPrimitivesIdentityClaimClaimType,
   PolymeshPrimitivesIdentityClaimScope,
-  PolymeshPrimitivesIdentityCreateChildIdentityWithAuth,
   PolymeshPrimitivesIdentityDidRecord,
   PolymeshPrimitivesIdentityId,
   PolymeshPrimitivesIdentityIdPortfolioId,
@@ -435,6 +497,7 @@ import type {
   SpRuntimeTransactionValidityValidTransaction,
   SpRuntimeTransactionalError,
   SpSessionMembershipProof,
+  SpSessionRuntimeApiOpaqueGeneratedSessionKeys,
   SpStakingExposure,
   SpStakingExposurePage,
   SpStakingIndividualExposure,
@@ -648,6 +711,69 @@ declare module '@polkadot/types/types/registry' {
     PalletRelayerError: PalletRelayerError;
     PalletRelayerEvent: PalletRelayerEvent;
     PalletRelayerSubsidy: PalletRelayerSubsidy;
+    PalletReviveCall: PalletReviveCall;
+    PalletReviveDebugDebugSettings: PalletReviveDebugDebugSettings;
+    PalletReviveError: PalletReviveError;
+    PalletReviveEvent: PalletReviveEvent;
+    PalletReviveEvmApiByteBytes256: PalletReviveEvmApiByteBytes256;
+    PalletReviveEvmApiByteBytes8: PalletReviveEvmApiByteBytes8;
+    PalletReviveEvmApiDebugRpcTypesCallLog: PalletReviveEvmApiDebugRpcTypesCallLog;
+    PalletReviveEvmApiDebugRpcTypesCallTrace: PalletReviveEvmApiDebugRpcTypesCallTrace;
+    PalletReviveEvmApiDebugRpcTypesCallTracerConfig: PalletReviveEvmApiDebugRpcTypesCallTracerConfig;
+    PalletReviveEvmApiDebugRpcTypesCallType: PalletReviveEvmApiDebugRpcTypesCallType;
+    PalletReviveEvmApiDebugRpcTypesExecutionStep: PalletReviveEvmApiDebugRpcTypesExecutionStep;
+    PalletReviveEvmApiDebugRpcTypesExecutionStepKind: PalletReviveEvmApiDebugRpcTypesExecutionStepKind;
+    PalletReviveEvmApiDebugRpcTypesExecutionTrace: PalletReviveEvmApiDebugRpcTypesExecutionTrace;
+    PalletReviveEvmApiDebugRpcTypesExecutionTracerConfig: PalletReviveEvmApiDebugRpcTypesExecutionTracerConfig;
+    PalletReviveEvmApiDebugRpcTypesPrestateTrace: PalletReviveEvmApiDebugRpcTypesPrestateTrace;
+    PalletReviveEvmApiDebugRpcTypesPrestateTraceInfo: PalletReviveEvmApiDebugRpcTypesPrestateTraceInfo;
+    PalletReviveEvmApiDebugRpcTypesPrestateTracerConfig: PalletReviveEvmApiDebugRpcTypesPrestateTracerConfig;
+    PalletReviveEvmApiDebugRpcTypesTrace: PalletReviveEvmApiDebugRpcTypesTrace;
+    PalletReviveEvmApiDebugRpcTypesTracerType: PalletReviveEvmApiDebugRpcTypesTracerType;
+    PalletReviveEvmApiRpcTypesDryRunConfig: PalletReviveEvmApiRpcTypesDryRunConfig;
+    PalletReviveEvmApiRpcTypesGenAccessListEntry: PalletReviveEvmApiRpcTypesGenAccessListEntry;
+    PalletReviveEvmApiRpcTypesGenAuthorizationListEntry: PalletReviveEvmApiRpcTypesGenAuthorizationListEntry;
+    PalletReviveEvmApiRpcTypesGenBlock: PalletReviveEvmApiRpcTypesGenBlock;
+    PalletReviveEvmApiRpcTypesGenGenericTransaction: PalletReviveEvmApiRpcTypesGenGenericTransaction;
+    PalletReviveEvmApiRpcTypesGenHashesOrTransactionInfos: PalletReviveEvmApiRpcTypesGenHashesOrTransactionInfos;
+    PalletReviveEvmApiRpcTypesGenInputOrData: PalletReviveEvmApiRpcTypesGenInputOrData;
+    PalletReviveEvmApiRpcTypesGenTransaction1559Signed: PalletReviveEvmApiRpcTypesGenTransaction1559Signed;
+    PalletReviveEvmApiRpcTypesGenTransaction1559Unsigned: PalletReviveEvmApiRpcTypesGenTransaction1559Unsigned;
+    PalletReviveEvmApiRpcTypesGenTransaction2930Signed: PalletReviveEvmApiRpcTypesGenTransaction2930Signed;
+    PalletReviveEvmApiRpcTypesGenTransaction2930Unsigned: PalletReviveEvmApiRpcTypesGenTransaction2930Unsigned;
+    PalletReviveEvmApiRpcTypesGenTransaction4844Signed: PalletReviveEvmApiRpcTypesGenTransaction4844Signed;
+    PalletReviveEvmApiRpcTypesGenTransaction4844Unsigned: PalletReviveEvmApiRpcTypesGenTransaction4844Unsigned;
+    PalletReviveEvmApiRpcTypesGenTransaction7702Signed: PalletReviveEvmApiRpcTypesGenTransaction7702Signed;
+    PalletReviveEvmApiRpcTypesGenTransaction7702Unsigned: PalletReviveEvmApiRpcTypesGenTransaction7702Unsigned;
+    PalletReviveEvmApiRpcTypesGenTransactionInfo: PalletReviveEvmApiRpcTypesGenTransactionInfo;
+    PalletReviveEvmApiRpcTypesGenTransactionLegacySigned: PalletReviveEvmApiRpcTypesGenTransactionLegacySigned;
+    PalletReviveEvmApiRpcTypesGenTransactionLegacyUnsigned: PalletReviveEvmApiRpcTypesGenTransactionLegacyUnsigned;
+    PalletReviveEvmApiRpcTypesGenTransactionSigned: PalletReviveEvmApiRpcTypesGenTransactionSigned;
+    PalletReviveEvmApiRpcTypesGenWithdrawal: PalletReviveEvmApiRpcTypesGenWithdrawal;
+    PalletReviveEvmBlockHashBlockBuilderEthereumBlockBuilderIR: PalletReviveEvmBlockHashBlockBuilderEthereumBlockBuilderIR;
+    PalletReviveEvmBlockHashHashBuilderIncrementalHashBuilderIR: PalletReviveEvmBlockHashHashBuilderIncrementalHashBuilderIR;
+    PalletReviveEvmBlockHashReceiptGasInfo: PalletReviveEvmBlockHashReceiptGasInfo;
+    PalletReviveEvmTxExtensionSetOrigin: PalletReviveEvmTxExtensionSetOrigin;
+    PalletReviveHoldReason: PalletReviveHoldReason;
+    PalletReviveOrigin: PalletReviveOrigin;
+    PalletRevivePrimitivesBalanceConversionError: PalletRevivePrimitivesBalanceConversionError;
+    PalletRevivePrimitivesCode: PalletRevivePrimitivesCode;
+    PalletRevivePrimitivesCodeUploadReturnValue: PalletRevivePrimitivesCodeUploadReturnValue;
+    PalletRevivePrimitivesContractAccessError: PalletRevivePrimitivesContractAccessError;
+    PalletRevivePrimitivesContractResultExecReturnValue: PalletRevivePrimitivesContractResultExecReturnValue;
+    PalletRevivePrimitivesContractResultInstantiateReturnValue: PalletRevivePrimitivesContractResultInstantiateReturnValue;
+    PalletRevivePrimitivesEthTransactError: PalletRevivePrimitivesEthTransactError;
+    PalletRevivePrimitivesEthTransactInfo: PalletRevivePrimitivesEthTransactInfo;
+    PalletRevivePrimitivesExecReturnValue: PalletRevivePrimitivesExecReturnValue;
+    PalletRevivePrimitivesInstantiateReturnValue: PalletRevivePrimitivesInstantiateReturnValue;
+    PalletRevivePrimitivesStorageDeposit: PalletRevivePrimitivesStorageDeposit;
+    PalletReviveStorageAccountInfo: PalletReviveStorageAccountInfo;
+    PalletReviveStorageAccountType: PalletReviveStorageAccountType;
+    PalletReviveStorageContractInfo: PalletReviveStorageContractInfo;
+    PalletReviveStorageDeletionQueueManager: PalletReviveStorageDeletionQueueManager;
+    PalletReviveUapiFlagsReturnFlags: PalletReviveUapiFlagsReturnFlags;
+    PalletReviveVmBytecodeType: PalletReviveVmBytecodeType;
+    PalletReviveVmCodeInfo: PalletReviveVmCodeInfo;
     PalletSchedulerCall: PalletSchedulerCall;
     PalletSchedulerError: PalletSchedulerError;
     PalletSchedulerEvent: PalletSchedulerEvent;
@@ -757,7 +883,6 @@ declare module '@polkadot/types/types/registry' {
     PolymeshPrimitivesIdentityClaimClaim: PolymeshPrimitivesIdentityClaimClaim;
     PolymeshPrimitivesIdentityClaimClaimType: PolymeshPrimitivesIdentityClaimClaimType;
     PolymeshPrimitivesIdentityClaimScope: PolymeshPrimitivesIdentityClaimScope;
-    PolymeshPrimitivesIdentityCreateChildIdentityWithAuth: PolymeshPrimitivesIdentityCreateChildIdentityWithAuth;
     PolymeshPrimitivesIdentityDidRecord: PolymeshPrimitivesIdentityDidRecord;
     PolymeshPrimitivesIdentityId: PolymeshPrimitivesIdentityId;
     PolymeshPrimitivesIdentityIdPortfolioId: PolymeshPrimitivesIdentityIdPortfolioId;
@@ -876,6 +1001,7 @@ declare module '@polkadot/types/types/registry' {
     SpRuntimeTransactionValidityValidTransaction: SpRuntimeTransactionValidityValidTransaction;
     SpRuntimeTransactionalError: SpRuntimeTransactionalError;
     SpSessionMembershipProof: SpSessionMembershipProof;
+    SpSessionRuntimeApiOpaqueGeneratedSessionKeys: SpSessionRuntimeApiOpaqueGeneratedSessionKeys;
     SpStakingExposure: SpStakingExposure;
     SpStakingExposurePage: SpStakingExposurePage;
     SpStakingIndividualExposure: SpStakingIndividualExposure;

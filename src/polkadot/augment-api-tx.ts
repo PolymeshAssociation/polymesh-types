@@ -16,6 +16,7 @@ import type {
   Bytes,
   Compact,
   Option,
+  U256,
   U8aFixed,
   Vec,
   bool,
@@ -29,6 +30,7 @@ import type { AnyNumber, IMethod, ITuple } from '@polkadot/types-codec/types';
 import type {
   AccountId32,
   Call,
+  H160,
   H256,
   MultiAddress,
   Perbill,
@@ -84,7 +86,6 @@ import type {
   PolymeshPrimitivesIdentityClaimClaim,
   PolymeshPrimitivesIdentityClaimClaimType,
   PolymeshPrimitivesIdentityClaimScope,
-  PolymeshPrimitivesIdentityCreateChildIdentityWithAuth,
   PolymeshPrimitivesIdentityId,
   PolymeshPrimitivesIdentityIdPortfolioId,
   PolymeshPrimitivesIdentitySecondaryKeyWithAuth,
@@ -237,6 +238,33 @@ declare module '@polkadot/api-base/types/submittable' {
         [PolymeshPrimitivesAssetAssetId, BTreeSet<PolymeshPrimitivesIdentityId>]
       >;
       /**
+       * Set the allowance for `spender` to transfer up to `amount` of `asset_id` from
+       * the caller's account.
+       *
+       * Replaces any existing allowance for this (owner, spender, asset_id) combination.
+       * Setting `amount` to 0 revokes the allowance (removes the storage entry).
+       * Setting `amount` to `Balance::MAX` grants an unlimited allowance that is never
+       * decremented on spend.
+       *
+       * # Arguments
+       * * `origin` — Signed origin. Caller must have a registered DID.
+       * * `asset_id` — The asset for which the allowance is set.
+       * * `spender` — The AccountId authorized to spend.
+       * * `amount` — Maximum amount the spender may transfer. 0 = revoke. Balance::MAX = unlimited.
+       *
+       * # Errors
+       * * `BadOrigin` — Unsigned origin.
+       * * `MissingIdentity` — Caller's key is not linked to a DID.
+       **/
+      approve: AugmentedSubmittable<
+        (
+          assetId: PolymeshPrimitivesAssetAssetId | string | Uint8Array,
+          spender: AccountId32 | string | Uint8Array,
+          amount: u128 | AnyNumber | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshPrimitivesAssetAssetId, AccountId32, u128]
+      >;
+      /**
        * Forces a transfer of tokens from `asset_holder` to the caller's default portfolio.
        *
        * This function allows the asset issuer or an external agent to force a transfer of tokens from one portfolio to another.
@@ -245,7 +273,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * * `origin` - The origin of the call, which can be the primary or secondary key of an identity.
        * * `asset_id` - The [`AssetId`] associated to the asset.
        * * `value` - The [`Balance`] of tokens that will be transferred.
-       * * `asset_holder` - The [`AssetHolder`] that will have its balance reduced.
+       * * `source` - The [`AssetHolder`] that will have its balance reduced.
+       * * `destination_kind` - The [`AssetHolderKind`] of the destination.
        *
        * # Permissions
        * * Asset
@@ -263,14 +292,26 @@ declare module '@polkadot/api-base/types/submittable' {
         (
           assetId: PolymeshPrimitivesAssetAssetId | string | Uint8Array,
           value: u128 | AnyNumber | Uint8Array,
-          assetHolder:
+          source:
             | PolymeshPrimitivesAssetAssetHolder
             | { Portfolio: any }
             | { Account: any }
             | string
+            | Uint8Array,
+          destinationKind:
+            | PolymeshPrimitivesAssetAssetHolderKind
+            | { Account: any }
+            | { DefaultPortfolio: any }
+            | { UserPortfolio: any }
+            | string
             | Uint8Array
         ) => SubmittableExtrinsic<ApiType>,
-        [PolymeshPrimitivesAssetAssetId, u128, PolymeshPrimitivesAssetAssetHolder]
+        [
+          PolymeshPrimitivesAssetAssetId,
+          u128,
+          PolymeshPrimitivesAssetAssetHolder,
+          PolymeshPrimitivesAssetAssetHolderKind,
+        ]
       >;
       /**
        * Creates a new asset.
@@ -3726,55 +3767,6 @@ declare module '@polkadot/api-base/types/submittable' {
         [AccountId32, Vec<PolymeshPrimitivesSecondaryKey>, Option<u64>]
       >;
       /**
-       * Create a child identities.
-       *
-       * The new primary key for each child identity will need to sign (off-chain)
-       * an authorization.
-       *
-       * Only the primary key can create child identities.
-       *
-       * # Arguments
-       * - `child_keys` the keys that will become primary keys of their own child identity.
-       *
-       * # Errors
-       * - `KeyNotAllowed` only the primary key can create a new identity.
-       * - `AlreadyLinked` one of the keys is already linked to an identity.
-       * - `DuplicateKey` one of the keys is included multiple times.
-       * - `IsChildIdentity` the caller's identity is already a child identity and can't create child identities.
-       **/
-      createChildIdentities: AugmentedSubmittable<
-        (
-          childKeys:
-            | Vec<PolymeshPrimitivesIdentityCreateChildIdentityWithAuth>
-            | (
-                | PolymeshPrimitivesIdentityCreateChildIdentityWithAuth
-                | { key?: any; authSignature?: any }
-                | string
-                | Uint8Array
-              )[],
-          expiresAt: u64 | AnyNumber | Uint8Array
-        ) => SubmittableExtrinsic<ApiType>,
-        [Vec<PolymeshPrimitivesIdentityCreateChildIdentityWithAuth>, u64]
-      >;
-      /**
-       * Create a child identity and make the `secondary_key` it's primary key.
-       *
-       * Only the primary key can create child identities.
-       *
-       * # Arguments
-       * - `secondary_key` the secondary key that will become the primary key of the new identity.
-       *
-       * # Errors
-       * - `KeyNotAllowed` only the primary key can create a new identity.
-       * - `NotASigner` the `secondary_key` is not a secondary key of the caller's identity.
-       * - `AccountKeyIsBeingUsed` the `secondary_key` can't be unlinked from it's current identity.
-       * - `IsChildIdentity` the caller's identity is already a child identity and can't create child identities.
-       **/
-      createChildIdentity: AugmentedSubmittable<
-        (secondaryKey: AccountId32 | string | Uint8Array) => SubmittableExtrinsic<ApiType>,
-        [AccountId32]
-      >;
-      /**
        * It disables all secondary keys at `did` identity.
        *
        * # Errors
@@ -3953,6 +3945,18 @@ declare module '@polkadot/api-base/types/submittable' {
         [u64]
       >;
       /**
+       * Register for a new DID for the caller's account.
+       *
+       * This is callable by any account that is not already linked to an identity, and will create a new DID with the caller as the primary key.
+       * This allows users to self onboard without needing to go through a DID registrar (formerly CDD provider).
+       *
+       * No CDD claim is added - DID existence is sufficient for onboarding.
+       *
+       * # Errors
+       * - Caller must not already have an identity.
+       **/
+      selfRegisterDid: AugmentedSubmittable<() => SubmittableExtrinsic<ApiType>, []>;
+      /**
        * Sets permissions for an specific `target_key` key.
        *
        * Only the primary key of an identity is able to set secondary key permissions.
@@ -3972,25 +3976,6 @@ declare module '@polkadot/api-base/types/submittable' {
        * Re-enables all secondary keys of the caller's identity.
        **/
       unfreezeSecondaryKeys: AugmentedSubmittable<() => SubmittableExtrinsic<ApiType>, []>;
-      /**
-       * Unlink a child identity from it's parent identity.
-       *
-       * Only the primary key of the parent or child identities can unlink the identities.
-       *
-       * # Arguments
-       * - `child_did` the child identity to unlink from its parent identity.
-       *
-       * # Errors
-       * - `KeyNotAllowed` only the primary key of either the parent or child identity can unlink the identities.
-       * - `NoParentIdentity` the identity `child_did` doesn't have a parent identity.
-       * - `NotParentOrChildIdentity` the caller's identity isn't the parent or child identity.
-       **/
-      unlinkChildIdentity: AugmentedSubmittable<
-        (
-          childDid: PolymeshPrimitivesIdentityId | string | Uint8Array
-        ) => SubmittableExtrinsic<ApiType>,
-        [PolymeshPrimitivesIdentityId]
-      >;
     };
     imOnline: {
       /**
@@ -4376,7 +4361,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * * `origin` - is a signer that has permissions to act as an agent of `asset_id`.
        * * `nft_id` - the [`NFTId`] of the NFT to be transferred.
        * * `source` - the [`AssetHolder`] that currently holds the NFT.
-       * * `callers_holdings_kind` - the [`AssetHolderKind`] of the caller's portfolio.
+       * * `destination_kind` - the [`AssetHolderKind`] of the caller's portfolio.
        *
        * # Permissions
        * * Asset
@@ -4391,7 +4376,7 @@ declare module '@polkadot/api-base/types/submittable' {
             | { Account: any }
             | string
             | Uint8Array,
-          callersHoldingsKind:
+          destinationKind:
             | PolymeshPrimitivesAssetAssetHolderKind
             | { Account: any }
             | { DefaultPortfolio: any }
@@ -4525,6 +4510,28 @@ declare module '@polkadot/api-base/types/submittable' {
           numberOfKeys: Option<u8> | null | Uint8Array | u8 | AnyNumber
         ) => SubmittableExtrinsic<ApiType>,
         [PolymeshPrimitivesAssetAssetId, u64, PolymeshPrimitivesAssetAssetHolderKind, Option<u8>]
+      >;
+      /**
+       * Transfer NFTs from the caller's account to another account.
+       *
+       * Same-identity transfers move NFTs directly. Cross-identity transfers
+       * route through the settlement engine.
+       *
+       * For portfolio-based transfers, use `Settlement::transfer_funds`.
+       *
+       * # Arguments
+       * * `origin` — Signed origin. Caller must have a registered DID.
+       * * `nfts` — The NFTs to transfer.
+       * * `to` — Destination account.
+       * * `memo` — Optional memo attached to the transfer.
+       **/
+      transferNft: AugmentedSubmittable<
+        (
+          nfts: PolymeshPrimitivesNftNfTs | { assetId?: any; ids?: any } | string | Uint8Array,
+          to: AccountId32 | string | Uint8Array,
+          memo: Option<PolymeshPrimitivesMemo> | null | Uint8Array | PolymeshPrimitivesMemo | string
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshPrimitivesNftNfTs, AccountId32, Option<PolymeshPrimitivesMemo>]
       >;
     };
     pips: {
@@ -4852,6 +4859,7 @@ declare module '@polkadot/api-base/types/submittable' {
        *
        * # Arguments
        * * `origin` - The origin of the call, which must be a GC member.
+       * * `limit` - Weight witness for the expected queue length (typically the active PIP limit). The actual weight is refunded based on the real queue size.
        *
        * # Events
        * * `SnapshotTaken` - Emitted when a snapshot is successfully taken, containing the ID of the snapshot and the queue of PIPs.
@@ -4859,7 +4867,10 @@ declare module '@polkadot/api-base/types/submittable' {
        * # Errors
        * * `NotACommitteeMember` - If the call is not made by a GC member.
        **/
-      snapshot: AugmentedSubmittable<() => SubmittableExtrinsic<ApiType>, []>;
+      snapshot: AugmentedSubmittable<
+        (limit: u32 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>,
+        [u32]
+      >;
       /**
        * Casts a vote either in favor or against a PIP with `id`.
        * The "conviction" or strength of the vote is given by `deposit`, which is reserved.
@@ -4986,35 +4997,6 @@ declare module '@polkadot/api-base/types/submittable' {
       /**
        * Instantiates a smart contract defining it with the given `code` and `salt`.
        *
-       * The contract will be attached as a primary key of a newly created child identity of the caller.
-       *
-       * # Arguments
-       * - `endowment`: Amount of POLYX to transfer to the contract.
-       * - `gas_limit`: For how much gas the `deploy` code in the contract may at most consume.
-       * - `storage_deposit_limit`: The maximum amount of balance that can be charged/reserved from the caller to pay for the storage consumed.
-       * - `code`: The WASM binary defining the smart contract.
-       * - `data`: The input data to pass to the contract constructor.
-       * - `salt`: Used for contract address derivation. By varying this, the same `code` can be used under the same identity.
-       *
-       **/
-      instantiateWithCodeAsPrimaryKey: AugmentedSubmittable<
-        (
-          endowment: u128 | AnyNumber | Uint8Array,
-          gasLimit:
-            | SpWeightsWeightV2Weight
-            | { refTime?: any; proofSize?: any }
-            | string
-            | Uint8Array,
-          storageDepositLimit: Option<u128> | null | Uint8Array | u128 | AnyNumber,
-          code: Bytes | string | Uint8Array,
-          data: Bytes | string | Uint8Array,
-          salt: Bytes | string | Uint8Array
-        ) => SubmittableExtrinsic<ApiType>,
-        [u128, SpWeightsWeightV2Weight, Option<u128>, Bytes, Bytes, Bytes]
-      >;
-      /**
-       * Instantiates a smart contract defining it with the given `code` and `salt`.
-       *
        * The contract will be attached as a secondary key,
        * with `perms` as its permissions, to `origin`'s identity.
        *
@@ -5065,37 +5047,6 @@ declare module '@polkadot/api-base/types/submittable' {
           Bytes,
           PolymeshPrimitivesSecondaryKeyPermissions,
         ]
-      >;
-      /**
-       * Instantiates a smart contract defining using the given `code_hash` and `salt`.
-       *
-       * Unlike `instantiate_with_code`, this assumes that at least one contract with the same WASM code has already been uploaded.
-       *
-       * The contract will be attached as a primary key of a newly created child identity of the caller.
-       *
-       * # Arguments
-       * - `endowment`: amount of POLYX to transfer to the contract.
-       * - `gas_limit`: for how much gas the `deploy` code in the contract may at most consume.
-       * - `storage_deposit_limit`: The maximum amount of balance that can be charged/reserved from the caller to pay for the storage consumed.
-       * - `code_hash`: of an already uploaded WASM binary.
-       * - `data`: The input data to pass to the contract constructor.
-       * - `salt`: used for contract address derivation. By varying this, the same `code` can be used under the same identity.
-       *
-       **/
-      instantiateWithHashAsPrimaryKey: AugmentedSubmittable<
-        (
-          endowment: u128 | AnyNumber | Uint8Array,
-          gasLimit:
-            | SpWeightsWeightV2Weight
-            | { refTime?: any; proofSize?: any }
-            | string
-            | Uint8Array,
-          storageDepositLimit: Option<u128> | null | Uint8Array | u128 | AnyNumber,
-          codeHash: H256 | string | Uint8Array,
-          data: Bytes | string | Uint8Array,
-          salt: Bytes | string | Uint8Array
-        ) => SubmittableExtrinsic<ApiType>,
-        [u128, SpWeightsWeightV2Weight, Option<u128>, H256, Bytes, Bytes]
       >;
       /**
        * Instantiates a smart contract defining using the given `code_hash` and `salt`.
@@ -5451,7 +5402,7 @@ declare module '@polkadot/api-base/types/submittable' {
             | 'AssetCreateAsset'
             | 'CheckpointCreateSchedule'
             | 'ComplianceManagerAddComplianceRequirement'
-            | 'IdentityCddRegisterDid'
+            | 'IdentityRegisterDid'
             | 'IdentityAddClaim'
             | 'IdentityAddSecondaryKeysWithAuthorization'
             | 'PipsPropose'
@@ -5460,7 +5411,6 @@ declare module '@polkadot/api-base/types/submittable' {
             | 'CapitalDistributionDistribute'
             | 'NFTCreateCollection'
             | 'NFTMint'
-            | 'IdentityCreateChildIdentity'
             | number
             | Uint8Array,
           baseFee: u128 | AnyNumber | Uint8Array
@@ -5620,9 +5570,301 @@ declare module '@polkadot/api-base/types/submittable' {
         [AccountId32, u128]
       >;
     };
+    revive: {
+      /**
+       * Makes a call to an account, optionally transferring some balance.
+       *
+       * # Parameters
+       *
+       * * `dest`: Address of the contract to call.
+       * * `value`: The balance to transfer from the `origin` to `dest`.
+       * * `weight_limit`: The weight limit enforced when executing the constructor.
+       * * `storage_deposit_limit`: The maximum amount of balance that can be charged from the
+       * caller to pay for the storage consumed.
+       * * `data`: The input data to pass to the contract.
+       *
+       * * If the account is a smart-contract account, the associated code will be
+       * executed and any value will be transferred.
+       * * If the account is a regular account, any value will be transferred.
+       * * If no account exists and the call value is not less than `existential_deposit`,
+       * a regular account will be created and any value will be transferred.
+       **/
+      call: AugmentedSubmittable<
+        (
+          dest: H160 | string | Uint8Array,
+          value: Compact<u128> | AnyNumber | Uint8Array,
+          weightLimit:
+            | SpWeightsWeightV2Weight
+            | { refTime?: any; proofSize?: any }
+            | string
+            | Uint8Array,
+          storageDepositLimit: Compact<u128> | AnyNumber | Uint8Array,
+          data: Bytes | string | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [H160, Compact<u128>, SpWeightsWeightV2Weight, Compact<u128>, Bytes]
+      >;
+      /**
+       * Dispatch an `call` with the origin set to the callers fallback address.
+       *
+       * Every `AccountId32` can control its corresponding fallback account. The fallback account
+       * is the `AccountId20` with the last 12 bytes set to `0xEE`. This is essentially a
+       * recovery function in case an `AccountId20` was used without creating a mapping first.
+       **/
+      dispatchAsFallbackAccount: AugmentedSubmittable<
+        (call: Call | IMethod | string | Uint8Array) => SubmittableExtrinsic<ApiType>,
+        [Call]
+      >;
+      /**
+       * Same as [`Self::call`], but intended to be dispatched **only**
+       * by an EVM transaction through the EVM compatibility layer.
+       *
+       * # Parameters
+       *
+       * * `dest`: The Ethereum address of the account to be called
+       * * `value`: The balance to transfer from the `origin` to the newly created contract.
+       * * `weight_limit`: The gas limit used to derive the transaction weight for transaction
+       * payment
+       * * `eth_gas_limit`: The Ethereum gas limit governing the resource usage of the execution
+       * * `data`: The input data to pass to the contract constructor.
+       * * `transaction_encoded`: The RLP encoding of the signed Ethereum transaction,
+       * represented as [crate::evm::TransactionSigned], provided by the Ethereum wallet. This
+       * is used for building the Ethereum transaction root.
+       * * effective_gas_price: the price of a unit of gas
+       * * encoded len: the byte code size of the `eth_transact` extrinsic
+       **/
+      ethCall: AugmentedSubmittable<
+        (
+          dest: H160 | string | Uint8Array,
+          value: U256 | AnyNumber | Uint8Array,
+          weightLimit:
+            | SpWeightsWeightV2Weight
+            | { refTime?: any; proofSize?: any }
+            | string
+            | Uint8Array,
+          ethGasLimit: U256 | AnyNumber | Uint8Array,
+          data: Bytes | string | Uint8Array,
+          transactionEncoded: Bytes | string | Uint8Array,
+          effectiveGasPrice: U256 | AnyNumber | Uint8Array,
+          encodedLen: u32 | AnyNumber | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [H160, U256, SpWeightsWeightV2Weight, U256, Bytes, Bytes, U256, u32]
+      >;
+      /**
+       * Same as [`Self::instantiate_with_code`], but intended to be dispatched **only**
+       * by an EVM transaction through the EVM compatibility layer.
+       *
+       * # Parameters
+       *
+       * * `value`: The balance to transfer from the `origin` to the newly created contract.
+       * * `weight_limit`: The gas limit used to derive the transaction weight for transaction
+       * payment
+       * * `eth_gas_limit`: The Ethereum gas limit governing the resource usage of the execution
+       * * `code`: The contract code to deploy in raw bytes.
+       * * `data`: The input data to pass to the contract constructor.
+       * * `transaction_encoded`: The RLP encoding of the signed Ethereum transaction,
+       * represented as [crate::evm::TransactionSigned], provided by the Ethereum wallet. This
+       * is used for building the Ethereum transaction root.
+       * * effective_gas_price: the price of a unit of gas
+       * * encoded len: the byte code size of the `eth_transact` extrinsic
+       *
+       * Calling this dispatchable ensures that the origin's nonce is bumped only once,
+       * via the `CheckNonce` transaction extension. In contrast, [`Self::instantiate_with_code`]
+       * also bumps the nonce after contract instantiation, since it may be invoked multiple
+       * times within a batch call transaction.
+       **/
+      ethInstantiateWithCode: AugmentedSubmittable<
+        (
+          value: U256 | AnyNumber | Uint8Array,
+          weightLimit:
+            | SpWeightsWeightV2Weight
+            | { refTime?: any; proofSize?: any }
+            | string
+            | Uint8Array,
+          ethGasLimit: U256 | AnyNumber | Uint8Array,
+          code: Bytes | string | Uint8Array,
+          data: Bytes | string | Uint8Array,
+          transactionEncoded: Bytes | string | Uint8Array,
+          effectiveGasPrice: U256 | AnyNumber | Uint8Array,
+          encodedLen: u32 | AnyNumber | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [U256, SpWeightsWeightV2Weight, U256, Bytes, Bytes, Bytes, U256, u32]
+      >;
+      /**
+       * Executes a Substrate runtime call from an Ethereum transaction.
+       *
+       * This dispatchable is intended to be called **only** through the EVM compatibility
+       * layer. The provided call will be dispatched using `RawOrigin::Signed`.
+       *
+       * # Parameters
+       *
+       * * `origin`: Must be an [`Origin::EthTransaction`] origin.
+       * * `call`: The Substrate runtime call to execute.
+       * * `transaction_encoded`: The RLP encoding of the Ethereum transaction,
+       **/
+      ethSubstrateCall: AugmentedSubmittable<
+        (
+          call: Call | IMethod | string | Uint8Array,
+          transactionEncoded: Bytes | string | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [Call, Bytes]
+      >;
+      /**
+       * A raw EVM transaction, typically dispatched by an Ethereum JSON-RPC server.
+       *
+       * # Parameters
+       *
+       * * `payload`: The encoded [`crate::evm::TransactionSigned`].
+       *
+       * # Note
+       *
+       * This call cannot be dispatched directly; attempting to do so will result in a failed
+       * transaction. It serves as a wrapper for an Ethereum transaction. When submitted, the
+       * runtime converts it into a [`sp_runtime::generic::CheckedExtrinsic`] by recovering the
+       * signer and validating the transaction.
+       **/
+      ethTransact: AugmentedSubmittable<
+        (payload: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>,
+        [Bytes]
+      >;
+      /**
+       * Instantiates a contract from a previously deployed vm binary.
+       *
+       * This function is identical to [`Self::instantiate_with_code`] but without the
+       * code deployment step. Instead, the `code_hash` of an on-chain deployed vm binary
+       * must be supplied.
+       **/
+      instantiate: AugmentedSubmittable<
+        (
+          value: Compact<u128> | AnyNumber | Uint8Array,
+          weightLimit:
+            | SpWeightsWeightV2Weight
+            | { refTime?: any; proofSize?: any }
+            | string
+            | Uint8Array,
+          storageDepositLimit: Compact<u128> | AnyNumber | Uint8Array,
+          codeHash: H256 | string | Uint8Array,
+          data: Bytes | string | Uint8Array,
+          salt: Option<U8aFixed> | null | Uint8Array | U8aFixed | string
+        ) => SubmittableExtrinsic<ApiType>,
+        [Compact<u128>, SpWeightsWeightV2Weight, Compact<u128>, H256, Bytes, Option<U8aFixed>]
+      >;
+      /**
+       * Instantiates a new contract from the supplied `code` optionally transferring
+       * some balance.
+       *
+       * This dispatchable has the same effect as calling [`Self::upload_code`] +
+       * [`Self::instantiate`]. Bundling them together provides efficiency gains. Please
+       * also check the documentation of [`Self::upload_code`].
+       *
+       * # Parameters
+       *
+       * * `value`: The balance to transfer from the `origin` to the newly created contract.
+       * * `weight_limit`: The weight limit enforced when executing the constructor.
+       * * `storage_deposit_limit`: The maximum amount of balance that can be charged/reserved
+       * from the caller to pay for the storage consumed.
+       * * `code`: The contract code to deploy in raw bytes.
+       * * `data`: The input data to pass to the contract constructor.
+       * * `salt`: Used for the address derivation. If `Some` is supplied then `CREATE2`
+       * semantics are used. If `None` then `CRATE1` is used.
+       *
+       *
+       * Instantiation is executed as follows:
+       *
+       * - The supplied `code` is deployed, and a `code_hash` is created for that code.
+       * - If the `code_hash` already exists on the chain the underlying `code` will be shared.
+       * - The destination address is computed based on the sender, code_hash and the salt.
+       * - The smart-contract account is created at the computed address.
+       * - The `value` is transferred to the new account.
+       * - The `deploy` function is executed in the context of the newly-created account.
+       **/
+      instantiateWithCode: AugmentedSubmittable<
+        (
+          value: Compact<u128> | AnyNumber | Uint8Array,
+          weightLimit:
+            | SpWeightsWeightV2Weight
+            | { refTime?: any; proofSize?: any }
+            | string
+            | Uint8Array,
+          storageDepositLimit: Compact<u128> | AnyNumber | Uint8Array,
+          code: Bytes | string | Uint8Array,
+          data: Bytes | string | Uint8Array,
+          salt: Option<U8aFixed> | null | Uint8Array | U8aFixed | string
+        ) => SubmittableExtrinsic<ApiType>,
+        [Compact<u128>, SpWeightsWeightV2Weight, Compact<u128>, Bytes, Bytes, Option<U8aFixed>]
+      >;
+      /**
+       * Register the callers account id so that it can be used in contract interactions.
+       *
+       * This will error if the origin is already mapped or is a eth native `Address20`. It will
+       * take a deposit that can be released by calling [`Self::unmap_account`].
+       **/
+      mapAccount: AugmentedSubmittable<() => SubmittableExtrinsic<ApiType>, []>;
+      /**
+       * Remove the code stored under `code_hash` and refund the deposit to its owner.
+       *
+       * A code can only be removed by its original uploader (its owner) and only if it is
+       * not used by any contract.
+       **/
+      removeCode: AugmentedSubmittable<
+        (codeHash: H256 | string | Uint8Array) => SubmittableExtrinsic<ApiType>,
+        [H256]
+      >;
+      /**
+       * Privileged function that changes the code of an existing contract.
+       *
+       * This takes care of updating refcounts and all other necessary operations. Returns
+       * an error if either the `code_hash` or `dest` do not exist.
+       *
+       * # Note
+       *
+       * This does **not** change the address of the contract in question. This means
+       * that the contract address is no longer derived from its code hash after calling
+       * this dispatchable.
+       **/
+      setCode: AugmentedSubmittable<
+        (
+          dest: H160 | string | Uint8Array,
+          codeHash: H256 | string | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [H160, H256]
+      >;
+      /**
+       * Unregister the callers account id in order to free the deposit.
+       *
+       * There is no reason to ever call this function other than freeing up the deposit.
+       * This is only useful when the account should no longer be used.
+       **/
+      unmapAccount: AugmentedSubmittable<() => SubmittableExtrinsic<ApiType>, []>;
+      /**
+       * Upload new `code` without instantiating a contract from it.
+       *
+       * If the code does not already exist a deposit is reserved from the caller
+       * The size of the reserve depends on the size of the supplied `code`.
+       *
+       * # Note
+       *
+       * Anyone can instantiate a contract from any uploaded code and thus prevent its removal.
+       * To avoid this situation a constructor could employ access control so that it can
+       * only be instantiated by permissioned entities. The same is true when uploading
+       * through [`Self::instantiate_with_code`].
+       *
+       * If the refcount of the code reaches zero after terminating the last contract that
+       * references this code, the code will be removed automatically.
+       **/
+      uploadCode: AugmentedSubmittable<
+        (
+          code: Bytes | string | Uint8Array,
+          storageDepositLimit: Compact<u128> | AnyNumber | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [Bytes, Compact<u128>]
+      >;
+    };
     scheduler: {
       /**
-       * Cancel an anonymously scheduled task.
+       * Cancel a scheduled task (named or anonymous), by providing the block it is scheduled for
+       * execution in, as well as the index of the task in that block's agenda.
+       *
+       * In the case of a named task, it will remove it from the lookup table as well.
        **/
       cancel: AugmentedSubmittable<
         (
@@ -5737,6 +5979,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * clones of the original task. Their retry configuration will be derived from the
        * original task's configuration, but will have a lower value for `remaining` than the
        * original `total_retries`.
+       *
+       * This call **cannot** be used to set a retry configuration for a named task.
        **/
       setRetry: AugmentedSubmittable<
         (
@@ -5759,6 +6003,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * clones of the original task. Their retry configuration will be derived from the
        * original task's configuration, but will have a lower value for `remaining` than the
        * original `total_retries`.
+       *
+       * This is the only way to set a retry configuration for a named task.
        **/
       setRetryNamed: AugmentedSubmittable<
         (
@@ -5779,22 +6025,20 @@ declare module '@polkadot/api-base/types/submittable' {
        * convertible to a validator ID using the chain's typical addressing system (this usually
        * means being a controller account) or directly convertible into a validator ID (which
        * usually means being a stash account).
-       *
-       * ## Complexity
-       * - `O(1)` in number of key types. Actual cost depends on the number of length of
-       * `T::Keys::key_ids()` which is fixed.
        **/
       purgeKeys: AugmentedSubmittable<() => SubmittableExtrinsic<ApiType>, []>;
       /**
        * Sets the session key(s) of the function caller to `keys`.
+       *
        * Allows an account to set its session key prior to becoming a validator.
        * This doesn't take effect until the next session.
        *
-       * The dispatch origin of this function must be signed.
-       *
-       * ## Complexity
-       * - `O(1)`. Actual cost depends on the number of length of `T::Keys::key_ids()` which is
-       * fixed.
+       * - `origin`: The dispatch origin of this function must be signed.
+       * - `keys`: The new session keys to set. These are the public keys of all sessions keys
+       * setup in the runtime.
+       * - `proof`: The proof that `origin` has access to the private keys of `keys`. See
+       * [`impl_opaque_keys`](sp_runtime::impl_opaque_keys) for more information about the
+       * proof format.
        **/
       setKeys: AugmentedSubmittable<
         (
@@ -6203,7 +6447,7 @@ declare module '@polkadot/api-base/types/submittable' {
       createVenue: AugmentedSubmittable<
         (
           details: Bytes | string | Uint8Array,
-          signers: Vec<AccountId32> | (AccountId32 | string | Uint8Array)[],
+          signers: BTreeSet<AccountId32>,
           typ:
             | PolymeshPrimitivesSettlementVenueType
             | 'Other'
@@ -6213,7 +6457,7 @@ declare module '@polkadot/api-base/types/submittable' {
             | number
             | Uint8Array
         ) => SubmittableExtrinsic<ApiType>,
-        [Bytes, Vec<AccountId32>, PolymeshPrimitivesSettlementVenueType]
+        [Bytes, BTreeSet<AccountId32>, PolymeshPrimitivesSettlementVenueType]
       >;
       /**
        * Revokes permission given to venues for creating instructions involving a particular asset.
@@ -6433,6 +6677,75 @@ declare module '@polkadot/api-base/types/submittable' {
         [PolymeshPrimitivesAssetAssetId, bool]
       >;
       /**
+       * Transfer assets between accounts and portfolios.
+       *
+       * Currently supports two modes:
+       * - Direct (owner, same-identity): `from` and `to` resolve to the same DID.
+       * Transfers immediately via `base_transfer` — no settlement instruction, no affirmation.
+       * - Direct (spender): Caller differs from source owner. Spender-approval mode.
+       * Allowance is checked and decremented. Spender mode is only available for
+       * `AssetHolder::Account` sources with fungible funds.
+       *
+       * When `from` is `None`, defaults to `AssetHolder::Account(caller)`.
+       *
+       * # Spender-mode allowance behavior
+       * - Finite allowance: decremented by transfer amount. Removed when depleted to zero.
+       * - Unlimited allowance (`Balance::MAX`): never decremented, no storage write.
+       * - No `Approval` event emitted on spend. Use the `allowance` Runtime API to query
+       * remaining allowance.
+       *
+       * # Arguments
+       * * `origin` — Signed origin. Caller must have a registered DID.
+       * * `from` — Source. `None` defaults to caller's account. When set to a different
+       * account, spender-approval mode activates.
+       * * `to` — Destination account or portfolio.
+       * * `fund` — Asset and amount (fungible) or NFT IDs (non-fungible), plus optional memo.
+       **/
+      transferFunds: AugmentedSubmittable<
+        (
+          from:
+            | Option<PolymeshPrimitivesAssetAssetHolder>
+            | null
+            | Uint8Array
+            | PolymeshPrimitivesAssetAssetHolder
+            | { Portfolio: any }
+            | { Account: any }
+            | string,
+          to:
+            | PolymeshPrimitivesAssetAssetHolder
+            | { Portfolio: any }
+            | { Account: any }
+            | string
+            | Uint8Array,
+          fund:
+            | PolymeshPrimitivesPortfolioFund
+            | { description?: any; memo?: any }
+            | string
+            | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [
+          Option<PolymeshPrimitivesAssetAssetHolder>,
+          PolymeshPrimitivesAssetAssetHolder,
+          PolymeshPrimitivesPortfolioFund,
+        ]
+      >;
+      /**
+       * Unlocks an instruction that is currently in `LockedForExecution` status,
+       * moving it back to `Pending`. Only a mediator of the instruction can call this.
+       *
+       * After unlocking, the mediator must wait at least [`Config::RelockCooldown`] before
+       * locking the instruction again. This gives other parties time to reject the
+       * instruction if they wish to back out.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call, must be a mediator of the instruction.
+       * * `inst_id` - The [`InstructionId`] of the instruction to unlock.
+       **/
+      unlockInstruction: AugmentedSubmittable<
+        (instId: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>,
+        [u64]
+      >;
+      /**
        * Edit a venue's details.
        *
        * * `id` specifies the ID of the venue to edit.
@@ -6454,10 +6767,10 @@ declare module '@polkadot/api-base/types/submittable' {
       updateVenueSigners: AugmentedSubmittable<
         (
           id: u64 | AnyNumber | Uint8Array,
-          signers: Vec<AccountId32> | (AccountId32 | string | Uint8Array)[],
+          signers: BTreeSet<AccountId32>,
           addSigners: bool | boolean | Uint8Array
         ) => SubmittableExtrinsic<ApiType>,
-        [u64, Vec<AccountId32>, bool]
+        [u64, BTreeSet<AccountId32>, bool]
       >;
       /**
        * Edit a venue's type.
@@ -6478,65 +6791,6 @@ declare module '@polkadot/api-base/types/submittable' {
             | Uint8Array
         ) => SubmittableExtrinsic<ApiType>,
         [u64, PolymeshPrimitivesSettlementVenueType]
-      >;
-      /**
-       * Withdraw an affirmation for a given instruction.
-       *
-       * # Arguments
-       * * `id` - the [`InstructionId`] of the instruction getting an affirmation withdrawn.
-       * * `holder_set` - a set of [`AssetHolder`] under the caller's control and intended for affirmation withdrawal.
-       *
-       * # Permissions
-       * * Portfolio
-       **/
-      withdrawAffirmation: AugmentedSubmittable<
-        (
-          id: u64 | AnyNumber | Uint8Array,
-          holderSet: BTreeSet<PolymeshPrimitivesAssetAssetHolder>
-        ) => SubmittableExtrinsic<ApiType>,
-        [u64, BTreeSet<PolymeshPrimitivesAssetAssetHolder>]
-      >;
-      /**
-       * Removes the mediator's affirmation for the instruction - should only be called by mediators, otherwise it will fail.
-       *
-       * # Arguments
-       * * `origin`: The secondary key of the sender.
-       * * `instruction_id`: The [`InstructionId`] that will have the affirmation removed.
-       **/
-      withdrawAffirmationAsMediator: AugmentedSubmittable<
-        (instructionId: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>,
-        [u64]
-      >;
-      /**
-       * Withdraw an affirmation for a given instruction.
-       *
-       * # Arguments
-       * * `id` - the [`InstructionId`] of the instruction getting an affirmation withdrawn.
-       * * `holder_set` - a set of [`AssetHolder`] under the caller's control and intended for affirmation withdrawal.
-       * * `number_of_assets` - an optional [`AffirmationCount`] that will be used for a precise fee estimation before executing the extrinsic.
-       *
-       * Note: calling the rpc method `get_affirmation_count` returns an instance of [`AffirmationCount`].
-       *
-       * # Permissions
-       * * Portfolio
-       **/
-      withdrawAffirmationWithCount: AugmentedSubmittable<
-        (
-          id: u64 | AnyNumber | Uint8Array,
-          holderSet: BTreeSet<PolymeshPrimitivesAssetAssetHolder>,
-          numberOfAssets:
-            | Option<PolymeshPrimitivesSettlementAffirmationCount>
-            | null
-            | Uint8Array
-            | PolymeshPrimitivesSettlementAffirmationCount
-            | { senderAssetCount?: any; receiverAssetCount?: any; offchainCount?: any }
-            | string
-        ) => SubmittableExtrinsic<ApiType>,
-        [
-          u64,
-          BTreeSet<PolymeshPrimitivesAssetAssetHolder>,
-          Option<PolymeshPrimitivesSettlementAffirmationCount>,
-        ]
       >;
     };
     staking: {
@@ -6890,7 +7144,7 @@ declare module '@polkadot/api-base/types/submittable' {
        *
        * If a validator has more than [`Config::MaxExposurePageSize`] nominators backing
        * them, then the list of nominators is paged, with each page being capped at
-       * [`Config::MaxExposurePageSize`.] If a validator has more than one page of nominators,
+       * [`Config::MaxExposurePageSize`]. If a validator has more than one page of nominators,
        * the call needs to be made for each page separately in order for all the nominators
        * backing a validator to receive the reward. The nominators are not sorted across pages
        * and so it should not be assumed the highest staker would be on the topmost page and vice
@@ -8331,6 +8585,7 @@ declare module '@polkadot/api-base/types/submittable' {
             | { PolymeshCommittee: any }
             | { TechnicalCommittee: any }
             | { UpgradeCommittee: any }
+            | { Revive: any }
             | string
             | Uint8Array,
           call: Call | IMethod | string | Uint8Array

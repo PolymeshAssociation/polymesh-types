@@ -85,6 +85,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       IncompatibleAssetTypeUpdate: AugmentedError<ApiType>;
       /**
+       * The spender's allowance for this asset is insufficient for the requested transfer amount.
+       **/
+      InsufficientAllowance: AugmentedError<ApiType>;
+      /**
        * The sender balance is not sufficient.
        **/
       InsufficientBalance: AugmentedError<ApiType>;
@@ -160,6 +164,10 @@ declare module '@polkadot/api-base/types/errors' {
        * Number of asset mediators would exceed the maximum allowed.
        **/
       NumberOfAssetMediatorsExceeded: AugmentedError<ApiType>;
+      /**
+       * Transfering ownership to the same owner is not allowed.
+       **/
+      SelfOwnershipTransferNotAllowed: AugmentedError<ApiType>;
       /**
        * Transfers to self are not allowed
        **/
@@ -1033,10 +1041,6 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       InvalidAuthorizationSignature: AugmentedError<ApiType>;
       /**
-       * Identity is already a child of an other identity, can't create grand-child identity.
-       **/
-      IsChildIdentity: AugmentedError<ApiType>;
-      /**
        * This key is not allowed to execute a given operation.
        **/
       KeyNotAllowed: AugmentedError<ApiType>;
@@ -1045,10 +1049,6 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       MissingIdentity: AugmentedError<ApiType>;
       /**
-       * The Identity doesn't have a parent identity.
-       **/
-      NoParentIdentity: AugmentedError<ApiType>;
-      /**
        * Signer is not a secondary key of the provided identity
        **/
       NotASigner: AugmentedError<ApiType>;
@@ -1056,10 +1056,6 @@ declare module '@polkadot/api-base/types/errors' {
        * Attestation was not by a DID registrar.
        **/
       NotDidRegistrarAttestation: AugmentedError<ApiType>;
-      /**
-       * The caller is not the parent or child identity.
-       **/
-      NotParentOrChildIdentity: AugmentedError<ApiType>;
       /**
        * Only the primary key is allowed to revoke an Identity Signatory off-chain authorization.
        **/
@@ -1424,6 +1420,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       SnapshotIdMismatch: AugmentedError<ApiType>;
       /**
+       * The provided `limit` is less than the actual queue length.
+       **/
+      SnapshotLimitTooSmall: AugmentedError<ApiType>;
+      /**
        * Tried to enact results for the snapshot queue overflowing its length.
        **/
       SnapshotResultTooLarge: AugmentedError<ApiType>;
@@ -1480,10 +1480,6 @@ declare module '@polkadot/api-base/types/errors' {
     };
     polymeshContracts: {
       /**
-       * The caller is not a primary key.
-       **/
-      CallerNotAPrimaryKey: AugmentedError<ApiType>;
-      /**
        * Data left in input when decoding arguments of a call.
        **/
       DataLeftAfterDecoding: AugmentedError<ApiType>;
@@ -1491,11 +1487,6 @@ declare module '@polkadot/api-base/types/errors' {
        * Input data that a contract passed when using the ChainExtension was too large.
        **/
       InLenTooLarge: AugmentedError<ApiType>;
-      /**
-       * A contract was attempted to be instantiated,
-       * but no identity was given to associate the new contract's key with.
-       **/
-      InstantiatorWithNoIdentity: AugmentedError<ApiType>;
       /**
        * Only future chain versions are allowed.
        **/
@@ -1508,10 +1499,6 @@ declare module '@polkadot/api-base/types/errors' {
        * Failed to decode a valid `RuntimeCall`.
        **/
       InvalidRuntimeCall: AugmentedError<ApiType>;
-      /**
-       * Secondary key permissions are missing.
-       **/
-      MissingKeyPermissions: AugmentedError<ApiType>;
       /**
        * There are no api upgrades supported for the contract.
        **/
@@ -1701,6 +1688,261 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       Overflow: AugmentedError<ApiType>;
     };
+    revive: {
+      /**
+       * Tried to map an account that is already mapped.
+       **/
+      AccountAlreadyMapped: AugmentedError<ApiType>;
+      /**
+       * An `AccountID32` account tried to interact with the pallet without having a mapping.
+       *
+       * Call [`Pallet::map_account`] in order to create a mapping for the account.
+       **/
+      AccountUnmapped: AugmentedError<ApiType>;
+      /**
+       * Failed to convert a U256 to a Balance.
+       **/
+      BalanceConversionFailed: AugmentedError<ApiType>;
+      /**
+       * The program contains a basic block that is larger than allowed.
+       **/
+      BasicBlockTooLarge: AugmentedError<ApiType>;
+      /**
+       * The code blob supplied is larger than [`limits::code::BLOB_BYTES`].
+       **/
+      BlobTooLarge: AugmentedError<ApiType>;
+      /**
+       * The calldata exceeds [`limits::CALLDATA_BYTES`].
+       **/
+      CallDataTooLarge: AugmentedError<ApiType>;
+      /**
+       * Can not add a delegate dependency to the code hash of the contract itself.
+       **/
+      CannotAddSelfAsDelegateDependency: AugmentedError<ApiType>;
+      /**
+       * No code info could be found at the supplied code hash.
+       **/
+      CodeInfoNotFound: AugmentedError<ApiType>;
+      /**
+       * Code removal was denied because the code is still in use by at least one contract.
+       **/
+      CodeInUse: AugmentedError<ApiType>;
+      /**
+       * No code could be found at the supplied code hash.
+       **/
+      CodeNotFound: AugmentedError<ApiType>;
+      /**
+       * The contract failed to compile or is missing the correct entry points.
+       *
+       * A more detailed error can be found on the node console if debug messages are enabled
+       * by supplying `-lruntime::revive=debug`.
+       **/
+      CodeRejected: AugmentedError<ApiType>;
+      /**
+       * No contract was found at the specified address.
+       **/
+      ContractNotFound: AugmentedError<ApiType>;
+      /**
+       * The contract ran to completion but decided to revert its storage changes.
+       * Please note that this error is only returned from extrinsics. When called directly
+       * or via RPC an `Ok` will be returned. In this case the caller needs to inspect the flags
+       * to determine whether a reversion has taken place.
+       **/
+      ContractReverted: AugmentedError<ApiType>;
+      /**
+       * Contract trapped during execution.
+       **/
+      ContractTrapped: AugmentedError<ApiType>;
+      /**
+       * Input passed to a contract API function failed to decode as expected type.
+       **/
+      DecodingFailed: AugmentedError<ApiType>;
+      /**
+       * The contract already depends on the given delegate dependency.
+       **/
+      DelegateDependencyAlreadyExists: AugmentedError<ApiType>;
+      /**
+       * The dependency was not found in the contract's delegate dependencies.
+       **/
+      DelegateDependencyNotFound: AugmentedError<ApiType>;
+      /**
+       * A contract with the same AccountId already exists.
+       **/
+      DuplicateContract: AugmentedError<ApiType>;
+      /**
+       * ECDSA public key recovery failed. Most probably wrong recovery id or signature.
+       **/
+      EcdsaRecoveryFailed: AugmentedError<ApiType>;
+      /**
+       * Tried to construct an EVM contract via code hash.
+       *
+       * EVM contracts can only be instantiated via code upload as no initcode is
+       * stored on-chain.
+       **/
+      EvmConstructedFromHash: AugmentedError<ApiType>;
+      /**
+       * When calling an EVM constructor `data` has to be empty.
+       *
+       * EVM constructors do not accept data. Their input data is part of the code blob itself.
+       **/
+      EvmConstructorNonEmptyData: AugmentedError<ApiType>;
+      /**
+       * PolkaVM failed during code execution. Probably due to a malformed program.
+       **/
+      ExecutionFailed: AugmentedError<ApiType>;
+      /**
+       * `seal_call` forwarded this contracts input. It therefore is no longer available.
+       **/
+      InputForwarded: AugmentedError<ApiType>;
+      /**
+       * Invalid combination of flags supplied to `seal_call` or `seal_delegate_call`.
+       **/
+      InvalidCallFlags: AugmentedError<ApiType>;
+      /**
+       * The transaction used to dry-run a contract is invalid.
+       **/
+      InvalidGenericTransaction: AugmentedError<ApiType>;
+      /**
+       * Immutable data can only be set during deploys and only be read during calls.
+       * Additionally, it is only valid to set the data once and it must not be empty.
+       **/
+      InvalidImmutableAccess: AugmentedError<ApiType>;
+      /**
+       * The program contains an invalid instruction.
+       **/
+      InvalidInstruction: AugmentedError<ApiType>;
+      /**
+       * Invalid jump destination. Dynamic jumps points to invalid not jumpdest opcode.
+       **/
+      InvalidJump: AugmentedError<ApiType>;
+      /**
+       * Invalid schedule supplied, e.g. with zero weight of a basic operation.
+       **/
+      InvalidSchedule: AugmentedError<ApiType>;
+      /**
+       * Invalid storage flags were passed to one of the storage syscalls.
+       **/
+      InvalidStorageFlags: AugmentedError<ApiType>;
+      /**
+       * The contract tried to call a syscall which does not exist (at its current api level).
+       **/
+      InvalidSyscall: AugmentedError<ApiType>;
+      /**
+       * Performing a call was denied because the calling depth reached the limit
+       * of what is specified in the schedule.
+       **/
+      MaxCallDepthReached: AugmentedError<ApiType>;
+      /**
+       * The contract has reached its maximum number of delegate dependencies.
+       **/
+      MaxDelegateDependenciesReached: AugmentedError<ApiType>;
+      /**
+       * A buffer outside of sandbox memory was passed to a contract API function.
+       **/
+      OutOfBounds: AugmentedError<ApiType>;
+      /**
+       * The executed contract exhausted its gas limit.
+       **/
+      OutOfGas: AugmentedError<ApiType>;
+      /**
+       * Can not add more data to transient storage.
+       **/
+      OutOfTransientStorage: AugmentedError<ApiType>;
+      /**
+       * Called a pre-compile that is not allowed to be delegate called.
+       *
+       * Some pre-compile functions will trap the caller context if being delegate
+       * called or if their caller was being delegate called.
+       **/
+      PrecompileDelegateDenied: AugmentedError<ApiType>;
+      /**
+       * A contract called into the runtime which then called back into this pallet.
+       **/
+      ReenteredPallet: AugmentedError<ApiType>;
+      /**
+       * A call tried to invoke a contract that is flagged as non-reentrant.
+       **/
+      ReentranceDenied: AugmentedError<ApiType>;
+      /**
+       * The refcount of a code either over or underflowed.
+       **/
+      RefcountOverOrUnderflow: AugmentedError<ApiType>;
+      /**
+       * The return data exceeds [`limits::CALLDATA_BYTES`].
+       **/
+      ReturnDataTooLarge: AugmentedError<ApiType>;
+      /**
+       * Attempting to push a value onto a full stack.
+       **/
+      StackOverflow: AugmentedError<ApiType>;
+      /**
+       * Attempting to pop a value from an empty stack.
+       **/
+      StackUnderflow: AugmentedError<ApiType>;
+      /**
+       * A contract attempted to invoke a state modifying API while being in read-only mode.
+       **/
+      StateChangeDenied: AugmentedError<ApiType>;
+      /**
+       * The contract declares too much memory (ro + rw + stack).
+       **/
+      StaticMemoryTooLarge: AugmentedError<ApiType>;
+      /**
+       * More storage was created than allowed by the storage deposit limit.
+       **/
+      StorageDepositLimitExhausted: AugmentedError<ApiType>;
+      /**
+       * Origin doesn't have enough balance to pay the required storage deposits.
+       **/
+      StorageDepositNotEnoughFunds: AugmentedError<ApiType>;
+      /**
+       * This means there are locks on the contracts storage deposit that prevents refunding it.
+       *
+       * This would be the case if the contract used its storage deposits for governance
+       * or other pallets that allow creating locks over held balance.
+       **/
+      StorageRefundLocked: AugmentedError<ApiType>;
+      /**
+       * The contract does not have enough balance to refund the storage deposit.
+       *
+       * This is a bug and should never happen. It means the accounting got out of sync.
+       **/
+      StorageRefundNotEnoughFunds: AugmentedError<ApiType>;
+      /**
+       * A contract self destructed in its constructor.
+       *
+       * This can be triggered by a call to `seal_terminate`.
+       **/
+      TerminatedInConstructor: AugmentedError<ApiType>;
+      /**
+       * Termination of a contract is not allowed while the contract is already
+       * on the call stack. Can be triggered by `seal_terminate`.
+       **/
+      TerminatedWhileReentrant: AugmentedError<ApiType>;
+      /**
+       * The amount of topics passed to `seal_deposit_events` exceeds the limit.
+       **/
+      TooManyTopics: AugmentedError<ApiType>;
+      /**
+       * Performing the requested transfer failed. Probably because there isn't enough
+       * free balance in the sender's account.
+       **/
+      TransferFailed: AugmentedError<ApiType>;
+      /**
+       * Too much deposit was drawn from the shared txfee and deposit credit.
+       *
+       * This happens if the passed `gas` inside the ethereum transaction is too low.
+       **/
+      TxFeeOverdraw: AugmentedError<ApiType>;
+      /**
+       * Unsupported precompile address.
+       **/
+      UnsupportedPrecompileAddress: AugmentedError<ApiType>;
+      /**
+       * Event body or storage item exceeds [`limits::STORAGE_BYTES`].
+       **/
+      ValueTooLarge: AugmentedError<ApiType>;
+    };
     scheduler: {
       /**
        * Failed to schedule a call
@@ -1747,6 +1989,10 @@ declare module '@polkadot/api-base/types/errors' {
     };
     settlement: {
       /**
+       * Spender allowances are not supported for non-fungible token transfers.
+       **/
+      AllowancesNotSupportedForNFTs: AugmentedError<ApiType>;
+      /**
        * The caller is not a mediator in the instruction.
        **/
       CallerIsNotAMediator: AugmentedError<ApiType>;
@@ -1779,6 +2025,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       InputWeightIsLessThanMinimum: AugmentedError<ApiType>;
       /**
+       * The instruction is already locked. It must be unlocked before relocking.
+       **/
+      InstructionAlreadyLocked: AugmentedError<ApiType>;
+      /**
        * Instruction has invalid dates
        **/
       InstructionDatesInvalid: AugmentedError<ApiType>;
@@ -1786,6 +2036,10 @@ declare module '@polkadot/api-base/types/errors' {
        * Instruction has not been affirmed.
        **/
       InstructionNotAffirmed: AugmentedError<ApiType>;
+      /**
+       * The instruction is not in `LockedForExecution` status and cannot be unlocked.
+       **/
+      InstructionNotLocked: AugmentedError<ApiType>;
       /**
        * Instruction settlement block has not yet been reached.
        **/
@@ -1851,9 +2105,17 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       MaxNumberOfReceiptsExceeded: AugmentedError<ApiType>;
       /**
+       * The maximum number of relocks for this instruction has been exceeded.
+       **/
+      MaxRelockCountExceeded: AugmentedError<ApiType>;
+      /**
        * The expiry date for the mediator's affirmation has passed.
        **/
       MediatorAffirmationExpired: AugmentedError<ApiType>;
+      /**
+       * At least one mediator is required for this instruction.
+       **/
+      MissingInstructionMediators: AugmentedError<ApiType>;
       /**
        * Multiple receipts for the same leg are not allowed.
        **/
@@ -1907,9 +2169,17 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       ReceiverIdentityNotFound: AugmentedError<ApiType>;
       /**
+       * The relock cooldown period has not expired since the last unlock.
+       **/
+      RelockCooldownNotExpired: AugmentedError<ApiType>;
+      /**
        * Sender and receiver are the same.
        **/
       SameSenderReceiver: AugmentedError<ApiType>;
+      /**
+       * Source and destination are the exact same AssetHolder.
+       **/
+      SenderSameAsReceiver: AugmentedError<ApiType>;
       /**
        * The provided settlement block number is in the past and cannot be used by the scheduler.
        **/

@@ -21,7 +21,7 @@ import type {
   u8,
 } from '@polkadot/types-codec';
 import type { ITuple } from '@polkadot/types-codec/types';
-import type { AccountId32, H256, Perbill, Permill } from '@polkadot/types/interfaces/runtime';
+import type { AccountId32, H160, H256, Perbill, Permill } from '@polkadot/types/interfaces/runtime';
 import type {
   FrameSupportTokensMiscBalanceStatus,
   FrameSystemDispatchEventInfo,
@@ -98,6 +98,24 @@ export type __AugmentedEvent<ApiType extends ApiTypes> = AugmentedEvent<ApiType>
 declare module '@polkadot/api-base/types/events' {
   interface AugmentedEvents<ApiType extends ApiTypes> {
     asset: {
+      /**
+       * A spender allowance was set for an asset.
+       **/
+      Approval: AugmentedEvent<
+        ApiType,
+        [
+          owner: AccountId32,
+          spender: AccountId32,
+          assetId: PolymeshPrimitivesAssetAssetId,
+          amount: u128,
+        ],
+        {
+          owner: AccountId32;
+          spender: AccountId32;
+          assetId: PolymeshPrimitivesAssetAssetId;
+          amount: u128;
+        }
+      >;
       /**
        * An asset has been added to the list of pre aprroved receivement (valid for all identities).
        * Parameters: [`AssetId`] of the pre approved asset.
@@ -1434,24 +1452,6 @@ declare module '@polkadot/api-base/types/events' {
         [Option<PolymeshPrimitivesIdentityId>, Option<AccountId32>, u64]
       >;
       /**
-       * Child identity created.
-       *
-       * (Parent DID, Child DID, primary key)
-       **/
-      ChildDidCreated: AugmentedEvent<
-        ApiType,
-        [PolymeshPrimitivesIdentityId, PolymeshPrimitivesIdentityId, AccountId32]
-      >;
-      /**
-       * Child identity unlinked from parent identity.
-       *
-       * (Caller DID, Parent DID, Child DID)
-       **/
-      ChildDidUnlinked: AugmentedEvent<
-        ApiType,
-        [PolymeshPrimitivesIdentityId, PolymeshPrimitivesIdentityId, PolymeshPrimitivesIdentityId]
-      >;
-      /**
        * Claim added to identity.
        *
        * (DID, claim)
@@ -2360,6 +2360,37 @@ declare module '@polkadot/api-base/types/events' {
         { userKey: AccountId32; payingKey: AccountId32; remaining: u128; oldRemaining: u128 }
       >;
     };
+    revive: {
+      /**
+       * A custom event emitted by the contract.
+       **/
+      ContractEmitted: AugmentedEvent<
+        ApiType,
+        [contract: H160, data: Bytes, topics: Vec<H256>],
+        { contract: H160; data: Bytes; topics: Vec<H256> }
+      >;
+      /**
+       * Emitted when an Ethereum transaction reverts.
+       *
+       * Ethereum transactions always complete successfully at the extrinsic level,
+       * as even reverted calls must store their `ReceiptInfo`.
+       * To distinguish reverted calls from successful ones, this event is emitted
+       * for failed Ethereum transactions.
+       **/
+      EthExtrinsicRevert: AugmentedEvent<
+        ApiType,
+        [dispatchError: SpRuntimeDispatchError],
+        { dispatchError: SpRuntimeDispatchError }
+      >;
+      /**
+       * Contract deployed by deployer at the specified address.
+       **/
+      Instantiated: AugmentedEvent<
+        ApiType,
+        [deployer: H160, contract: H160],
+        { deployer: H160; contract: H160 }
+      >;
+    };
     scheduler: {
       /**
        * Agenda is incomplete from `when`.
@@ -2533,10 +2564,13 @@ declare module '@polkadot/api-base/types/events' {
        **/
       InstructionRejected: AugmentedEvent<ApiType, [PolymeshPrimitivesIdentityId, u64]>;
       /**
-       * Instruction is rescheduled.
-       * (caller DID, instruction_id)
+       * An instruction has been unlocked by a mediator.
+       *
+       * Parameters:
+       * - `IdentityId`: The [`IdentityId`] of the mediator.
+       * - `InstructionId`: The [`InstructionId`] of the instruction.
        **/
-      InstructionRescheduled: AugmentedEvent<ApiType, [PolymeshPrimitivesIdentityId, u64]>;
+      InstructionUnlocked: AugmentedEvent<ApiType, [PolymeshPrimitivesIdentityId, u64]>;
       /**
        * Execution of a leg failed (did, instruction_id, leg_id)
        **/
@@ -2575,10 +2609,6 @@ declare module '@polkadot/api-base/types/events' {
           Option<PolymeshPrimitivesSettlementReceiptMetadata>,
         ]
       >;
-      /**
-       * Scheduling of instruction fails.
-       **/
-      SchedulingFailed: AugmentedEvent<ApiType, [u64, SpRuntimeDispatchError]>;
       /**
        * Settlement manually executed (did, id)
        **/
@@ -2620,7 +2650,7 @@ declare module '@polkadot/api-base/types/events' {
        **/
       VenueSignersUpdated: AugmentedEvent<
         ApiType,
-        [PolymeshPrimitivesIdentityId, u64, Vec<AccountId32>, bool]
+        [PolymeshPrimitivesIdentityId, u64, BTreeSet<AccountId32>, bool]
       >;
       /**
        * An existing venue's type has been updated (did, venue_id, type)

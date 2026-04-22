@@ -19,6 +19,8 @@ import type {
   Result,
   Struct,
   Text,
+  U256,
+  U8aFixed,
   Vec,
   bool,
   u128,
@@ -29,7 +31,7 @@ import type { AnyNumber, IMethod, ITuple } from '@polkadot/types-codec/types';
 import type { OpaqueKeyOwnershipProof } from '@polkadot/types/interfaces/babe';
 import type { Extrinsic } from '@polkadot/types/interfaces/extrinsics';
 import type { OpaqueMetadata } from '@polkadot/types/interfaces/metadata';
-import type { AccountId32, H256, Slot } from '@polkadot/types/interfaces/runtime';
+import type { AccountId32, H160, H256, Slot } from '@polkadot/types/interfaces/runtime';
 import type {
   FrameSystemEventRecord,
   PalletContractsPrimitivesCode,
@@ -44,6 +46,20 @@ import type {
   PalletIdentityKeyIdentityData,
   PalletIdentityRpcDidRecords,
   PalletPipsVoteCount,
+  PalletReviveEvmApiDebugRpcTypesTrace,
+  PalletReviveEvmApiDebugRpcTypesTracerType,
+  PalletReviveEvmApiRpcTypesDryRunConfig,
+  PalletReviveEvmApiRpcTypesGenBlock,
+  PalletReviveEvmApiRpcTypesGenGenericTransaction,
+  PalletReviveEvmBlockHashReceiptGasInfo,
+  PalletRevivePrimitivesBalanceConversionError,
+  PalletRevivePrimitivesCode,
+  PalletRevivePrimitivesCodeUploadReturnValue,
+  PalletRevivePrimitivesContractAccessError,
+  PalletRevivePrimitivesContractResultExecReturnValue,
+  PalletRevivePrimitivesContractResultInstantiateReturnValue,
+  PalletRevivePrimitivesEthTransactError,
+  PalletRevivePrimitivesEthTransactInfo,
   PalletTransactionPaymentFeeDetails,
   PalletTransactionPaymentRuntimeDispatchInfo,
   PolymeshPrimitivesAssetAssetHolder,
@@ -79,6 +95,7 @@ import type {
   SpMmrPrimitivesAncestryProof,
   SpMmrPrimitivesError,
   SpMmrPrimitivesLeafProof,
+  SpRuntimeBlock,
   SpRuntimeBlockLazyBlock,
   SpRuntimeDispatchError,
   SpRuntimeExtrinsicInclusionMode,
@@ -86,6 +103,7 @@ import type {
   SpRuntimeTransactionValidityTransactionSource,
   SpRuntimeTransactionValidityTransactionValidityError,
   SpRuntimeTransactionValidityValidTransaction,
+  SpSessionRuntimeApiOpaqueGeneratedSessionKeys,
   SpVersionRuntimeVersion,
   SpWeightsWeightV2Weight,
 } from '@polkadot/types/lookup';
@@ -108,6 +126,17 @@ declare module '@polkadot/api-base/types/calls' {
     };
     /** 0xbb6ba9053c5c9d78/ */
     assetApi: {
+      /**
+       * Returns the remaining allowance that `spender` can transfer from `owner`, for the given `asset_id`. Returns 0 if no allowance exists., `Balance::MAX` (u128::MAX) indicates an unlimited allowance.
+       **/
+      allowance: AugmentedCall<
+        ApiType,
+        (
+          owner: AccountId32 | string | Uint8Array,
+          spender: AccountId32 | string | Uint8Array,
+          asset_id: PolymeshPrimitivesAssetAssetId | string | Uint8Array
+        ) => Observable<u128>
+      >;
       /**
        * Returns a vector containing all errors for the transfer. An empty vec means there's no error.
        **/
@@ -727,7 +756,7 @@ declare module '@polkadot/api-base/types/calls' {
             | 'AssetCreateAsset'
             | 'CheckpointCreateSchedule'
             | 'ComplianceManagerAddComplianceRequirement'
-            | 'IdentityCddRegisterDid'
+            | 'IdentityRegisterDid'
             | 'IdentityAddClaim'
             | 'IdentityAddSecondaryKeysWithAuthorization'
             | 'PipsPropose'
@@ -736,10 +765,299 @@ declare module '@polkadot/api-base/types/calls' {
             | 'CapitalDistributionDistribute'
             | 'NFTCreateCollection'
             | 'NFTMint'
-            | 'IdentityCreateChildIdentity'
             | number
             | Uint8Array
         ) => Observable<PalletProtocolFeeRpcRuntimeApiCappedFee>
+      >;
+    };
+    /** 0x8c403e5c4a9fd442/ */
+    reviveApi: {
+      /**
+       * Get the account id associated to this H160 address.
+       **/
+      accountId: AugmentedCall<
+        ApiType,
+        (address: H160 | string | Uint8Array) => Observable<AccountId32>
+      >;
+      /**
+       * Get the H160 address associated to this account id
+       **/
+      address: AugmentedCall<
+        ApiType,
+        (account_id: AccountId32 | string | Uint8Array) => Observable<H160>
+      >;
+      /**
+       * Returns the free balance of the given `[H160]` address, using EVM decimals.
+       **/
+      balance: AugmentedCall<ApiType, (address: H160 | string | Uint8Array) => Observable<U256>>;
+      /**
+       * The address of the validator that produced the current block.
+       **/
+      blockAuthor: AugmentedCall<ApiType, () => Observable<H160>>;
+      /**
+       * Returns the block gas limit.
+       **/
+      blockGasLimit: AugmentedCall<ApiType, () => Observable<U256>>;
+      /**
+       * Perform a call from a specified account to a given contract.,, See [`crate::Pallet::bare_call`].
+       **/
+      call: AugmentedCall<
+        ApiType,
+        (
+          origin: AccountId32 | string | Uint8Array,
+          dest: H160 | string | Uint8Array,
+          value: u128 | AnyNumber | Uint8Array,
+          gas_limit:
+            | Option<SpWeightsWeightV2Weight>
+            | null
+            | Uint8Array
+            | SpWeightsWeightV2Weight
+            | { refTime?: any; proofSize?: any }
+            | string,
+          storage_deposit_limit: Option<u128> | null | Uint8Array | u128 | AnyNumber,
+          input_data: Bytes | string | Uint8Array
+        ) => Observable<PalletRevivePrimitivesContractResultExecReturnValue>
+      >;
+      /**
+       * The code at the specified address taking pre-compiles into account.
+       **/
+      code: AugmentedCall<ApiType, (address: H160 | string | Uint8Array) => Observable<Bytes>>;
+      /**
+       * Returns the current ETH block.,, This is one block behind the substrate block.
+       **/
+      ethBlock: AugmentedCall<ApiType, () => Observable<PalletReviveEvmApiRpcTypesGenBlock>>;
+      /**
+       * Returns the ETH block hash for the given block number.
+       **/
+      ethBlockHash: AugmentedCall<
+        ApiType,
+        (number: U256 | AnyNumber | Uint8Array) => Observable<Option<H256>>
+      >;
+      /**
+       * The details needed to reconstruct the receipt information offchain.,, # Note,, Each entry corresponds to the appropriate Ethereum transaction in the current block.
+       **/
+      ethReceiptData: AugmentedCall<
+        ApiType,
+        () => Observable<Vec<PalletReviveEvmBlockHashReceiptGasInfo>>
+      >;
+      /**
+       * Perform an Ethereum call.,, Deprecated use `v2` version instead., See [`crate::Pallet::dry_run_eth_transact`]
+       **/
+      ethTransact: AugmentedCall<
+        ApiType,
+        (
+          tx:
+            | PalletReviveEvmApiRpcTypesGenGenericTransaction
+            | {
+                accessList?: any;
+                authorizationList?: any;
+                blobVersionedHashes?: any;
+                blobs?: any;
+                chainId?: any;
+                from?: any;
+                gas?: any;
+                gasPrice?: any;
+                input?: any;
+                maxFeePerBlobGas?: any;
+                maxFeePerGas?: any;
+                maxPriorityFeePerGas?: any;
+                nonce?: any;
+                to?: any;
+                r_type?: any;
+                value?: any;
+              }
+            | string
+            | Uint8Array
+        ) => Observable<
+          Result<PalletRevivePrimitivesEthTransactInfo, PalletRevivePrimitivesEthTransactError>
+        >
+      >;
+      /**
+       * Perform an Ethereum call.,, See [`crate::Pallet::dry_run_eth_transact`]
+       **/
+      ethTransactWithConfig: AugmentedCall<
+        ApiType,
+        (
+          tx:
+            | PalletReviveEvmApiRpcTypesGenGenericTransaction
+            | {
+                accessList?: any;
+                authorizationList?: any;
+                blobVersionedHashes?: any;
+                blobs?: any;
+                chainId?: any;
+                from?: any;
+                gas?: any;
+                gasPrice?: any;
+                input?: any;
+                maxFeePerBlobGas?: any;
+                maxFeePerGas?: any;
+                maxPriorityFeePerGas?: any;
+                nonce?: any;
+                to?: any;
+                r_type?: any;
+                value?: any;
+              }
+            | string
+            | Uint8Array,
+          config:
+            | PalletReviveEvmApiRpcTypesDryRunConfig
+            | { timestampOverride?: any; reserved?: any }
+            | string
+            | Uint8Array
+        ) => Observable<
+          Result<PalletRevivePrimitivesEthTransactInfo, PalletRevivePrimitivesEthTransactError>
+        >
+      >;
+      /**
+       * Returns the gas price.
+       **/
+      gasPrice: AugmentedCall<ApiType, () => Observable<U256>>;
+      /**
+       * Query a given storage key in a given contract.,, Returns `Ok(Some(Vec<u8>))` if the storage value exists under the given key in the, specified account and `Ok(None)` if it doesn't. If the account specified by the address, doesn't exist, or doesn't have a contract then `Err` is returned.
+       **/
+      getStorage: AugmentedCall<
+        ApiType,
+        (
+          address: H160 | string | Uint8Array,
+          key: U8aFixed | string | Uint8Array
+        ) => Observable<Result<Option<Bytes>, PalletRevivePrimitivesContractAccessError>>
+      >;
+      /**
+       * Query a given variable-sized storage key in a given contract.,, Returns `Ok(Some(Vec<u8>))` if the storage value exists under the given key in the, specified account and `Ok(None)` if it doesn't. If the account specified by the address, doesn't exist, or doesn't have a contract then `Err` is returned.
+       **/
+      getStorageVarKey: AugmentedCall<
+        ApiType,
+        (
+          address: H160 | string | Uint8Array,
+          key: Bytes | string | Uint8Array
+        ) => Observable<Result<Option<Bytes>, PalletRevivePrimitivesContractAccessError>>
+      >;
+      /**
+       * Instantiate a new contract.,, See `[crate::Pallet::bare_instantiate]`.
+       **/
+      instantiate: AugmentedCall<
+        ApiType,
+        (
+          origin: AccountId32 | string | Uint8Array,
+          value: u128 | AnyNumber | Uint8Array,
+          gas_limit:
+            | Option<SpWeightsWeightV2Weight>
+            | null
+            | Uint8Array
+            | SpWeightsWeightV2Weight
+            | { refTime?: any; proofSize?: any }
+            | string,
+          storage_deposit_limit: Option<u128> | null | Uint8Array | u128 | AnyNumber,
+          code:
+            | PalletRevivePrimitivesCode
+            | { Upload: any }
+            | { Existing: any }
+            | string
+            | Uint8Array,
+          data: Bytes | string | Uint8Array,
+          salt: Option<U8aFixed> | null | Uint8Array | U8aFixed | string
+        ) => Observable<PalletRevivePrimitivesContractResultInstantiateReturnValue>
+      >;
+      /**
+       * Construct the new balance and dust components of this EVM balance.
+       **/
+      newBalanceWithDust: AugmentedCall<
+        ApiType,
+        (
+          balance: U256 | AnyNumber | Uint8Array
+        ) => Observable<Result<ITuple<[u128, u64]>, PalletRevivePrimitivesBalanceConversionError>>
+      >;
+      /**
+       * Returns the nonce of the given `[H160]` address.
+       **/
+      nonce: AugmentedCall<ApiType, (address: H160 | string | Uint8Array) => Observable<u32>>;
+      /**
+       * The address used to call the runtime's pallets dispatchables
+       **/
+      runtimePalletsAddress: AugmentedCall<ApiType, () => Observable<H160>>;
+      /**
+       * Traces the execution of an entire block and returns call traces.,, This is intended to be called through `state_call` to replay the block from the, parent block.,, See eth-rpc `debug_traceBlockByNumber` for usage.
+       **/
+      traceBlock: AugmentedCall<
+        ApiType,
+        (
+          block: SpRuntimeBlock | { header?: any; extrinsics?: any } | string | Uint8Array,
+          config:
+            | PalletReviveEvmApiDebugRpcTypesTracerType
+            | { CallTracer: any }
+            | { PrestateTracer: any }
+            | { ExecutionTracer: any }
+            | string
+            | Uint8Array
+        ) => Observable<Vec<ITuple<[u32, PalletReviveEvmApiDebugRpcTypesTrace]>>>
+      >;
+      /**
+       * Dry run and return the trace of the given call.,, See eth-rpc `debug_traceCall` for usage.
+       **/
+      traceCall: AugmentedCall<
+        ApiType,
+        (
+          tx:
+            | PalletReviveEvmApiRpcTypesGenGenericTransaction
+            | {
+                accessList?: any;
+                authorizationList?: any;
+                blobVersionedHashes?: any;
+                blobs?: any;
+                chainId?: any;
+                from?: any;
+                gas?: any;
+                gasPrice?: any;
+                input?: any;
+                maxFeePerBlobGas?: any;
+                maxFeePerGas?: any;
+                maxPriorityFeePerGas?: any;
+                nonce?: any;
+                to?: any;
+                r_type?: any;
+                value?: any;
+              }
+            | string
+            | Uint8Array,
+          config:
+            | PalletReviveEvmApiDebugRpcTypesTracerType
+            | { CallTracer: any }
+            | { PrestateTracer: any }
+            | { ExecutionTracer: any }
+            | string
+            | Uint8Array
+        ) => Observable<
+          Result<PalletReviveEvmApiDebugRpcTypesTrace, PalletRevivePrimitivesEthTransactError>
+        >
+      >;
+      /**
+       * Traces the execution of a specific transaction within a block.,, This is intended to be called through `state_call` to replay the block from the, parent hash up to the transaction.,, See eth-rpc `debug_traceTransaction` for usage.
+       **/
+      traceTx: AugmentedCall<
+        ApiType,
+        (
+          block: SpRuntimeBlock | { header?: any; extrinsics?: any } | string | Uint8Array,
+          tx_index: u32 | AnyNumber | Uint8Array,
+          config:
+            | PalletReviveEvmApiDebugRpcTypesTracerType
+            | { CallTracer: any }
+            | { PrestateTracer: any }
+            | { ExecutionTracer: any }
+            | string
+            | Uint8Array
+        ) => Observable<Option<PalletReviveEvmApiDebugRpcTypesTrace>>
+      >;
+      /**
+       * Upload new code without instantiating a contract from it.,, See [`crate::Pallet::bare_upload_code`].
+       **/
+      uploadCode: AugmentedCall<
+        ApiType,
+        (
+          origin: AccountId32 | string | Uint8Array,
+          code: Bytes | string | Uint8Array,
+          storage_deposit_limit: Option<u128> | null | Uint8Array | u128 | AnyNumber
+        ) => Observable<Result<PalletRevivePrimitivesCodeUploadReturnValue, SpRuntimeDispatchError>>
       >;
     };
     /** 0xab3c0572291feb8b/ */
@@ -758,7 +1076,10 @@ declare module '@polkadot/api-base/types/calls' {
        **/
       generateSessionKeys: AugmentedCall<
         ApiType,
-        (seed: Option<Bytes> | null | Uint8Array | Bytes | string) => Observable<Bytes>
+        (
+          owner: Bytes | string | Uint8Array,
+          seed: Option<Bytes> | null | Uint8Array | Bytes | string
+        ) => Observable<SpSessionRuntimeApiOpaqueGeneratedSessionKeys>
       >;
     };
     /** 0x53df5001418f3b46/ */

@@ -373,6 +373,96 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       maxNumberOfNFTsMoves: u32 & AugmentedConst<ApiType>;
     };
+    revive: {
+      /**
+       * Allow EVM bytecode to be uploaded and instantiated.
+       **/
+      allowEVMBytecode: bool & AugmentedConst<ApiType>;
+      /**
+       * The [EIP-155](https://eips.ethereum.org/EIPS/eip-155) chain ID.
+       *
+       * This is a unique identifier assigned to each blockchain network,
+       * preventing replay attacks.
+       **/
+      chainId: u64 & AugmentedConst<ApiType>;
+      /**
+       * The percentage of the storage deposit that should be held for using a code hash.
+       * Instantiating a contract, protects the code from being removed. In order to prevent
+       * abuse these actions are protected with a percentage of the code deposit.
+       **/
+      codeHashLockupDepositPercent: Perbill & AugmentedConst<ApiType>;
+      /**
+       * Allows debug-mode configuration, such as enabling unlimited contract size.
+       **/
+      debugEnabled: bool & AugmentedConst<ApiType>;
+      /**
+       * The amount of balance a caller has to pay for each byte of storage.
+       *
+       * # Note
+       *
+       * It is safe to change this value on a live chain as all refunds are pro rata.
+       **/
+      depositPerByte: u128 & AugmentedConst<ApiType>;
+      /**
+       * The amount of balance a caller has to pay for each child trie storage item.
+       *
+       * Those are the items created by a contract. In Solidity each value is a single
+       * storage item. This is why we need to set a lower value here than for the main
+       * trie items. Otherwise the storage deposit is too high.
+       *
+       * # Note
+       *
+       * It is safe to change this value on a live chain as all refunds are pro rata.
+       **/
+      depositPerChildTrieItem: u128 & AugmentedConst<ApiType>;
+      /**
+       * The amount of balance a caller has to pay for each storage item.
+       *
+       * # Note
+       *
+       * It is safe to change this value on a live chain as all refunds are pro rata.
+       **/
+      depositPerItem: u128 & AugmentedConst<ApiType>;
+      /**
+       * This determines the relative scale of our gas price and gas estimates.
+       *
+       * By default, the gas price (in wei) is `FeeInfo::next_fee_multiplier()` multiplied by
+       * `NativeToEthRatio`. `GasScale` allows to scale this value: the actual gas price is the
+       * default gas price multiplied by `GasScale`.
+       *
+       * As a consequence, gas cost (gas estimates and actual gas usage during transaction) is
+       * scaled down by the same factor. Thus, the total transaction cost is not affected by
+       * `GasScale` – apart from rounding differences: the transaction cost is always a multiple
+       * of the gas price and is derived by rounded up, so that with higher `GasScales` this can
+       * lead to higher gas cost as the rounding difference would be larger.
+       *
+       * The main purpose of changing the `GasScale` is to tune the gas cost so that it is closer
+       * to standard EVM gas cost and contracts will not run out of gas when tools or code
+       * assume hard coded gas limits.
+       *
+       * Requirement: `GasScale` must not be 0
+       **/
+      gasScale: u32 & AugmentedConst<ApiType>;
+      /**
+       * The fraction the maximum extrinsic weight `eth_transact` extrinsics are capped to.
+       *
+       * This is not a security measure but a requirement due to how we map gas to `(Weight,
+       * StorageDeposit)`. The mapping might derive a `Weight` that is too large to fit into an
+       * extrinsic. In this case we cap it to the limit specified here.
+       *
+       * `eth_transact` transactions that use more weight than specified will fail with an out of
+       * gas error during execution. Larger fractions will allow more transactions to run.
+       * Smaller values waste less block space: Choose as small as possible and as large as
+       * necessary.
+       *
+       * Default: `0.5`.
+       **/
+      maxEthExtrinsicWeight: u128 & AugmentedConst<ApiType>;
+      /**
+       * The ratio between the decimal representation of the native token and the ETH token.
+       **/
+      nativeToEthRatio: u64 & AugmentedConst<ApiType>;
+    };
     scheduler: {
       /**
        * The maximum weight that may be scheduled per block for any dispatchables.
@@ -426,6 +516,14 @@ declare module '@polkadot/api-base/types/consts' {
        * Maximum number of venue signers.
        **/
       maxNumberOfVenueSigners: u32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum number of times an instruction can be relocked.
+       **/
+      maxRelockCount: u32 & AugmentedConst<ApiType>;
+      /**
+       * The minimum cooldown period a mediator must wait after unlocking before relocking an instruction.
+       **/
+      relockCooldown: u64 & AugmentedConst<ApiType>;
     };
     staking: {
       /**
