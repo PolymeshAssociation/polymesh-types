@@ -7,11 +7,14 @@ import '@polkadot/api-base/types/events';
 
 import type { ApiTypes, AugmentedEvent } from '@polkadot/api-base/types';
 import type {
+  BTreeMap,
   BTreeSet,
   Bytes,
   Null,
   Option,
   Result,
+  Struct,
+  Text,
   U8aFixed,
   Vec,
   bool,
@@ -26,6 +29,9 @@ import type {
   FrameSupportTokensMiscBalanceStatus,
   FrameSystemDispatchEventInfo,
   PalletBalancesUnexpectedKind,
+  PalletConfidentialAssetsCurveTreeCurveTreeTimestamp,
+  PalletConfidentialAssetsCurveTreeTimestampedTreeRoot,
+  PalletConfidentialAssetsSettlementSettlementStatus,
   PalletContractsOrigin,
   PalletCorporateActionsBallotBallotMeta,
   PalletCorporateActionsBallotBallotTimeRange,
@@ -50,6 +56,15 @@ import type {
   PolymeshContractsApi,
   PolymeshContractsChainExtensionExtrinsicId,
   PolymeshContractsChainVersion,
+  PolymeshDartBpAccountAccountStateCommitment,
+  PolymeshDartBpBatchedProofHash,
+  PolymeshDartBpFeeFeeAccountStateCommitment,
+  PolymeshDartBpKeysAccountPublicKey,
+  PolymeshDartBpKeysEncryptionPublicKey,
+  PolymeshDartBpLegLegRef,
+  PolymeshDartBpLegSettlementRef,
+  PolymeshDartCurveTreeCommonCompressedLeafValue,
+  PolymeshDartCurveTreeCompressedCurveTreeRoot,
   PolymeshPrimitivesAgentAgentGroup,
   PolymeshPrimitivesAssetAssetHolder,
   PolymeshPrimitivesAssetAssetId,
@@ -99,6 +114,26 @@ export type __AugmentedEvent<ApiType extends ApiTypes> = AugmentedEvent<ApiType>
 declare module '@polkadot/api-base/types/events' {
   interface AugmentedEvents<ApiType extends ApiTypes> {
     asset: {
+      /**
+       * A spender used part of an allowance.
+       **/
+      AllowanceSpent: AugmentedEvent<
+        ApiType,
+        [
+          owner: AccountId32,
+          spender: AccountId32,
+          assetId: PolymeshPrimitivesAssetAssetId,
+          amountSpent: u128,
+          remainingAllowance: u128,
+        ],
+        {
+          owner: AccountId32;
+          spender: AccountId32;
+          assetId: PolymeshPrimitivesAssetAssetId;
+          amountSpent: u128;
+          remainingAllowance: u128;
+        }
+      >;
       /**
        * A spender allowance was set for an asset.
        **/
@@ -934,6 +969,354 @@ declare module '@polkadot/api-base/types/events' {
       TrustedDefaultClaimIssuerRemoved: AugmentedEvent<
         ApiType,
         [PolymeshPrimitivesIdentityId, PolymeshPrimitivesAssetAssetId, PolymeshPrimitivesIdentityId]
+      >;
+    };
+    confidentialAssets: {
+      /**
+       * Account asset registered.
+       **/
+      AccountAssetRegistered: AugmentedEvent<
+        ApiType,
+        [
+          callerDid: PolymeshPrimitivesIdentityId,
+          account: PolymeshDartBpKeysAccountPublicKey,
+          assetId: u32,
+        ],
+        {
+          callerDid: PolymeshPrimitivesIdentityId;
+          account: PolymeshDartBpKeysAccountPublicKey;
+          assetId: u32;
+        }
+      >;
+      /**
+       * Account curve tree root updated.
+       **/
+      AccountCurveTreeRootUpdated: AugmentedEvent<
+        ApiType,
+        [
+          root: {
+            readonly root: PolymeshDartCurveTreeCompressedCurveTreeRoot;
+            readonly timestamp: PalletConfidentialAssetsCurveTreeCurveTreeTimestamp;
+          } & Struct,
+        ],
+        {
+          root: {
+            readonly root: PolymeshDartCurveTreeCompressedCurveTreeRoot;
+            readonly timestamp: PalletConfidentialAssetsCurveTreeCurveTreeTimestamp;
+          } & Struct;
+        }
+      >;
+      /**
+       * A new Confidential account has been registered.
+       **/
+      AccountRegistered: AugmentedEvent<
+        ApiType,
+        [
+          callerDid: PolymeshPrimitivesIdentityId,
+          account: PolymeshDartBpKeysAccountPublicKey,
+          encryptionKey: PolymeshDartBpKeysEncryptionPublicKey,
+        ],
+        {
+          callerDid: PolymeshPrimitivesIdentityId;
+          account: PolymeshDartBpKeysAccountPublicKey;
+          encryptionKey: PolymeshDartBpKeysEncryptionPublicKey;
+        }
+      >;
+      /**
+       * Account curve tree leaf inserted.
+       *
+       * This curve tree is append-only, so we only store the new leaf.
+       **/
+      AccountStateLeafInserted: AugmentedEvent<
+        ApiType,
+        [leafIndex: u64, accountCommitment: PolymeshDartBpAccountAccountStateCommitment],
+        { leafIndex: u64; accountCommitment: PolymeshDartBpAccountAccountStateCommitment }
+      >;
+      /**
+       * A new Confidential asset has been created.
+       **/
+      AssetCreated: AugmentedEvent<
+        ApiType,
+        [
+          callerDid: PolymeshPrimitivesIdentityId,
+          assetId: u32,
+          mediators: BTreeMap<
+            PolymeshDartBpKeysAccountPublicKey,
+            PolymeshDartBpKeysEncryptionPublicKey
+          >,
+          auditors: BTreeSet<PolymeshDartBpKeysEncryptionPublicKey>,
+          name: Text,
+          symbol_: Text,
+          decimals: u8,
+          data: Bytes,
+        ],
+        {
+          callerDid: PolymeshPrimitivesIdentityId;
+          assetId: u32;
+          mediators: BTreeMap<
+            PolymeshDartBpKeysAccountPublicKey,
+            PolymeshDartBpKeysEncryptionPublicKey
+          >;
+          auditors: BTreeSet<PolymeshDartBpKeysEncryptionPublicKey>;
+          name: Text;
+          symbol: Text;
+          decimals: u8;
+          data: Bytes;
+        }
+      >;
+      /**
+       * Asset curve tree root updated.
+       **/
+      AssetCurveTreeRootUpdated: AugmentedEvent<
+        ApiType,
+        [
+          root: {
+            readonly root: PolymeshDartCurveTreeCompressedCurveTreeRoot;
+            readonly timestamp: PalletConfidentialAssetsCurveTreeCurveTreeTimestamp;
+          } & Struct,
+        ],
+        {
+          root: {
+            readonly root: PolymeshDartCurveTreeCompressedCurveTreeRoot;
+            readonly timestamp: PalletConfidentialAssetsCurveTreeCurveTreeTimestamp;
+          } & Struct;
+        }
+      >;
+      /**
+       * Minted Confidential asset.
+       **/
+      AssetMinted: AugmentedEvent<
+        ApiType,
+        [
+          callerDid: PolymeshPrimitivesIdentityId,
+          assetId: u32,
+          amount: u128,
+          totalSupply: u128,
+          account: PolymeshDartBpKeysAccountPublicKey,
+        ],
+        {
+          callerDid: PolymeshPrimitivesIdentityId;
+          assetId: u32;
+          amount: u128;
+          totalSupply: u128;
+          account: PolymeshDartBpKeysAccountPublicKey;
+        }
+      >;
+      /**
+       * An asset state leaf has been updated.
+       *
+       * This curve tree is mutable, so we can update existing leaves.
+       **/
+      AssetStateLeafUpdated: AugmentedEvent<
+        ApiType,
+        [leafIndex: u64, assetLeaf: PolymeshDartCurveTreeCommonCompressedLeafValue],
+        { leafIndex: u64; assetLeaf: PolymeshDartCurveTreeCommonCompressedLeafValue }
+      >;
+      /**
+       * A Confidential asset has been updated.
+       **/
+      AssetUpdated: AugmentedEvent<
+        ApiType,
+        [
+          callerDid: PolymeshPrimitivesIdentityId,
+          assetId: u32,
+          mediators: BTreeMap<
+            PolymeshDartBpKeysAccountPublicKey,
+            PolymeshDartBpKeysEncryptionPublicKey
+          >,
+          auditors: BTreeSet<PolymeshDartBpKeysEncryptionPublicKey>,
+        ],
+        {
+          callerDid: PolymeshPrimitivesIdentityId;
+          assetId: u32;
+          mediators: BTreeMap<
+            PolymeshDartBpKeysAccountPublicKey,
+            PolymeshDartBpKeysEncryptionPublicKey
+          >;
+          auditors: BTreeSet<PolymeshDartBpKeysEncryptionPublicKey>;
+        }
+      >;
+      /**
+       * An encryption key has been registered.
+       **/
+      EncryptionKeyRegistered: AugmentedEvent<
+        ApiType,
+        [
+          callerDid: PolymeshPrimitivesIdentityId,
+          encryptionKey: PolymeshDartBpKeysEncryptionPublicKey,
+        ],
+        {
+          callerDid: PolymeshPrimitivesIdentityId;
+          encryptionKey: PolymeshDartBpKeysEncryptionPublicKey;
+        }
+      >;
+      /**
+       * Fee account curve tree root updated.
+       **/
+      FeeAccountCurveTreeRootUpdated: AugmentedEvent<
+        ApiType,
+        [root: PalletConfidentialAssetsCurveTreeTimestampedTreeRoot],
+        { root: PalletConfidentialAssetsCurveTreeTimestampedTreeRoot }
+      >;
+      /**
+       * POLYX deposited into the fee account.
+       **/
+      FeeAccountDeposited: AugmentedEvent<
+        ApiType,
+        [sender: AccountId32, amount: u128],
+        { sender: AccountId32; amount: u128 }
+      >;
+      /**
+       * Fee account curve tree leaf inserted.
+       *
+       * This curve tree is append-only, so we only store the new leaf.
+       **/
+      FeeAccountStateLeafInserted: AugmentedEvent<
+        ApiType,
+        [leafIndex: u64, feeAccountCommitment: PolymeshDartBpFeeFeeAccountStateCommitment],
+        { leafIndex: u64; feeAccountCommitment: PolymeshDartBpFeeFeeAccountStateCommitment }
+      >;
+      /**
+       * Fee account updated.
+       *
+       * This event is emitted for both registration and top-up of fee accounts.
+       **/
+      FeeAccountUpdated: AugmentedEvent<
+        ApiType,
+        [
+          callerDid: PolymeshPrimitivesIdentityId,
+          account: PolymeshDartBpKeysAccountPublicKey,
+          isRegistration: bool,
+          amount: u128,
+        ],
+        {
+          callerDid: PolymeshPrimitivesIdentityId;
+          account: PolymeshDartBpKeysAccountPublicKey;
+          isRegistration: bool;
+          amount: u128;
+        }
+      >;
+      /**
+       * POLYX withdrawn from the fee account.
+       **/
+      FeeAccountWithdrawn: AugmentedEvent<
+        ApiType,
+        [receiver: AccountId32, amount: u128],
+        { receiver: AccountId32; amount: u128 }
+      >;
+      /**
+       * Mediator has affirmed a leg.
+       **/
+      MediatorAffirmed: AugmentedEvent<
+        ApiType,
+        [legRef: PolymeshDartBpLegLegRef, keyIndex: u8],
+        { legRef: PolymeshDartBpLegLegRef; keyIndex: u8 }
+      >;
+      /**
+       * Mediator has rejected a leg.
+       **/
+      MediatorRejected: AugmentedEvent<
+        ApiType,
+        [legRef: PolymeshDartBpLegLegRef, keyIndex: u8],
+        { legRef: PolymeshDartBpLegLegRef; keyIndex: u8 }
+      >;
+      /**
+       * Receiver has reverted their affirmation for a leg.
+       **/
+      ReceiverAffirmationReverted: AugmentedEvent<
+        ApiType,
+        [legRef: PolymeshDartBpLegLegRef],
+        { legRef: PolymeshDartBpLegLegRef }
+      >;
+      /**
+       * Receiver has affirmed a leg.
+       **/
+      ReceiverAffirmed: AugmentedEvent<
+        ApiType,
+        [legRef: PolymeshDartBpLegLegRef],
+        { legRef: PolymeshDartBpLegLegRef }
+      >;
+      /**
+       * Receiver has claimed assets.
+       **/
+      ReceiverClaimed: AugmentedEvent<
+        ApiType,
+        [legRef: PolymeshDartBpLegLegRef],
+        { legRef: PolymeshDartBpLegLegRef }
+      >;
+      /**
+       * Relayer submitted batched proofs including fee payment.
+       **/
+      RelayerBatchedProofs: AugmentedEvent<
+        ApiType,
+        [
+          relayer: AccountId32,
+          amount: u128,
+          batchHash: PolymeshDartBpBatchedProofHash,
+          batchResult: Result<Null, SpRuntimeDispatchError>,
+        ],
+        {
+          relayer: AccountId32;
+          amount: u128;
+          batchHash: PolymeshDartBpBatchedProofHash;
+          batchResult: Result<Null, SpRuntimeDispatchError>;
+        }
+      >;
+      /**
+       * Sender has reverted their affirmation for a leg.
+       **/
+      SenderAffirmationReverted: AugmentedEvent<
+        ApiType,
+        [legRef: PolymeshDartBpLegLegRef],
+        { legRef: PolymeshDartBpLegLegRef }
+      >;
+      /**
+       * Sender has affirmed a leg.
+       **/
+      SenderAffirmed: AugmentedEvent<
+        ApiType,
+        [legRef: PolymeshDartBpLegLegRef],
+        { legRef: PolymeshDartBpLegLegRef }
+      >;
+      /**
+       * Sender updated counter.
+       **/
+      SenderCounterUpdated: AugmentedEvent<
+        ApiType,
+        [legRef: PolymeshDartBpLegLegRef],
+        { legRef: PolymeshDartBpLegLegRef }
+      >;
+      /**
+       * Settlement created.
+       **/
+      SettlementCreated: AugmentedEvent<
+        ApiType,
+        [
+          settlementRef: PolymeshDartBpLegSettlementRef,
+          memo: Bytes,
+          assetRootBlock: u32,
+          legs: Vec<Bytes>,
+        ],
+        {
+          settlementRef: PolymeshDartBpLegSettlementRef;
+          memo: Bytes;
+          assetRootBlock: u32;
+          legs: Vec<Bytes>;
+        }
+      >;
+      /**
+       * Settlement status updated.
+       **/
+      SettlementStatusUpdated: AugmentedEvent<
+        ApiType,
+        [
+          settlementRef: PolymeshDartBpLegSettlementRef,
+          status: PalletConfidentialAssetsSettlementSettlementStatus,
+        ],
+        {
+          settlementRef: PolymeshDartBpLegSettlementRef;
+          status: PalletConfidentialAssetsSettlementSettlementStatus;
+        }
       >;
     };
     contracts: {

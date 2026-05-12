@@ -20,6 +20,7 @@ import type {
   FrameSupportDispatchPerDispatchClassWeight,
   FrameSupportDispatchPerDispatchClassWeightsPerClass,
   FrameSupportDispatchRawOrigin,
+  FrameSupportPalletId,
   FrameSupportPreimagesBounded,
   FrameSupportStorageNoDrop,
   FrameSupportTokensFungibleImbalance,
@@ -77,6 +78,15 @@ import type {
   PalletComplianceManagerCall,
   PalletComplianceManagerError,
   PalletComplianceManagerEvent,
+  PalletConfidentialAssetsAssetDetails,
+  PalletConfidentialAssetsCall,
+  PalletConfidentialAssetsCurveTreeCurveTreeTimestamp,
+  PalletConfidentialAssetsCurveTreeTimestampedTreeRoot,
+  PalletConfidentialAssetsError,
+  PalletConfidentialAssetsEvent,
+  PalletConfidentialAssetsSettlementAffirmationStatus,
+  PalletConfidentialAssetsSettlementLegAffirmParty,
+  PalletConfidentialAssetsSettlementSettlementStatus,
   PalletContractsCall,
   PalletContractsEnvironment,
   PalletContractsEnvironmentTypeAccountId32,
@@ -351,6 +361,56 @@ import type {
   PolymeshContractsError,
   PolymeshContractsEvent,
   PolymeshContractsNextUpgrade,
+  PolymeshDartBpAccountAccountAssetRegistrationProof,
+  PolymeshDartBpAccountAccountStateCommitment,
+  PolymeshDartBpAccountAccountStateNullifier,
+  PolymeshDartBpAccountBatchedAccountAssetRegistrationProof,
+  PolymeshDartBpAffirmationProofsInstantReceiverAffirmationProof,
+  PolymeshDartBpAffirmationProofsInstantSenderAffirmationProof,
+  PolymeshDartBpAffirmationProofsReceiverAffirmationProof,
+  PolymeshDartBpAffirmationProofsReceiverClaimProof,
+  PolymeshDartBpAffirmationProofsReceiverRevertAffirmationProof,
+  PolymeshDartBpAffirmationProofsSenderAffirmationProof,
+  PolymeshDartBpAffirmationProofsSenderCounterUpdateProof,
+  PolymeshDartBpAffirmationProofsSenderRevertAffirmationProof,
+  PolymeshDartBpAssetAssetKeys,
+  PolymeshDartBpAssetAssetMintingProof,
+  PolymeshDartBpBatchedBatchedProof,
+  PolymeshDartBpBatchedBatchedProofs,
+  PolymeshDartBpBatchedProofHash,
+  PolymeshDartBpEncodeCompressedAffine,
+  PolymeshDartBpEncodeCompressedBaseField,
+  PolymeshDartBpFeeBatchedFeeAccountRegistrationProof,
+  PolymeshDartBpFeeBatchedFeeAccountTopupProof,
+  PolymeshDartBpFeeFeeAccountPaymentProof,
+  PolymeshDartBpFeeFeeAccountRegistrationProof,
+  PolymeshDartBpFeeFeeAccountStateCommitment,
+  PolymeshDartBpFeeFeeAccountStateNullifier,
+  PolymeshDartBpFeeFeeAccountTopupProof,
+  PolymeshDartBpFeeFeePaymentWithBatchedProofs,
+  PolymeshDartBpKeysAccountPublicKey,
+  PolymeshDartBpKeysAccountPublicKeys,
+  PolymeshDartBpKeysAccountRegistrationProof,
+  PolymeshDartBpKeysEncryptionKeyRegistrationProof,
+  PolymeshDartBpKeysEncryptionPublicKey,
+  PolymeshDartBpLegAnySettlementLegProof,
+  PolymeshDartBpLegInstantInstantSettlementLegAffirmations,
+  PolymeshDartBpLegInstantInstantSettlementProof,
+  PolymeshDartBpLegLegRef,
+  PolymeshDartBpLegProofsBatchedSettlementLegAffirmations,
+  PolymeshDartBpLegProofsBatchedSettlementProof,
+  PolymeshDartBpLegProofsMediatorAffirmationProof,
+  PolymeshDartBpLegSettlementLegProof,
+  PolymeshDartBpLegSettlementLegProofRevealedAssetId,
+  PolymeshDartBpLegSettlementProof,
+  PolymeshDartBpLegSettlementRef,
+  PolymeshDartCurveTreeAccountTreeConfig,
+  PolymeshDartCurveTreeAssetTreeConfig,
+  PolymeshDartCurveTreeCommonCompressedInner,
+  PolymeshDartCurveTreeCommonCompressedLeafValue,
+  PolymeshDartCurveTreeCommonNodeLocation,
+  PolymeshDartCurveTreeCommonNodePosition,
+  PolymeshDartCurveTreeCompressedCurveTreeRoot,
   PolymeshPrimitivesAgentAgentGroup,
   PolymeshPrimitivesAssetAssetHolder,
   PolymeshPrimitivesAssetAssetHolderKind,
@@ -533,6 +593,7 @@ declare module '@polkadot/types/types/registry' {
     FrameSupportDispatchPerDispatchClassWeight: FrameSupportDispatchPerDispatchClassWeight;
     FrameSupportDispatchPerDispatchClassWeightsPerClass: FrameSupportDispatchPerDispatchClassWeightsPerClass;
     FrameSupportDispatchRawOrigin: FrameSupportDispatchRawOrigin;
+    FrameSupportPalletId: FrameSupportPalletId;
     FrameSupportPreimagesBounded: FrameSupportPreimagesBounded;
     FrameSupportStorageNoDrop: FrameSupportStorageNoDrop;
     FrameSupportTokensFungibleImbalance: FrameSupportTokensFungibleImbalance;
@@ -590,6 +651,15 @@ declare module '@polkadot/types/types/registry' {
     PalletComplianceManagerCall: PalletComplianceManagerCall;
     PalletComplianceManagerError: PalletComplianceManagerError;
     PalletComplianceManagerEvent: PalletComplianceManagerEvent;
+    PalletConfidentialAssetsAssetDetails: PalletConfidentialAssetsAssetDetails;
+    PalletConfidentialAssetsCall: PalletConfidentialAssetsCall;
+    PalletConfidentialAssetsCurveTreeCurveTreeTimestamp: PalletConfidentialAssetsCurveTreeCurveTreeTimestamp;
+    PalletConfidentialAssetsCurveTreeTimestampedTreeRoot: PalletConfidentialAssetsCurveTreeTimestampedTreeRoot;
+    PalletConfidentialAssetsError: PalletConfidentialAssetsError;
+    PalletConfidentialAssetsEvent: PalletConfidentialAssetsEvent;
+    PalletConfidentialAssetsSettlementAffirmationStatus: PalletConfidentialAssetsSettlementAffirmationStatus;
+    PalletConfidentialAssetsSettlementLegAffirmParty: PalletConfidentialAssetsSettlementLegAffirmParty;
+    PalletConfidentialAssetsSettlementSettlementStatus: PalletConfidentialAssetsSettlementSettlementStatus;
     PalletContractsCall: PalletContractsCall;
     PalletContractsEnvironment: PalletContractsEnvironment;
     PalletContractsEnvironmentTypeAccountId32: PalletContractsEnvironmentTypeAccountId32;
@@ -864,6 +934,56 @@ declare module '@polkadot/types/types/registry' {
     PolymeshContractsError: PolymeshContractsError;
     PolymeshContractsEvent: PolymeshContractsEvent;
     PolymeshContractsNextUpgrade: PolymeshContractsNextUpgrade;
+    PolymeshDartBpAccountAccountAssetRegistrationProof: PolymeshDartBpAccountAccountAssetRegistrationProof;
+    PolymeshDartBpAccountAccountStateCommitment: PolymeshDartBpAccountAccountStateCommitment;
+    PolymeshDartBpAccountAccountStateNullifier: PolymeshDartBpAccountAccountStateNullifier;
+    PolymeshDartBpAccountBatchedAccountAssetRegistrationProof: PolymeshDartBpAccountBatchedAccountAssetRegistrationProof;
+    PolymeshDartBpAffirmationProofsInstantReceiverAffirmationProof: PolymeshDartBpAffirmationProofsInstantReceiverAffirmationProof;
+    PolymeshDartBpAffirmationProofsInstantSenderAffirmationProof: PolymeshDartBpAffirmationProofsInstantSenderAffirmationProof;
+    PolymeshDartBpAffirmationProofsReceiverAffirmationProof: PolymeshDartBpAffirmationProofsReceiverAffirmationProof;
+    PolymeshDartBpAffirmationProofsReceiverClaimProof: PolymeshDartBpAffirmationProofsReceiverClaimProof;
+    PolymeshDartBpAffirmationProofsReceiverRevertAffirmationProof: PolymeshDartBpAffirmationProofsReceiverRevertAffirmationProof;
+    PolymeshDartBpAffirmationProofsSenderAffirmationProof: PolymeshDartBpAffirmationProofsSenderAffirmationProof;
+    PolymeshDartBpAffirmationProofsSenderCounterUpdateProof: PolymeshDartBpAffirmationProofsSenderCounterUpdateProof;
+    PolymeshDartBpAffirmationProofsSenderRevertAffirmationProof: PolymeshDartBpAffirmationProofsSenderRevertAffirmationProof;
+    PolymeshDartBpAssetAssetKeys: PolymeshDartBpAssetAssetKeys;
+    PolymeshDartBpAssetAssetMintingProof: PolymeshDartBpAssetAssetMintingProof;
+    PolymeshDartBpBatchedBatchedProof: PolymeshDartBpBatchedBatchedProof;
+    PolymeshDartBpBatchedBatchedProofs: PolymeshDartBpBatchedBatchedProofs;
+    PolymeshDartBpBatchedProofHash: PolymeshDartBpBatchedProofHash;
+    PolymeshDartBpEncodeCompressedAffine: PolymeshDartBpEncodeCompressedAffine;
+    PolymeshDartBpEncodeCompressedBaseField: PolymeshDartBpEncodeCompressedBaseField;
+    PolymeshDartBpFeeBatchedFeeAccountRegistrationProof: PolymeshDartBpFeeBatchedFeeAccountRegistrationProof;
+    PolymeshDartBpFeeBatchedFeeAccountTopupProof: PolymeshDartBpFeeBatchedFeeAccountTopupProof;
+    PolymeshDartBpFeeFeeAccountPaymentProof: PolymeshDartBpFeeFeeAccountPaymentProof;
+    PolymeshDartBpFeeFeeAccountRegistrationProof: PolymeshDartBpFeeFeeAccountRegistrationProof;
+    PolymeshDartBpFeeFeeAccountStateCommitment: PolymeshDartBpFeeFeeAccountStateCommitment;
+    PolymeshDartBpFeeFeeAccountStateNullifier: PolymeshDartBpFeeFeeAccountStateNullifier;
+    PolymeshDartBpFeeFeeAccountTopupProof: PolymeshDartBpFeeFeeAccountTopupProof;
+    PolymeshDartBpFeeFeePaymentWithBatchedProofs: PolymeshDartBpFeeFeePaymentWithBatchedProofs;
+    PolymeshDartBpKeysAccountPublicKey: PolymeshDartBpKeysAccountPublicKey;
+    PolymeshDartBpKeysAccountPublicKeys: PolymeshDartBpKeysAccountPublicKeys;
+    PolymeshDartBpKeysAccountRegistrationProof: PolymeshDartBpKeysAccountRegistrationProof;
+    PolymeshDartBpKeysEncryptionKeyRegistrationProof: PolymeshDartBpKeysEncryptionKeyRegistrationProof;
+    PolymeshDartBpKeysEncryptionPublicKey: PolymeshDartBpKeysEncryptionPublicKey;
+    PolymeshDartBpLegAnySettlementLegProof: PolymeshDartBpLegAnySettlementLegProof;
+    PolymeshDartBpLegInstantInstantSettlementLegAffirmations: PolymeshDartBpLegInstantInstantSettlementLegAffirmations;
+    PolymeshDartBpLegInstantInstantSettlementProof: PolymeshDartBpLegInstantInstantSettlementProof;
+    PolymeshDartBpLegLegRef: PolymeshDartBpLegLegRef;
+    PolymeshDartBpLegProofsBatchedSettlementLegAffirmations: PolymeshDartBpLegProofsBatchedSettlementLegAffirmations;
+    PolymeshDartBpLegProofsBatchedSettlementProof: PolymeshDartBpLegProofsBatchedSettlementProof;
+    PolymeshDartBpLegProofsMediatorAffirmationProof: PolymeshDartBpLegProofsMediatorAffirmationProof;
+    PolymeshDartBpLegSettlementLegProof: PolymeshDartBpLegSettlementLegProof;
+    PolymeshDartBpLegSettlementLegProofRevealedAssetId: PolymeshDartBpLegSettlementLegProofRevealedAssetId;
+    PolymeshDartBpLegSettlementProof: PolymeshDartBpLegSettlementProof;
+    PolymeshDartBpLegSettlementRef: PolymeshDartBpLegSettlementRef;
+    PolymeshDartCurveTreeAccountTreeConfig: PolymeshDartCurveTreeAccountTreeConfig;
+    PolymeshDartCurveTreeAssetTreeConfig: PolymeshDartCurveTreeAssetTreeConfig;
+    PolymeshDartCurveTreeCommonCompressedInner: PolymeshDartCurveTreeCommonCompressedInner;
+    PolymeshDartCurveTreeCommonCompressedLeafValue: PolymeshDartCurveTreeCommonCompressedLeafValue;
+    PolymeshDartCurveTreeCommonNodeLocation: PolymeshDartCurveTreeCommonNodeLocation;
+    PolymeshDartCurveTreeCommonNodePosition: PolymeshDartCurveTreeCommonNodePosition;
+    PolymeshDartCurveTreeCompressedCurveTreeRoot: PolymeshDartCurveTreeCompressedCurveTreeRoot;
     PolymeshPrimitivesAgentAgentGroup: PolymeshPrimitivesAgentAgentGroup;
     PolymeshPrimitivesAssetAssetHolder: PolymeshPrimitivesAssetAssetHolder;
     PolymeshPrimitivesAssetAssetHolderKind: PolymeshPrimitivesAssetAssetHolderKind;

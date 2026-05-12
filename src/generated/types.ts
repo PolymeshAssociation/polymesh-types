@@ -942,6 +942,30 @@ export enum MultiBlockMigrationsTx {
   ClearHistoric = 'multiBlockMigrations.clearHistoric',
 }
 
+export enum ConfidentialAssetsTx {
+  RegisterAccounts = 'confidentialAssets.registerAccounts',
+  RegisterEncryptionKeys = 'confidentialAssets.registerEncryptionKeys',
+  CreateAsset = 'confidentialAssets.createAsset',
+  RegisterAccountAssets = 'confidentialAssets.registerAccountAssets',
+  MintAsset = 'confidentialAssets.mintAsset',
+  CreateSettlement = 'confidentialAssets.createSettlement',
+  SenderAffirmation = 'confidentialAssets.senderAffirmation',
+  ReceiverAffirmation = 'confidentialAssets.receiverAffirmation',
+  MediatorAffirmation = 'confidentialAssets.mediatorAffirmation',
+  SenderUpdateCounter = 'confidentialAssets.senderUpdateCounter',
+  SenderRevertAffirmation = 'confidentialAssets.senderRevertAffirmation',
+  ReceiverRevertAffirmation = 'confidentialAssets.receiverRevertAffirmation',
+  ReceiverClaim = 'confidentialAssets.receiverClaim',
+  BatchedSettlement = 'confidentialAssets.batchedSettlement',
+  RegisterFeeAccounts = 'confidentialAssets.registerFeeAccounts',
+  TopupFeeAccounts = 'confidentialAssets.topupFeeAccounts',
+  SubmitBatchedProofs = 'confidentialAssets.submitBatchedProofs',
+  RelayerSubmitBatchedProofs = 'confidentialAssets.relayerSubmitBatchedProofs',
+  ExecuteInstantSettlement = 'confidentialAssets.executeInstantSettlement',
+  InstantSenderAffirmation = 'confidentialAssets.instantSenderAffirmation',
+  InstantReceiverAffirmation = 'confidentialAssets.instantReceiverAffirmation',
+}
+
 export enum ModuleName {
   System = 'system',
   Babe = 'babe',
@@ -996,6 +1020,7 @@ export enum ModuleName {
   Beefy = 'beefy',
   Revive = 'revive',
   MultiBlockMigrations = 'multiBlockMigrations',
+  ConfidentialAssets = 'confidentialAssets',
 }
 
 export type TxTag =
@@ -1051,7 +1076,8 @@ export type TxTag =
   | PolymeshTransactionPaymentTx
   | BeefyTx
   | ReviveTx
-  | MultiBlockMigrationsTx;
+  | MultiBlockMigrationsTx
+  | ConfidentialAssetsTx;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const TxTags = {
@@ -1108,4 +1134,5 @@ export const TxTags = {
   beefy: BeefyTx,
   revive: ReviveTx,
   multiBlockMigrations: MultiBlockMigrationsTx,
+  confidentialAssets: ConfidentialAssetsTx,
 };

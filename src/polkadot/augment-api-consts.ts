@@ -7,8 +7,9 @@ import '@polkadot/api-base/types/consts';
 
 import type { ApiTypes, AugmentedConst } from '@polkadot/api-base/types';
 import type { bool, u128, u16, u32, u64, u8 } from '@polkadot/types-codec';
-import type { Perbill, Permill } from '@polkadot/types/interfaces/runtime';
+import type { AccountId32, Perbill, Permill } from '@polkadot/types/interfaces/runtime';
 import type {
+  FrameSupportPalletId,
   FrameSystemLimitsBlockLength,
   FrameSystemLimitsBlockWeights,
   PalletContractsEnvironment,
@@ -135,6 +136,82 @@ declare module '@polkadot/api-base/types/consts' {
        * The maximum claim reads that are allowed to happen in worst case of a condition resolution
        **/
       maxConditionComplexity: u32 & AugmentedConst<ApiType>;
+    };
+    confidentialAssets: {
+      /**
+       * Get the Confidential Assets fee account id.
+       **/
+      feeAccountId: AccountId32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum number of account asset registration proofs in a single transaction.
+       **/
+      maxAccountAssetRegProofs: u32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum age of historical account curve tree roots.
+       **/
+      maxAccountCurveTreeRootAge: u64 & AugmentedConst<ApiType>;
+      /**
+       * The maximum number of asset auditors.
+       **/
+      maxAssetAuditors: u32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum age of historical asset curve tree roots.
+       **/
+      maxAssetCurveTreeRootAge: u64 & AugmentedConst<ApiType>;
+      /**
+       * Maximum asset data length.
+       **/
+      maxAssetDataLength: u32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum number of asset encryption keys (mediators + auditors).
+       **/
+      maxAssetEncryptionKeys: u32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum number of asset mediators.
+       **/
+      maxAssetMediators: u32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum number of proofs in a single batched proof.
+       **/
+      maxBatchedProofs: u32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum age of historical fee account curve tree roots.
+       **/
+      maxFeeAccountCurveTreeRootAge: u64 & AugmentedConst<ApiType>;
+      /**
+       * The maximum number of fee account registration proofs in a single transaction.
+       **/
+      maxFeeAccountRegProofs: u32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum number of fee account topup proofs in a single transaction.
+       **/
+      maxFeeAccountTopupProofs: u32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum number of keys in an account registration proof.
+       **/
+      maxKeysPerRegProof: u32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum number of legs in a settlement.
+       **/
+      maxSettlementLegs: u32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum settlement memo length.
+       **/
+      maxSettlementMemoLength: u32 & AugmentedConst<ApiType>;
+      /**
+       * Maximum total supply.
+       **/
+      maxTotalSupply: u128 & AugmentedConst<ApiType>;
+      /**
+       * The minimum time between curve tree root updates.
+       *
+       * If there hasn't been transactions to cause a curve tree root update for a while, a new root will be recorded.
+       **/
+      minCurveTreeRootUpdateInterval: u64 & AugmentedConst<ApiType>;
+      /**
+       * Get the Confidential Assets fee pallet id.
+       **/
+      palletFeeId: FrameSupportPalletId & AugmentedConst<ApiType>;
     };
     contracts: {
       /**

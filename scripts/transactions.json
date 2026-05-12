@@ -634,5 +634,28 @@
     "force_set_active_cursor": "force_set_active_cursor",
     "force_onboard_mbms": "force_onboard_mbms",
     "clear_historic": "clear_historic"
+  },
+  "ConfidentialAssets": {
+    "register_accounts": "register_accounts",
+    "register_encryption_keys": "register_encryption_keys",
+    "create_asset": "create_asset",
+    "register_account_assets": "register_account_assets",
+    "mint_asset": "mint_asset",
+    "create_settlement": "create_settlement",
+    "sender_affirmation": "sender_affirmation",
+    "receiver_affirmation": "receiver_affirmation",
+    "mediator_affirmation": "mediator_affirmation",
+    "sender_update_counter": "sender_update_counter",
+    "sender_revert_affirmation": "sender_revert_affirmation",
+    "receiver_revert_affirmation": "receiver_revert_affirmation",
+    "receiver_claim": "receiver_claim",
+    "batched_settlement": "batched_settlement",
+    "register_fee_accounts": "register_fee_accounts",
+    "topup_fee_accounts": "topup_fee_accounts",
+    "submit_batched_proofs": "submit_batched_proofs",
+    "relayer_submit_batched_proofs": "relayer_submit_batched_proofs",
+    "execute_instant_settlement": "execute_instant_settlement",
+    "instant_sender_affirmation": "instant_sender_affirmation",
+    "instant_receiver_affirmation": "instant_receiver_affirmation"
   }
 }

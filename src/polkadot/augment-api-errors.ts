@@ -508,6 +508,192 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       WeightLimitExceeded: AugmentedError<ApiType>;
     };
+    confidentialAssets: {
+      /**
+       * Confidential account already exists.
+       **/
+      AccountAlreadyCreated: AugmentedError<ApiType>;
+      /**
+       * Confidential account has already registered that asset.
+       **/
+      AccountAssetAlreadyRegistered: AugmentedError<ApiType>;
+      /**
+       * Confidential account hasn't been registered yet.
+       **/
+      AccountMissing: AugmentedError<ApiType>;
+      /**
+       * Already affirmed.
+       **/
+      AlreadyAffirmed: AugmentedError<ApiType>;
+      /**
+       * Already finalized.
+       **/
+      AlreadyFinalized: AugmentedError<ApiType>;
+      /**
+       * Already rejected.
+       **/
+      AlreadyRejected: AugmentedError<ApiType>;
+      /**
+       * Amount overflow.
+       **/
+      AmountOverflow: AugmentedError<ApiType>;
+      /**
+       * Confidential asset hasn't been registered yet.
+       **/
+      AssetMissing: AugmentedError<ApiType>;
+      /**
+       * Asset state is invalid.
+       **/
+      AssetStateInvalid: AugmentedError<ApiType>;
+      /**
+       * Batched settlement has invalid leg references.
+       **/
+      BatchedSettlementInvalidLegRefs: AugmentedError<ApiType>;
+      /**
+       * CurveTree error.
+       **/
+      CurveTreeError: AugmentedError<ApiType>;
+      /**
+       * CurveTree parameters not set.
+       **/
+      CurveTreeParametersNotSet: AugmentedError<ApiType>;
+      /**
+       * CurveTree root not found.
+       **/
+      CurveTreeRootNotFound: AugmentedError<ApiType>;
+      /**
+       * Batch of proofs can't be empty.
+       **/
+      EmptyBatchedProofs: AugmentedError<ApiType>;
+      /**
+       * Encryption key already registered.
+       **/
+      EncryptionKeyAlreadyRegistered: AugmentedError<ApiType>;
+      /**
+       * Encryption key for the Confidential account is missing.
+       **/
+      EncryptionKeyMissing: AugmentedError<ApiType>;
+      /**
+       * Confidential fee account already registered.
+       **/
+      FeeAccountAlreadyRegistered: AugmentedError<ApiType>;
+      /**
+       * Confidential fee account hasn't been registered yet.
+       **/
+      FeeAccountMissing: AugmentedError<ApiType>;
+      /**
+       * Insufficient fee payment amount.
+       **/
+      InsufficientFeePaymentAmount: AugmentedError<ApiType>;
+      /**
+       * Invalid affirmation status transition.
+       **/
+      InvalidAffirmationStatusTransition: AugmentedError<ApiType>;
+      /**
+       * Invalid asset name.
+       **/
+      InvalidAssetName: AugmentedError<ApiType>;
+      /**
+       * Invalid fee asset id.
+       **/
+      InvalidFeeAssetId: AugmentedError<ApiType>;
+      /**
+       * Invalid Fee Payment proof.
+       **/
+      InvalidFeePaymentProof: AugmentedError<ApiType>;
+      /**
+       * Invalid proof provided.
+       **/
+      InvalidProof: AugmentedError<ApiType>;
+      /**
+       * Leaf not found in the curve tree.
+       **/
+      LeafNotFound: AugmentedError<ApiType>;
+      /**
+       * Leg not found in the settlement.
+       **/
+      LegNotFound: AugmentedError<ApiType>;
+      /**
+       * The asset total supply cannot exceed the maximum total supply.
+       **/
+      MaxTotalSupplyExceeded: AugmentedError<ApiType>;
+      /**
+       * Name too long for the asset.
+       **/
+      NameTooLong: AugmentedError<ApiType>;
+      /**
+       * Confidential assets require at least one mediator or auditor.
+       **/
+      NoAuditorsOrMediators: AugmentedError<ApiType>;
+      /**
+       * No current worker session.
+       **/
+      NoCurrentWorkerSession: AugmentedError<ApiType>;
+      /**
+       * No pending affirmations for this settlement.
+       **/
+      NoPendingAffirmations: AugmentedError<ApiType>;
+      /**
+       * The caller is not the owner of the Confidential account.
+       **/
+      NotAccountOwner: AugmentedError<ApiType>;
+      /**
+       * The caller is not the owner of the Confidential asset.
+       **/
+      NotAssetOwner: AugmentedError<ApiType>;
+      /**
+       * Not the last pending affirmation for the settlement.
+       **/
+      NotLastPendingAffirmation: AugmentedError<ApiType>;
+      /**
+       * The nullifier for the account state commitment has already been used.
+       **/
+      NullifierAlreadyUsed: AugmentedError<ApiType>;
+      /**
+       * Settlement has executed, cannot be reverted.
+       **/
+      SettlementAlreadyExecuted: AugmentedError<ApiType>;
+      /**
+       * Settlement already exists.
+       **/
+      SettlementAlreadyExists: AugmentedError<ApiType>;
+      /**
+       * Settlement is missing legs.
+       **/
+      SettlementMissingLegs: AugmentedError<ApiType>;
+      /**
+       * Settlement not executed.
+       **/
+      SettlementNotExecuted: AugmentedError<ApiType>;
+      /**
+       * Settlement not found.
+       **/
+      SettlementNotFound: AugmentedError<ApiType>;
+      /**
+       * Settlement not pending.
+       **/
+      SettlementNotPending: AugmentedError<ApiType>;
+      /**
+       * Settlement has too many legs.
+       **/
+      SettlementTooManyLegs: AugmentedError<ApiType>;
+      /**
+       * Symbol too long for the asset.
+       **/
+      SymbolTooLong: AugmentedError<ApiType>;
+      /**
+       * Too many decimals for the asset.
+       **/
+      TooManyDecimals: AugmentedError<ApiType>;
+      /**
+       * Too many mediators for this leg.
+       **/
+      TooManyMediators: AugmentedError<ApiType>;
+      /**
+       * Wrong mediator id for this leg.
+       **/
+      WrongMediatorId: AugmentedError<ApiType>;
+    };
     contracts: {
       /**
        * Can not add a delegate dependency to the code hash of the contract itself.

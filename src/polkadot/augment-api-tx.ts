@@ -12,10 +12,12 @@ import type {
   SubmittableExtrinsicFunction,
 } from '@polkadot/api-base/types';
 import type {
+  BTreeMap,
   BTreeSet,
   Bytes,
   Compact,
   Option,
+  Text,
   U256,
   U8aFixed,
   Vec,
@@ -68,6 +70,28 @@ import type {
   PolymeshContractsApi,
   PolymeshContractsChainExtensionExtrinsicId,
   PolymeshContractsNextUpgrade,
+  PolymeshDartBpAccountBatchedAccountAssetRegistrationProof,
+  PolymeshDartBpAffirmationProofsInstantReceiverAffirmationProof,
+  PolymeshDartBpAffirmationProofsInstantSenderAffirmationProof,
+  PolymeshDartBpAffirmationProofsReceiverAffirmationProof,
+  PolymeshDartBpAffirmationProofsReceiverClaimProof,
+  PolymeshDartBpAffirmationProofsReceiverRevertAffirmationProof,
+  PolymeshDartBpAffirmationProofsSenderAffirmationProof,
+  PolymeshDartBpAffirmationProofsSenderCounterUpdateProof,
+  PolymeshDartBpAffirmationProofsSenderRevertAffirmationProof,
+  PolymeshDartBpAssetAssetMintingProof,
+  PolymeshDartBpBatchedBatchedProofs,
+  PolymeshDartBpFeeBatchedFeeAccountRegistrationProof,
+  PolymeshDartBpFeeBatchedFeeAccountTopupProof,
+  PolymeshDartBpFeeFeePaymentWithBatchedProofs,
+  PolymeshDartBpKeysAccountPublicKey,
+  PolymeshDartBpKeysAccountRegistrationProof,
+  PolymeshDartBpKeysEncryptionKeyRegistrationProof,
+  PolymeshDartBpKeysEncryptionPublicKey,
+  PolymeshDartBpLegInstantInstantSettlementProof,
+  PolymeshDartBpLegProofsBatchedSettlementProof,
+  PolymeshDartBpLegProofsMediatorAffirmationProof,
+  PolymeshDartBpLegSettlementProof,
   PolymeshPrimitivesAgentAgentGroup,
   PolymeshPrimitivesAssetAssetHolder,
   PolymeshPrimitivesAssetAssetHolderKind,
@@ -2325,6 +2349,580 @@ declare module '@polkadot/api-base/types/submittable' {
           assetId: PolymeshPrimitivesAssetAssetId | string | Uint8Array
         ) => SubmittableExtrinsic<ApiType>,
         [PolymeshPrimitivesAssetAssetId]
+      >;
+    };
+    confidentialAssets: {
+      /**
+       * Create a settlement with batched leg affirmations.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call.
+       * * `proof` - The settlement proof with batched leg affirmations.
+       *
+       * # Errors
+       * * `BadOrigin` if `origin` isn't signed.
+       * * `InvalidProof` if the proof is invalid.
+       * * `SettlementMissingLegs` if the settlement has no legs.
+       * * `SettlementTooManyLegs` if the settlement has more legs than the maximum allowed.
+       **/
+      batchedSettlement: AugmentedSubmittable<
+        (
+          proof:
+            | PolymeshDartBpLegProofsBatchedSettlementProof
+            | { settlement?: any; legAffirmations?: any }
+            | string
+            | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshDartBpLegProofsBatchedSettlementProof]
+      >;
+      /**
+       * Create a new Confidential Asset.
+       *
+       * # Arguments
+       * * `auditor_or_mediator` - The auditor or mediator public key.
+       *
+       * # Errors
+       * * `BadOrigin` if `origin` isn't signed.
+       * * `AccountMissing` if the auditor or mediator is not registered.
+       * * `EncryptionKeyMissing` if the encryption key of the auditor or mediator is not registered.
+       **/
+      createAsset: AugmentedSubmittable<
+        (
+          name: Text | string,
+          symbol: Text | string,
+          decimals: u8 | AnyNumber | Uint8Array,
+          mediators: BTreeMap<
+            PolymeshDartBpKeysAccountPublicKey,
+            PolymeshDartBpKeysEncryptionPublicKey
+          >,
+          auditors: BTreeSet<PolymeshDartBpKeysEncryptionPublicKey>,
+          data: Bytes | string | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [
+          Text,
+          Text,
+          u8,
+          BTreeMap<PolymeshDartBpKeysAccountPublicKey, PolymeshDartBpKeysEncryptionPublicKey>,
+          BTreeSet<PolymeshDartBpKeysEncryptionPublicKey>,
+          Bytes,
+        ]
+      >;
+      /**
+       * Create a new settlement.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call.
+       * * `proof` - The settlement proof.
+       *
+       * # Errors
+       * * `BadOrigin` if `origin` isn't signed.
+       * * `InvalidProof` if the proof is invalid.
+       * * `SettlementMissingLegs` if the settlement has no legs.
+       * * `SettlementTooManyLegs` if the settlement has more legs than the maximum allowed.
+       **/
+      createSettlement: AugmentedSubmittable<
+        (
+          proof:
+            | PolymeshDartBpLegSettlementProof
+            | { memo?: any; rootBlock?: any; legs?: any }
+            | string
+            | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshDartBpLegSettlementProof]
+      >;
+      /**
+       * Create and execute an instant settlement.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call.
+       * * `proof` - The settlement proof with batched leg affirmations.
+       *
+       * # Errors
+       * * `BadOrigin` if `origin` isn't signed.
+       * * `InvalidProof` if the proof is invalid.
+       * * `SettlementMissingLegs` if the settlement has no legs.
+       * * `SettlementTooManyLegs` if the settlement has more legs than the maximum allowed.
+       **/
+      executeInstantSettlement: AugmentedSubmittable<
+        (
+          proof:
+            | PolymeshDartBpLegInstantInstantSettlementProof
+            | { settlement?: any; legAffirmations?: any }
+            | string
+            | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshDartBpLegInstantInstantSettlementProof]
+      >;
+      /**
+       * Receiver affirms a settlement leg as the last pending affirmation.
+       *
+       * This can only be used when the receiver affirmation is the last pending affirmation for the settlement.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call.
+       * * `proof` - The instant receiver affirmation proof.
+       *
+       * # Errors
+       * * `BadOrigin` if `origin` isn't signed.
+       * * `SettlementNotPending` if the settlement is not pending.
+       * * `SettlementNotFound` if the settlement is not found.
+       * * `LegNotFound` if the leg is not found in the settlement.
+       * * `AlreadyAffirmed` if the leg has already been affirmed by the receiver.
+       * * `NotLastPendingAffirmation` if the receiver affirmation is not the last pending affirmation for the settlement.
+       **/
+      instantReceiverAffirmation: AugmentedSubmittable<
+        (
+          proof:
+            | PolymeshDartBpAffirmationProofsInstantReceiverAffirmationProof
+            | {
+                legRef?: any;
+                rootBlock?: any;
+                updatedAccountStateCommitment?: any;
+                nullifier?: any;
+                inner?: any;
+              }
+            | string
+            | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshDartBpAffirmationProofsInstantReceiverAffirmationProof]
+      >;
+      /**
+       * Sender affirms a settlement leg as the last pending affirmation.
+       *
+       * This can only be used when the sender affirmation is the last pending affirmation for the settlement.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call.
+       * * `proof` - The instant sender affirmation proof.
+       *
+       * # Errors
+       * * `BadOrigin` if `origin` isn't signed.
+       * * `SettlementNotPending` if the settlement is not pending.
+       * * `SettlementNotFound` if the settlement is not found.
+       * * `LegNotFound` if the leg is not found in the settlement.
+       * * `AlreadyAffirmed` if the leg has already been affirmed by the sender.
+       * * `NotLastPendingAffirmation` if the sender affirmation is not the last pending affirmation for the settlement.
+       **/
+      instantSenderAffirmation: AugmentedSubmittable<
+        (
+          proof:
+            | PolymeshDartBpAffirmationProofsInstantSenderAffirmationProof
+            | {
+                legRef?: any;
+                rootBlock?: any;
+                updatedAccountStateCommitment?: any;
+                nullifier?: any;
+                inner?: any;
+              }
+            | string
+            | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshDartBpAffirmationProofsInstantSenderAffirmationProof]
+      >;
+      /**
+       * Mediator affirms a settlement leg.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call.
+       * * `proof` - The mediator affirmation proof.
+       *
+       * # Errors
+       * * `BadOrigin` if `origin` isn't signed.
+       * * `SettlementNotPending` if the settlement is not pending.
+       * * `SettlementNotFound` if the settlement is not found.
+       * * `LegNotFound` if the leg is not found in the settlement.
+       * * `AlreadyAffirmed` if the leg has already been affirmed by the mediator.
+       * * `WrongMediatorId` if the mediator ID does not match the expected mediator for the leg.
+       **/
+      mediatorAffirmation: AugmentedSubmittable<
+        (
+          proof:
+            | PolymeshDartBpLegProofsMediatorAffirmationProof
+            | { legRef?: any; accept?: any; keyIndex?: any; inner?: any }
+            | string
+            | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshDartBpLegProofsMediatorAffirmationProof]
+      >;
+      /**
+       * Mint a Confidential asset.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call. They must be the owner of the Confidential asset and Confidential account.
+       * * `proof` - The minting proof.
+       *
+       * # Errors
+       * * `BadOrigin` if `origin` isn't signed.
+       * * `AccountMissing` if the Confidential account is not registered.
+       * * `AssetMissing` if the Confidential asset is not registered.
+       * * `NotAccountOwner` if the caller is not the owner of the Confidential account.
+       * * `InvalidProof` if the proof is invalid.
+       * * `NotAssetOwner` if the caller is not the owner of the Confidential asset.
+       * * `MaxTotalSupplyExceeded` if the total supply of the Confidential asset exceeds the maximum total supply.
+       * * `NullifierAlreadyUsed` if the nullifier for the account state commitment has already been used.
+       **/
+      mintAsset: AugmentedSubmittable<
+        (
+          proof:
+            | PolymeshDartBpAssetAssetMintingProof
+            | {
+                pk?: any;
+                pkEnc?: any;
+                assetId?: any;
+                amount?: any;
+                rootBlock?: any;
+                updatedAccountStateCommitment?: any;
+                nullifier?: any;
+                inner?: any;
+              }
+            | string
+            | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshDartBpAssetAssetMintingProof]
+      >;
+      /**
+       * Receiver affirms a settlement leg.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call.
+       * * `proof` - The receiver affirmation proof.
+       *
+       * # Errors
+       * * `BadOrigin` if `origin` isn't signed.
+       * * `SettlementNotPending` if the settlement is not pending.
+       * * `SettlementNotFound` if the settlement is not found.
+       * * `LegNotFound` if the leg is not found in the settlement.
+       * * `AlreadyAffirmed` if the leg has already been affirmed by the receiver.
+       **/
+      receiverAffirmation: AugmentedSubmittable<
+        (
+          proof:
+            | PolymeshDartBpAffirmationProofsReceiverAffirmationProof
+            | {
+                legRef?: any;
+                rootBlock?: any;
+                updatedAccountStateCommitment?: any;
+                nullifier?: any;
+                inner?: any;
+              }
+            | string
+            | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshDartBpAffirmationProofsReceiverAffirmationProof]
+      >;
+      /**
+       * Receiver claims their assets after a settlement has been executed.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call.
+       * * `proof` - The receiver claim proof.
+       *
+       * # Errors
+       * * `BadOrigin` if `origin` isn't signed.
+       * * `SettlementNotExecuted` if the settlement has not been executed.
+       * * `SettlementNotFound` if the settlement is not found.
+       * * `LegNotFound` if the leg is not found in the settlement.
+       **/
+      receiverClaim: AugmentedSubmittable<
+        (
+          proof:
+            | PolymeshDartBpAffirmationProofsReceiverClaimProof
+            | {
+                legRef?: any;
+                rootBlock?: any;
+                updatedAccountStateCommitment?: any;
+                nullifier?: any;
+                inner?: any;
+              }
+            | string
+            | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshDartBpAffirmationProofsReceiverClaimProof]
+      >;
+      /**
+       * Receiver reverts their affirmation.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call.
+       * * `proof` - The receiver revert affirmation proof.
+       *
+       * # Errors
+       * * `BadOrigin` if `origin` isn't signed.
+       * * `SettlementAlreadyExecuted` if the settlement has already been executed.
+       * * `SettlementNotFound` if the settlement is not found.
+       * * `LegNotFound` if the leg is not found in the settlement.
+       **/
+      receiverRevertAffirmation: AugmentedSubmittable<
+        (
+          proof:
+            | PolymeshDartBpAffirmationProofsReceiverRevertAffirmationProof
+            | {
+                legRef?: any;
+                rootBlock?: any;
+                updatedAccountStateCommitment?: any;
+                nullifier?: any;
+                inner?: any;
+              }
+            | string
+            | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshDartBpAffirmationProofsReceiverRevertAffirmationProof]
+      >;
+      /**
+       * Batch register multiple accounts and assets.
+       *
+       * This is used to initialize the first account state commitment of the Confidential asset for the Confidential account.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call.  They must be the owner of the Confidential account.
+       * * `proof` - The Batched Account asset registration proof.
+       *
+       * # Errors
+       * * `BadOrigin` if `origin` isn't signed.
+       * * `AccountMissing` if the Confidential account is not registered.
+       * * `AssetMissing` if the Confidential asset is not registered.
+       * * `AccountAssetAlreadyRegistered` if the Confidential account has already registered the Confidential asset.
+       * * `NotAccountOwner` if the caller is not the owner of the Confidential account.
+       * * `InvalidProof` if the proof is invalid.
+       **/
+      registerAccountAssets: AugmentedSubmittable<
+        (
+          proof:
+            | PolymeshDartBpAccountBatchedAccountAssetRegistrationProof
+            | { proofs?: any }
+            | string
+            | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshDartBpAccountBatchedAccountAssetRegistrationProof]
+      >;
+      /**
+       * Register a dart account.
+       *
+       * # Arguments
+       * * `account` the dart account to register.
+       * * `encryption_key` the encryption key for the dart account.
+       *
+       * # Errors
+       * * `BadOrigin` if `origin` isn't signed.
+       * * `AccountAlreadyCreated` if the dart account or encryption key is already registered.
+       **/
+      registerAccounts: AugmentedSubmittable<
+        (
+          proof:
+            | PolymeshDartBpKeysAccountRegistrationProof
+            | { accounts?: any; inner?: any }
+            | string
+            | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshDartBpKeysAccountRegistrationProof]
+      >;
+      /**
+       * Register encryption keys for auditors/mediators.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call.
+       * * `proof` - The auditor/mediator encryption registration proof.
+       *
+       * # Errors
+       * * `BadOrigin` if `origin` isn't signed.
+       * * `EncryptionKeyAlreadyRegistered` if the encryption key is already registered.
+       * * `InvalidProof` if the proof is invalid.
+       **/
+      registerEncryptionKeys: AugmentedSubmittable<
+        (
+          proof:
+            | PolymeshDartBpKeysEncryptionKeyRegistrationProof
+            | { keys_?: any; inner?: any }
+            | string
+            | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshDartBpKeysEncryptionKeyRegistrationProof]
+      >;
+      /**
+       * Batch register multiple fee accounts.
+       *
+       * This is used to register fee accounts for Confidential private fee payments.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call.
+       * * `proof` - The batched fee account registration proof.
+       *
+       * # Errors
+       * * `BadOrigin` if `origin` isn't signed.
+       * * `FeeAccountAlreadyRegistered` if the fee account or encryption key is already registered.
+       * * `NullifierAlreadyUsed` if the nullifier for the fee account state commitment has already been used.
+       * * `InvalidFeeAssetId` if the fee asset ID is invalid.
+       * * `InvalidProof` if the proof is invalid.
+       * * `InsufficientBalance` if the caller has insufficient balance to pay the deposit.
+       **/
+      registerFeeAccounts: AugmentedSubmittable<
+        (
+          proof:
+            | PolymeshDartBpFeeBatchedFeeAccountRegistrationProof
+            | { proofs?: any }
+            | string
+            | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshDartBpFeeBatchedFeeAccountRegistrationProof]
+      >;
+      /**
+       * Relayer submit a batch of proofs paid using a private fee payment.
+       *
+       * Users can use a Relayer service to submit their Confidential proofs for privacy (i.e., the origin is not the user).
+       * The Relayer is paid/reimbursed using a private fee payment from the user's Confidential fee account.
+       *
+       * Relayers can charge a commission fee on top of the transaction fee (i.e. `commission fee + transaction fee = fee amount`).
+       *
+       * Relayers should verify that the fee payment proof is valid before submitting the batched Confidential proofs.  They are not required
+       * to verify the batched Confidential proofs.  If the user's Confidential proofs are invalid, the user is still responsible for paying the fee to the relayer.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call.  This is the relayer.
+       * * `proof` - The fee payment proof and batched Confidential proofs.
+       *
+       * # Errors
+       * * `BadOrigin` if `origin` isn't signed.
+       * * `InvalidFeePaymentProof` if the fee payment proof is invalid.
+       * * `InsufficientFeePayment` if the fee payment is insufficient to cover the relayer fee.
+       **/
+      relayerSubmitBatchedProofs: AugmentedSubmittable<
+        (
+          proof:
+            | PolymeshDartBpFeeFeePaymentWithBatchedProofs
+            | { feePayment?: any; batchedProofs?: any }
+            | string
+            | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshDartBpFeeFeePaymentWithBatchedProofs]
+      >;
+      /**
+       * Sender affirms a settlement leg.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call.
+       * * `proof` - The sender affirmation proof.
+       *
+       * # Errors
+       * * `BadOrigin` if `origin` isn't signed.
+       * * `SettlementNotPending` if the settlement is not pending.
+       * * `SettlementNotFound` if the settlement is not found.
+       * * `LegNotFound` if the leg is not found in the settlement.
+       * * `AlreadyAffirmed` if the leg has already been affirmed by the sender.
+       **/
+      senderAffirmation: AugmentedSubmittable<
+        (
+          proof:
+            | PolymeshDartBpAffirmationProofsSenderAffirmationProof
+            | {
+                legRef?: any;
+                rootBlock?: any;
+                updatedAccountStateCommitment?: any;
+                nullifier?: any;
+                inner?: any;
+              }
+            | string
+            | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshDartBpAffirmationProofsSenderAffirmationProof]
+      >;
+      /**
+       * Sender reverts their affirmation.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call.
+       * * `proof` - The sender revert affirmation proof.
+       *
+       * # Errors
+       * * `BadOrigin` if `origin` isn't signed.
+       * * `SettlementAlreadyExecuted` if the settlement has already been executed.
+       * * `SettlementNotFound` if the settlement is not found.
+       * * `LegNotFound` if the leg is not found in the settlement.
+       **/
+      senderRevertAffirmation: AugmentedSubmittable<
+        (
+          proof:
+            | PolymeshDartBpAffirmationProofsSenderRevertAffirmationProof
+            | {
+                legRef?: any;
+                rootBlock?: any;
+                updatedAccountStateCommitment?: any;
+                nullifier?: any;
+                inner?: any;
+              }
+            | string
+            | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshDartBpAffirmationProofsSenderRevertAffirmationProof]
+      >;
+      /**
+       * Sender updates their counter after a settlement has been executed.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call.
+       * * `proof` - The sender update proof.
+       *
+       * # Errors
+       * * `BadOrigin` if `origin` isn't signed.
+       * * `SettlementNotExecuted` if the settlement has not been executed.
+       * * `SettlementNotFound` if the settlement is not found.
+       * * `LegNotFound` if the leg is not found in the settlement.
+       **/
+      senderUpdateCounter: AugmentedSubmittable<
+        (
+          proof:
+            | PolymeshDartBpAffirmationProofsSenderCounterUpdateProof
+            | {
+                legRef?: any;
+                rootBlock?: any;
+                updatedAccountStateCommitment?: any;
+                nullifier?: any;
+                inner?: any;
+              }
+            | string
+            | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshDartBpAffirmationProofsSenderCounterUpdateProof]
+      >;
+      /**
+       * Submit a batch of proofs.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call.
+       * * `proof` - The batched proofs.
+       *
+       * # Errors
+       * * `BadOrigin` if `origin` isn't signed.
+       * * `InvalidProof` if any of the proofs are invalid.
+       **/
+      submitBatchedProofs: AugmentedSubmittable<
+        (
+          proof: PolymeshDartBpBatchedBatchedProofs | { proofs?: any } | string | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshDartBpBatchedBatchedProofs]
+      >;
+      /**
+       * Toup a batch of fee accounts.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call.
+       * * `proof` - The batched fee account topup proof.
+       *
+       * # Errors
+       * * `BadOrigin` if `origin` isn't signed.
+       * * `FeeAccountMissing` if the fee account is not registered.
+       * * `InvalidFeeAssetId` if the fee asset ID is invalid.
+       * * `InvalidProof` if the proof is invalid.
+       * * `InsufficientBalance` if the caller has insufficient balance to pay the deposit.
+       **/
+      topupFeeAccounts: AugmentedSubmittable<
+        (
+          proof:
+            | PolymeshDartBpFeeBatchedFeeAccountTopupProof
+            | { rootBlock?: any; proofs?: any }
+            | string
+            | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshDartBpFeeBatchedFeeAccountTopupProof]
       >;
     };
     contracts: {

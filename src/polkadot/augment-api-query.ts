@@ -9,6 +9,7 @@ import type { ApiTypes, AugmentedQuery, QueryableStorageEntry } from '@polkadot/
 import type {
   BTreeSet,
   Bytes,
+  Compact,
   Null,
   Option,
   Struct,
@@ -48,6 +49,12 @@ import type {
   PalletBalancesBalanceLock,
   PalletBalancesReserveData,
   PalletCommitteePolymeshVotes,
+  PalletConfidentialAssetsAssetDetails,
+  PalletConfidentialAssetsCurveTreeCurveTreeTimestamp,
+  PalletConfidentialAssetsCurveTreeTimestampedTreeRoot,
+  PalletConfidentialAssetsSettlementAffirmationStatus,
+  PalletConfidentialAssetsSettlementLegAffirmParty,
+  PalletConfidentialAssetsSettlementSettlementStatus,
   PalletContractsStorageContractInfo,
   PalletContractsStorageDeletionQueueManager,
   PalletContractsWasmCodeInfo,
@@ -107,6 +114,18 @@ import type {
   PolymeshContractsApiCodeHash,
   PolymeshContractsChainExtensionExtrinsicId,
   PolymeshContractsNextUpgrade,
+  PolymeshDartBpAccountAccountStateCommitment,
+  PolymeshDartBpAccountAccountStateNullifier,
+  PolymeshDartBpAssetAssetKeys,
+  PolymeshDartBpFeeFeeAccountStateCommitment,
+  PolymeshDartBpFeeFeeAccountStateNullifier,
+  PolymeshDartBpKeysAccountPublicKey,
+  PolymeshDartBpKeysEncryptionPublicKey,
+  PolymeshDartBpLegSettlementRef,
+  PolymeshDartCurveTreeCommonCompressedInner,
+  PolymeshDartCurveTreeCommonCompressedLeafValue,
+  PolymeshDartCurveTreeCommonNodeLocation,
+  PolymeshDartCurveTreeCompressedCurveTreeRoot,
   PolymeshPrimitivesAgentAgentGroup,
   PolymeshPrimitivesAssetAssetHolder,
   PolymeshPrimitivesAssetAssetId,
@@ -1040,6 +1059,523 @@ declare module '@polkadot/api-base/types/storage' {
           arg: PolymeshPrimitivesAssetAssetId | string | Uint8Array
         ) => Observable<Vec<PolymeshPrimitivesConditionTrustedIssuer>>,
         [PolymeshPrimitivesAssetAssetId]
+      >;
+    };
+    confidentialAssets: {
+      /**
+       * Confidential account asset registrations.
+       *
+       * The chain must prevent the same account from registering the same asset multiple times.
+       *
+       * This is a double map where the first key is the account public key and the second key is the asset ID.
+       **/
+      accountAssetRegistrations: AugmentedQuery<
+        ApiType,
+        (
+          arg1: PolymeshDartBpKeysAccountPublicKey | string | Uint8Array,
+          arg2: u32 | AnyNumber | Uint8Array
+        ) => Observable<bool>,
+        [PolymeshDartBpKeysAccountPublicKey, u32]
+      >;
+      /**
+       * The current CurveTree Root for Confidential accounts curve tree.
+       **/
+      accountCurveTreeCurrentRoot: AugmentedQuery<
+        ApiType,
+        () => Observable<
+          Option<
+            {
+              readonly root: PolymeshDartCurveTreeCompressedCurveTreeRoot;
+              readonly timestamp: PalletConfidentialAssetsCurveTreeCurveTreeTimestamp;
+            } & Struct
+          >
+        >,
+        []
+      >;
+      /**
+       * The height of the accounts curve tree.
+       **/
+      accountCurveTreeHeight: AugmentedQuery<ApiType, () => Observable<u8>, []>;
+      /**
+       * The block number of the last account curve tree root pruned.
+       *
+       * For keeping track of the current pruning point of the account curve tree roots.
+       **/
+      accountCurveTreeLastPruned: AugmentedQuery<ApiType, () => Observable<u32>, []>;
+      /**
+       * The block number of the last account curve tree root update.
+       *
+       * This is used to track the last time the account curve tree was updated.
+       **/
+      accountCurveTreeLastUpdate: AugmentedQuery<
+        ApiType,
+        () => Observable<PalletConfidentialAssetsCurveTreeCurveTreeTimestamp>,
+        []
+      >;
+      /**
+       * CurveTree Roots for Confidential accounts curve tree.
+       *
+       * At the end of each block we will store the root of the accounts curve tree.
+       * The map key is the block number and the value is the root of the accounts curve tree.
+       **/
+      accountCurveTreeRoots: AugmentedQuery<
+        ApiType,
+        (arg: u32 | AnyNumber | Uint8Array) => Observable<
+          Option<
+            {
+              readonly root: PolymeshDartCurveTreeCompressedCurveTreeRoot;
+              readonly timestamp: PalletConfidentialAssetsCurveTreeCurveTreeTimestamp;
+            } & Struct
+          >
+        >,
+        [u32]
+      >;
+      /**
+       * Confidential account to identity mapping.
+       **/
+      accountDid: AugmentedQuery<
+        ApiType,
+        (
+          arg: PolymeshDartBpKeysAccountPublicKey | string | Uint8Array
+        ) => Observable<Option<PolymeshPrimitivesIdentityId>>,
+        [PolymeshDartBpKeysAccountPublicKey]
+      >;
+      /**
+       * Mapping of Confidential account public keys to their encryption keys.
+       **/
+      accountEncryptionKey: AugmentedQuery<
+        ApiType,
+        (
+          arg: PolymeshDartBpKeysAccountPublicKey | string | Uint8Array
+        ) => Observable<Option<PolymeshDartBpKeysEncryptionPublicKey>>,
+        [PolymeshDartBpKeysAccountPublicKey]
+      >;
+      /**
+       * Inner node storage for Confidential accounts curve tree.
+       **/
+      accountInnerNodes: AugmentedQuery<
+        ApiType,
+        (
+          arg:
+            | PolymeshDartCurveTreeCommonNodeLocation
+            | { Leaf: any }
+            | { Odd: any }
+            | { Even: any }
+            | string
+            | Uint8Array
+        ) => Observable<Option<PolymeshDartCurveTreeCommonCompressedInner>>,
+        [PolymeshDartCurveTreeCommonNodeLocation]
+      >;
+      /**
+       * Leaf storage for Confidential accounts curve tree.
+       *
+       * The leaves are immutable, so we use a simple storage map.
+       **/
+      accountLeaves: AugmentedQuery<
+        ApiType,
+        (
+          arg: u64 | AnyNumber | Uint8Array
+        ) => Observable<Option<PolymeshDartBpAccountAccountStateCommitment>>,
+        [u64]
+      >;
+      /**
+       * Nullifiers for Confidential account state commitments.
+       *
+       * This is used to ensure that the same account state commitment cannot be used twice.
+       **/
+      accountStateCommitmentNullifiers: AugmentedQuery<
+        ApiType,
+        (
+          arg: PolymeshDartBpAccountAccountStateNullifier | string | Uint8Array
+        ) => Observable<Option<Null>>,
+        [PolymeshDartBpAccountAccountStateNullifier]
+      >;
+      /**
+       * The current CurveTree Root for Confidential assets curve tree.
+       **/
+      assetCurveTreeCurrentRoot: AugmentedQuery<
+        ApiType,
+        () => Observable<
+          Option<
+            {
+              readonly root: PolymeshDartCurveTreeCompressedCurveTreeRoot;
+              readonly timestamp: PalletConfidentialAssetsCurveTreeCurveTreeTimestamp;
+            } & Struct
+          >
+        >,
+        []
+      >;
+      /**
+       * The height of the assets curve tree.
+       **/
+      assetCurveTreeHeight: AugmentedQuery<ApiType, () => Observable<u8>, []>;
+      /**
+       * The block number of the last asset curve tree root pruned.
+       *
+       * For keeping track of the current pruning point of the asset curve tree roots.
+       **/
+      assetCurveTreeLastPruned: AugmentedQuery<ApiType, () => Observable<u32>, []>;
+      /**
+       * The block number of the last asset curve tree root update.
+       *
+       * This is used to track the last time the asset curve tree was updated.
+       **/
+      assetCurveTreeLastUpdate: AugmentedQuery<
+        ApiType,
+        () => Observable<PalletConfidentialAssetsCurveTreeCurveTreeTimestamp>,
+        []
+      >;
+      /**
+       * CurveTree Roots for Confidential assets curve tree.
+       *
+       * At the end of each block we will store the root of the assets curve tree.
+       * The map key is the block number and the value is the root of the assets curve tree.
+       **/
+      assetCurveTreeRoots: AugmentedQuery<
+        ApiType,
+        (arg: u32 | AnyNumber | Uint8Array) => Observable<
+          Option<
+            {
+              readonly root: PolymeshDartCurveTreeCompressedCurveTreeRoot;
+              readonly timestamp: PalletConfidentialAssetsCurveTreeCurveTreeTimestamp;
+            } & Struct
+          >
+        >,
+        [u32]
+      >;
+      /**
+       * Inner node storage for Confidential assets curve tree.
+       **/
+      assetInnerNodes: AugmentedQuery<
+        ApiType,
+        (
+          arg:
+            | PolymeshDartCurveTreeCommonNodeLocation
+            | { Leaf: any }
+            | { Odd: any }
+            | { Even: any }
+            | string
+            | Uint8Array
+        ) => Observable<Option<PolymeshDartCurveTreeCommonCompressedInner>>,
+        [PolymeshDartCurveTreeCommonNodeLocation]
+      >;
+      /**
+       * Leaf storage for Confidential assets curve tree.
+       *
+       * A counted map is used since we need to support updating the leaves in the tree.
+       **/
+      assetLeaves: AugmentedQuery<
+        ApiType,
+        (
+          arg: u64 | AnyNumber | Uint8Array
+        ) => Observable<Option<PolymeshDartCurveTreeCommonCompressedLeafValue>>,
+        [u64]
+      >;
+      /**
+       * Cache DART parameters.
+       **/
+      cachedDartParameters: AugmentedQuery<ApiType, () => Observable<Option<Bytes>>, []>;
+      /**
+       * Counter for the related counted storage map
+       **/
+      counterForAssetLeaves: AugmentedQuery<ApiType, () => Observable<u32>, []>;
+      /**
+       * The WorkerSessionId for the current block.
+       **/
+      currentWorkerSessionId: AugmentedQuery<ApiType, () => Observable<Option<u32>>, []>;
+      /**
+       * A Confidential assets token decimals.
+       **/
+      decimals: AugmentedQuery<
+        ApiType,
+        (arg: u32 | AnyNumber | Uint8Array) => Observable<Option<u8>>,
+        [u32]
+      >;
+      /**
+       * Mapping of Confidential Asset ID to its details.
+       **/
+      details: AugmentedQuery<
+        ApiType,
+        (
+          arg: u32 | AnyNumber | Uint8Array
+        ) => Observable<Option<PalletConfidentialAssetsAssetDetails>>,
+        [u32]
+      >;
+      /**
+       * Mapping of identity to their Confidential accounts.
+       **/
+      didAccounts: AugmentedQuery<
+        ApiType,
+        (
+          arg1: PolymeshPrimitivesIdentityId | string | Uint8Array,
+          arg2: PolymeshDartBpKeysAccountPublicKey | string | Uint8Array
+        ) => Observable<Option<Null>>,
+        [PolymeshPrimitivesIdentityId, PolymeshDartBpKeysAccountPublicKey]
+      >;
+      /**
+       * Mapping of Confidential encryption keys to their public keys.
+       **/
+      encryptionKeyAccount: AugmentedQuery<
+        ApiType,
+        (
+          arg: PolymeshDartBpKeysEncryptionPublicKey | string | Uint8Array
+        ) => Observable<Option<PolymeshDartBpKeysAccountPublicKey>>,
+        [PolymeshDartBpKeysEncryptionPublicKey]
+      >;
+      /**
+       * Encryption key to identity mapping.
+       *
+       * This is used for the auditor and mediator encryption keys.
+       **/
+      encryptionKeyDid: AugmentedQuery<
+        ApiType,
+        (
+          arg: PolymeshDartBpKeysEncryptionPublicKey | string | Uint8Array
+        ) => Observable<Option<PolymeshPrimitivesIdentityId>>,
+        [PolymeshDartBpKeysEncryptionPublicKey]
+      >;
+      /**
+       * The current CurveTree Root for Confidential fee accounts curve tree.
+       **/
+      feeAccountCurveTreeCurrentRoot: AugmentedQuery<
+        ApiType,
+        () => Observable<Option<PalletConfidentialAssetsCurveTreeTimestampedTreeRoot>>,
+        []
+      >;
+      /**
+       * The height of the fee accounts curve tree.
+       **/
+      feeAccountCurveTreeHeight: AugmentedQuery<ApiType, () => Observable<u8>, []>;
+      /**
+       * The block number of the last fee account curve tree root pruned.
+       *
+       * For keeping track of the current pruning point of the fee account curve tree roots.
+       **/
+      feeAccountCurveTreeLastPruned: AugmentedQuery<ApiType, () => Observable<u32>, []>;
+      /**
+       * The block number of the last fee account curve tree root update.
+       *
+       * This is used to track the last time the fee account curve tree was updated.
+       **/
+      feeAccountCurveTreeLastUpdate: AugmentedQuery<
+        ApiType,
+        () => Observable<PalletConfidentialAssetsCurveTreeCurveTreeTimestamp>,
+        []
+      >;
+      /**
+       * CurveTree Roots for Confidential fee accounts curve tree.
+       *
+       * At the end of each block we will store the root of the fee accounts curve tree.
+       * The map key is the block number and the value is the root of the fee accounts curve tree.
+       **/
+      feeAccountCurveTreeRoots: AugmentedQuery<
+        ApiType,
+        (
+          arg: u32 | AnyNumber | Uint8Array
+        ) => Observable<Option<PalletConfidentialAssetsCurveTreeTimestampedTreeRoot>>,
+        [u32]
+      >;
+      /**
+       * Confidential fee account to identity mapping.
+       **/
+      feeAccountDid: AugmentedQuery<
+        ApiType,
+        (
+          arg: PolymeshDartBpKeysAccountPublicKey | string | Uint8Array
+        ) => Observable<Option<PolymeshPrimitivesIdentityId>>,
+        [PolymeshDartBpKeysAccountPublicKey]
+      >;
+      /**
+       * Inner node storage for Confidential fee accounts curve tree.
+       **/
+      feeAccountInnerNodes: AugmentedQuery<
+        ApiType,
+        (
+          arg:
+            | PolymeshDartCurveTreeCommonNodeLocation
+            | { Leaf: any }
+            | { Odd: any }
+            | { Even: any }
+            | string
+            | Uint8Array
+        ) => Observable<Option<PolymeshDartCurveTreeCommonCompressedInner>>,
+        [PolymeshDartCurveTreeCommonNodeLocation]
+      >;
+      /**
+       * Leaf storage for Confidential fee accounts curve tree.
+       *
+       * The leaves are immutable, so we use a simple storage map.
+       **/
+      feeAccountLeaves: AugmentedQuery<
+        ApiType,
+        (
+          arg: u64 | AnyNumber | Uint8Array
+        ) => Observable<Option<PolymeshDartBpFeeFeeAccountStateCommitment>>,
+        [u64]
+      >;
+      /**
+       * Confidential fee account egistrations.
+       *
+       * The chain must prevent the same account from registering the multiple times.
+       **/
+      feeAccountRegistrations: AugmentedQuery<
+        ApiType,
+        (arg: PolymeshDartBpKeysAccountPublicKey | string | Uint8Array) => Observable<bool>,
+        [PolymeshDartBpKeysAccountPublicKey]
+      >;
+      /**
+       * Nullifiers for Confidential fee account state commitments.
+       *
+       * This is used to ensure that the same fee account state commitment cannot be used twice.
+       **/
+      feeAccountStateCommitmentNullifiers: AugmentedQuery<
+        ApiType,
+        (
+          arg: PolymeshDartBpFeeFeeAccountStateNullifier | string | Uint8Array
+        ) => Observable<Option<Null>>,
+        [PolymeshDartBpFeeFeeAccountStateNullifier]
+      >;
+      /**
+       * Mapping of Confidential Asset ID to its auditor and mediator keys.
+       **/
+      keys: AugmentedQuery<
+        ApiType,
+        (arg: u32 | AnyNumber | Uint8Array) => Observable<Option<PolymeshDartBpAssetAssetKeys>>,
+        [u32]
+      >;
+      /**
+       * The last committed leaf index for Confidential accounts curve tree.
+       *
+       * This is used to do batched inserts into the tree.
+       **/
+      lastCommittedAccountLeafIndex: AugmentedQuery<ApiType, () => Observable<u64>, []>;
+      /**
+       * The last committed leaf index for Confidential fee accounts curve tree.
+       *
+       * This is used to do batched inserts into the tree.
+       **/
+      lastCommittedFeeAccountLeafIndex: AugmentedQuery<ApiType, () => Observable<u64>, []>;
+      /**
+       * The affirmation status of each party in a settlement leg.
+       * This is a triple map where the first key is the settlement ID, the second key is the leg ID, and the third key is the party (sender, receiver, mediator).
+       **/
+      legAffirmationStatus: AugmentedQuery<
+        ApiType,
+        (
+          arg1: PolymeshDartBpLegSettlementRef | string | Uint8Array,
+          arg2: u8 | AnyNumber | Uint8Array,
+          arg3:
+            | PalletConfidentialAssetsSettlementLegAffirmParty
+            | { Sender: any }
+            | { Receiver: any }
+            | { Mediator: any }
+            | string
+            | Uint8Array
+        ) => Observable<Option<PalletConfidentialAssetsSettlementAffirmationStatus>>,
+        [PolymeshDartBpLegSettlementRef, u8, PalletConfidentialAssetsSettlementLegAffirmParty]
+      >;
+      /**
+       * A Confidential assets token name.
+       **/
+      names: AugmentedQuery<
+        ApiType,
+        (arg: u32 | AnyNumber | Uint8Array) => Observable<Option<Text>>,
+        [u32]
+      >;
+      /**
+       * Next leaf index for Confidential accounts curve tree.
+       *
+       * This is used to allocate new leaves in the tree.
+       **/
+      nextAccountLeafIndex: AugmentedQuery<ApiType, () => Observable<u64>, []>;
+      /**
+       * Next Asset ID to be used for Confidential assets.
+       **/
+      nextAssetId: AugmentedQuery<ApiType, () => Observable<u32>, []>;
+      /**
+       * Next leaf index for Confidential fee accounts curve tree.
+       *
+       * This is used to allocate new leaves in the tree.
+       **/
+      nextFeeAccountLeafIndex: AugmentedQuery<ApiType, () => Observable<u64>, []>;
+      /**
+       * Mapping of asset owner to their assets.
+       **/
+      ownerAssets: AugmentedQuery<
+        ApiType,
+        (
+          arg1: PolymeshPrimitivesIdentityId | string | Uint8Array,
+          arg2: u32 | AnyNumber | Uint8Array
+        ) => Observable<Option<Null>>,
+        [PolymeshPrimitivesIdentityId, u32]
+      >;
+      /**
+       * The number of legs in each settlement.
+       **/
+      settlementLegCount: AugmentedQuery<
+        ApiType,
+        (
+          arg: PolymeshDartBpLegSettlementRef | string | Uint8Array
+        ) => Observable<Option<Compact<u32>>>,
+        [PolymeshDartBpLegSettlementRef]
+      >;
+      /**
+       * The settlement legs.
+       *
+       * This is a double map where the first key is the settlement ID and the second key is the leg ID.
+       * The value is the DartSettlementLeg.
+       **/
+      settlementLegs: AugmentedQuery<
+        ApiType,
+        (
+          arg1: PolymeshDartBpLegSettlementRef | string | Uint8Array,
+          arg2: u8 | AnyNumber | Uint8Array
+        ) => Observable<Option<Bytes>>,
+        [PolymeshDartBpLegSettlementRef, u8]
+      >;
+      /**
+       * The settlement memo.
+       **/
+      settlementMemo: AugmentedQuery<
+        ApiType,
+        (arg: PolymeshDartBpLegSettlementRef | string | Uint8Array) => Observable<Option<Bytes>>,
+        [PolymeshDartBpLegSettlementRef]
+      >;
+      /**
+       * The number of pending affirmations for a settlement.
+       * This is used to track when a settlement can be executed.
+       **/
+      settlementPendingAffirmations: AugmentedQuery<
+        ApiType,
+        (arg: PolymeshDartBpLegSettlementRef | string | Uint8Array) => Observable<u32>,
+        [PolymeshDartBpLegSettlementRef]
+      >;
+      /**
+       * The number of pending finalizations for a settlement.
+       * This is used to track when a settlement can be finalized and all storage can be cleaned up.
+       **/
+      settlementPendingFinalizations: AugmentedQuery<
+        ApiType,
+        (arg: PolymeshDartBpLegSettlementRef | string | Uint8Array) => Observable<u32>,
+        [PolymeshDartBpLegSettlementRef]
+      >;
+      /**
+       * The settlement status.
+       **/
+      settlementState: AugmentedQuery<
+        ApiType,
+        (
+          arg: PolymeshDartBpLegSettlementRef | string | Uint8Array
+        ) => Observable<Option<PalletConfidentialAssetsSettlementSettlementStatus>>,
+        [PolymeshDartBpLegSettlementRef]
+      >;
+      /**
+       * A Confidential assets token symbol.
+       **/
+      symbols: AugmentedQuery<
+        ApiType,
+        (arg: u32 | AnyNumber | Uint8Array) => Observable<Option<Text>>,
+        [u32]
       >;
     };
     contracts: {
