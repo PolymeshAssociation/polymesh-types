@@ -166,6 +166,15 @@ import type {
   PalletIndicesCall,
   PalletIndicesError,
   PalletIndicesEvent,
+  PalletMigrationsActiveCursor,
+  PalletMigrationsCall,
+  PalletMigrationsError,
+  PalletMigrationsEvent,
+  PalletMigrationsHistoricCleanupSelector,
+  PalletMigrationsMbmIsOngoing,
+  PalletMigrationsMbmProgress,
+  PalletMigrationsMbmStatus,
+  PalletMigrationsMigrationCursor,
   PalletMultisigCall,
   PalletMultisigError,
   PalletMultisigEvent,
@@ -670,6 +679,15 @@ declare module '@polkadot/types/types/registry' {
     PalletIndicesCall: PalletIndicesCall;
     PalletIndicesError: PalletIndicesError;
     PalletIndicesEvent: PalletIndicesEvent;
+    PalletMigrationsActiveCursor: PalletMigrationsActiveCursor;
+    PalletMigrationsCall: PalletMigrationsCall;
+    PalletMigrationsError: PalletMigrationsError;
+    PalletMigrationsEvent: PalletMigrationsEvent;
+    PalletMigrationsHistoricCleanupSelector: PalletMigrationsHistoricCleanupSelector;
+    PalletMigrationsMbmIsOngoing: PalletMigrationsMbmIsOngoing;
+    PalletMigrationsMbmProgress: PalletMigrationsMbmProgress;
+    PalletMigrationsMbmStatus: PalletMigrationsMbmStatus;
+    PalletMigrationsMigrationCursor: PalletMigrationsMigrationCursor;
     PalletMultisigCall: PalletMultisigCall;
     PalletMultisigError: PalletMultisigError;
     PalletMultisigEvent: PalletMultisigEvent;

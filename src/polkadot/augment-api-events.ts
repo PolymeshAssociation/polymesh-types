@@ -71,6 +71,7 @@ import type {
   PolymeshPrimitivesMaybeBlock,
   PolymeshPrimitivesMemo,
   PolymeshPrimitivesNftNfTs,
+  PolymeshPrimitivesPortfolioFund,
   PolymeshPrimitivesPortfolioFundDescription,
   PolymeshPrimitivesPosRatio,
   PolymeshPrimitivesSecondaryKey,
@@ -1599,6 +1600,60 @@ declare module '@polkadot/api-base/types/events' {
         { index: u32; who: AccountId32 }
       >;
     };
+    multiBlockMigrations: {
+      /**
+       * The set of historical migrations has been cleared.
+       **/
+      HistoricCleared: AugmentedEvent<
+        ApiType,
+        [nextCursor: Option<Bytes>],
+        { nextCursor: Option<Bytes> }
+      >;
+      /**
+       * A migration progressed.
+       **/
+      MigrationAdvanced: AugmentedEvent<
+        ApiType,
+        [index: u32, took: u32],
+        { index: u32; took: u32 }
+      >;
+      /**
+       * A Migration completed.
+       **/
+      MigrationCompleted: AugmentedEvent<
+        ApiType,
+        [index: u32, took: u32],
+        { index: u32; took: u32 }
+      >;
+      /**
+       * A Migration failed.
+       *
+       * This implies that the whole upgrade failed and governance intervention is required.
+       **/
+      MigrationFailed: AugmentedEvent<ApiType, [index: u32, took: u32], { index: u32; took: u32 }>;
+      /**
+       * A migration was skipped since it was already executed in the past.
+       **/
+      MigrationSkipped: AugmentedEvent<ApiType, [index: u32], { index: u32 }>;
+      /**
+       * The current runtime upgrade completed.
+       *
+       * This implies that all of its migrations completed successfully as well.
+       **/
+      UpgradeCompleted: AugmentedEvent<ApiType, []>;
+      /**
+       * Runtime upgrade failed.
+       *
+       * This is very bad and will require governance intervention.
+       **/
+      UpgradeFailed: AugmentedEvent<ApiType, []>;
+      /**
+       * A Runtime upgrade started.
+       *
+       * Its end is indicated by `UpgradeCompleted` or `UpgradeFailed`.
+       **/
+      UpgradeStarted: AugmentedEvent<ApiType, [migrations: u32], { migrations: u32 }>;
+    };
     multiSig: {
       /**
        * A Multisig has added an admin DID.
@@ -2510,6 +2565,24 @@ declare module '@polkadot/api-base/types/events' {
        * Failed to execute instruction.
        **/
       FailedToExecuteInstruction: AugmentedEvent<ApiType, [u64, SpRuntimeDispatchError]>;
+      /**
+       * Funds have been transferred
+       *
+       * Parameters:
+       * - `IdentityId`: The [`IdentityId`] of the caller.
+       * - `AssetHolder`: The source [`AssetHolder`] of the transfer.
+       * - `AssetHolder`: The destination [`AssetHolder`] of the transfer.
+       * - `Fund`: The [`Fund`] being transferred.
+       **/
+      FundsTransferred: AugmentedEvent<
+        ApiType,
+        [
+          PolymeshPrimitivesIdentityId,
+          PolymeshPrimitivesAssetAssetHolder,
+          PolymeshPrimitivesAssetAssetHolder,
+          PolymeshPrimitivesPortfolioFund,
+        ]
+      >;
       /**
        * An instruction has been affirmed (did, asset_holder, instruction_id)
        **/

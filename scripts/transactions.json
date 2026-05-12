@@ -628,5 +628,11 @@
     "map_account": "map_account",
     "unmap_account": "unmap_account",
     "dispatch_as_fallback_account": "dispatch_as_fallback_account"
+  },
+  "MultiBlockMigrations": {
+    "force_set_cursor": "force_set_cursor",
+    "force_set_active_cursor": "force_set_active_cursor",
+    "force_onboard_mbms": "force_onboard_mbms",
+    "clear_historic": "clear_historic"
   }
 }

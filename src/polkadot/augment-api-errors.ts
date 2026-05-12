@@ -1121,6 +1121,12 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       Permanent: AugmentedError<ApiType>;
     };
+    multiBlockMigrations: {
+      /**
+       * The operation cannot complete since some MBMs are ongoing.
+       **/
+      Ongoing: AugmentedError<ApiType>;
+    };
     multiSig: {
       /**
        * Multisig has no admin.
@@ -1373,10 +1379,6 @@ declare module '@polkadot/api-base/types/errors' {
        * Invalid PIP ID. Pip id was not expected to be in the live queue.
        **/
       InvalidPipId: AugmentedError<ApiType>;
-      /**
-       * TaskName cannot exceed 32 bytes.
-       **/
-      InvalidTaskName: AugmentedError<ApiType>;
       /**
        * The current DID is missing.
        **/
@@ -2072,10 +2074,6 @@ declare module '@polkadot/api-base/types/errors' {
        * Offchain signature is invalid.
        **/
       InvalidSignature: AugmentedError<ApiType>;
-      /**
-       * TaskName cannot exceed 32 bytes.
-       **/
-      InvalidTaskName: AugmentedError<ApiType>;
       /**
        * Venue does not exist.
        **/

@@ -935,6 +935,13 @@ export enum ReviveTx {
   DispatchAsFallbackAccount = 'revive.dispatchAsFallbackAccount',
 }
 
+export enum MultiBlockMigrationsTx {
+  ForceSetCursor = 'multiBlockMigrations.forceSetCursor',
+  ForceSetActiveCursor = 'multiBlockMigrations.forceSetActiveCursor',
+  ForceOnboardMbms = 'multiBlockMigrations.forceOnboardMbms',
+  ClearHistoric = 'multiBlockMigrations.clearHistoric',
+}
+
 export enum ModuleName {
   System = 'system',
   Babe = 'babe',
@@ -988,6 +995,7 @@ export enum ModuleName {
   PolymeshTransactionPayment = 'polymeshTransactionPayment',
   Beefy = 'beefy',
   Revive = 'revive',
+  MultiBlockMigrations = 'multiBlockMigrations',
 }
 
 export type TxTag =
@@ -1042,7 +1050,8 @@ export type TxTag =
   | DidRegistrarsTx
   | PolymeshTransactionPaymentTx
   | BeefyTx
-  | ReviveTx;
+  | ReviveTx
+  | MultiBlockMigrationsTx;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const TxTags = {
@@ -1098,4 +1107,5 @@ export const TxTags = {
   polymeshTransactionPayment: PolymeshTransactionPaymentTx,
   beefy: BeefyTx,
   revive: ReviveTx,
+  multiBlockMigrations: MultiBlockMigrationsTx,
 };
