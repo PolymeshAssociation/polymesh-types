@@ -55,9 +55,6 @@ import type {
   PalletConfidentialAssetsSettlementAffirmationStatus,
   PalletConfidentialAssetsSettlementLegAffirmParty,
   PalletConfidentialAssetsSettlementSettlementStatus,
-  PalletContractsStorageContractInfo,
-  PalletContractsStorageDeletionQueueManager,
-  PalletContractsWasmCodeInfo,
   PalletCorporateActionsBallotBallotMeta,
   PalletCorporateActionsBallotBallotTimeRange,
   PalletCorporateActionsBallotBallotVote,
@@ -110,10 +107,6 @@ import type {
   PalletTransactionPaymentReleases,
   PalletValidatorsPermissionedIdentityPrefs,
   PalletValidatorsSlashingSwitch,
-  PolymeshContractsApi,
-  PolymeshContractsApiCodeHash,
-  PolymeshContractsChainExtensionExtrinsicId,
-  PolymeshContractsNextUpgrade,
   PolymeshDartBpAccountAccountStateCommitment,
   PolymeshDartBpAccountAccountStateNullifier,
   PolymeshDartBpAssetAssetKeys,
@@ -1578,86 +1571,6 @@ declare module '@polkadot/api-base/types/storage' {
         [u32]
       >;
     };
-    contracts: {
-      /**
-       * A mapping from a contract's code hash to its code info.
-       **/
-      codeInfoOf: AugmentedQuery<
-        ApiType,
-        (arg: H256 | string | Uint8Array) => Observable<Option<PalletContractsWasmCodeInfo>>,
-        [H256]
-      >;
-      /**
-       * The code associated with a given account.
-       *
-       * TWOX-NOTE: SAFE since `AccountId` is a secure hash.
-       **/
-      contractInfoOf: AugmentedQuery<
-        ApiType,
-        (
-          arg: AccountId32 | string | Uint8Array
-        ) => Observable<Option<PalletContractsStorageContractInfo>>,
-        [AccountId32]
-      >;
-      /**
-       * Evicted contracts that await child trie deletion.
-       *
-       * Child trie deletion is a heavy operation depending on the amount of storage items
-       * stored in said trie. Therefore this operation is performed lazily in `on_idle`.
-       **/
-      deletionQueue: AugmentedQuery<
-        ApiType,
-        (arg: u32 | AnyNumber | Uint8Array) => Observable<Option<Bytes>>,
-        [u32]
-      >;
-      /**
-       * A pair of monotonic counters used to track the latest contract marked for deletion
-       * and the latest deleted contract in queue.
-       **/
-      deletionQueueCounter: AugmentedQuery<
-        ApiType,
-        () => Observable<PalletContractsStorageDeletionQueueManager>,
-        []
-      >;
-      /**
-       * A migration can span across multiple blocks. This storage defines a cursor to track the
-       * progress of the migration, enabling us to resume from the last completed position.
-       **/
-      migrationInProgress: AugmentedQuery<ApiType, () => Observable<Option<Bytes>>, []>;
-      /**
-       * This is a **monotonic** counter incremented on contract instantiation.
-       *
-       * This is used in order to generate unique trie ids for contracts.
-       * The trie id of a new contract is calculated from hash(account_id, nonce).
-       * The nonce is required because otherwise the following sequence would lead to
-       * a possible collision of storage:
-       *
-       * 1. Create a new contract.
-       * 2. Terminate the contract.
-       * 3. Immediately recreate the contract with the same account_id.
-       *
-       * This is bad because the contents of a trie are deleted lazily and there might be
-       * storage of the old instantiation still in it when the new contract is created. Please
-       * note that we can't replace the counter by the block number because the sequence above
-       * can happen in the same block. We also can't keep the account counter in memory only
-       * because storage is the only way to communicate across different extrinsics in the
-       * same block.
-       *
-       * # Note
-       *
-       * Do not use it to determine the number of contracts. It won't be decremented if
-       * a contract is destroyed.
-       **/
-      nonce: AugmentedQuery<ApiType, () => Observable<u64>, []>;
-      /**
-       * A mapping from a contract's code hash to its code.
-       **/
-      pristineCode: AugmentedQuery<
-        ApiType,
-        (arg: H256 | string | Uint8Array) => Observable<Option<Bytes>>,
-        [H256]
-      >;
-    };
     corporateAction: {
       /**
        * Associations from CAs to `Document`s via their IDs.
@@ -2907,40 +2820,6 @@ declare module '@polkadot/api-base/types/storage' {
         (arg: H256 | string | Uint8Array) => Observable<Option<PalletCommitteePolymeshVotes>>,
         [H256]
       >;
-    };
-    polymeshContracts: {
-      /**
-       * Stores the chain version and code hash for the next chain upgrade.
-       **/
-      apiNextUpgrade: AugmentedQuery<
-        ApiType,
-        (
-          arg: PolymeshContractsApi | { desc?: any; major?: any } | string | Uint8Array
-        ) => Observable<Option<PolymeshContractsNextUpgrade>>,
-        [PolymeshContractsApi]
-      >;
-      /**
-       * Whitelist of extrinsics allowed to be called from contracts.
-       **/
-      callRuntimeWhitelist: AugmentedQuery<
-        ApiType,
-        (arg: PolymeshContractsChainExtensionExtrinsicId) => Observable<bool>,
-        [PolymeshContractsChainExtensionExtrinsicId]
-      >;
-      /**
-       * Stores the code hash for the current api.
-       **/
-      currentApiHash: AugmentedQuery<
-        ApiType,
-        (
-          arg: PolymeshContractsApi | { desc?: any; major?: any } | string | Uint8Array
-        ) => Observable<Option<PolymeshContractsApiCodeHash>>,
-        [PolymeshContractsApi]
-      >;
-      /**
-       * Storage version.
-       **/
-      storageVersion: AugmentedQuery<ApiType, () => Observable<u8>, []>;
     };
     polymeshTransactionPayment: {
       /**
@@ -4524,6 +4403,18 @@ declare module '@polkadot/api-base/types/storage' {
       >;
     };
     validators: {
+      /**
+       * Current payout era index.
+       **/
+      currentPayoutEra: AugmentedQuery<ApiType, () => Observable<Option<u32>>, []>;
+      /**
+       * Validators that are awaiting payout for a given era.
+       **/
+      pendingPayouts: AugmentedQuery<
+        ApiType,
+        (arg: u32 | AnyNumber | Uint8Array) => Observable<Vec<AccountId32>>,
+        [u32]
+      >;
       /**
        * Entities that are allowed to run operator/validator nodes.
        **/

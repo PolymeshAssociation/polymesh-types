@@ -32,7 +32,6 @@ import type {
   PalletConfidentialAssetsCurveTreeCurveTreeTimestamp,
   PalletConfidentialAssetsCurveTreeTimestampedTreeRoot,
   PalletConfidentialAssetsSettlementSettlementStatus,
-  PalletContractsOrigin,
   PalletCorporateActionsBallotBallotMeta,
   PalletCorporateActionsBallotBallotTimeRange,
   PalletCorporateActionsBallotBallotVote,
@@ -53,9 +52,6 @@ import type {
   PalletStoFundingAsset,
   PalletStoFundraiser,
   PalletValidatorsSlashingSwitch,
-  PolymeshContractsApi,
-  PolymeshContractsChainExtensionExtrinsicId,
-  PolymeshContractsChainVersion,
   PolymeshDartBpAccountAccountStateCommitment,
   PolymeshDartBpBatchedProofHash,
   PolymeshDartBpFeeFeeAccountStateCommitment,
@@ -1319,105 +1315,6 @@ declare module '@polkadot/api-base/types/events' {
         }
       >;
     };
-    contracts: {
-      /**
-       * A contract was called either by a plain account or another contract.
-       *
-       * # Note
-       *
-       * Please keep in mind that like all events this is only emitted for successful
-       * calls. This is because on failure all storage changes including events are
-       * rolled back.
-       **/
-      Called: AugmentedEvent<
-        ApiType,
-        [caller: PalletContractsOrigin, contract: AccountId32],
-        { caller: PalletContractsOrigin; contract: AccountId32 }
-      >;
-      /**
-       * A code with the specified hash was removed.
-       **/
-      CodeRemoved: AugmentedEvent<
-        ApiType,
-        [codeHash: H256, depositReleased: u128, remover: AccountId32],
-        { codeHash: H256; depositReleased: u128; remover: AccountId32 }
-      >;
-      /**
-       * Code with the specified hash has been stored.
-       **/
-      CodeStored: AugmentedEvent<
-        ApiType,
-        [codeHash: H256, depositHeld: u128, uploader: AccountId32],
-        { codeHash: H256; depositHeld: u128; uploader: AccountId32 }
-      >;
-      /**
-       * A contract's code was updated.
-       **/
-      ContractCodeUpdated: AugmentedEvent<
-        ApiType,
-        [contract: AccountId32, newCodeHash: H256, oldCodeHash: H256],
-        { contract: AccountId32; newCodeHash: H256; oldCodeHash: H256 }
-      >;
-      /**
-       * A custom event emitted by the contract.
-       **/
-      ContractEmitted: AugmentedEvent<
-        ApiType,
-        [contract: AccountId32, data: Bytes],
-        { contract: AccountId32; data: Bytes }
-      >;
-      /**
-       * A contract delegate called a code hash.
-       *
-       * # Note
-       *
-       * Please keep in mind that like all events this is only emitted for successful
-       * calls. This is because on failure all storage changes including events are
-       * rolled back.
-       **/
-      DelegateCalled: AugmentedEvent<
-        ApiType,
-        [contract: AccountId32, codeHash: H256],
-        { contract: AccountId32; codeHash: H256 }
-      >;
-      /**
-       * Contract deployed by address at the specified address.
-       **/
-      Instantiated: AugmentedEvent<
-        ApiType,
-        [deployer: AccountId32, contract: AccountId32],
-        { deployer: AccountId32; contract: AccountId32 }
-      >;
-      /**
-       * Some funds have been transferred and held as storage deposit.
-       **/
-      StorageDepositTransferredAndHeld: AugmentedEvent<
-        ApiType,
-        [from: AccountId32, to: AccountId32, amount: u128],
-        { from: AccountId32; to: AccountId32; amount: u128 }
-      >;
-      /**
-       * Some storage deposit funds have been transferred and released.
-       **/
-      StorageDepositTransferredAndReleased: AugmentedEvent<
-        ApiType,
-        [from: AccountId32, to: AccountId32, amount: u128],
-        { from: AccountId32; to: AccountId32; amount: u128 }
-      >;
-      /**
-       * Contract has been removed.
-       *
-       * # Note
-       *
-       * The only way for a contract to be removed and emitting this event is by calling
-       * `seal_terminate`.
-       **/
-      Terminated: AugmentedEvent<
-        ApiType,
-        [contract: AccountId32, beneficiary: AccountId32],
-        { contract: AccountId32; beneficiary: AccountId32 }
-      >;
-    };
     corporateAction: {
       /**
        * A CA was initiated.
@@ -2561,24 +2458,6 @@ declare module '@polkadot/api-base/types/events' {
        * Parameters: caller DID, numerator, denominator
        **/
       VoteThresholdUpdated: AugmentedEvent<ApiType, [PolymeshPrimitivesIdentityId, u32, u32]>;
-    };
-    polymeshContracts: {
-      /**
-       * Emitted when a contract starts supporting a new API upgrade.
-       * Contains the [`Api`], [`ChainVersion`], and the bytes for the code hash.
-       **/
-      ApiHashUpdated: AugmentedEvent<
-        ApiType,
-        [PolymeshContractsApi, PolymeshContractsChainVersion, H256]
-      >;
-      /**
-       * Emitted when a contract calls into the runtime.
-       * Contains the account id set by the contract owner and the [`ExtrinsicId`].
-       **/
-      SCRuntimeCall: AugmentedEvent<
-        ApiType,
-        [AccountId32, PolymeshContractsChainExtensionExtrinsicId]
-      >;
     };
     portfolio: {
       /**
@@ -3904,6 +3783,10 @@ declare module '@polkadot/api-base/types/events' {
     };
     validators: {
       /**
+       * Automatic payout finished for the era.
+       **/
+      AutomaticPayoutFinished: AugmentedEvent<ApiType, [era: u32], { era: u32 }>;
+      /**
        * Commission cap has been updated.
        **/
       CommissionCapUpdated: AugmentedEvent<
@@ -3920,7 +3803,7 @@ declare module '@polkadot/api-base/types/events' {
         }
       >;
       /**
-       * Remove the nominators from the valid nominators when there CDD expired.
+       * Remove the nominators from the valid nominators when their CDD expired.
        **/
       InvalidatedNominators: AugmentedEvent<
         ApiType,
@@ -3994,6 +3877,14 @@ declare module '@polkadot/api-base/types/events' {
         ApiType,
         [slashingSwitch: PalletValidatorsSlashingSwitch],
         { slashingSwitch: PalletValidatorsSlashingSwitch }
+      >;
+      /**
+       * Validator payout failed.
+       **/
+      ValidatorPayoutFailed: AugmentedEvent<
+        ApiType,
+        [validator: AccountId32, era: u32, page: u32, error: SpRuntimeDispatchError],
+        { validator: AccountId32; era: u32; page: u32; error: SpRuntimeDispatchError }
       >;
     };
   } // AugmentedEvents

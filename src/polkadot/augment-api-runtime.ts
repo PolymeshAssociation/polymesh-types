@@ -17,7 +17,6 @@ import type {
   Null,
   Option,
   Result,
-  Struct,
   Text,
   U256,
   U8aFixed,
@@ -33,14 +32,6 @@ import type { Extrinsic } from '@polkadot/types/interfaces/extrinsics';
 import type { OpaqueMetadata } from '@polkadot/types/interfaces/metadata';
 import type { AccountId32, H160, H256, Slot } from '@polkadot/types/interfaces/runtime';
 import type {
-  FrameSystemEventRecord,
-  PalletContractsPrimitivesCode,
-  PalletContractsPrimitivesCodeUploadReturnValue,
-  PalletContractsPrimitivesContractAccessError,
-  PalletContractsPrimitivesContractResult,
-  PalletContractsPrimitivesExecReturnValue,
-  PalletContractsPrimitivesStorageDeposit,
-  PalletContractsWasmDeterminism,
   PalletGroupRpcRuntimeApiMember,
   PalletIdentityDidStatus,
   PalletIdentityKeyIdentityData,
@@ -327,91 +318,6 @@ declare module '@polkadot/api-base/types/calls' {
           receiver_identity: PolymeshPrimitivesIdentityId | string | Uint8Array
         ) => Observable<
           Result<PolymeshPrimitivesComplianceManagerComplianceReport, SpRuntimeDispatchError>
-        >
-      >;
-    };
-    /** 0x68b66ba122c93fa7/ */
-    contractsApi: {
-      /**
-       * Perform a call from a specified account to a given contract.,, See [`crate::Pallet::bare_call`].
-       **/
-      call: AugmentedCall<
-        ApiType,
-        (
-          origin: AccountId32 | string | Uint8Array,
-          dest: AccountId32 | string | Uint8Array,
-          value: u128 | AnyNumber | Uint8Array,
-          gas_limit:
-            | Option<SpWeightsWeightV2Weight>
-            | null
-            | Uint8Array
-            | SpWeightsWeightV2Weight
-            | { refTime?: any; proofSize?: any }
-            | string,
-          storage_deposit_limit: Option<u128> | null | Uint8Array | u128 | AnyNumber,
-          input_data: Bytes | string | Uint8Array
-        ) => Observable<
-          {
-            readonly gasConsumed: SpWeightsWeightV2Weight;
-            readonly gasRequired: SpWeightsWeightV2Weight;
-            readonly storageDeposit: PalletContractsPrimitivesStorageDeposit;
-            readonly debugMessage: Bytes;
-            readonly result: Result<
-              PalletContractsPrimitivesExecReturnValue,
-              SpRuntimeDispatchError
-            >;
-            readonly events: Option<Vec<FrameSystemEventRecord>>;
-          } & Struct
-        >
-      >;
-      /**
-       * Query a given storage key in a given contract.,, Returns `Ok(Some(Vec<u8>))` if the storage value exists under the given key in the, specified account and `Ok(None)` if it doesn't. If the account specified by the address, doesn't exist, or doesn't have a contract then `Err` is returned.
-       **/
-      getStorage: AugmentedCall<
-        ApiType,
-        (
-          address: AccountId32 | string | Uint8Array,
-          key: Bytes | string | Uint8Array
-        ) => Observable<Result<Option<Bytes>, PalletContractsPrimitivesContractAccessError>>
-      >;
-      /**
-       * Instantiate a new contract.,, See `[crate::Pallet::bare_instantiate]`.
-       **/
-      instantiate: AugmentedCall<
-        ApiType,
-        (
-          origin: AccountId32 | string | Uint8Array,
-          value: u128 | AnyNumber | Uint8Array,
-          gas_limit:
-            | Option<SpWeightsWeightV2Weight>
-            | null
-            | Uint8Array
-            | SpWeightsWeightV2Weight
-            | { refTime?: any; proofSize?: any }
-            | string,
-          storage_deposit_limit: Option<u128> | null | Uint8Array | u128 | AnyNumber,
-          code:
-            | PalletContractsPrimitivesCode
-            | { Upload: any }
-            | { Existing: any }
-            | string
-            | Uint8Array,
-          data: Bytes | string | Uint8Array,
-          salt: Bytes | string | Uint8Array
-        ) => Observable<PalletContractsPrimitivesContractResult>
-      >;
-      /**
-       * Upload new code without instantiating a contract from it.,, See [`crate::Pallet::bare_upload_code`].
-       **/
-      uploadCode: AugmentedCall<
-        ApiType,
-        (
-          origin: AccountId32 | string | Uint8Array,
-          code: Bytes | string | Uint8Array,
-          storage_deposit_limit: Option<u128> | null | Uint8Array | u128 | AnyNumber,
-          determinism: PalletContractsWasmDeterminism | 'Enforced' | 'Relaxed' | number | Uint8Array
-        ) => Observable<
-          Result<PalletContractsPrimitivesCodeUploadReturnValue, SpRuntimeDispatchError>
         >
       >;
     };
@@ -834,6 +740,41 @@ declare module '@polkadot/api-base/types/calls' {
         (number: U256 | AnyNumber | Uint8Array) => Observable<Option<H256>>
       >;
       /**
+       * Estimates the amount of gas that a transactions requires.,, This function estimates the gas of the transaction according to the same binary search, algorithm that's implemented in Geth. It stops when with an acceptable error ratio of, 1.5% so that the algorithm terminates early.
+       **/
+      ethEstimateGas: AugmentedCall<
+        ApiType,
+        (
+          tx:
+            | PalletReviveEvmApiRpcTypesGenGenericTransaction
+            | {
+                accessList?: any;
+                authorizationList?: any;
+                blobVersionedHashes?: any;
+                blobs?: any;
+                chainId?: any;
+                from?: any;
+                gas?: any;
+                gasPrice?: any;
+                input?: any;
+                maxFeePerBlobGas?: any;
+                maxFeePerGas?: any;
+                maxPriorityFeePerGas?: any;
+                nonce?: any;
+                to?: any;
+                r_type?: any;
+                value?: any;
+              }
+            | string
+            | Uint8Array,
+          config:
+            | PalletReviveEvmApiRpcTypesDryRunConfig
+            | { timestampOverride?: any; performBalanceChecks?: any }
+            | string
+            | Uint8Array
+        ) => Observable<Result<U256, PalletRevivePrimitivesEthTransactError>>
+      >;
+      /**
        * The details needed to reconstruct the receipt information offchain.,, # Note,, Each entry corresponds to the appropriate Ethereum transaction in the current block.
        **/
       ethReceiptData: AugmentedCall<
@@ -902,7 +843,7 @@ declare module '@polkadot/api-base/types/calls' {
             | Uint8Array,
           config:
             | PalletReviveEvmApiRpcTypesDryRunConfig
-            | { timestampOverride?: any; reserved?: any }
+            | { timestampOverride?: any; performBalanceChecks?: any }
             | string
             | Uint8Array
         ) => Observable<
@@ -959,6 +900,10 @@ declare module '@polkadot/api-base/types/calls' {
           salt: Option<U8aFixed> | null | Uint8Array | U8aFixed | string
         ) => Observable<PalletRevivePrimitivesContractResultInstantiateReturnValue>
       >;
+      /**
+       * Returns the block gas limit as calculated from the weights.
+       **/
+      maxExtrinsicWeightInGas: AugmentedCall<ApiType, () => Observable<U256>>;
       /**
        * Construct the new balance and dust components of this EVM balance.
        **/

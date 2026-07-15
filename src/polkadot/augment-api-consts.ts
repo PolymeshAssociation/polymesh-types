@@ -12,8 +12,6 @@ import type {
   FrameSupportPalletId,
   FrameSystemLimitsBlockLength,
   FrameSystemLimitsBlockWeights,
-  PalletContractsEnvironment,
-  PalletContractsSchedule,
   SpVersionRuntimeVersion,
   SpWeightsRuntimeDbWeight,
   SpWeightsWeightV2Weight,
@@ -212,90 +210,6 @@ declare module '@polkadot/api-base/types/consts' {
        * Get the Confidential Assets fee pallet id.
        **/
       palletFeeId: FrameSupportPalletId & AugmentedConst<ApiType>;
-    };
-    contracts: {
-      /**
-       * The version of the HostFn APIs that are available in the runtime.
-       *
-       * Only valid value is `()`.
-       **/
-      apiVersion: u16 & AugmentedConst<ApiType>;
-      /**
-       * The percentage of the storage deposit that should be held for using a code hash.
-       * Instantiating a contract, or calling [`chain_extension::Ext::lock_delegate_dependency`]
-       * protects the code from being removed. In order to prevent abuse these actions are
-       * protected with a percentage of the code deposit.
-       **/
-      codeHashLockupDepositPercent: Perbill & AugmentedConst<ApiType>;
-      /**
-       * Fallback value to limit the storage deposit if it's not being set by the caller.
-       **/
-      defaultDepositLimit: u128 & AugmentedConst<ApiType>;
-      /**
-       * The amount of balance a caller has to pay for each byte of storage.
-       *
-       * # Note
-       *
-       * Changing this value for an existing chain might need a storage migration.
-       **/
-      depositPerByte: u128 & AugmentedConst<ApiType>;
-      /**
-       * The amount of balance a caller has to pay for each storage item.
-       *
-       * # Note
-       *
-       * Changing this value for an existing chain might need a storage migration.
-       **/
-      depositPerItem: u128 & AugmentedConst<ApiType>;
-      /**
-       * Type that bundles together all the runtime configurable interface types.
-       *
-       * This is not a real config. We just mention the type here as constant so that
-       * its type appears in the metadata. Only valid value is `()`.
-       **/
-      environment: PalletContractsEnvironment & AugmentedConst<ApiType>;
-      /**
-       * The maximum length of a contract code in bytes.
-       *
-       * The value should be chosen carefully taking into the account the overall memory limit
-       * your runtime has, as well as the [maximum allowed callstack
-       * depth](#associatedtype.CallStack). Look into the `integrity_test()` for some insights.
-       **/
-      maxCodeLen: u32 & AugmentedConst<ApiType>;
-      /**
-       * The maximum length of the debug buffer in bytes.
-       **/
-      maxDebugBufferLen: u32 & AugmentedConst<ApiType>;
-      /**
-       * The maximum number of delegate_dependencies that a contract can lock with
-       * [`chain_extension::Ext::lock_delegate_dependency`].
-       **/
-      maxDelegateDependencies: u32 & AugmentedConst<ApiType>;
-      /**
-       * The maximum allowable length in bytes for storage keys.
-       **/
-      maxStorageKeyLen: u32 & AugmentedConst<ApiType>;
-      /**
-       * The maximum size of the transient storage in bytes.
-       * This includes keys, values, and previous entries used for storage rollback.
-       **/
-      maxTransientStorageSize: u32 & AugmentedConst<ApiType>;
-      /**
-       * Cost schedule and limits.
-       **/
-      schedule: PalletContractsSchedule & AugmentedConst<ApiType>;
-      /**
-       * Make contract callable functions marked as `#[unstable]` available.
-       *
-       * Contracts that use `#[unstable]` functions won't be able to be uploaded unless
-       * this is set to `true`. This is only meant for testnets and dev nodes in order to
-       * experiment with new features.
-       *
-       * # Warning
-       *
-       * Do **not** set to `true` on productions chains.
-       **/
-      unsafeUnstableInterface: bool & AugmentedConst<ApiType>;
     };
     corporateAction: {
       /**
@@ -777,6 +691,10 @@ declare module '@polkadot/api-base/types/consts' {
        * Yearly total reward amount that gets distributed when fixed rewards kicks in.
        **/
       fixedYearlyReward: u128 & AugmentedConst<ApiType>;
+      /**
+       * Maximum weight for paying out stakers.
+       **/
+      maxPayoutWeight: SpWeightsWeightV2Weight & AugmentedConst<ApiType>;
       /**
        * Maximum amount of validators that can run by an identity.
        * It will be MaxValidatorPerIdentity * Self::validator_count().

@@ -87,33 +87,6 @@ import type {
   PalletConfidentialAssetsSettlementAffirmationStatus,
   PalletConfidentialAssetsSettlementLegAffirmParty,
   PalletConfidentialAssetsSettlementSettlementStatus,
-  PalletContractsCall,
-  PalletContractsEnvironment,
-  PalletContractsEnvironmentTypeAccountId32,
-  PalletContractsEnvironmentTypeBlakeTwo256,
-  PalletContractsEnvironmentTypeH256,
-  PalletContractsEnvironmentTypeU128,
-  PalletContractsEnvironmentTypeU32,
-  PalletContractsEnvironmentTypeU64,
-  PalletContractsError,
-  PalletContractsEvent,
-  PalletContractsHoldReason,
-  PalletContractsOrigin,
-  PalletContractsPrimitivesCode,
-  PalletContractsPrimitivesCodeUploadReturnValue,
-  PalletContractsPrimitivesContractAccessError,
-  PalletContractsPrimitivesContractResult,
-  PalletContractsPrimitivesExecReturnValue,
-  PalletContractsPrimitivesInstantiateReturnValue,
-  PalletContractsPrimitivesStorageDeposit,
-  PalletContractsSchedule,
-  PalletContractsScheduleInstructionWeights,
-  PalletContractsScheduleLimits,
-  PalletContractsStorageContractInfo,
-  PalletContractsStorageDeletionQueueManager,
-  PalletContractsUapiFlagsReturnFlags,
-  PalletContractsWasmCodeInfo,
-  PalletContractsWasmDeterminism,
   PalletCorporateActionsBallotBallotMeta,
   PalletCorporateActionsBallotBallotTimeRange,
   PalletCorporateActionsBallotBallotVote,
@@ -353,14 +326,6 @@ import type {
   PalletValidatorsEvent,
   PalletValidatorsPermissionedIdentityPrefs,
   PalletValidatorsSlashingSwitch,
-  PolymeshContractsApi,
-  PolymeshContractsApiCodeHash,
-  PolymeshContractsCall,
-  PolymeshContractsChainExtensionExtrinsicId,
-  PolymeshContractsChainVersion,
-  PolymeshContractsError,
-  PolymeshContractsEvent,
-  PolymeshContractsNextUpgrade,
   PolymeshDartBpAccountAccountAssetRegistrationProof,
   PolymeshDartBpAccountAccountStateCommitment,
   PolymeshDartBpAccountAccountStateNullifier,
@@ -660,33 +625,6 @@ declare module '@polkadot/types/types/registry' {
     PalletConfidentialAssetsSettlementAffirmationStatus: PalletConfidentialAssetsSettlementAffirmationStatus;
     PalletConfidentialAssetsSettlementLegAffirmParty: PalletConfidentialAssetsSettlementLegAffirmParty;
     PalletConfidentialAssetsSettlementSettlementStatus: PalletConfidentialAssetsSettlementSettlementStatus;
-    PalletContractsCall: PalletContractsCall;
-    PalletContractsEnvironment: PalletContractsEnvironment;
-    PalletContractsEnvironmentTypeAccountId32: PalletContractsEnvironmentTypeAccountId32;
-    PalletContractsEnvironmentTypeBlakeTwo256: PalletContractsEnvironmentTypeBlakeTwo256;
-    PalletContractsEnvironmentTypeH256: PalletContractsEnvironmentTypeH256;
-    PalletContractsEnvironmentTypeU128: PalletContractsEnvironmentTypeU128;
-    PalletContractsEnvironmentTypeU32: PalletContractsEnvironmentTypeU32;
-    PalletContractsEnvironmentTypeU64: PalletContractsEnvironmentTypeU64;
-    PalletContractsError: PalletContractsError;
-    PalletContractsEvent: PalletContractsEvent;
-    PalletContractsHoldReason: PalletContractsHoldReason;
-    PalletContractsOrigin: PalletContractsOrigin;
-    PalletContractsPrimitivesCode: PalletContractsPrimitivesCode;
-    PalletContractsPrimitivesCodeUploadReturnValue: PalletContractsPrimitivesCodeUploadReturnValue;
-    PalletContractsPrimitivesContractAccessError: PalletContractsPrimitivesContractAccessError;
-    PalletContractsPrimitivesContractResult: PalletContractsPrimitivesContractResult;
-    PalletContractsPrimitivesExecReturnValue: PalletContractsPrimitivesExecReturnValue;
-    PalletContractsPrimitivesInstantiateReturnValue: PalletContractsPrimitivesInstantiateReturnValue;
-    PalletContractsPrimitivesStorageDeposit: PalletContractsPrimitivesStorageDeposit;
-    PalletContractsSchedule: PalletContractsSchedule;
-    PalletContractsScheduleInstructionWeights: PalletContractsScheduleInstructionWeights;
-    PalletContractsScheduleLimits: PalletContractsScheduleLimits;
-    PalletContractsStorageContractInfo: PalletContractsStorageContractInfo;
-    PalletContractsStorageDeletionQueueManager: PalletContractsStorageDeletionQueueManager;
-    PalletContractsUapiFlagsReturnFlags: PalletContractsUapiFlagsReturnFlags;
-    PalletContractsWasmCodeInfo: PalletContractsWasmCodeInfo;
-    PalletContractsWasmDeterminism: PalletContractsWasmDeterminism;
     PalletCorporateActionsBallotBallotMeta: PalletCorporateActionsBallotBallotMeta;
     PalletCorporateActionsBallotBallotTimeRange: PalletCorporateActionsBallotBallotTimeRange;
     PalletCorporateActionsBallotBallotVote: PalletCorporateActionsBallotBallotVote;
@@ -926,14 +864,6 @@ declare module '@polkadot/types/types/registry' {
     PalletValidatorsEvent: PalletValidatorsEvent;
     PalletValidatorsPermissionedIdentityPrefs: PalletValidatorsPermissionedIdentityPrefs;
     PalletValidatorsSlashingSwitch: PalletValidatorsSlashingSwitch;
-    PolymeshContractsApi: PolymeshContractsApi;
-    PolymeshContractsApiCodeHash: PolymeshContractsApiCodeHash;
-    PolymeshContractsCall: PolymeshContractsCall;
-    PolymeshContractsChainExtensionExtrinsicId: PolymeshContractsChainExtensionExtrinsicId;
-    PolymeshContractsChainVersion: PolymeshContractsChainVersion;
-    PolymeshContractsError: PolymeshContractsError;
-    PolymeshContractsEvent: PolymeshContractsEvent;
-    PolymeshContractsNextUpgrade: PolymeshContractsNextUpgrade;
     PolymeshDartBpAccountAccountAssetRegistrationProof: PolymeshDartBpAccountAccountAssetRegistrationProof;
     PolymeshDartBpAccountAccountStateCommitment: PolymeshDartBpAccountAccountStateCommitment;
     PolymeshDartBpAccountAccountStateNullifier: PolymeshDartBpAccountAccountStateNullifier;
