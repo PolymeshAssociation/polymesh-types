@@ -144,58 +144,6 @@ export default {
       type: 'CappedFee',
     },
   },
-  staking: {
-    getCurve: {
-      description: 'Retrieves curves parameters',
-      params: [
-        {
-          name: 'blockHash',
-          type: 'Hash',
-          isOptional: true,
-        },
-      ],
-      type: 'Vec<(Perbill, Perbill)>',
-    },
-  },
-  asset: {
-    transferReport: {
-      description:
-        "Returns a vector containing all errors for the transfer. An empty vec means there's no error.",
-      params: [
-        {
-          name: 'sender',
-          type: 'AssetHolder',
-          isOptional: false,
-        },
-        {
-          name: 'receiver',
-          type: 'AssetHolder',
-          isOptional: false,
-        },
-        {
-          name: 'asset_id',
-          type: 'PolymeshAssetId',
-          isOptional: false,
-        },
-        {
-          name: 'transfer_value',
-          type: 'Balance',
-          isOptional: false,
-        },
-        {
-          name: 'skip_locked_check',
-          type: 'bool',
-          isOptional: false,
-        },
-        {
-          name: 'blockHash',
-          type: 'Hash',
-          isOptional: true,
-        },
-      ],
-      type: 'Vec<DispatchError>',
-    },
-  },
   group: {
     getCDDValidMembers: {
       description: 'Get the CDD members',
@@ -218,40 +166,6 @@ export default {
         },
       ],
       type: 'Vec<Member>',
-    },
-  },
-  nft: {
-    transferReport: {
-      description:
-        "Returns a vector containing all errors for the transfer. An empty vec means there's no error.",
-      params: [
-        {
-          name: 'sender',
-          type: 'AssetHolder',
-          isOptional: false,
-        },
-        {
-          name: 'receiver',
-          type: 'AssetHolder',
-          isOptional: false,
-        },
-        {
-          name: 'nfts',
-          type: 'NFTs',
-          isOptional: false,
-        },
-        {
-          name: 'skip_locked_check',
-          type: 'bool',
-          isOptional: false,
-        },
-        {
-          name: 'blockHash',
-          type: 'Hash',
-          isOptional: true,
-        },
-      ],
-      type: 'Vec<DispatchError>',
     },
   },
   settlement: {
@@ -301,6 +215,12 @@ export default {
         {
           name: 'instruction_id',
           type: 'InstructionId',
+          isOptional: false,
+        },
+        {
+          name: 'blockHash',
+          type: 'Hash',
+          isOptional: true,
         },
       ],
       type: 'Vec<DispatchError>',
@@ -312,33 +232,20 @@ export default {
         {
           name: 'leg',
           type: 'Leg',
+          isOptional: false,
         },
         {
           name: 'skip_locked_check',
           type: 'bool',
+          isOptional: false,
+        },
+        {
+          name: 'blockHash',
+          type: 'Hash',
+          isOptional: true,
         },
       ],
       type: 'Vec<DispatchError>',
-    },
-  },
-  compliance: {
-    complianceReport: {
-      description: 'Checks all compliance requirements for the given asset.',
-      params: [
-        {
-          name: 'asset_id',
-          type: 'PolymeshAssetId',
-        },
-        {
-          name: 'sender_identity',
-          type: 'IdentityId',
-        },
-        {
-          name: 'receiver_identity',
-          type: 'IdentityId',
-        },
-      ],
-      type: 'Result<ComplianceReport, DispatchError>',
     },
   },
 };

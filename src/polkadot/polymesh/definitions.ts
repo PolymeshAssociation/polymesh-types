@@ -696,6 +696,7 @@ export default {
       condition: 'Condition',
     },
     PolymeshPrimitivesSettlementInstructionId: 'u64',
+    PolymeshPrimitivesNftNftId: 'u64',
     PalletPipsPipId: 'u32',
     PalletProtocolFeeRpcRuntimeApiCappedFee: 'u64',
     PolymeshRuntimeDevelopRuntimeRuntimeCall: 'Call',
@@ -1487,6 +1488,10 @@ export default {
       payload: {},
     },
     StoreCallMetadata: {
+      extrinsic: {},
+      payload: {},
+    },
+    EthSetOrigin: {
       extrinsic: {},
       payload: {},
     },

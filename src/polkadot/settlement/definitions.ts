@@ -46,6 +46,12 @@ export default {
         {
           name: 'instruction_id',
           type: 'InstructionId',
+          isOptional: false,
+        },
+        {
+          name: 'blockHash',
+          type: 'Hash',
+          isOptional: true,
         },
       ],
       type: 'Vec<DispatchError>',
@@ -57,10 +63,17 @@ export default {
         {
           name: 'leg',
           type: 'Leg',
+          isOptional: false,
         },
         {
           name: 'skip_locked_check',
           type: 'bool',
+          isOptional: false,
+        },
+        {
+          name: 'blockHash',
+          type: 'Hash',
+          isOptional: true,
         },
       ],
       type: 'Vec<DispatchError>',

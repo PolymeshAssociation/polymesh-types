@@ -436,6 +436,28 @@ declare module '@polkadot/api-base/types/storage' {
         [PolymeshPrimitivesAssetAssetId]
       >;
       /**
+       * Tracks if the account is frozen.
+       **/
+      frozenAccounts: AugmentedQuery<
+        ApiType,
+        (
+          arg1: AccountId32 | string | Uint8Array,
+          arg2: PolymeshPrimitivesAssetAssetId | string | Uint8Array
+        ) => Observable<bool>,
+        [AccountId32, PolymeshPrimitivesAssetAssetId]
+      >;
+      /**
+       * Tracks the amount of frozen tokens for each asset held by the account.
+       **/
+      frozenBalance: AugmentedQuery<
+        ApiType,
+        (
+          arg1: AccountId32 | string | Uint8Array,
+          arg2: PolymeshPrimitivesAssetAssetId | string | Uint8Array
+        ) => Observable<u128>,
+        [AccountId32, PolymeshPrimitivesAssetAssetId]
+      >;
+      /**
        * Maps each [`AssetId`] to the name of its founding round ([`FundingRoundName`]).
        **/
       fundingRound: AugmentedQuery<
@@ -2547,6 +2569,24 @@ declare module '@polkadot/api-base/types/storage' {
         [ITuple<[u64, u64]>, PolymeshPrimitivesAssetMetadataAssetMetadataKey]
       >;
       /**
+       * The number of NFTs of a given collection held by an account key.
+       *
+       * This is the account-level counterpart of `pallet_portfolio::PortfolioNFTCount`, mirroring
+       * the split used by `pallet_asset::FrozenBalance` / `PortfolioFrozenAssets`. A zero count is
+       * never stored; the entry is removed instead.
+       *
+       * Unlike [`NumberOfNFTs`], which aggregates over a whole identity, this is scoped to a
+       * single account key and is what the ERC-721 precompile reports as `balanceOf`.
+       **/
+      nftAccountCount: AugmentedQuery<
+        ApiType,
+        (
+          arg1: AccountId32 | string | Uint8Array,
+          arg2: PolymeshPrimitivesAssetAssetId | string | Uint8Array
+        ) => Observable<u64>,
+        [AccountId32, PolymeshPrimitivesAssetAssetId]
+      >;
+      /**
        * All NFTs associated to the account Key.
        **/
       nftHolder: AugmentedQuery<
@@ -2578,6 +2618,26 @@ declare module '@polkadot/api-base/types/storage' {
         [PolymeshPrimitivesAssetAssetId, PolymeshPrimitivesIdentityId]
       >;
       /**
+       * Collection-wide operator approvals, keyed by `(owner, operator, asset_id)`.
+       *
+       * Mirrors the ERC-721 `setApprovalForAll`, but scoped to a single collection rather than to
+       * every collection the owner holds: each ERC-721 precompile address is one collection, and
+       * this matches `pallet_asset::Allowances` being per-`AssetId`. `false` is never stored; the
+       * entry is removed instead.
+       *
+       * Uses `StorageNMap` so that all operator approvals of a given owner can be iterated by
+       * prefix.
+       **/
+      operatorApproval: AugmentedQuery<
+        ApiType,
+        (
+          arg1: AccountId32 | string | Uint8Array,
+          arg2: AccountId32 | string | Uint8Array,
+          arg3: PolymeshPrimitivesAssetAssetId | string | Uint8Array
+        ) => Observable<bool>,
+        [AccountId32, AccountId32, PolymeshPrimitivesAssetAssetId]
+      >;
+      /**
        * Reverse mapping for allowing to find the owner of a specific NFT.
        **/
       owner: AugmentedQuery<
@@ -2586,6 +2646,20 @@ declare module '@polkadot/api-base/types/storage' {
           arg1: PolymeshPrimitivesAssetAssetId | string | Uint8Array,
           arg2: u64 | AnyNumber | Uint8Array
         ) => Observable<Option<PolymeshPrimitivesAssetAssetHolder>>,
+        [PolymeshPrimitivesAssetAssetId, u64]
+      >;
+      /**
+       * The account approved to transfer a specific NFT, if any.
+       *
+       * Mirrors the ERC-721 per-token approval. The entry is cleared whenever the NFT changes
+       * hands, so an approval never survives a transfer.
+       **/
+      tokenApproval: AugmentedQuery<
+        ApiType,
+        (
+          arg1: PolymeshPrimitivesAssetAssetId | string | Uint8Array,
+          arg2: u64 | AnyNumber | Uint8Array
+        ) => Observable<Option<AccountId32>>,
         [PolymeshPrimitivesAssetAssetId, u64]
       >;
     };
@@ -2839,6 +2913,18 @@ declare module '@polkadot/api-base/types/storage' {
         ) => Observable<bool>,
         [PolymeshPrimitivesIdentityId, PolymeshPrimitivesIdentityId]
       >;
+      frozenPortfolios: AugmentedQuery<
+        ApiType,
+        (
+          arg1:
+            | PolymeshPrimitivesIdentityIdPortfolioId
+            | { did?: any; kind?: any }
+            | string
+            | Uint8Array,
+          arg2: PolymeshPrimitivesAssetAssetId | string | Uint8Array
+        ) => Observable<bool>,
+        [PolymeshPrimitivesIdentityIdPortfolioId, PolymeshPrimitivesAssetAssetId]
+      >;
       /**
        * Inverse map of `Portfolios` used to ensure bijectivitiy,
        * and uniqueness of names in `Portfolios`.
@@ -2903,6 +2989,21 @@ declare module '@polkadot/api-base/types/storage' {
         [PolymeshPrimitivesIdentityIdPortfolioId]
       >;
       /**
+       * Amount of assets frozen in a portfolio.
+       **/
+      portfolioFrozenAssets: AugmentedQuery<
+        ApiType,
+        (
+          arg1:
+            | PolymeshPrimitivesIdentityIdPortfolioId
+            | { did?: any; kind?: any }
+            | string
+            | Uint8Array,
+          arg2: PolymeshPrimitivesAssetAssetId | string | Uint8Array
+        ) => Observable<u128>,
+        [PolymeshPrimitivesIdentityIdPortfolioId, PolymeshPrimitivesAssetAssetId]
+      >;
+      /**
        * Amount of assets locked in a portfolio.
        * These assets show up in portfolio balance but can not be transferred away.
        **/
@@ -2950,6 +3051,25 @@ declare module '@polkadot/api-base/types/storage' {
           arg3: u64 | AnyNumber | Uint8Array
         ) => Observable<bool>,
         [PolymeshPrimitivesIdentityIdPortfolioId, PolymeshPrimitivesAssetAssetId, u64]
+      >;
+      /**
+       * The number of NFTs of a given collection held by a portfolio.
+       *
+       * This is the portfolio-level counterpart of `pallet_nft::NFTAccountCount`, mirroring the
+       * split used by `PortfolioFrozenAssets` / `pallet_asset::FrozenBalance`. A zero count is
+       * never stored; the entry is removed instead.
+       **/
+      portfolioNFTCount: AugmentedQuery<
+        ApiType,
+        (
+          arg1:
+            | PolymeshPrimitivesIdentityIdPortfolioId
+            | { did?: any; kind?: any }
+            | string
+            | Uint8Array,
+          arg2: PolymeshPrimitivesAssetAssetId | string | Uint8Array
+        ) => Observable<u64>,
+        [PolymeshPrimitivesIdentityIdPortfolioId, PolymeshPrimitivesAssetAssetId]
       >;
       /**
        * The set of existing portfolios with their names. If a certain pair of a DID and

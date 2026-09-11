@@ -1,0 +1,11 @@
+- Expected
++ Received
+
+@@ -592,6 +592,7 @@
+    "PipId": "u32",
+    "PolymeshAssetId": "[u8; 16]",
+    "PolymeshMoment": "u64",
++   "PolymeshPrimitivesNftNftId": "u64",
+    "PolymeshPrimitivesSettlementInstructionId": "u64",
+    "PolymeshRuntimeDevelopRuntimeRuntimeCall": "Call",
+    "PortfolioId": Object {

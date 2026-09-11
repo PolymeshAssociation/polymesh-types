@@ -77,6 +77,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       BalanceOverflow: AugmentedError<ApiType>;
       /**
+       * Failed to freeze a partial amount of tokens that exceeds the holder's balance.
+       **/
+      FreezePartialTokenMustNotExceedHoldersBalance: AugmentedError<ApiType>;
+      /**
        * Maximum length of the funding round name has been exceeded.
        **/
       FundingRoundNameMaxLengthExceeded: AugmentedError<ApiType>;
@@ -92,6 +96,10 @@ declare module '@polkadot/api-base/types/errors' {
        * The sender balance is not sufficient.
        **/
       InsufficientBalance: AugmentedError<ApiType>;
+      /**
+       * Attempt to unfreeze more tokens than are currently frozen for the asset holder.
+       **/
+      InsufficientFrozenBalance: AugmentedError<ApiType>;
       /**
        * Insufficient tokens are locked.
        **/
@@ -133,6 +141,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       InvalidTransferInvalidReceiverDID: AugmentedError<ApiType>;
       /**
+       * The sender is frozen and cannot transfer assets.
+       **/
+      InvalidTransferSenderIsFrozen: AugmentedError<ApiType>;
+      /**
        * Investor Uniqueness claims are not allowed for this asset.
        **/
       InvestorUniquenessClaimNotAllowed: AugmentedError<ApiType>;
@@ -164,6 +176,10 @@ declare module '@polkadot/api-base/types/errors' {
        * Number of asset mediators would exceed the maximum allowed.
        **/
       NumberOfAssetMediatorsExceeded: AugmentedError<ApiType>;
+      /**
+       * The destination requires receiver affirmation before assets can be moved into it.
+       **/
+      ReceiverAffirmationRequired: AugmentedError<ApiType>;
       /**
        * Transfering ownership to the same owner is not allowed.
        **/
@@ -1275,6 +1291,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       DuplicateMetadataKey: AugmentedError<ApiType>;
       /**
+       * The spender has no approval to transfer this NFT.
+       **/
+      InsufficientNFTApproval: AugmentedError<ApiType>;
+      /**
        * There's no asset associated to the given asset_id.
        **/
       InvalidAssetId: AugmentedError<ApiType>;
@@ -1335,6 +1355,13 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       MaxNumberOfNFTsPerLegExceeded: AugmentedError<ApiType>;
       /**
+       * The caller is not allowed to approve a spender for this NFT.
+       *
+       * Only the account key that currently holds the NFT, or an approved operator for the
+       * collection, may set a per-token approval.
+       **/
+      NFTApprovalNotAuthorized: AugmentedError<ApiType>;
+      /**
        * The NFT is locked.
        **/
       NFTIsLocked: AugmentedError<ApiType>;
@@ -1350,6 +1377,10 @@ declare module '@polkadot/api-base/types/errors' {
        * The number of keys in the collection is greater than the input.
        **/
       NumberOfKeysIsLessThanExpected: AugmentedError<ApiType>;
+      /**
+       * The destination requires receiver affirmation before assets can be moved into it.
+       **/
+      ReceiverAffirmationRequired: AugmentedError<ApiType>;
       /**
        * An overflow while calculating the updated supply.
        **/
@@ -1569,6 +1600,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       PortfolioDoesNotExist: AugmentedError<ApiType>;
       /**
+       * The portfolio is frozen for the given asset.
+       **/
+      PortfolioIsFrozen: AugmentedError<ApiType>;
+      /**
        * The portfolio couldn't be renamed because the chosen name is already in use.
        **/
       PortfolioNameAlreadyInUse: AugmentedError<ApiType>;
@@ -1749,7 +1784,8 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       DelegateDependencyNotFound: AugmentedError<ApiType>;
       /**
-       * A contract with the same AccountId already exists.
+       * A contract with the same AccountId already exists, or the address is occupied by a
+       * pre-compile.
        **/
       DuplicateContract: AugmentedError<ApiType>;
       /**
@@ -1972,10 +2008,6 @@ declare module '@polkadot/api-base/types/errors' {
     };
     settlement: {
       /**
-       * Spender allowances are not supported for non-fungible token transfers.
-       **/
-      AllowancesNotSupportedForNFTs: AugmentedError<ApiType>;
-      /**
        * The caller is not a mediator in the instruction.
        **/
       CallerIsNotAMediator: AugmentedError<ApiType>;
@@ -1983,6 +2015,11 @@ declare module '@polkadot/api-base/types/errors' {
        * The caller is not a party of this instruction.
        **/
       CallerIsNotAParty: AugmentedError<ApiType>;
+      /**
+       * Deprecated placeholder kept to preserve error indices after removing
+       * `AllowancesNotSupportedForNFTs` (NFT spender transfers now use approvals).
+       **/
+      DeprecatedAllowancesNotSupportedForNFTs: AugmentedError<ApiType>;
       /**
        * No duplicate uid are allowed for different receipts.
        **/

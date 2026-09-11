@@ -8,6 +8,7 @@ import '@polkadot/api-base/types/calls';
 import type {
   PalletPipsPipId,
   PalletProtocolFeeRpcRuntimeApiCappedFee,
+  PolymeshPrimitivesNftNftId,
   PolymeshPrimitivesSettlementInstructionId,
   PolymeshRuntimeDevelopRuntimeRuntimeCall,
 } from './polymesh';
@@ -577,6 +578,27 @@ declare module '@polkadot/api-base/types/calls' {
     };
     /** 0x9ea061a615cee2fe/ */
     nftApi: {
+      /**
+       * Returns `true` if `operator` may transfer any NFT of `asset_id` held by `owner`.,, This is the ERC-721 `isApprovedForAll`, scoped to a single collection.
+       **/
+      operatorApproval: AugmentedCall<
+        ApiType,
+        (
+          owner: AccountId32 | string | Uint8Array,
+          operator: AccountId32 | string | Uint8Array,
+          asset_id: PolymeshPrimitivesAssetAssetId | string | Uint8Array
+        ) => Observable<bool>
+      >;
+      /**
+       * Returns the account approved to transfer `nft_id`, if any.,, This is the ERC-721 `getApproved`.
+       **/
+      tokenApproval: AugmentedCall<
+        ApiType,
+        (
+          asset_id: PolymeshPrimitivesAssetAssetId | string | Uint8Array,
+          nft_id: PolymeshPrimitivesNftNftId | AnyNumber | Uint8Array
+        ) => Observable<Option<AccountId32>>
+      >;
       /**
        * Returns a vector containing all errors for the transfer. An empty vec means there's no error.
        **/

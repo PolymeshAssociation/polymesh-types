@@ -1943,6 +1943,37 @@ declare module '@polkadot/types/lookup' {
       readonly spender: AccountId32;
       readonly amount: u128;
     } & Struct;
+    readonly isSetFrozenTokens: boolean;
+    readonly asSetFrozenTokens: {
+      readonly assetId: PolymeshPrimitivesAssetAssetId;
+      readonly assetHolder: PolymeshPrimitivesAssetAssetHolder;
+      readonly amount: u128;
+    } & Struct;
+    readonly isSetHolderFrozen: boolean;
+    readonly asSetHolderFrozen: {
+      readonly assetHolder: PolymeshPrimitivesAssetAssetHolder;
+      readonly assetId: PolymeshPrimitivesAssetAssetId;
+      readonly freeze: bool;
+    } & Struct;
+    readonly isControllerTransferTo: boolean;
+    readonly asControllerTransferTo: {
+      readonly assetId: PolymeshPrimitivesAssetAssetId;
+      readonly value: u128;
+      readonly source: PolymeshPrimitivesAssetAssetHolder;
+      readonly destination: PolymeshPrimitivesAssetAssetHolder;
+    } & Struct;
+    readonly isFreezePartialTokens: boolean;
+    readonly asFreezePartialTokens: {
+      readonly assetId: PolymeshPrimitivesAssetAssetId;
+      readonly assetHolder: PolymeshPrimitivesAssetAssetHolder;
+      readonly amount: u128;
+    } & Struct;
+    readonly isUnfreezePartialTokens: boolean;
+    readonly asUnfreezePartialTokens: {
+      readonly assetId: PolymeshPrimitivesAssetAssetId;
+      readonly assetHolder: PolymeshPrimitivesAssetAssetHolder;
+      readonly amount: u128;
+    } & Struct;
     readonly type:
       | 'RegisterUniqueTicker'
       | 'AcceptTickerTransfer'
@@ -1981,7 +2012,12 @@ declare module '@polkadot/types/lookup' {
       | 'TransferAsset'
       | 'ReceiverAffirmAssetTransfer'
       | 'RejectAssetTransfer'
-      | 'Approve';
+      | 'Approve'
+      | 'SetFrozenTokens'
+      | 'SetHolderFrozen'
+      | 'ControllerTransferTo'
+      | 'FreezePartialTokens'
+      | 'UnfreezePartialTokens';
   }
 
   /** @name PolymeshPrimitivesAssetAssetType (143) */
@@ -3547,12 +3583,33 @@ declare module '@polkadot/types/lookup' {
       readonly to: AccountId32;
       readonly memo: Option<PolymeshPrimitivesMemo>;
     } & Struct;
+    readonly isApprove: boolean;
+    readonly asApprove: {
+      readonly assetId: PolymeshPrimitivesAssetAssetId;
+      readonly nftId: u64;
+      readonly spender: Option<AccountId32>;
+    } & Struct;
+    readonly isSetApprovalForAll: boolean;
+    readonly asSetApprovalForAll: {
+      readonly assetId: PolymeshPrimitivesAssetAssetId;
+      readonly operator: AccountId32;
+      readonly approved: bool;
+    } & Struct;
+    readonly isControllerTransferTo: boolean;
+    readonly asControllerTransferTo: {
+      readonly nfts: PolymeshPrimitivesNftNfTs;
+      readonly source: PolymeshPrimitivesAssetAssetHolder;
+      readonly destination: PolymeshPrimitivesAssetAssetHolder;
+    } & Struct;
     readonly type:
       | 'CreateNftCollection'
       | 'IssueNft'
       | 'RedeemNft'
       | 'ControllerTransfer'
-      | 'TransferNft';
+      | 'TransferNft'
+      | 'Approve'
+      | 'SetApprovalForAll'
+      | 'ControllerTransferTo';
   }
 
   /** @name PolymeshPrimitivesNftNftCollectionKeys (326) */
@@ -4356,7 +4413,9 @@ declare module '@polkadot/types/lookup' {
   type FrameSystemExtensionsCheckWeight = Null;
 
   /** @name PolymeshTransactionPaymentChargeTransactionPayment (527) */
-  interface PolymeshTransactionPaymentChargeTransactionPayment extends Compact<u128> {}
+  interface PolymeshTransactionPaymentChargeTransactionPayment extends Struct {
+    readonly tip: Compact<u128>;
+  }
 
   /** @name PalletPermissionsStoreCallMetadata (528) */
   type PalletPermissionsStoreCallMetadata = Null;
@@ -5641,6 +5700,28 @@ declare module '@polkadot/types/lookup' {
       readonly amountSpent: u128;
       readonly remainingAllowance: u128;
     } & Struct;
+    readonly isFrozenBalanceSet: boolean;
+    readonly asFrozenBalanceSet: {
+      readonly callerDid: PolymeshPrimitivesIdentityId;
+      readonly assetHolder: PolymeshPrimitivesAssetAssetHolder;
+      readonly assetId: PolymeshPrimitivesAssetAssetId;
+      readonly frozenBalance: u128;
+    } & Struct;
+    readonly isSetAccountFreeze: boolean;
+    readonly asSetAccountFreeze: {
+      readonly callerDid: PolymeshPrimitivesIdentityId;
+      readonly holder: PolymeshPrimitivesAssetAssetHolder;
+      readonly assetId: PolymeshPrimitivesAssetAssetId;
+      readonly freeze: bool;
+    } & Struct;
+    readonly isControllerTransferTo: boolean;
+    readonly asControllerTransferTo: {
+      readonly callerDid: PolymeshPrimitivesIdentityId;
+      readonly assetId: PolymeshPrimitivesAssetAssetId;
+      readonly source: PolymeshPrimitivesAssetAssetHolder;
+      readonly destination: PolymeshPrimitivesAssetAssetHolder;
+      readonly amount: u128;
+    } & Struct;
     readonly type:
       | 'AssetCreated'
       | 'IdentifiersUpdated'
@@ -5676,7 +5757,10 @@ declare module '@polkadot/types/lookup' {
       | 'GlobalMetadataSpecUpdated'
       | 'CreatedAssetTransfer'
       | 'Approval'
-      | 'AllowanceSpent';
+      | 'AllowanceSpent'
+      | 'FrozenBalanceSet'
+      | 'SetAccountFreeze'
+      | 'ControllerTransferTo';
   }
 
   /** @name PolymeshPrimitivesAssetHoldingsUpdateReason (589) */
@@ -6710,7 +6794,33 @@ declare module '@polkadot/types/lookup' {
         PolymeshPrimitivesAssetHoldingsUpdateReason,
       ]
     >;
-    readonly type: 'NftCollectionCreated' | 'NftHoldingsUpdated';
+    readonly isNftApproval: boolean;
+    readonly asNftApproval: {
+      readonly owner: AccountId32;
+      readonly spender: Option<AccountId32>;
+      readonly assetId: PolymeshPrimitivesAssetAssetId;
+      readonly nftId: u64;
+    } & Struct;
+    readonly isNftApprovalForAll: boolean;
+    readonly asNftApprovalForAll: {
+      readonly owner: AccountId32;
+      readonly operator: AccountId32;
+      readonly assetId: PolymeshPrimitivesAssetAssetId;
+      readonly approved: bool;
+    } & Struct;
+    readonly isNftApprovalSpent: boolean;
+    readonly asNftApprovalSpent: {
+      readonly owner: AccountId32;
+      readonly spender: AccountId32;
+      readonly assetId: PolymeshPrimitivesAssetAssetId;
+      readonly nftId: u64;
+    } & Struct;
+    readonly type:
+      | 'NftCollectionCreated'
+      | 'NftHoldingsUpdated'
+      | 'NftApproval'
+      | 'NftApprovalForAll'
+      | 'NftApprovalSpent';
   }
 
   /** @name PalletElectionProviderMultiPhaseEvent (635) */
@@ -7874,6 +7984,10 @@ declare module '@polkadot/types/lookup' {
     readonly isInsufficientAllowance: boolean;
     readonly isSelfOwnershipTransferNotAllowed: boolean;
     readonly isWeightLimitExceeded: boolean;
+    readonly isInvalidTransferSenderIsFrozen: boolean;
+    readonly isReceiverAffirmationRequired: boolean;
+    readonly isInsufficientFrozenBalance: boolean;
+    readonly isFreezePartialTokenMustNotExceedHoldersBalance: boolean;
     readonly type:
       | 'Unauthorized'
       | 'AssetAlreadyCreated'
@@ -7929,7 +8043,11 @@ declare module '@polkadot/types/lookup' {
       | 'InsufficientTokensLocked'
       | 'InsufficientAllowance'
       | 'SelfOwnershipTransferNotAllowed'
-      | 'WeightLimitExceeded';
+      | 'WeightLimitExceeded'
+      | 'InvalidTransferSenderIsFrozen'
+      | 'ReceiverAffirmationRequired'
+      | 'InsufficientFrozenBalance'
+      | 'FreezePartialTokenMustNotExceedHoldersBalance';
   }
 
   /** @name PalletCorporateActionsDistributionPalletError (804) */
@@ -8193,6 +8311,7 @@ declare module '@polkadot/types/lookup' {
     readonly isUnauthorizedPortfolioKey: boolean;
     readonly isKeyNotFoundForCaller: boolean;
     readonly isInsufficientBalance: boolean;
+    readonly isPortfolioIsFrozen: boolean;
     readonly type:
       | 'PortfolioDoesNotExist'
       | 'InsufficientPortfolioBalance'
@@ -8216,7 +8335,8 @@ declare module '@polkadot/types/lookup' {
       | 'DefaultPortfoliosCannotHaveCustodians'
       | 'UnauthorizedPortfolioKey'
       | 'KeyNotFoundForCaller'
-      | 'InsufficientBalance';
+      | 'InsufficientBalance'
+      | 'PortfolioIsFrozen';
   }
 
   /** @name PalletProtocolFeeError (844) */
@@ -8390,7 +8510,7 @@ declare module '@polkadot/types/lookup' {
     readonly isInvalidAccountId: boolean;
     readonly isReceiptExpired: boolean;
     readonly isSenderSameAsReceiver: boolean;
-    readonly isAllowancesNotSupportedForNFTs: boolean;
+    readonly isDeprecatedAllowancesNotSupportedForNFTs: boolean;
     readonly isInstructionAlreadyLocked: boolean;
     readonly isInstructionNotLocked: boolean;
     readonly isRelockCooldownNotExpired: boolean;
@@ -8451,7 +8571,7 @@ declare module '@polkadot/types/lookup' {
       | 'InvalidAccountId'
       | 'ReceiptExpired'
       | 'SenderSameAsReceiver'
-      | 'AllowancesNotSupportedForNFTs'
+      | 'DeprecatedAllowancesNotSupportedForNFTs'
       | 'InstructionAlreadyLocked'
       | 'InstructionNotLocked'
       | 'RelockCooldownNotExpired'
@@ -8691,6 +8811,9 @@ declare module '@polkadot/types/lookup' {
     readonly isNftIsLocked: boolean;
     readonly isNumberOfKeysIsLessThanExpected: boolean;
     readonly isNftIsNotLocked: boolean;
+    readonly isNftApprovalNotAuthorized: boolean;
+    readonly isInsufficientNFTApproval: boolean;
+    readonly isReceiverAffirmationRequired: boolean;
     readonly type:
       | 'BalanceOverflow'
       | 'BalanceUnderflow'
@@ -8720,7 +8843,10 @@ declare module '@polkadot/types/lookup' {
       | 'InvalidAssetId'
       | 'NftIsLocked'
       | 'NumberOfKeysIsLessThanExpected'
-      | 'NftIsNotLocked';
+      | 'NftIsNotLocked'
+      | 'NftApprovalNotAuthorized'
+      | 'InsufficientNFTApproval'
+      | 'ReceiverAffirmationRequired';
   }
 
   /** @name PalletElectionProviderMultiPhaseReadySolution (902) */

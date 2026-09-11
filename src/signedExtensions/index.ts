@@ -7,4 +7,8 @@ export default {
     extrinsic: {},
     payload: {},
   },
+  EthSetOrigin: {
+    extrinsic: {},
+    payload: {},
+  },
 };

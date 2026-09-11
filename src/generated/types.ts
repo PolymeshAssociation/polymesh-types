@@ -588,6 +588,11 @@ export enum AssetTx {
   ReceiverAffirmAssetTransfer = 'asset.receiverAffirmAssetTransfer',
   RejectAssetTransfer = 'asset.rejectAssetTransfer',
   Approve = 'asset.approve',
+  SetFrozenTokens = 'asset.setFrozenTokens',
+  SetHolderFrozen = 'asset.setHolderFrozen',
+  ControllerTransferTo = 'asset.controllerTransferTo',
+  FreezePartialTokens = 'asset.freezePartialTokens',
+  UnfreezePartialTokens = 'asset.unfreezePartialTokens',
 }
 
 export enum CapitalDistributionTx {
@@ -862,6 +867,9 @@ export enum NftTx {
   RedeemNft = 'nft.redeemNft',
   ControllerTransfer = 'nft.controllerTransfer',
   TransferNft = 'nft.transferNft',
+  Approve = 'nft.approve',
+  SetApprovalForAll = 'nft.setApprovalForAll',
+  ControllerTransferTo = 'nft.controllerTransferTo',
 }
 
 export enum StateTrieMigrationTx {

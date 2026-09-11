@@ -1077,6 +1077,9 @@ export interface PolymeshAssetId extends U8aFixed {}
 /** @name PolymeshMoment */
 export interface PolymeshMoment extends u64 {}
 
+/** @name PolymeshPrimitivesNftNftId */
+export interface PolymeshPrimitivesNftNftId extends u64 {}
+
 /** @name PolymeshPrimitivesSettlementInstructionId */
 export interface PolymeshPrimitivesSettlementInstructionId extends u64 {}
 

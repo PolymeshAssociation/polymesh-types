@@ -336,6 +336,55 @@ declare module '@polkadot/api-base/types/submittable' {
         ]
       >;
       /**
+       * Forces a transfer of tokens from `source` to `destination`.
+       *
+       * Unlike [`Self::controller_transfer`], which always sends the funds to the caller,
+       * this extrinsic lets the caller name an arbitrary [`AssetHolder`] as the destination.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call, which can be the primary or secondary key of an identity.
+       * * `asset_id` - The [`AssetId`] associated to the asset.
+       * * `value` - The [`Balance`] of tokens that will be transferred.
+       * * `source` - The [`AssetHolder`] that will have its balance reduced.
+       * * `destination` - The [`AssetHolder`] that will have its balance increased.
+       *
+       * # Permissions
+       * * Asset
+       *
+       * # Events
+       * * `ControllerTransferTo` - When tokens are successfully transferred.
+       *
+       * # Errors
+       * * `UnexpectedNonFungibleToken` - If the asset is a non-fungible token.
+       * * `InvalidGranularity` - If the amount to transfer does not meet the granularity requirements.
+       * * `TotalSupplyOverflow` - If the total supply exceeds the maximum allowed limit.
+       * * `ReceiverAffirmationRequired` - If `destination` requires receiver affirmation for the asset.
+       **/
+      controllerTransferTo: AugmentedSubmittable<
+        (
+          assetId: PolymeshPrimitivesAssetAssetId | string | Uint8Array,
+          value: u128 | AnyNumber | Uint8Array,
+          source:
+            | PolymeshPrimitivesAssetAssetHolder
+            | { Portfolio: any }
+            | { Account: any }
+            | string
+            | Uint8Array,
+          destination:
+            | PolymeshPrimitivesAssetAssetHolder
+            | { Portfolio: any }
+            | { Account: any }
+            | string
+            | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [
+          PolymeshPrimitivesAssetAssetId,
+          u128,
+          PolymeshPrimitivesAssetAssetHolder,
+          PolymeshPrimitivesAssetAssetHolder,
+        ]
+      >;
+      /**
        * Creates a new asset.
        *
        * The total supply will initially be zero. To mint tokens, use [`Pallet::issue`].
@@ -485,6 +534,23 @@ declare module '@polkadot/api-base/types/submittable' {
           assetId: PolymeshPrimitivesAssetAssetId | string | Uint8Array
         ) => SubmittableExtrinsic<ApiType>,
         [PolymeshPrimitivesAssetAssetId]
+      >;
+      /**
+       * Freezes an additional `amount` of `asset_id` tokens from `asset_holder`, on top of
+       * any tokens already frozen.
+       **/
+      freezePartialTokens: AugmentedSubmittable<
+        (
+          assetId: PolymeshPrimitivesAssetAssetId | string | Uint8Array,
+          assetHolder:
+            | PolymeshPrimitivesAssetAssetHolder
+            | { Portfolio: any }
+            | { Account: any }
+            | string
+            | Uint8Array,
+          amount: u128 | AnyNumber | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshPrimitivesAssetAssetId, PolymeshPrimitivesAssetAssetHolder, u128]
       >;
       /**
        * Issue (i.e mint) new tokens to the caller, which must be an authorized external agent.
@@ -1102,6 +1168,22 @@ declare module '@polkadot/api-base/types/submittable' {
         ]
       >;
       /**
+       * Freezes `amount` of `asset_id` tokens from `asset_holder`.
+       **/
+      setFrozenTokens: AugmentedSubmittable<
+        (
+          assetId: PolymeshPrimitivesAssetAssetId | string | Uint8Array,
+          assetHolder:
+            | PolymeshPrimitivesAssetAssetHolder
+            | { Portfolio: any }
+            | { Account: any }
+            | string
+            | Uint8Array,
+          amount: u128 | AnyNumber | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshPrimitivesAssetAssetId, PolymeshPrimitivesAssetAssetHolder, u128]
+      >;
+      /**
        * Sets the name of the current funding round.
        *
        * This function allows the asset issuer or an external agent to set the name of the current funding round for an asset.
@@ -1126,6 +1208,22 @@ declare module '@polkadot/api-base/types/submittable' {
           fundingRoundName: Bytes | string | Uint8Array
         ) => SubmittableExtrinsic<ApiType>,
         [PolymeshPrimitivesAssetAssetId, Bytes]
+      >;
+      /**
+       * Set the status of `account` for `asset_id` to `freeze`.
+       **/
+      setHolderFrozen: AugmentedSubmittable<
+        (
+          assetHolder:
+            | PolymeshPrimitivesAssetAssetHolder
+            | { Portfolio: any }
+            | { Account: any }
+            | string
+            | Uint8Array,
+          assetId: PolymeshPrimitivesAssetAssetId | string | Uint8Array,
+          freeze: bool | boolean | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshPrimitivesAssetAssetHolder, PolymeshPrimitivesAssetAssetId, bool]
       >;
       /**
        * Transfer assets from the caller's default portfolio to the target address's default portfolio.
@@ -1190,6 +1288,23 @@ declare module '@polkadot/api-base/types/submittable' {
           assetId: PolymeshPrimitivesAssetAssetId | string | Uint8Array
         ) => SubmittableExtrinsic<ApiType>,
         [PolymeshPrimitivesAssetAssetId]
+      >;
+      /**
+       * Unfreezes `amount` of `asset_id` tokens from `asset_holder`, reducing the amount
+       * currently frozen.
+       **/
+      unfreezePartialTokens: AugmentedSubmittable<
+        (
+          assetId: PolymeshPrimitivesAssetAssetId | string | Uint8Array,
+          assetHolder:
+            | PolymeshPrimitivesAssetAssetHolder
+            | { Portfolio: any }
+            | { Account: any }
+            | string
+            | Uint8Array,
+          amount: u128 | AnyNumber | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshPrimitivesAssetAssetId, PolymeshPrimitivesAssetAssetHolder, u128]
       >;
       /**
        * Removes the link between a ticker and an asset.
@@ -4731,6 +4846,37 @@ declare module '@polkadot/api-base/types/submittable' {
     };
     nft: {
       /**
+       * Approves `spender` to transfer the `nft_id` NFT of the `asset_id` collection on the
+       * caller's behalf.
+       *
+       * This is the ERC-721 per-token approval. The approval is consumed when used and is
+       * cleared whenever the NFT changes hands, so it never survives a transfer.
+       *
+       * Passing `None` for `spender` revokes any existing approval.
+       *
+       * # Arguments
+       * * `origin` - Signed origin. Must hold the NFT in its account key, or be an approved
+       * operator for the collection.
+       * * `asset_id` - the [`AssetId`] of the NFT collection.
+       * * `nft_id` - the [`NFTId`] of the NFT being approved.
+       * * `spender` - the account authorized to transfer the NFT, or `None` to revoke.
+       *
+       * # Errors
+       * * `NFTApprovalNotAuthorized` - the caller neither holds the NFT nor is an approved
+       * operator for the collection.
+       *
+       * # Permissions
+       * * Asset
+       **/
+      approve: AugmentedSubmittable<
+        (
+          assetId: PolymeshPrimitivesAssetAssetId | string | Uint8Array,
+          nftId: u64 | AnyNumber | Uint8Array,
+          spender: Option<AccountId32> | null | Uint8Array | AccountId32 | string
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshPrimitivesAssetAssetId, u64, Option<AccountId32>]
+      >;
+      /**
        * Forces the transfer of NFTs from a given portfolio to the caller's portfolio.
        *
        * # Arguments
@@ -4764,6 +4910,43 @@ declare module '@polkadot/api-base/types/submittable' {
           PolymeshPrimitivesNftNfTs,
           PolymeshPrimitivesAssetAssetHolder,
           PolymeshPrimitivesAssetAssetHolderKind,
+        ]
+      >;
+      /**
+       * Forces the transfer of NFTs from a given portfolio to `destination`.
+       *
+       * Unlike [`Self::controller_transfer`], which always sends the NFTs to the caller's,
+       * this extrinsic lets the caller name an arbitrary [`AssetHolder`] as the destination.
+       *
+       * # Arguments
+       * * `origin` - is a signer that has permissions to act as an agent of `asset_id`.
+       * * `nfts` - the [`NFTs`] to be transferred.
+       * * `source` - the [`AssetHolder`] that currently holds the NFTs.
+       * * `destination` - the [`AssetHolder`] that will receive the NFTs.
+       *
+       * # Permissions
+       * * Asset
+       **/
+      controllerTransferTo: AugmentedSubmittable<
+        (
+          nfts: PolymeshPrimitivesNftNfTs | { assetId?: any; ids?: any } | string | Uint8Array,
+          source:
+            | PolymeshPrimitivesAssetAssetHolder
+            | { Portfolio: any }
+            | { Account: any }
+            | string
+            | Uint8Array,
+          destination:
+            | PolymeshPrimitivesAssetAssetHolder
+            | { Portfolio: any }
+            | { Account: any }
+            | string
+            | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [
+          PolymeshPrimitivesNftNfTs,
+          PolymeshPrimitivesAssetAssetHolder,
+          PolymeshPrimitivesAssetAssetHolder,
         ]
       >;
       /**
@@ -4886,6 +5069,33 @@ declare module '@polkadot/api-base/types/submittable' {
           numberOfKeys: Option<u8> | null | Uint8Array | u8 | AnyNumber
         ) => SubmittableExtrinsic<ApiType>,
         [PolymeshPrimitivesAssetAssetId, u64, PolymeshPrimitivesAssetAssetHolderKind, Option<u8>]
+      >;
+      /**
+       * Grants or revokes `operator` the right to transfer any NFT of the `asset_id`
+       * collection held by the caller's account key.
+       *
+       * This is the ERC-721 `setApprovalForAll`, scoped to a single collection rather than to
+       * every collection the caller holds.
+       *
+       * Unlike a per-token approval, an operator approval is not consumed on use and is not
+       * cleared when an NFT is transferred.
+       *
+       * # Arguments
+       * * `origin` - Signed origin.
+       * * `asset_id` - the [`AssetId`] of the NFT collection.
+       * * `operator` - the account being granted or revoked.
+       * * `approved` - `true` to grant, `false` to revoke.
+       *
+       * # Permissions
+       * * Asset
+       **/
+      setApprovalForAll: AugmentedSubmittable<
+        (
+          assetId: PolymeshPrimitivesAssetAssetId | string | Uint8Array,
+          operator: AccountId32 | string | Uint8Array,
+          approved: bool | boolean | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshPrimitivesAssetAssetId, AccountId32, bool]
       >;
       /**
        * Transfer NFTs from the caller's account to another account.

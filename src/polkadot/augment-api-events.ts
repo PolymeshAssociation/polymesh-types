@@ -268,6 +268,26 @@ declare module '@polkadot/api-base/types/events' {
         ]
       >;
       /**
+       * Event for when a controller transfers assets from one holder to another.
+       **/
+      ControllerTransferTo: AugmentedEvent<
+        ApiType,
+        [
+          callerDid: PolymeshPrimitivesIdentityId,
+          assetId: PolymeshPrimitivesAssetAssetId,
+          source: PolymeshPrimitivesAssetAssetHolder,
+          destination: PolymeshPrimitivesAssetAssetHolder,
+          amount: u128,
+        ],
+        {
+          callerDid: PolymeshPrimitivesIdentityId;
+          assetId: PolymeshPrimitivesAssetAssetId;
+          source: PolymeshPrimitivesAssetAssetHolder;
+          destination: PolymeshPrimitivesAssetAssetHolder;
+          amount: u128;
+        }
+      >;
+      /**
        * An asset transfer has been created.
        **/
       CreatedAssetTransfer: AugmentedEvent<
@@ -328,6 +348,24 @@ declare module '@polkadot/api-base/types/events' {
       DocumentRemoved: AugmentedEvent<
         ApiType,
         [PolymeshPrimitivesIdentityId, PolymeshPrimitivesAssetAssetId, u32]
+      >;
+      /**
+       * The asset's frozen balance was set for an asset holder.
+       **/
+      FrozenBalanceSet: AugmentedEvent<
+        ApiType,
+        [
+          callerDid: PolymeshPrimitivesIdentityId,
+          assetHolder: PolymeshPrimitivesAssetAssetHolder,
+          assetId: PolymeshPrimitivesAssetAssetId,
+          frozenBalance: u128,
+        ],
+        {
+          callerDid: PolymeshPrimitivesIdentityId;
+          assetHolder: PolymeshPrimitivesAssetAssetHolder;
+          assetId: PolymeshPrimitivesAssetAssetId;
+          frozenBalance: u128;
+        }
       >;
       /**
        * An event carrying the name of the current funding round of an asset.
@@ -419,6 +457,24 @@ declare module '@polkadot/api-base/types/events' {
       RemovePreApprovedAsset: AugmentedEvent<
         ApiType,
         [PolymeshPrimitivesIdentityId, PolymeshPrimitivesAssetAssetId]
+      >;
+      /**
+       * The account status has been set to `freeze`.
+       **/
+      SetAccountFreeze: AugmentedEvent<
+        ApiType,
+        [
+          callerDid: PolymeshPrimitivesIdentityId,
+          holder: PolymeshPrimitivesAssetAssetHolder,
+          assetId: PolymeshPrimitivesAssetAssetId,
+          freeze: bool,
+        ],
+        {
+          callerDid: PolymeshPrimitivesIdentityId;
+          holder: PolymeshPrimitivesAssetAssetHolder;
+          assetId: PolymeshPrimitivesAssetAssetId;
+          freeze: bool;
+        }
       >;
       /**
        * Set asset metadata value.
@@ -2127,6 +2183,62 @@ declare module '@polkadot/api-base/types/events' {
       >;
     };
     nft: {
+      /**
+       * A per-token approval was set or revoked.
+       *
+       * `spender` is `None` when the approval was revoked.
+       **/
+      NFTApproval: AugmentedEvent<
+        ApiType,
+        [
+          owner: AccountId32,
+          spender: Option<AccountId32>,
+          assetId: PolymeshPrimitivesAssetAssetId,
+          nftId: u64,
+        ],
+        {
+          owner: AccountId32;
+          spender: Option<AccountId32>;
+          assetId: PolymeshPrimitivesAssetAssetId;
+          nftId: u64;
+        }
+      >;
+      /**
+       * A collection-wide operator approval was granted or revoked.
+       **/
+      NFTApprovalForAll: AugmentedEvent<
+        ApiType,
+        [
+          owner: AccountId32,
+          operator: AccountId32,
+          assetId: PolymeshPrimitivesAssetAssetId,
+          approved: bool,
+        ],
+        {
+          owner: AccountId32;
+          operator: AccountId32;
+          assetId: PolymeshPrimitivesAssetAssetId;
+          approved: bool;
+        }
+      >;
+      /**
+       * A spender consumed a per-token approval to transfer an NFT.
+       **/
+      NFTApprovalSpent: AugmentedEvent<
+        ApiType,
+        [
+          owner: AccountId32,
+          spender: AccountId32,
+          assetId: PolymeshPrimitivesAssetAssetId,
+          nftId: u64,
+        ],
+        {
+          owner: AccountId32;
+          spender: AccountId32;
+          assetId: PolymeshPrimitivesAssetAssetId;
+          nftId: u64;
+        }
+      >;
       /**
        * Emitted when a new nft collection is created.
        **/

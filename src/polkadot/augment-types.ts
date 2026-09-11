@@ -72,6 +72,7 @@ import type {
   PipId,
   PolymeshAssetId,
   PolymeshMoment,
+  PolymeshPrimitivesNftNftId,
   PolymeshPrimitivesSettlementInstructionId,
   PolymeshRuntimeDevelopRuntimeRuntimeCall,
   PortfolioId,
@@ -1108,6 +1109,77 @@ import type {
   VouchingStatus,
 } from '@polkadot/types/interfaces/society';
 import type {
+  ActiveEraInfo,
+  CompactAssignments,
+  CompactAssignmentsTo257,
+  CompactAssignmentsTo265,
+  CompactAssignmentsWith16,
+  CompactAssignmentsWith24,
+  CompactScore,
+  CompactScoreCompact,
+  ElectionCompute,
+  ElectionPhase,
+  ElectionResult,
+  ElectionResultToSpec10,
+  ElectionScore,
+  ElectionSize,
+  ElectionStatus,
+  EraIndex,
+  EraPoints,
+  EraRewardPoints,
+  EraRewards,
+  Exposure,
+  ExtendedBalance,
+  Forcing,
+  IndividualExposure,
+  KeyType,
+  MomentOf,
+  Nominations,
+  NominatorIndex,
+  NominatorIndexCompact,
+  OffchainAccuracy,
+  OffchainAccuracyCompact,
+  PhragmenScore,
+  Points,
+  RawSolution,
+  RawSolutionTo265,
+  RawSolutionWith16,
+  RawSolutionWith24,
+  ReadySolution,
+  RewardDestination,
+  RewardPoint,
+  RoundSnapshot,
+  SeatHolder,
+  SignedSubmission,
+  SignedSubmissionOf,
+  SignedSubmissionTo276,
+  SlashJournalEntry,
+  SlashingSpans,
+  SlashingSpansTo204,
+  SolutionOrSnapshotSize,
+  SolutionSupport,
+  SolutionSupports,
+  SpanIndex,
+  SpanRecord,
+  StakingLedger,
+  StakingLedgerTo223,
+  StakingLedgerTo240,
+  SubmissionIndicesOf,
+  Supports,
+  UnappliedSlash,
+  UnappliedSlashOther,
+  UnlockChunk,
+  ValidatorIndex,
+  ValidatorIndexCompact,
+  ValidatorPrefs,
+  ValidatorPrefsTo145,
+  ValidatorPrefsTo196,
+  ValidatorPrefsWithBlocked,
+  ValidatorPrefsWithCommission,
+  VoteWeight,
+  Voter,
+} from '@polkadot/types/interfaces/staking';
+import type {
   ApiId,
   BlockTrace,
   BlockTraceEvent,
@@ -1414,6 +1486,7 @@ declare module '@polkadot/types/types/registry' {
     AccountVote: AccountVote;
     AccountVoteSplit: AccountVoteSplit;
     AccountVoteStandard: AccountVoteStandard;
+    ActiveEraInfo: ActiveEraInfo;
     ActiveGilt: ActiveGilt;
     ActiveGiltsTotal: ActiveGiltsTotal;
     ActiveIndex: ActiveIndex;
@@ -1596,6 +1669,13 @@ declare module '@polkadot/types/types/registry' {
     CollatorSignature: CollatorSignature;
     CollectiveOrigin: CollectiveOrigin;
     CommittedCandidateReceipt: CommittedCandidateReceipt;
+    CompactAssignments: CompactAssignments;
+    CompactAssignmentsTo257: CompactAssignmentsTo257;
+    CompactAssignmentsTo265: CompactAssignmentsTo265;
+    CompactAssignmentsWith16: CompactAssignmentsWith16;
+    CompactAssignmentsWith24: CompactAssignmentsWith24;
+    CompactScore: CompactScore;
+    CompactScoreCompact: CompactScoreCompact;
     ComplianceReport: ComplianceReport;
     ComplianceRequirementResult: ComplianceRequirementResult;
     Condition: Condition;
@@ -1747,12 +1827,23 @@ declare module '@polkadot/types/types/registry' {
     EIP1559Transaction: EIP1559Transaction;
     EIP2930Transaction: EIP2930Transaction;
     EIP7702Transaction: EIP7702Transaction;
+    ElectionCompute: ElectionCompute;
+    ElectionPhase: ElectionPhase;
+    ElectionResult: ElectionResult;
+    ElectionResultToSpec10: ElectionResultToSpec10;
+    ElectionScore: ElectionScore;
+    ElectionSize: ElectionSize;
+    ElectionStatus: ElectionStatus;
     EncodedFinalityProofs: EncodedFinalityProofs;
     EncodedJustification: EncodedJustification;
     EnumDeprecationInfoV16: EnumDeprecationInfoV16;
     Epoch: Epoch;
     EpochAuthorship: EpochAuthorship;
     Era: Era;
+    EraIndex: EraIndex;
+    EraPoints: EraPoints;
+    EraRewardPoints: EraRewardPoints;
+    EraRewards: EraRewards;
     Error: Error;
     ErrorMetadataLatest: ErrorMetadataLatest;
     ErrorMetadataV10: ErrorMetadataV10;
@@ -1834,6 +1925,8 @@ declare module '@polkadot/types/types/registry' {
     ExitRevert: ExitRevert;
     ExitSucceed: ExitSucceed;
     ExplicitDisputeStatement: ExplicitDisputeStatement;
+    Exposure: Exposure;
+    ExtendedBalance: ExtendedBalance;
     Extrinsic: Extrinsic;
     ExtrinsicEra: ExtrinsicEra;
     ExtrinsicInclusionMode: ExtrinsicInclusionMode;
@@ -1871,6 +1964,7 @@ declare module '@polkadot/types/types/registry' {
     FixedI64: FixedI64;
     FixedU128: FixedU128;
     FixedU64: FixedU64;
+    Forcing: Forcing;
     ForkTreePendingChange: ForkTreePendingChange;
     ForkTreePendingChangeNode: ForkTreePendingChangeNode;
     FullIdentification: FullIdentification;
@@ -1973,6 +2067,7 @@ declare module '@polkadot/types/types/registry' {
     IncomingParachainFixed: IncomingParachainFixed;
     Index: Index;
     IndicesLookupSource: IndicesLookupSource;
+    IndividualExposure: IndividualExposure;
     InherentData: InherentData;
     InherentIdentifier: InherentIdentifier;
     InitializationData: InitializationData;
@@ -2021,6 +2116,7 @@ declare module '@polkadot/types/types/registry' {
     KeyIdentityData: KeyIdentityData;
     KeyOwnerProof: KeyOwnerProof;
     Keys: Keys;
+    KeyType: KeyType;
     KeyTypeId: KeyTypeId;
     KeyValue: KeyValue;
     KeyValueOption: KeyValueOption;
@@ -2094,6 +2190,7 @@ declare module '@polkadot/types/types/registry' {
     ModuleMetadataV13: ModuleMetadataV13;
     ModuleMetadataV9: ModuleMetadataV9;
     Moment: Moment;
+    MomentOf: MomentOf;
     MoreAttestations: MoreAttestations;
     MortalEra: MortalEra;
     MultiAddress: MultiAddress;
@@ -2147,6 +2244,9 @@ declare module '@polkadot/types/types/registry' {
     NFTs: NFTs;
     NodeFeatures: NodeFeatures;
     NodeRole: NodeRole;
+    Nominations: Nominations;
+    NominatorIndex: NominatorIndex;
+    NominatorIndexCompact: NominatorIndexCompact;
     NonFungibleLeg: NonFungibleLeg;
     NonFungibleLegV7: NonFungibleLegV7;
     NotConnectedPeer: NotConnectedPeer;
@@ -2155,6 +2255,8 @@ declare module '@polkadot/types/types/registry' {
     Null: Null;
     OccupiedCore: OccupiedCore;
     OccupiedCoreAssumption: OccupiedCoreAssumption;
+    OffchainAccuracy: OffchainAccuracy;
+    OffchainAccuracyCompact: OffchainAccuracyCompact;
     OffChainLeg: OffChainLeg;
     OffenceDetails: OffenceDetails;
     Offender: Offender;
@@ -2266,9 +2368,12 @@ declare module '@polkadot/types/types/registry' {
     Phantom: Phantom;
     PhantomData: PhantomData;
     Phase: Phase;
+    PhragmenScore: PhragmenScore;
     PipId: PipId;
+    Points: Points;
     PolymeshAssetId: PolymeshAssetId;
     PolymeshMoment: PolymeshMoment;
+    PolymeshPrimitivesNftNftId: PolymeshPrimitivesNftNftId;
     PolymeshPrimitivesSettlementInstructionId: PolymeshPrimitivesSettlementInstructionId;
     PolymeshRuntimeDevelopRuntimeRuntimeCall: PolymeshRuntimeDevelopRuntimeRuntimeCall;
     PortableType: PortableType;
@@ -2320,8 +2425,13 @@ declare module '@polkadot/types/types/registry' {
     RawBabePreDigestSecondaryVRF: RawBabePreDigestSecondaryVRF;
     RawBabePreDigestTo159: RawBabePreDigestTo159;
     RawOrigin: RawOrigin;
+    RawSolution: RawSolution;
+    RawSolutionTo265: RawSolutionTo265;
+    RawSolutionWith16: RawSolutionWith16;
+    RawSolutionWith24: RawSolutionWith24;
     RawVRFOutput: RawVRFOutput;
     ReadProof: ReadProof;
+    ReadySolution: ReadySolution;
     Reasons: Reasons;
     Receipt: Receipt;
     ReceiptMessage: ReceiptMessage;
@@ -2362,6 +2472,9 @@ declare module '@polkadot/types/types/registry' {
     ResponseV4: ResponseV4;
     ResponseV5: ResponseV5;
     Retriable: Retriable;
+    RewardDestination: RewardDestination;
+    RewardPoint: RewardPoint;
+    RoundSnapshot: RoundSnapshot;
     RoundState: RoundState;
     RpcDidRecords: RpcDidRecords;
     RpcDidRecordsSuccess: RpcDidRecordsSuccess;
@@ -2397,6 +2510,7 @@ declare module '@polkadot/types/types/registry' {
     ScrapedOnChainVotes: ScrapedOnChainVotes;
     Seal: Seal;
     SealV0: SealV0;
+    SeatHolder: SeatHolder;
     SecondaryKey: SecondaryKey;
     SecondaryKeyAuthMessage: SecondaryKeyAuthMessage;
     SeedOf: SeedOf;
@@ -2464,6 +2578,9 @@ declare module '@polkadot/types/types/registry' {
     SignedBlockWithJustifications: SignedBlockWithJustifications;
     SignedExtensionMetadataLatest: SignedExtensionMetadataLatest;
     SignedExtensionMetadataV14: SignedExtensionMetadataV14;
+    SignedSubmission: SignedSubmission;
+    SignedSubmissionOf: SignedSubmissionOf;
+    SignedSubmissionTo276: SignedSubmissionTo276;
     SignerPayload: SignerPayload;
     SigningContext: SigningContext;
     SiLookupTypeId: SiLookupTypeId;
@@ -2481,6 +2598,9 @@ declare module '@polkadot/types/types/registry' {
     SiTypeParameter: SiTypeParameter;
     SiVariant: SiVariant;
     SlashingOffenceKind: SlashingOffenceKind;
+    SlashingSpans: SlashingSpans;
+    SlashingSpansTo204: SlashingSpansTo204;
+    SlashJournalEntry: SlashJournalEntry;
     Slot: Slot;
     SlotDuration: SlotDuration;
     SlotNumber: SlotNumber;
@@ -2488,8 +2608,16 @@ declare module '@polkadot/types/types/registry' {
     SlotRange10: SlotRange10;
     SocietyJudgement: SocietyJudgement;
     SocietyVote: SocietyVote;
+    SolutionOrSnapshotSize: SolutionOrSnapshotSize;
+    SolutionSupport: SolutionSupport;
+    SolutionSupports: SolutionSupports;
+    SpanIndex: SpanIndex;
+    SpanRecord: SpanRecord;
     SpecVersion: SpecVersion;
     Sr25519Signature: Sr25519Signature;
+    StakingLedger: StakingLedger;
+    StakingLedgerTo223: StakingLedgerTo223;
+    StakingLedgerTo240: StakingLedgerTo240;
     StatClaim: StatClaim;
     Statement: Statement;
     StatementKind: StatementKind;
@@ -2541,6 +2669,8 @@ declare module '@polkadot/types/types/registry' {
     StoredState: StoredState;
     StrikeCount: StrikeCount;
     SubId: SubId;
+    SubmissionIndicesOf: SubmissionIndicesOf;
+    Supports: Supports;
     SyncState: SyncState;
     SystemInherentData: SystemInherentData;
     SystemOrigin: SystemOrigin;
@@ -2594,10 +2724,13 @@ declare module '@polkadot/types/types/registry' {
     U64: U64;
     u8: u8;
     U8: U8;
+    UnappliedSlash: UnappliedSlash;
+    UnappliedSlashOther: UnappliedSlashOther;
     UncheckedFungibilityV4: UncheckedFungibilityV4;
     UncheckedFungibilityV5: UncheckedFungibilityV5;
     UncleEntryItem: UncleEntryItem;
     UnknownTransaction: UnknownTransaction;
+    UnlockChunk: UnlockChunk;
     UnrewardedRelayer: UnrewardedRelayer;
     UnrewardedRelayersState: UnrewardedRelayersState;
     UpgradeGoAhead: UpgradeGoAhead;
@@ -2613,6 +2746,13 @@ declare module '@polkadot/types/types/registry' {
     ValidatorCount: ValidatorCount;
     ValidatorId: ValidatorId;
     ValidatorIdOf: ValidatorIdOf;
+    ValidatorIndex: ValidatorIndex;
+    ValidatorIndexCompact: ValidatorIndexCompact;
+    ValidatorPrefs: ValidatorPrefs;
+    ValidatorPrefsTo145: ValidatorPrefsTo145;
+    ValidatorPrefsTo196: ValidatorPrefsTo196;
+    ValidatorPrefsWithBlocked: ValidatorPrefsWithBlocked;
+    ValidatorPrefsWithCommission: ValidatorPrefsWithCommission;
     ValidatorSet: ValidatorSet;
     ValidatorSetId: ValidatorSetId;
     ValidatorSignature: ValidatorSignature;
@@ -2635,10 +2775,12 @@ declare module '@polkadot/types/types/registry' {
     VoteCount: VoteCount;
     VoteCountProposalFound: VoteCountProposalFound;
     VoteIndex: VoteIndex;
+    Voter: Voter;
     VoterInfo: VoterInfo;
     Votes: Votes;
     VotesTo230: VotesTo230;
     VoteThreshold: VoteThreshold;
+    VoteWeight: VoteWeight;
     Voting: Voting;
     VotingDelegating: VotingDelegating;
     VotingDirect: VotingDirect;

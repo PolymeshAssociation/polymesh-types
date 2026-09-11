@@ -312,7 +312,12 @@
     "transfer_asset": "transfer_asset",
     "receiver_affirm_asset_transfer": "receiver_affirm_asset_transfer",
     "reject_asset_transfer": "reject_asset_transfer",
-    "approve": "approve"
+    "approve": "approve",
+    "set_frozen_tokens": "set_frozen_tokens",
+    "set_holder_frozen": "set_holder_frozen",
+    "controller_transfer_to": "controller_transfer_to",
+    "freeze_partial_tokens": "freeze_partial_tokens",
+    "unfreeze_partial_tokens": "unfreeze_partial_tokens"
   },
   "CapitalDistribution": {
     "distribute": "distribute",
@@ -564,7 +569,10 @@
     "issue_nft": "issue_nft",
     "redeem_nft": "redeem_nft",
     "controller_transfer": "controller_transfer",
-    "transfer_nft": "transfer_nft"
+    "transfer_nft": "transfer_nft",
+    "approve": "approve",
+    "set_approval_for_all": "set_approval_for_all",
+    "controller_transfer_to": "controller_transfer_to"
   },
   "StateTrieMigration": {
     "control_auto_migration": "control_auto_migration",

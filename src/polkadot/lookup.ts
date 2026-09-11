@@ -1476,6 +1476,32 @@ export default {
         spender: 'AccountId32',
         amount: 'u128',
       },
+      set_frozen_tokens: {
+        assetId: 'PolymeshPrimitivesAssetAssetId',
+        assetHolder: 'PolymeshPrimitivesAssetAssetHolder',
+        amount: 'u128',
+      },
+      set_holder_frozen: {
+        assetHolder: 'PolymeshPrimitivesAssetAssetHolder',
+        assetId: 'PolymeshPrimitivesAssetAssetId',
+        freeze: 'bool',
+      },
+      controller_transfer_to: {
+        assetId: 'PolymeshPrimitivesAssetAssetId',
+        value: 'u128',
+        source: 'PolymeshPrimitivesAssetAssetHolder',
+        destination: 'PolymeshPrimitivesAssetAssetHolder',
+      },
+      freeze_partial_tokens: {
+        assetId: 'PolymeshPrimitivesAssetAssetId',
+        assetHolder: 'PolymeshPrimitivesAssetAssetHolder',
+        amount: 'u128',
+      },
+      unfreeze_partial_tokens: {
+        assetId: 'PolymeshPrimitivesAssetAssetId',
+        assetHolder: 'PolymeshPrimitivesAssetAssetHolder',
+        amount: 'u128',
+      },
     },
   },
   /**
@@ -2867,6 +2893,21 @@ export default {
         to: 'AccountId32',
         memo: 'Option<PolymeshPrimitivesMemo>',
       },
+      approve: {
+        assetId: 'PolymeshPrimitivesAssetAssetId',
+        nftId: 'u64',
+        spender: 'Option<AccountId32>',
+      },
+      set_approval_for_all: {
+        assetId: 'PolymeshPrimitivesAssetAssetId',
+        operator: 'AccountId32',
+        approved: 'bool',
+      },
+      controller_transfer_to: {
+        nfts: 'PolymeshPrimitivesNftNfTs',
+        source: 'PolymeshPrimitivesAssetAssetHolder',
+        destination: 'PolymeshPrimitivesAssetAssetHolder',
+      },
     },
   },
   /**
@@ -3606,7 +3647,9 @@ export default {
   /**
    * Lookup527: polymesh_transaction_payment::ChargeTransactionPayment<T>
    **/
-  PolymeshTransactionPaymentChargeTransactionPayment: 'Compact<u128>',
+  PolymeshTransactionPaymentChargeTransactionPayment: {
+    tip: 'Compact<u128>',
+  },
   /**
    * Lookup528: pallet_permissions::StoreCallMetadata<T>
    **/
@@ -4562,6 +4605,25 @@ export default {
         amountSpent: 'u128',
         remainingAllowance: 'u128',
       },
+      FrozenBalanceSet: {
+        callerDid: 'PolymeshPrimitivesIdentityId',
+        assetHolder: 'PolymeshPrimitivesAssetAssetHolder',
+        assetId: 'PolymeshPrimitivesAssetAssetId',
+        frozenBalance: 'u128',
+      },
+      SetAccountFreeze: {
+        callerDid: 'PolymeshPrimitivesIdentityId',
+        holder: 'PolymeshPrimitivesAssetAssetHolder',
+        assetId: 'PolymeshPrimitivesAssetAssetId',
+        freeze: 'bool',
+      },
+      ControllerTransferTo: {
+        callerDid: 'PolymeshPrimitivesIdentityId',
+        assetId: 'PolymeshPrimitivesAssetAssetId',
+        source: 'PolymeshPrimitivesAssetAssetHolder',
+        destination: 'PolymeshPrimitivesAssetAssetHolder',
+        amount: 'u128',
+      },
     },
   },
   /**
@@ -5133,6 +5195,24 @@ export default {
       NftCollectionCreated: '(PolymeshPrimitivesIdentityId,PolymeshPrimitivesAssetAssetId,u64)',
       NFTHoldingsUpdated:
         '(PolymeshPrimitivesIdentityId,PolymeshPrimitivesNftNfTs,Option<PolymeshPrimitivesAssetAssetHolder>,Option<PolymeshPrimitivesAssetAssetHolder>,PolymeshPrimitivesAssetHoldingsUpdateReason)',
+      NFTApproval: {
+        owner: 'AccountId32',
+        spender: 'Option<AccountId32>',
+        assetId: 'PolymeshPrimitivesAssetAssetId',
+        nftId: 'u64',
+      },
+      NFTApprovalForAll: {
+        owner: 'AccountId32',
+        operator: 'AccountId32',
+        assetId: 'PolymeshPrimitivesAssetAssetId',
+        approved: 'bool',
+      },
+      NFTApprovalSpent: {
+        owner: 'AccountId32',
+        spender: 'AccountId32',
+        assetId: 'PolymeshPrimitivesAssetAssetId',
+        nftId: 'u64',
+      },
     },
   },
   /**
@@ -6116,6 +6196,10 @@ export default {
       'InsufficientAllowance',
       'SelfOwnershipTransferNotAllowed',
       'WeightLimitExceeded',
+      'InvalidTransferSenderIsFrozen',
+      'ReceiverAffirmationRequired',
+      'InsufficientFrozenBalance',
+      'FreezePartialTokenMustNotExceedHoldersBalance',
     ],
   },
   /**
@@ -6329,6 +6413,7 @@ export default {
       'UnauthorizedPortfolioKey',
       'KeyNotFoundForCaller',
       'InsufficientBalance',
+      'PortfolioIsFrozen',
     ],
   },
   /**
@@ -6506,7 +6591,7 @@ export default {
       'InvalidAccountId',
       'ReceiptExpired',
       'SenderSameAsReceiver',
-      'AllowancesNotSupportedForNFTs',
+      'DeprecatedAllowancesNotSupportedForNFTs',
       'InstructionAlreadyLocked',
       'InstructionNotLocked',
       'RelockCooldownNotExpired',
@@ -6712,6 +6797,9 @@ export default {
       'NFTIsLocked',
       'NumberOfKeysIsLessThanExpected',
       'NFTIsNotLocked',
+      'NFTApprovalNotAuthorized',
+      'InsufficientNFTApproval',
+      'ReceiverAffirmationRequired',
     ],
   },
   /**
