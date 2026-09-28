@@ -2440,6 +2440,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       FundraiserNotLive: AugmentedError<ApiType>;
       /**
+       * The settlement instruction was not settled successfully.
+       **/
+      InstructionNotSettled: AugmentedError<ApiType>;
+      /**
        * The fundraiser does not have enough tokens remaining to fulfil the investment.
        **/
       InsufficientTokensRemaining: AugmentedError<ApiType>;
