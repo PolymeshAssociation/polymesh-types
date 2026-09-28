@@ -8627,6 +8627,7 @@ declare module '@polkadot/types/lookup' {
     readonly isInvalidSignature: boolean;
     readonly isOffchainFundingNotAllowed: boolean;
     readonly isReceiptExpired: boolean;
+    readonly isInstructionNotSettled: boolean;
     readonly type:
       | 'Unauthorized'
       | 'Overflow'
@@ -8642,7 +8643,8 @@ declare module '@polkadot/types/lookup' {
       | 'InvestmentAmountTooLow'
       | 'InvalidSignature'
       | 'OffchainFundingNotAllowed'
-      | 'ReceiptExpired';
+      | 'ReceiptExpired'
+      | 'InstructionNotSettled';
   }
 
   /** @name PalletTreasuryError (879) */

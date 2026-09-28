@@ -6647,6 +6647,7 @@ export default {
       'InvalidSignature',
       'OffchainFundingNotAllowed',
       'ReceiptExpired',
+      'InstructionNotSettled',
     ],
   },
   /**
