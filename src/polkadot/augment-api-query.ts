@@ -77,6 +77,7 @@ import type {
   PalletPipsPip,
   PalletPipsPipsMetadata,
   PalletPipsProposalState,
+  PalletPipsProposer,
   PalletPipsSnapshotMetadata,
   PalletPipsSnapshottedPip,
   PalletPipsVote,
@@ -2782,6 +2783,14 @@ declare module '@polkadot/api-base/types/storage' {
         [u32]
       >;
       /**
+       * The [`Proposer`] for each proposal ([`PipId`]).
+       **/
+      proposalProposers: AugmentedQuery<
+        ApiType,
+        (arg: u32 | AnyNumber | Uint8Array) => Observable<Option<PalletPipsProposer>>,
+        [u32]
+      >;
+      /**
        * The [`VotingResult`] for each proposal ([`PipId`]).
        **/
       proposalResult: AugmentedQuery<
@@ -3194,6 +3203,13 @@ declare module '@polkadot/api-base/types/storage' {
         ) => Observable<Option<u128>>,
         [AccountId32, AccountId32]
       >;
+      /**
+       * `relay_tx` reentry guard.
+       *
+       * Set while a relayed call is being dispatched, so that nested `relay_tx` calls are
+       * rejected regardless of how the inner call is dispatched (e.g. through a multisig proposal).
+       **/
+      relayReentry: AugmentedQuery<ApiType, () => Observable<bool>, []>;
       /**
        * Nonce for `relay_tx`.
        **/

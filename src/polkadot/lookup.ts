@@ -5213,6 +5213,18 @@ export default {
         assetId: 'PolymeshPrimitivesAssetAssetId',
         nftId: 'u64',
       },
+      ControllerTransfer: {
+        callerDid: 'PolymeshPrimitivesIdentityId',
+        nfts: 'PolymeshPrimitivesNftNfTs',
+        source: 'PolymeshPrimitivesAssetAssetHolder',
+        destination: 'PolymeshPrimitivesAssetAssetHolder',
+      },
+      ControllerTransferTo: {
+        callerDid: 'PolymeshPrimitivesIdentityId',
+        nfts: 'PolymeshPrimitivesNftNfTs',
+        source: 'PolymeshPrimitivesAssetAssetHolder',
+        destination: 'PolymeshPrimitivesAssetAssetHolder',
+      },
     },
   },
   /**
@@ -6264,6 +6276,9 @@ export default {
       'DuplicateComplianceRequirements',
       'ComplianceRequirementTooComplex',
       'WeightLimitExceeded',
+      'EmptyClaimsInCondition',
+      'TooManyTrustedIssuers',
+      'TooManyTrustedIssuerClaimTypes',
     ],
   },
   /**
@@ -6597,6 +6612,7 @@ export default {
       'RelockCooldownNotExpired',
       'MaxRelockCountExceeded',
       'MissingInstructionMediators',
+      'EmptyAffirmation',
     ],
   },
   /**
@@ -6702,6 +6718,7 @@ export default {
       'NoPendingSubsidy',
       'InvalidSignature',
       'ExpiredRelayTx',
+      'NestingNotAllowed',
     ],
   },
   /**
@@ -7438,6 +7455,7 @@ export default {
       '__Unused63',
       'PrecompileDelegateDenied',
       'EcdsaRecoveryFailed',
+      'UnmapAccountDisabled',
     ],
   },
   /**

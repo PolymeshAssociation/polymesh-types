@@ -6815,12 +6815,28 @@ declare module '@polkadot/types/lookup' {
       readonly assetId: PolymeshPrimitivesAssetAssetId;
       readonly nftId: u64;
     } & Struct;
+    readonly isControllerTransfer: boolean;
+    readonly asControllerTransfer: {
+      readonly callerDid: PolymeshPrimitivesIdentityId;
+      readonly nfts: PolymeshPrimitivesNftNfTs;
+      readonly source: PolymeshPrimitivesAssetAssetHolder;
+      readonly destination: PolymeshPrimitivesAssetAssetHolder;
+    } & Struct;
+    readonly isControllerTransferTo: boolean;
+    readonly asControllerTransferTo: {
+      readonly callerDid: PolymeshPrimitivesIdentityId;
+      readonly nfts: PolymeshPrimitivesNftNfTs;
+      readonly source: PolymeshPrimitivesAssetAssetHolder;
+      readonly destination: PolymeshPrimitivesAssetAssetHolder;
+    } & Struct;
     readonly type:
       | 'NftCollectionCreated'
       | 'NftHoldingsUpdated'
       | 'NftApproval'
       | 'NftApprovalForAll'
-      | 'NftApprovalSpent';
+      | 'NftApprovalSpent'
+      | 'ControllerTransfer'
+      | 'ControllerTransferTo';
   }
 
   /** @name PalletElectionProviderMultiPhaseEvent (635) */
@@ -8124,6 +8140,9 @@ declare module '@polkadot/types/lookup' {
     readonly isDuplicateComplianceRequirements: boolean;
     readonly isComplianceRequirementTooComplex: boolean;
     readonly isWeightLimitExceeded: boolean;
+    readonly isEmptyClaimsInCondition: boolean;
+    readonly isTooManyTrustedIssuers: boolean;
+    readonly isTooManyTrustedIssuerClaimTypes: boolean;
     readonly type:
       | 'Unauthorized'
       | 'DidNotExist'
@@ -8131,7 +8150,10 @@ declare module '@polkadot/types/lookup' {
       | 'IncorrectOperationOnTrustedIssuer'
       | 'DuplicateComplianceRequirements'
       | 'ComplianceRequirementTooComplex'
-      | 'WeightLimitExceeded';
+      | 'WeightLimitExceeded'
+      | 'EmptyClaimsInCondition'
+      | 'TooManyTrustedIssuers'
+      | 'TooManyTrustedIssuerClaimTypes';
   }
 
   /** @name PalletCorporateActionsError (820) */
@@ -8516,6 +8538,7 @@ declare module '@polkadot/types/lookup' {
     readonly isRelockCooldownNotExpired: boolean;
     readonly isMaxRelockCountExceeded: boolean;
     readonly isMissingInstructionMediators: boolean;
+    readonly isEmptyAffirmation: boolean;
     readonly type:
       | 'InvalidVenue'
       | 'Unauthorized'
@@ -8576,7 +8599,8 @@ declare module '@polkadot/types/lookup' {
       | 'InstructionNotLocked'
       | 'RelockCooldownNotExpired'
       | 'MaxRelockCountExceeded'
-      | 'MissingInstructionMediators';
+      | 'MissingInstructionMediators'
+      | 'EmptyAffirmation';
   }
 
   /** @name PolymeshPrimitivesStatisticsStat1stKey (870) */
@@ -8705,6 +8729,7 @@ declare module '@polkadot/types/lookup' {
     readonly isNoPendingSubsidy: boolean;
     readonly isInvalidSignature: boolean;
     readonly isExpiredRelayTx: boolean;
+    readonly isNestingNotAllowed: boolean;
     readonly type:
       | 'NoPayingKey'
       | 'NotPayingKey'
@@ -8712,7 +8737,8 @@ declare module '@polkadot/types/lookup' {
       | 'Overflow'
       | 'NoPendingSubsidy'
       | 'InvalidSignature'
-      | 'ExpiredRelayTx';
+      | 'ExpiredRelayTx'
+      | 'NestingNotAllowed';
   }
 
   /** @name PalletPreimageOldRequestStatus (887) */
@@ -9490,6 +9516,7 @@ declare module '@polkadot/types/lookup' {
     readonly isStorageRefundLocked: boolean;
     readonly isPrecompileDelegateDenied: boolean;
     readonly isEcdsaRecoveryFailed: boolean;
+    readonly isUnmapAccountDisabled: boolean;
     readonly type:
       | 'InvalidSchedule'
       | 'InvalidCallFlags'
@@ -9546,7 +9573,8 @@ declare module '@polkadot/types/lookup' {
       | 'StorageRefundNotEnoughFunds'
       | 'StorageRefundLocked'
       | 'PrecompileDelegateDenied'
-      | 'EcdsaRecoveryFailed';
+      | 'EcdsaRecoveryFailed'
+      | 'UnmapAccountDisabled';
   }
 
   /** @name SpRuntimeBlockLazyBlock (988) */

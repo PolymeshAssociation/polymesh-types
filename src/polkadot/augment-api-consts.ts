@@ -134,6 +134,15 @@ declare module '@polkadot/api-base/types/consts' {
        * The maximum claim reads that are allowed to happen in worst case of a condition resolution
        **/
       maxConditionComplexity: u32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum number of trusted issuers allowed in the default trusted claim issuers of an asset
+       * and in the `issuers` list of each condition.
+       **/
+      maximumNumberOfTrustedIssuers: u32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum number of claim types a trusted issuer can be trusted for (`TrustedFor::Specific`).
+       **/
+      maxTrustedIssuerClaimTypes: u32 & AugmentedConst<ApiType>;
     };
     confidentialAssets: {
       /**

@@ -2184,6 +2184,44 @@ declare module '@polkadot/api-base/types/events' {
     };
     nft: {
       /**
+       * An agent forced the transfer of NFTs from `source` to one of the caller's holdings,
+       * via `controller_transfer`.
+       **/
+      ControllerTransfer: AugmentedEvent<
+        ApiType,
+        [
+          callerDid: PolymeshPrimitivesIdentityId,
+          nfts: PolymeshPrimitivesNftNfTs,
+          source: PolymeshPrimitivesAssetAssetHolder,
+          destination: PolymeshPrimitivesAssetAssetHolder,
+        ],
+        {
+          callerDid: PolymeshPrimitivesIdentityId;
+          nfts: PolymeshPrimitivesNftNfTs;
+          source: PolymeshPrimitivesAssetAssetHolder;
+          destination: PolymeshPrimitivesAssetAssetHolder;
+        }
+      >;
+      /**
+       * An agent forced the transfer of NFTs from `source` to an arbitrary `destination`,
+       * via `controller_transfer_to`.
+       **/
+      ControllerTransferTo: AugmentedEvent<
+        ApiType,
+        [
+          callerDid: PolymeshPrimitivesIdentityId,
+          nfts: PolymeshPrimitivesNftNfTs,
+          source: PolymeshPrimitivesAssetAssetHolder,
+          destination: PolymeshPrimitivesAssetAssetHolder,
+        ],
+        {
+          callerDid: PolymeshPrimitivesIdentityId;
+          nfts: PolymeshPrimitivesNftNfTs;
+          source: PolymeshPrimitivesAssetAssetHolder;
+          destination: PolymeshPrimitivesAssetAssetHolder;
+        }
+      >;
+      /**
        * A per-token approval was set or revoked.
        *
        * `spender` is `None` when the approval was revoked.

@@ -5007,6 +5007,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * - `CollectionNotFound` - if the collection associated to the given asset_id has not been created.
        * - `InvalidMetadataAttribute` - if the number of attributes is not equal to the number set in the collection or attempting to set a value for a key not definied in the collection.
        * - `DuplicateMetadataKey` - if a duplicate metadata keys has been passed as input.
+       * - `AssetMetadataValueMaxLengthExceeded` - if any metadata value exceeds `AssetMetadataValueMaxLength`.
        *
        *
        * # Permissions

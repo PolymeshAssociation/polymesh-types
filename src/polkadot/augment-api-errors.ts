@@ -512,6 +512,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       DuplicateComplianceRequirements: AugmentedError<ApiType>;
       /**
+       * `IsAnyOf` and `IsNoneOf` conditions must have at least one claim.
+       **/
+      EmptyClaimsInCondition: AugmentedError<ApiType>;
+      /**
        * Issuer exist but trying to add it again.
        **/
       IncorrectOperationOnTrustedIssuer: AugmentedError<ApiType>;
@@ -519,6 +523,14 @@ declare module '@polkadot/api-base/types/errors' {
        * Compliance requirement id doesn't exist.
        **/
       InvalidComplianceRequirementId: AugmentedError<ApiType>;
+      /**
+       * The number of claim types of a trusted issuer exceeds `MaxTrustedIssuerClaimTypes`.
+       **/
+      TooManyTrustedIssuerClaimTypes: AugmentedError<ApiType>;
+      /**
+       * The number of trusted issuers exceeds `MaximumNumberOfTrustedIssuers`.
+       **/
+      TooManyTrustedIssuers: AugmentedError<ApiType>;
       /**
        * User is not authorized.
        **/
@@ -1686,6 +1698,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       InvalidSignature: AugmentedError<ApiType>;
       /**
+       * Nested `relay_tx` calls are not allowed.
+       **/
+      NestingNotAllowed: AugmentedError<ApiType>;
+      /**
        * The `user_key` doesn't have a `paying_key`.
        **/
       NoPayingKey: AugmentedError<ApiType>;
@@ -1954,6 +1970,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       TxFeeOverdraw: AugmentedError<ApiType>;
       /**
+       * Attempting to unmap an account when this operation is disabled.
+       **/
+      UnmapAccountDisabled: AugmentedError<ApiType>;
+      /**
        * Unsupported precompile address.
        **/
       UnsupportedPrecompileAddress: AugmentedError<ApiType>;
@@ -2024,6 +2044,10 @@ declare module '@polkadot/api-base/types/errors' {
        * No duplicate uid are allowed for different receipts.
        **/
       DuplicateReceiptUid: AugmentedError<ApiType>;
+      /**
+       * The affirmation must include at least one asset holder or receipt.
+       **/
+      EmptyAffirmation: AugmentedError<ApiType>;
       /**
        * The instruction has been locked for too much time.
        **/
