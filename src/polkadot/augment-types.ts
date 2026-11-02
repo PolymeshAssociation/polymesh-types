@@ -165,7 +165,11 @@ import type {
   MoreAttestations,
 } from '@polkadot/types/interfaces/attestations';
 import type { RawAuraPreDigest } from '@polkadot/types/interfaces/aura';
-import type { ExtrinsicOrHash, ExtrinsicStatus } from '@polkadot/types/interfaces/author';
+import type {
+  ExtrinsicOrHash,
+  ExtrinsicStatus,
+  GeneratedSessionKeys,
+} from '@polkadot/types/interfaces/author';
 import type { UncleEntryItem } from '@polkadot/types/interfaces/authorship';
 import type {
   AllowedSlots,
@@ -737,6 +741,7 @@ import type {
   SessionStatus,
 } from '@polkadot/types/interfaces/mixnet';
 import type {
+  MmrAncestryProof,
   MmrBatchProof,
   MmrEncodableOpaqueLeaf,
   MmrError,
@@ -1998,6 +2003,7 @@ declare module '@polkadot/types/types/registry' {
     FungibleLegV7: FungibleLegV7;
     FungiblesAccessError: FungiblesAccessError;
     Gas: Gas;
+    GeneratedSessionKeys: GeneratedSessionKeys;
     GenesisBuildErr: GenesisBuildErr;
     GiltBid: GiltBid;
     GlobalValidationData: GlobalValidationData;
@@ -2168,6 +2174,7 @@ declare module '@polkadot/types/types/registry' {
     MigrationStatusResult: MigrationStatusResult;
     Mixnode: Mixnode;
     MixnodesErr: MixnodesErr;
+    MmrAncestryProof: MmrAncestryProof;
     MmrBatchProof: MmrBatchProof;
     MmrEncodableOpaqueLeaf: MmrEncodableOpaqueLeaf;
     MmrError: MmrError;
