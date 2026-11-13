@@ -870,6 +870,7 @@ export enum NftTx {
   Approve = 'nft.approve',
   SetApprovalForAll = 'nft.setApprovalForAll',
   ControllerTransferTo = 'nft.controllerTransferTo',
+  SetNftsFrozen = 'nft.setNftsFrozen',
 }
 
 export enum StateTrieMigrationTx {
@@ -972,6 +973,25 @@ export enum ConfidentialAssetsTx {
   ExecuteInstantSettlement = 'confidentialAssets.executeInstantSettlement',
   InstantSenderAffirmation = 'confidentialAssets.instantSenderAffirmation',
   InstantReceiverAffirmation = 'confidentialAssets.instantReceiverAffirmation',
+  SetRequiredClaim = 'confidentialAssets.setRequiredClaim',
+  RemoveRequiredClaim = 'confidentialAssets.removeRequiredClaim',
+  DistributeEncryptionKey = 'confidentialAssets.distributeEncryptionKey',
+  UpdateAssetKeys = 'confidentialAssets.updateAssetKeys',
+  SetAssetFrozen = 'confidentialAssets.setAssetFrozen',
+}
+
+export enum WorkerModulesTx {
+  RegisterProtocol = 'workerModules.registerProtocol',
+  UploadProtocolModuleCode = 'workerModules.uploadProtocolModuleCode',
+  UploadProtocolModuleContext = 'workerModules.uploadProtocolModuleContext',
+  UploadProtocolModuleConfig = 'workerModules.uploadProtocolModuleConfig',
+}
+
+export enum WorkerTestingTx {
+  TestVersion = 'workerTesting.testVersion',
+  SetProtocolVersion = 'workerTesting.setProtocolVersion',
+  SetEnableWorkSession = 'workerTesting.setEnableWorkSession',
+  SubmitWorkRequest = 'workerTesting.submitWorkRequest',
 }
 
 export enum ModuleName {
@@ -1029,6 +1049,8 @@ export enum ModuleName {
   Revive = 'revive',
   MultiBlockMigrations = 'multiBlockMigrations',
   ConfidentialAssets = 'confidentialAssets',
+  WorkerModules = 'workerModules',
+  WorkerTesting = 'workerTesting',
 }
 
 export type TxTag =
@@ -1085,7 +1107,9 @@ export type TxTag =
   | BeefyTx
   | ReviveTx
   | MultiBlockMigrationsTx
-  | ConfidentialAssetsTx;
+  | ConfidentialAssetsTx
+  | WorkerModulesTx
+  | WorkerTestingTx;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const TxTags = {
@@ -1143,4 +1167,6 @@ export const TxTags = {
   revive: ReviveTx,
   multiBlockMigrations: MultiBlockMigrationsTx,
   confidentialAssets: ConfidentialAssetsTx,
+  workerModules: WorkerModulesTx,
+  workerTesting: WorkerTestingTx,
 };

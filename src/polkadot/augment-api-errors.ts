@@ -570,6 +570,18 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       AmountOverflow: AugmentedError<ApiType>;
       /**
+       * Only Root may change a Root freeze.
+       **/
+      AssetFrozenByRoot: AugmentedError<ApiType>;
+      /**
+       * No more confidential asset IDs are available.
+       **/
+      AssetIdOverflow: AugmentedError<ApiType>;
+      /**
+       * A frozen asset cannot be used in a new settlement.
+       **/
+      AssetIsFrozen: AugmentedError<ApiType>;
+      /**
        * Confidential asset hasn't been registered yet.
        **/
       AssetMissing: AugmentedError<ApiType>;
@@ -602,9 +614,17 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       EncryptionKeyAlreadyRegistered: AugmentedError<ApiType>;
       /**
+       * Encryption key does not match the registered key for the account.
+       **/
+      EncryptionKeyMismatch: AugmentedError<ApiType>;
+      /**
        * Encryption key for the Confidential account is missing.
        **/
       EncryptionKeyMissing: AugmentedError<ApiType>;
+      /**
+       * The shared encryption key hasn't been distributed to the mediator's encryption key.
+       **/
+      EncryptionKeyNotShared: AugmentedError<ApiType>;
       /**
        * Confidential fee account already registered.
        **/
@@ -613,10 +633,6 @@ declare module '@polkadot/api-base/types/errors' {
        * Confidential fee account hasn't been registered yet.
        **/
       FeeAccountMissing: AugmentedError<ApiType>;
-      /**
-       * Insufficient fee payment amount.
-       **/
-      InsufficientFeePaymentAmount: AugmentedError<ApiType>;
       /**
        * Invalid affirmation status transition.
        **/
@@ -650,6 +666,14 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       MaxTotalSupplyExceeded: AugmentedError<ApiType>;
       /**
+       * Missing leg mediators.
+       **/
+      MissingLegMediators: AugmentedError<ApiType>;
+      /**
+       * DID does not hold the required claim from a trusted issuer (or it expired).
+       **/
+      MissingRequiredClaim: AugmentedError<ApiType>;
+      /**
        * Name too long for the asset.
        **/
       NameTooLong: AugmentedError<ApiType>;
@@ -661,6 +685,10 @@ declare module '@polkadot/api-base/types/errors' {
        * No current worker session.
        **/
       NoCurrentWorkerSession: AugmentedError<ApiType>;
+      /**
+       * Key distribution requires at least one recipient.
+       **/
+      NoKeyRecipients: AugmentedError<ApiType>;
       /**
        * No pending affirmations for this settlement.
        **/
@@ -682,6 +710,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       NullifierAlreadyUsed: AugmentedError<ApiType>;
       /**
+       * Relayer proof submission is only permitted as the top-level call.
+       **/
+      RelayerCallMustBeTopLevel: AugmentedError<ApiType>;
+      /**
        * Settlement has executed, cannot be reverted.
        **/
       SettlementAlreadyExecuted: AugmentedError<ApiType>;
@@ -689,6 +721,10 @@ declare module '@polkadot/api-base/types/errors' {
        * Settlement already exists.
        **/
       SettlementAlreadyExists: AugmentedError<ApiType>;
+      /**
+       * The leg count provided with a batched proof doesn't match the settlement.
+       **/
+      SettlementLegCountMismatch: AugmentedError<ApiType>;
       /**
        * Settlement is missing legs.
        **/
@@ -721,6 +757,14 @@ declare module '@polkadot/api-base/types/errors' {
        * Too many mediators for this leg.
        **/
       TooManyMediators: AugmentedError<ApiType>;
+      /**
+       * A registration or proof batch exceeds its runtime-configured limit.
+       **/
+      TooManyProofs: AugmentedError<ApiType>;
+      /**
+       * Too many recipients for the shared encryption key.
+       **/
+      TooManySharedKeyRecipients: AugmentedError<ApiType>;
       /**
        * Wrong mediator id for this leg.
        **/
@@ -951,6 +995,10 @@ declare module '@polkadot/api-base/types/errors' {
        * The caller's secondary key does not have the required asset permission.
        **/
       SecondaryKeyNotAuthorizedForAsset: AugmentedError<ApiType>;
+      /**
+       * The `BecomeAgent` authorization was issued before the target was last removed as an agent.
+       **/
+      StaleAuthorization: AugmentedError<ApiType>;
       /**
        * The agent is not authorized to call the current extrinsic.
        **/
@@ -1196,6 +1244,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       DecodingError: AugmentedError<ApiType>;
       /**
+       * The list of signers contains the same account more than once.
+       **/
+      DuplicateSigners: AugmentedError<ApiType>;
+      /**
        * Identity provided is not the multisig's admin.
        **/
       IdentityNotAdmin: AugmentedError<ApiType>;
@@ -1343,6 +1395,10 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       InvalidNFTTransferInvalidReceiverDID: AugmentedError<ApiType>;
       /**
+       * Failed to transfer an NFT - the NFT is frozen for the sender.
+       **/
+      InvalidNFTTransferNFTIsFrozen: AugmentedError<ApiType>;
+      /**
        * Failed to transfer an NFT - nft is locked.
        **/
       InvalidNFTTransferNFTIsLocked: AugmentedError<ApiType>;
@@ -1373,6 +1429,10 @@ declare module '@polkadot/api-base/types/errors' {
        * collection, may set a per-token approval.
        **/
       NFTApprovalNotAuthorized: AugmentedError<ApiType>;
+      /**
+       * The NFT is frozen.
+       **/
+      NFTIsFrozen: AugmentedError<ApiType>;
       /**
        * The NFT is locked.
        **/
@@ -1575,6 +1635,10 @@ declare module '@polkadot/api-base/types/errors' {
        * Can not unlock more tokens than what are locked
        **/
       InsufficientTokensLocked: AugmentedError<ApiType>;
+      /**
+       * Frozen NFTs can not be moved between portfolios.
+       **/
+      InvalidTransferNFTIsFrozen: AugmentedError<ApiType>;
       /**
        * Locked NFTs can not be moved between portfolios.
        **/
@@ -2076,6 +2140,10 @@ declare module '@polkadot/api-base/types/errors' {
        * Instruction has invalid dates
        **/
       InstructionDatesInvalid: AugmentedError<ApiType>;
+      /**
+       * An instruction must have at least one leg.
+       **/
+      InstructionHasNoLegs: AugmentedError<ApiType>;
       /**
        * Instruction has not been affirmed.
        **/
@@ -2755,6 +2823,46 @@ declare module '@polkadot/api-base/types/errors' {
        * No validator was found for the given key.
        **/
       ValidatorNotFound: AugmentedError<ApiType>;
+    };
+    workerModules: {
+      /**
+       * The protocol metadata is invalid.
+       **/
+      InvalidProtocolMetadata: AugmentedError<ApiType>;
+      /**
+       * Module code missing for the given code hash.
+       **/
+      ModuleCodeMissing: AugmentedError<ApiType>;
+      /**
+       * Module context missing for the given context hash.
+       **/
+      ModuleContextMissing: AugmentedError<ApiType>;
+      /**
+       * The protocol is already registered.
+       **/
+      ProtocolAlreadyRegistered: AugmentedError<ApiType>;
+      /**
+       * The protocol module code already exists.
+       **/
+      ProtocolModuleCodeAlreadyExists: AugmentedError<ApiType>;
+      /**
+       * The protocol module config already exists.
+       **/
+      ProtocolModuleConfigAlreadyExists: AugmentedError<ApiType>;
+      /**
+       * The protocol module context already exists.
+       **/
+      ProtocolModuleContextAlreadyExists: AugmentedError<ApiType>;
+      /**
+       * The protocol is not registered.
+       **/
+      ProtocolNotRegistered: AugmentedError<ApiType>;
+    };
+    workerTesting: {
+      /**
+       * The worker session is not initialized.
+       **/
+      NoSession: AugmentedError<ApiType>;
     };
   } // AugmentedErrors
 } // declare module

@@ -19,6 +19,7 @@ import type {
   Vec,
   bool,
   u128,
+  u16,
   u32,
   u64,
   u8,
@@ -31,6 +32,8 @@ import type {
   PalletBalancesUnexpectedKind,
   PalletConfidentialAssetsCurveTreeCurveTreeTimestamp,
   PalletConfidentialAssetsCurveTreeTimestampedTreeRoot,
+  PalletConfidentialAssetsFreezeOrigin,
+  PalletConfidentialAssetsRoleKind,
   PalletConfidentialAssetsSettlementSettlementStatus,
   PalletCorporateActionsBallotBallotMeta,
   PalletCorporateActionsBallotBallotTimeRange,
@@ -52,9 +55,12 @@ import type {
   PalletStoFundingAsset,
   PalletStoFundraiser,
   PalletValidatorsSlashingSwitch,
+  PalletWorkerModulesProtocolMetadata,
+  PalletWorkerModulesProtocolModuleConfig,
   PolymeshDartBpAccountAccountStateCommitment,
   PolymeshDartBpBatchedProofHash,
   PolymeshDartBpFeeFeeAccountStateCommitment,
+  PolymeshDartBpKeyDistributionProof,
   PolymeshDartBpKeysAccountPublicKey,
   PolymeshDartBpKeysEncryptionPublicKey,
   PolymeshDartBpLegLegRef,
@@ -77,6 +83,7 @@ import type {
   PolymeshPrimitivesDocument,
   PolymeshPrimitivesEventOnly,
   PolymeshPrimitivesIdentityClaim,
+  PolymeshPrimitivesIdentityClaimClaim,
   PolymeshPrimitivesIdentityId,
   PolymeshPrimitivesIdentityIdPortfolioId,
   PolymeshPrimitivesMaybeBlock,
@@ -99,6 +106,10 @@ import type {
   PolymeshPrimitivesTransferComplianceTransferCondition,
   PolymeshPrimitivesTransferComplianceTransferConditionExemptKey,
   PolymeshRuntimeDevelopRuntimeRuntimeHoldReason,
+  PolymeshWorkerCommonErrorProtocolError,
+  PolymeshWorkerCommonProtocol,
+  PolymeshWorkerProtocolTestingTestWorkRequest,
+  PolymeshWorkerProtocolTestingTestWorkResponse,
   SpConsensusGrandpaAppPublic,
   SpNposElectionsElectionScore,
   SpRuntimeDispatchError,
@@ -1134,6 +1145,11 @@ declare module '@polkadot/api-base/types/events' {
           } & Struct;
         }
       >;
+      AssetFrozen: AugmentedEvent<
+        ApiType,
+        [assetId: u32, freezeOrigin: PalletConfidentialAssetsFreezeOrigin],
+        { assetId: u32; freezeOrigin: PalletConfidentialAssetsFreezeOrigin }
+      >;
       /**
        * Minted Confidential asset.
        **/
@@ -1164,6 +1180,11 @@ declare module '@polkadot/api-base/types/events' {
         [leafIndex: u64, assetLeaf: PolymeshDartCurveTreeCommonCompressedLeafValue],
         { leafIndex: u64; assetLeaf: PolymeshDartCurveTreeCommonCompressedLeafValue }
       >;
+      AssetUnfrozen: AugmentedEvent<
+        ApiType,
+        [assetId: u32, unfreezeOrigin: PalletConfidentialAssetsFreezeOrigin],
+        { assetId: u32; unfreezeOrigin: PalletConfidentialAssetsFreezeOrigin }
+      >;
       /**
        * A Confidential asset has been updated.
        **/
@@ -1186,6 +1207,24 @@ declare module '@polkadot/api-base/types/events' {
             PolymeshDartBpKeysEncryptionPublicKey
           >;
           auditors: BTreeSet<PolymeshDartBpKeysEncryptionPublicKey>;
+        }
+      >;
+      /**
+       * An encryption key has been distributed (shared) to recipient encryption keys.
+       *
+       * Recipients decrypt the shared secret key from `proof`.
+       **/
+      EncryptionKeyDistributed: AugmentedEvent<
+        ApiType,
+        [
+          callerDid: PolymeshPrimitivesIdentityId,
+          encryptionKey: PolymeshDartBpKeysEncryptionPublicKey,
+          proof: PolymeshDartBpKeyDistributionProof,
+        ],
+        {
+          callerDid: PolymeshPrimitivesIdentityId;
+          encryptionKey: PolymeshDartBpKeysEncryptionPublicKey;
+          proof: PolymeshDartBpKeyDistributionProof;
         }
       >;
       /**
@@ -1312,6 +1351,30 @@ declare module '@polkadot/api-base/types/events' {
           amount: u128;
           batchHash: PolymeshDartBpBatchedProofHash;
           batchResult: Result<Null, SpRuntimeDispatchError>;
+        }
+      >;
+      /**
+       * Required claim removed for a gated role (back to permissionless).
+       **/
+      RequiredClaimRemoved: AugmentedEvent<
+        ApiType,
+        [role: PalletConfidentialAssetsRoleKind],
+        { role: PalletConfidentialAssetsRoleKind }
+      >;
+      /**
+       * Required claim set for a gated role.
+       **/
+      RequiredClaimSet: AugmentedEvent<
+        ApiType,
+        [
+          role: PalletConfidentialAssetsRoleKind,
+          claim: PolymeshPrimitivesIdentityClaimClaim,
+          trustedIssuers: Vec<PolymeshPrimitivesIdentityId>,
+        ],
+        {
+          role: PalletConfidentialAssetsRoleKind;
+          claim: PolymeshPrimitivesIdentityClaimClaim;
+          trustedIssuers: Vec<PolymeshPrimitivesIdentityId>;
         }
       >;
       /**
@@ -2298,6 +2361,27 @@ declare module '@polkadot/api-base/types/events' {
           Option<PolymeshPrimitivesAssetAssetHolder>,
           PolymeshPrimitivesAssetHoldingsUpdateReason,
         ]
+      >;
+      /**
+       * `nfts` were frozen or unfrozen for `holder`.
+       *
+       * Emitted by `set_nfts_frozen`, and with `frozen: false` when a controller transfer
+       * unfreezes the NFTs it takes from `holder`.
+       **/
+      NFTsFrozenStatusUpdated: AugmentedEvent<
+        ApiType,
+        [
+          callerDid: PolymeshPrimitivesIdentityId,
+          holder: PolymeshPrimitivesAssetAssetHolder,
+          nfts: PolymeshPrimitivesNftNfTs,
+          frozen: bool,
+        ],
+        {
+          callerDid: PolymeshPrimitivesIdentityId;
+          holder: PolymeshPrimitivesAssetAssetHolder;
+          nfts: PolymeshPrimitivesNftNfTs;
+          frozen: bool;
+        }
       >;
     };
     offences: {
@@ -4035,6 +4119,67 @@ declare module '@polkadot/api-base/types/events' {
         ApiType,
         [validator: AccountId32, era: u32, page: u32, error: SpRuntimeDispatchError],
         { validator: AccountId32; era: u32; page: u32; error: SpRuntimeDispatchError }
+      >;
+    };
+    workerModules: {
+      /**
+       * Protocol module code has been uploaded.
+       **/
+      ProtocolModuleCodeUploaded: AugmentedEvent<
+        ApiType,
+        [protocol: PolymeshWorkerCommonProtocol, code: Bytes, codeHash: U8aFixed],
+        { protocol: PolymeshWorkerCommonProtocol; code: Bytes; codeHash: U8aFixed }
+      >;
+      /**
+       * Protocol module config has been uploaded.
+       **/
+      ProtocolModuleConfigUploaded: AugmentedEvent<
+        ApiType,
+        [
+          protocol: PolymeshWorkerCommonProtocol,
+          config: PalletWorkerModulesProtocolModuleConfig,
+          configHash: U8aFixed,
+        ],
+        {
+          protocol: PolymeshWorkerCommonProtocol;
+          config: PalletWorkerModulesProtocolModuleConfig;
+          configHash: U8aFixed;
+        }
+      >;
+      /**
+       * Protocol module context has been uploaded.
+       **/
+      ProtocolModuleContextUploaded: AugmentedEvent<
+        ApiType,
+        [protocol: PolymeshWorkerCommonProtocol, context: Bytes, contextHash: U8aFixed],
+        { protocol: PolymeshWorkerCommonProtocol; context: Bytes; contextHash: U8aFixed }
+      >;
+      /**
+       * A new protocol has been registered.
+       **/
+      ProtocolRegistered: AugmentedEvent<
+        ApiType,
+        [protocolId: u16, metadata: PalletWorkerModulesProtocolMetadata],
+        { protocolId: u16; metadata: PalletWorkerModulesProtocolMetadata }
+      >;
+    };
+    workerTesting: {
+      TestingProtocolTask: AugmentedEvent<
+        ApiType,
+        [
+          request: PolymeshWorkerProtocolTestingTestWorkRequest,
+          result: Result<
+            PolymeshWorkerProtocolTestingTestWorkResponse,
+            PolymeshWorkerCommonErrorProtocolError
+          >,
+        ],
+        {
+          request: PolymeshWorkerProtocolTestingTestWorkRequest;
+          result: Result<
+            PolymeshWorkerProtocolTestingTestWorkResponse,
+            PolymeshWorkerCommonErrorProtocolError
+          >;
+        }
       >;
     };
   } // AugmentedEvents
