@@ -33,6 +33,7 @@ import type { Extrinsic } from '@polkadot/types/interfaces/extrinsics';
 import type { OpaqueMetadata } from '@polkadot/types/interfaces/metadata';
 import type { AccountId32, H160, H256, Slot } from '@polkadot/types/interfaces/runtime';
 import type {
+  PalletConfidentialAssetsRelayerSubmitBatchedFeeInfo,
   PalletGroupRpcRuntimeApiMember,
   PalletIdentityDidStatus,
   PalletIdentityKeyIdentityData,
@@ -54,6 +55,7 @@ import type {
   PalletRevivePrimitivesEthTransactInfo,
   PalletTransactionPaymentFeeDetails,
   PalletTransactionPaymentRuntimeDispatchInfo,
+  PolymeshDartBpBatchedBatchedProofs,
   PolymeshPrimitivesAssetAssetHolder,
   PolymeshPrimitivesAssetAssetId,
   PolymeshPrimitivesAuthorization,
@@ -320,6 +322,18 @@ declare module '@polkadot/api-base/types/calls' {
         ) => Observable<
           Result<PolymeshPrimitivesComplianceManagerComplianceReport, SpRuntimeDispatchError>
         >
+      >;
+    };
+    /** 0x1b5ab1652b4f7170/ */
+    confidentialAssetsApi: {
+      /**
+       * Returns the weight and fee for a signed `relayer_submit_batched_proofs` extrinsic, carrying `batch`.,, The fee payment proof's length is estimated from the current fee account curve, tree height, since the proof itself isn't available yet at this point.
+       **/
+      relayerSubmitBatchedFeeInfo: AugmentedCall<
+        ApiType,
+        (
+          batch: PolymeshDartBpBatchedBatchedProofs | { proofs?: any } | string | Uint8Array
+        ) => Observable<PalletConfidentialAssetsRelayerSubmitBatchedFeeInfo>
       >;
     };
     /** 0xdf6acb689907609b/ */

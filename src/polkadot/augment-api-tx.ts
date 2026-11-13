@@ -41,6 +41,7 @@ import type {
 } from '@polkadot/types/interfaces/runtime';
 import type {
   PalletBalancesAdjustmentDirection,
+  PalletConfidentialAssetsRoleKind,
   PalletCorporateActionsBallotBallotMeta,
   PalletCorporateActionsBallotBallotTimeRange,
   PalletCorporateActionsBallotBallotVote,
@@ -66,6 +67,8 @@ import type {
   PalletStoFundingMethod,
   PalletStoPriceTier,
   PalletValidatorsSlashingSwitch,
+  PalletWorkerModulesProtocolMetadata,
+  PalletWorkerModulesProtocolModuleConfig,
   PolymeshDartBpAccountBatchedAccountAssetRegistrationProof,
   PolymeshDartBpAffirmationProofsInstantReceiverAffirmationProof,
   PolymeshDartBpAffirmationProofsInstantSenderAffirmationProof,
@@ -80,6 +83,7 @@ import type {
   PolymeshDartBpFeeBatchedFeeAccountRegistrationProof,
   PolymeshDartBpFeeBatchedFeeAccountTopupProof,
   PolymeshDartBpFeeFeePaymentWithBatchedProofs,
+  PolymeshDartBpKeyDistributionProof,
   PolymeshDartBpKeysAccountPublicKey,
   PolymeshDartBpKeysAccountRegistrationProof,
   PolymeshDartBpKeysEncryptionKeyRegistrationProof,
@@ -137,6 +141,8 @@ import type {
   PolymeshPrimitivesTransferComplianceTransferConditionExemptKey,
   PolymeshRuntimeDevelopRuntimeOriginCaller,
   PolymeshRuntimeDevelopRuntimeSessionKeys,
+  PolymeshWorkerCommonProtocol,
+  PolymeshWorkerProtocolTestingTestWorkRequest,
   SpConsensusBabeDigestsNextConfigDescriptor,
   SpConsensusBeefyDoubleVotingProof,
   SpConsensusBeefyForkVotingProofAncestryProof,
@@ -752,6 +758,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * * `AssetMetadataLocalKeyAlreadyExists` - If the local metadata key already exists.
        * * `AssetMetadataValueIsLocked` - If the metadata value is locked.
        * * `AssetMetadataValueMaxLengthExceeded` - If the metadata value length exceeds the maximum allowed length.
+       * * `AssetMetadataValueIsEmpty` - If `details` lock an empty metadata value.
        **/
       registerAndSetLocalAssetMetadata: AugmentedSubmittable<
         (
@@ -1098,6 +1105,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * * `AssetMetadataKeyIsMissing` - If the metadata key is missing.
        * * `AssetMetadataValueIsLocked` - If the metadata value is locked.
        * * `AssetMetadataValueMaxLengthExceeded` - If the metadata value length exceeds the maximum allowed length.
+       * * `AssetMetadataValueIsEmpty` - If `details` lock an empty metadata value.
        **/
       setAssetMetadata: AugmentedSubmittable<
         (
@@ -2542,6 +2550,37 @@ declare module '@polkadot/api-base/types/submittable' {
         [PolymeshDartBpLegSettlementProof]
       >;
       /**
+       * Register a new shared encryption key and distribute it to registered encryption keys.
+       *
+       * The shared key is linked to the caller's DID (normally the asset issuer). It can then
+       * be used as an asset auditor key, or as a mediator key by the owner of a Confidential
+       * account whose encryption key it was distributed to.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call (must meet the auditor requirements).
+       * * `proof` - The key distribution proof.
+       *
+       * # Errors
+       * * `BadOrigin` if `origin` isn't signed.
+       * * `MissingRequiredClaim` if the caller doesn't meet the auditor requirements, or a
+       * recipient's DID doesn't meet the auditor requirements.
+       * * `EncryptionKeyAlreadyRegistered` if the shared key is already registered.
+       * * `EncryptionKeyMissing` if a recipient key isn't registered.
+       * * `NoKeyRecipients` if the proof has no recipients.
+       * * `TooManySharedKeyRecipients` if the proof exceeds `MaxSharedKeyRecipients`.
+       * * `InvalidProof` if the proof is invalid.
+       **/
+      distributeEncryptionKey: AugmentedSubmittable<
+        (
+          proof:
+            | PolymeshDartBpKeyDistributionProof
+            | { publicKey?: any; recipientPks?: any; inner?: any }
+            | string
+            | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshDartBpKeyDistributionProof]
+      >;
+      /**
        * Create and execute an instant settlement.
        *
        * # Arguments
@@ -2794,6 +2833,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * * `AssetMissing` if the Confidential asset is not registered.
        * * `AccountAssetAlreadyRegistered` if the Confidential account has already registered the Confidential asset.
        * * `NotAccountOwner` if the caller is not the owner of the Confidential account.
+       * * `EncryptionKeyMismatch` if the proof key doesn't match the account's registered key.
        * * `InvalidProof` if the proof is invalid.
        **/
       registerAccountAssets: AugmentedSubmittable<
@@ -2816,6 +2856,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * # Errors
        * * `BadOrigin` if `origin` isn't signed.
        * * `AccountAlreadyCreated` if the dart account or encryption key is already registered.
+       * * `NotAccountOwner` if the account key is registered to another identity as a fee account.
        **/
       registerAccounts: AugmentedSubmittable<
         (
@@ -2861,6 +2902,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * # Errors
        * * `BadOrigin` if `origin` isn't signed.
        * * `FeeAccountAlreadyRegistered` if the fee account or encryption key is already registered.
+       * * `NotAccountOwner` if the account key is registered to another identity as an asset account.
        * * `NullifierAlreadyUsed` if the nullifier for the fee account state commitment has already been used.
        * * `InvalidFeeAssetId` if the fee asset ID is invalid.
        * * `InvalidProof` if the proof is invalid.
@@ -2884,8 +2926,11 @@ declare module '@polkadot/api-base/types/submittable' {
        *
        * Relayers can charge a commission fee on top of the transaction fee (i.e. `commission fee + transaction fee = fee amount`).
        *
-       * Relayers should verify that the fee payment proof is valid before submitting the batched Confidential proofs.  They are not required
-       * to verify the batched Confidential proofs.  If the user's Confidential proofs are invalid, the user is still responsible for paying the fee to the relayer.
+       * Relayers are responsible for checking the fee payment terms and the fee and batch proofs before submission.
+       * The signed extension checks whether the fee nullifier is already spent; a concurrent spend can still make
+       * that check stale before inclusion. Fee-payment roots are checked against the shorter relayer root-age limit
+       * during dispatch, so relayers should submit with enough time remaining for inclusion. If the batch proofs
+       * are invalid, the user is still responsible for paying the fee to the relayer.
        *
        * # Arguments
        * * `origin` - The origin of the call.  This is the relayer.
@@ -2894,17 +2939,43 @@ declare module '@polkadot/api-base/types/submittable' {
        * # Errors
        * * `BadOrigin` if `origin` isn't signed.
        * * `InvalidFeePaymentProof` if the fee payment proof is invalid.
-       * * `InsufficientFeePayment` if the fee payment is insufficient to cover the relayer fee.
+       * * `CurveTreeRootNotFound` if the fee payment root is missing or too old.
+       * * `RelayerCallMustBeTopLevel` if this call is nested or the signed extension did not run.
        **/
       relayerSubmitBatchedProofs: AugmentedSubmittable<
         (
           proof:
             | PolymeshDartBpFeeFeePaymentWithBatchedProofs
-            | { feePayment?: any; batchedProofs?: any }
+            | { feePayment?: any; batchedProofs?: any; isBroadcast?: any }
             | string
             | Uint8Array
         ) => SubmittableExtrinsic<ApiType>,
         [PolymeshDartBpFeeFeePaymentWithBatchedProofs]
+      >;
+      /**
+       * Remove the required claim for a gated role (Root only).
+       *
+       * The role becomes permissionless again (mediators keep falling back to the
+       * auditor spec while that one is set).
+       *
+       * # Arguments
+       * * `origin` - The origin of the call (must be Root).
+       * * `role` - The gated role.
+       *
+       * # Errors
+       * * `BadOrigin` if `origin` isn't Root.
+       **/
+      removeRequiredClaim: AugmentedSubmittable<
+        (
+          role:
+            | PalletConfidentialAssetsRoleKind
+            | 'AssetCreator'
+            | 'Auditor'
+            | 'Mediator'
+            | number
+            | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PalletConfidentialAssetsRoleKind]
       >;
       /**
        * Sender affirms a settlement leg.
@@ -2995,6 +3066,67 @@ declare module '@polkadot/api-base/types/submittable' {
         [PolymeshDartBpAffirmationProofsSenderCounterUpdateProof]
       >;
       /**
+       * Set the freeze state as the issuer or Root. Only Root may change a Root freeze.
+       **/
+      setAssetFrozen: AugmentedSubmittable<
+        (
+          assetId: u32 | AnyNumber | Uint8Array,
+          frozen: bool | boolean | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [u32, bool]
+      >;
+      /**
+       * Set the required claim for a gated role (Root only).
+       *
+       * While a spec is set, a DID acting in that role must hold a live
+       * (unexpired) claim equal to `claim` from one of `trusted_issuers`.
+       * An empty issuer list blocks the role entirely (deny-all); remove the spec
+       * (see `remove_required_claim`) to restore permissionless behavior.
+       * Mediators fall back to the auditor spec when no mediator spec is set.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call (must be Root).
+       * * `role` - The gated role.
+       * * `claim` - The required claim (type, scope and value).
+       * * `trusted_issuers` - DIDs trusted to issue the required claim.
+       *
+       * # Errors
+       * * `BadOrigin` if `origin` isn't Root.
+       **/
+      setRequiredClaim: AugmentedSubmittable<
+        (
+          role:
+            | PalletConfidentialAssetsRoleKind
+            | 'AssetCreator'
+            | 'Auditor'
+            | 'Mediator'
+            | number
+            | Uint8Array,
+          claim:
+            | PolymeshPrimitivesIdentityClaimClaim
+            | { Accredited: any }
+            | { Affiliate: any }
+            | { BuyLockup: any }
+            | { SellLockup: any }
+            | { CustomerDueDiligence: any }
+            | { KnowYourCustomer: any }
+            | { Jurisdiction: any }
+            | { Exempted: any }
+            | { Blocked: any }
+            | { Custom: any }
+            | string
+            | Uint8Array,
+          trustedIssuers:
+            | Vec<PolymeshPrimitivesIdentityId>
+            | (PolymeshPrimitivesIdentityId | string | Uint8Array)[]
+        ) => SubmittableExtrinsic<ApiType>,
+        [
+          PalletConfidentialAssetsRoleKind,
+          PolymeshPrimitivesIdentityClaimClaim,
+          Vec<PolymeshPrimitivesIdentityId>,
+        ]
+      >;
+      /**
        * Submit a batch of proofs.
        *
        * # Arguments
@@ -3021,6 +3153,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * # Errors
        * * `BadOrigin` if `origin` isn't signed.
        * * `FeeAccountMissing` if the fee account is not registered.
+       * * `NotAccountOwner` if the caller does not own the fee account.
        * * `InvalidFeeAssetId` if the fee asset ID is invalid.
        * * `InvalidProof` if the proof is invalid.
        * * `InsufficientBalance` if the caller has insufficient balance to pay the deposit.
@@ -3034,6 +3167,27 @@ declare module '@polkadot/api-base/types/submittable' {
             | Uint8Array
         ) => SubmittableExtrinsic<ApiType>,
         [PolymeshDartBpFeeBatchedFeeAccountTopupProof]
+      >;
+      /**
+       * Update the auditor and mediator encryption keys for an asset.
+       *
+       * The asset owner must retain the required live claims for every selected auditor and
+       * mediator. Existing settlements keep their creation-time encrypted legs and mediator set.
+       **/
+      updateAssetKeys: AugmentedSubmittable<
+        (
+          assetId: u32 | AnyNumber | Uint8Array,
+          mediators: BTreeMap<
+            PolymeshDartBpKeysAccountPublicKey,
+            PolymeshDartBpKeysEncryptionPublicKey
+          >,
+          auditors: BTreeSet<PolymeshDartBpKeysEncryptionPublicKey>
+        ) => SubmittableExtrinsic<ApiType>,
+        [
+          u32,
+          BTreeMap<PolymeshDartBpKeysAccountPublicKey, PolymeshDartBpKeysEncryptionPublicKey>,
+          BTreeSet<PolymeshDartBpKeysEncryptionPublicKey>,
+        ]
       >;
     };
     corporateAction: {
@@ -4736,6 +4890,7 @@ declare module '@polkadot/api-base/types/submittable' {
        *
        * # Arguments
        * * `signers` - Signers of the multisig (They need to accept authorization before they are actually added).
+       * Must not contain duplicates.
        * * `sigs_required` - Number of sigs required to process a multi-sig tx.
        * * `permissions` - optional custom permissions.  Only the primary key can provide custom permissions.
        **/
@@ -5097,6 +5252,42 @@ declare module '@polkadot/api-base/types/submittable' {
           approved: bool | boolean | Uint8Array
         ) => SubmittableExtrinsic<ApiType>,
         [PolymeshPrimitivesAssetAssetId, AccountId32, bool]
+      >;
+      /**
+       * Freezes or unfreezes `nfts` for `holder`.
+       *
+       * A frozen NFT can't be transferred, moved between portfolios, redeemed or locked in a
+       * settlement instruction while `holder` holds it. Controller transfers are exempt and
+       * unfreeze the NFTs they take. The freeze is per holder, as in ERC-7943: it can be set
+       * for a holder that doesn't hold the NFT yet, and applies if the NFT arrives.
+       *
+       * # Arguments
+       * * `origin` - is a signer that has permissions to act as an agent of the collection.
+       * * `holder` - the [`AssetHolder`] the freeze applies to.
+       * * `nfts` - the [`NFTs`] to freeze or unfreeze.
+       * * `frozen` - `true` to freeze, `false` to unfreeze.
+       *
+       * ## Errors
+       * - `CollectionNotFound` - if the collection does not exist.
+       * - `ZeroCount`, `MaxNumberOfNFTsPerLegExceeded`, `DuplicatedNFTId` - if `nfts` is empty,
+       * too large or has duplicate ids.
+       * - `NFTNotFound` - if freezing and any of the NFTs does not exist.
+       *
+       * # Permissions
+       * * Asset
+       **/
+      setNftsFrozen: AugmentedSubmittable<
+        (
+          holder:
+            | PolymeshPrimitivesAssetAssetHolder
+            | { Portfolio: any }
+            | { Account: any }
+            | string
+            | Uint8Array,
+          nfts: PolymeshPrimitivesNftNfTs | { assetId?: any; ids?: any } | string | Uint8Array,
+          frozen: bool | boolean | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshPrimitivesAssetAssetHolder, PolymeshPrimitivesNftNfTs, bool]
       >;
       /**
        * Transfer NFTs from the caller's account to another account.
@@ -9123,6 +9314,11 @@ declare module '@polkadot/api-base/types/submittable' {
        * # Arguments
        * * origin Required origin for removing a potential validator.
        * * identity Validator's IdentityId.
+       *
+       * All stashes of `identity` that are still validating are chilled.
+       *
+       * The worst-case weight is charged up front and refunded down to the number of stashes
+       * actually chilled.
        **/
       removePermissionedValidator: AugmentedSubmittable<
         (
@@ -9150,6 +9346,144 @@ declare module '@polkadot/api-base/types/submittable' {
           newIntendedCount: u32 | AnyNumber | Uint8Array
         ) => SubmittableExtrinsic<ApiType>,
         [PolymeshPrimitivesIdentityId, u32]
+      >;
+    };
+    workerModules: {
+      /**
+       * Register a new protocol.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call, must be root.
+       * * `protocol_id` - The ID of the protocol to register.
+       * * `metadata` - The metadata of the protocol to register.
+       *
+       * # Errors
+       * * `DispatchError::BadOrigin` - If the origin is not root.
+       * * `Error::<T>::ProtocolAlreadyRegistered` - If the protocol is already registered.
+       * * `Error::<T>::InvalidProtocolMetadata` - If the protocol metadata is invalid.
+       **/
+      registerProtocol: AugmentedSubmittable<
+        (
+          protocolId: u16 | AnyNumber | Uint8Array,
+          metadata:
+            | PalletWorkerModulesProtocolMetadata
+            | { protocolName?: any; protocolDescription?: any; protocolVersion?: any }
+            | string
+            | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [u16, PalletWorkerModulesProtocolMetadata]
+      >;
+      /**
+       * Upload protocol module code.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call, must be root.
+       * * `protocol` - The protocol to upload the module code for.
+       * * `code` - The module code to upload.
+       * * `module_version` - The version of the module being uploaded.
+       *
+       * # Errors
+       * * `DispatchError::BadOrigin` - If the origin is not root.
+       * * `Error::<T>::ProtocolNotRegistered` - If the protocol is not registered.
+       * * `Error::<T>::ProtocolModuleCodeAlreadyExists` - If the protocol module code already exists.
+       **/
+      uploadProtocolModuleCode: AugmentedSubmittable<
+        (
+          protocol:
+            | PolymeshWorkerCommonProtocol
+            | { id?: any; version?: any }
+            | string
+            | Uint8Array,
+          code: Bytes | string | Uint8Array,
+          moduleVersion: u32 | AnyNumber | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshWorkerCommonProtocol, Bytes, u32]
+      >;
+      /**
+       * Upload protocol module config.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call, must be root.
+       * * `config` - The module config to upload.
+       *
+       * # Errors
+       * * `DispatchError::BadOrigin` - If the origin is not root.
+       * * `Error::<T>::ProtocolNotRegistered` - If the protocol is not registered.
+       * * `Error::<T>::ProtocolModuleConfigAlreadyExists` - If the protocol module config already exists.
+       **/
+      uploadProtocolModuleConfig: AugmentedSubmittable<
+        (
+          config:
+            | PalletWorkerModulesProtocolModuleConfig
+            | { protocol?: any; initializationMethod?: any; modules?: any }
+            | string
+            | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PalletWorkerModulesProtocolModuleConfig]
+      >;
+      /**
+       * Upload protocol module context.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call, must be root.
+       * * `protocol` - The protocol to upload the module context for.
+       * * `context` - The module context to upload.
+       *
+       * # Errors
+       * * `DispatchError::BadOrigin` - If the origin is not root.
+       * * `Error::<T>::ProtocolNotRegistered` - If the protocol is not registered.
+       * * `Error::<T>::ProtocolModuleContextAlreadyExists` - If the protocol module context already exists.
+       **/
+      uploadProtocolModuleContext: AugmentedSubmittable<
+        (
+          protocol:
+            | PolymeshWorkerCommonProtocol
+            | { id?: any; version?: any }
+            | string
+            | Uint8Array,
+          context: Bytes | string | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshWorkerCommonProtocol, Bytes]
+      >;
+    };
+    workerTesting: {
+      /**
+       * Set whether to enable work session per block. This is used for testing purpose only.
+       **/
+      setEnableWorkSession: AugmentedSubmittable<
+        (enable: bool | boolean | Uint8Array) => SubmittableExtrinsic<ApiType>,
+        [bool]
+      >;
+      /**
+       * Set what version of the testing protocol.
+       **/
+      setProtocolVersion: AugmentedSubmittable<
+        (
+          protocol: PolymeshWorkerCommonProtocol | { id?: any; version?: any } | string | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshWorkerCommonProtocol]
+      >;
+      /**
+       * Submit a work request to the worker session.
+       **/
+      submitWorkRequest: AugmentedSubmittable<
+        (
+          request:
+            | PolymeshWorkerProtocolTestingTestWorkRequest
+            | { VerifyVersion: any }
+            | string
+            | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshWorkerProtocolTestingTestWorkRequest]
+      >;
+      /**
+       * Test the protocol version in the `Testing` protocol module.
+       **/
+      testVersion: AugmentedSubmittable<
+        (
+          protocol: PolymeshWorkerCommonProtocol | { id?: any; version?: any } | string | Uint8Array
+        ) => SubmittableExtrinsic<ApiType>,
+        [PolymeshWorkerCommonProtocol]
       >;
     };
   } // AugmentedSubmittables

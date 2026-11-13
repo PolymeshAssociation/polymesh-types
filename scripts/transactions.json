@@ -572,7 +572,8 @@
     "transfer_nft": "transfer_nft",
     "approve": "approve",
     "set_approval_for_all": "set_approval_for_all",
-    "controller_transfer_to": "controller_transfer_to"
+    "controller_transfer_to": "controller_transfer_to",
+    "set_nfts_frozen": "set_nfts_frozen"
   },
   "StateTrieMigration": {
     "control_auto_migration": "control_auto_migration",
@@ -664,6 +665,23 @@
     "relayer_submit_batched_proofs": "relayer_submit_batched_proofs",
     "execute_instant_settlement": "execute_instant_settlement",
     "instant_sender_affirmation": "instant_sender_affirmation",
-    "instant_receiver_affirmation": "instant_receiver_affirmation"
+    "instant_receiver_affirmation": "instant_receiver_affirmation",
+    "set_required_claim": "set_required_claim",
+    "remove_required_claim": "remove_required_claim",
+    "distribute_encryption_key": "distribute_encryption_key",
+    "update_asset_keys": "update_asset_keys",
+    "set_asset_frozen": "set_asset_frozen"
+  },
+  "WorkerModules": {
+    "register_protocol": "register_protocol",
+    "upload_protocol_module_code": "upload_protocol_module_code",
+    "upload_protocol_module_context": "upload_protocol_module_context",
+    "upload_protocol_module_config": "upload_protocol_module_config"
+  },
+  "WorkerTesting": {
+    "test_version": "test_version",
+    "set_protocol_version": "set_protocol_version",
+    "set_enable_work_session": "set_enable_work_session",
+    "submit_work_request": "submit_work_request"
   }
 }

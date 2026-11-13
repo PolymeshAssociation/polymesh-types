@@ -80,10 +80,16 @@ import type {
   PalletComplianceManagerEvent,
   PalletConfidentialAssetsAssetDetails,
   PalletConfidentialAssetsCall,
+  PalletConfidentialAssetsCheckRelayerSubmitBatchedProofs,
   PalletConfidentialAssetsCurveTreeCurveTreeTimestamp,
   PalletConfidentialAssetsCurveTreeTimestampedTreeRoot,
   PalletConfidentialAssetsError,
   PalletConfidentialAssetsEvent,
+  PalletConfidentialAssetsFreezeOrigin,
+  PalletConfidentialAssetsLegMediatorKeys,
+  PalletConfidentialAssetsRelayerSubmitBatchedFeeInfo,
+  PalletConfidentialAssetsRequiredClaim,
+  PalletConfidentialAssetsRoleKind,
   PalletConfidentialAssetsSettlementAffirmationStatus,
   PalletConfidentialAssetsSettlementLegAffirmParty,
   PalletConfidentialAssetsSettlementSettlementStatus,
@@ -326,6 +332,15 @@ import type {
   PalletValidatorsEvent,
   PalletValidatorsPermissionedIdentityPrefs,
   PalletValidatorsSlashingSwitch,
+  PalletWorkerModulesCall,
+  PalletWorkerModulesError,
+  PalletWorkerModulesEvent,
+  PalletWorkerModulesProtocolInitializationMethod,
+  PalletWorkerModulesProtocolMetadata,
+  PalletWorkerModulesProtocolModuleConfig,
+  PalletWorkerTestingCall,
+  PalletWorkerTestingError,
+  PalletWorkerTestingEvent,
   PolymeshDartBpAccountAccountAssetRegistrationProof,
   PolymeshDartBpAccountAccountStateCommitment,
   PolymeshDartBpAccountAccountStateNullifier,
@@ -353,6 +368,7 @@ import type {
   PolymeshDartBpFeeFeeAccountStateNullifier,
   PolymeshDartBpFeeFeeAccountTopupProof,
   PolymeshDartBpFeeFeePaymentWithBatchedProofs,
+  PolymeshDartBpKeyDistributionProof,
   PolymeshDartBpKeysAccountPublicKey,
   PolymeshDartBpKeysAccountPublicKeys,
   PolymeshDartBpKeysAccountRegistrationProof,
@@ -364,6 +380,7 @@ import type {
   PolymeshDartBpLegLegRef,
   PolymeshDartBpLegProofsBatchedSettlementLegAffirmations,
   PolymeshDartBpLegProofsBatchedSettlementProof,
+  PolymeshDartBpLegProofsMediatorAffirmationInner,
   PolymeshDartBpLegProofsMediatorAffirmationProof,
   PolymeshDartBpLegSettlementLegProof,
   PolymeshDartBpLegSettlementLegProofRevealedAssetId,
@@ -475,6 +492,15 @@ import type {
   PolymeshRuntimeDevelopRuntimeSessionKeys,
   PolymeshTransactionPaymentCall,
   PolymeshTransactionPaymentChargeTransactionPayment,
+  PolymeshWorkerCommonBackendModuleDefinition,
+  PolymeshWorkerCommonBackendModuleKind,
+  PolymeshWorkerCommonErrorProtocolError,
+  PolymeshWorkerCommonProtocol,
+  PolymeshWorkerCommonProtocolVersion,
+  PolymeshWorkerProtocolTestingTestWorkRequest,
+  PolymeshWorkerProtocolTestingTestWorkResponse,
+  PolymeshWorkerProtocolTestingVerifyVersionRequest,
+  PolymeshWorkerProtocolTestingVerifyVersionResponse,
   SpArithmeticArithmeticError,
   SpAuthorityDiscoveryAppPublic,
   SpConsensusBabeAllowedSlots,
@@ -618,10 +644,16 @@ declare module '@polkadot/types/types/registry' {
     PalletComplianceManagerEvent: PalletComplianceManagerEvent;
     PalletConfidentialAssetsAssetDetails: PalletConfidentialAssetsAssetDetails;
     PalletConfidentialAssetsCall: PalletConfidentialAssetsCall;
+    PalletConfidentialAssetsCheckRelayerSubmitBatchedProofs: PalletConfidentialAssetsCheckRelayerSubmitBatchedProofs;
     PalletConfidentialAssetsCurveTreeCurveTreeTimestamp: PalletConfidentialAssetsCurveTreeCurveTreeTimestamp;
     PalletConfidentialAssetsCurveTreeTimestampedTreeRoot: PalletConfidentialAssetsCurveTreeTimestampedTreeRoot;
     PalletConfidentialAssetsError: PalletConfidentialAssetsError;
     PalletConfidentialAssetsEvent: PalletConfidentialAssetsEvent;
+    PalletConfidentialAssetsFreezeOrigin: PalletConfidentialAssetsFreezeOrigin;
+    PalletConfidentialAssetsLegMediatorKeys: PalletConfidentialAssetsLegMediatorKeys;
+    PalletConfidentialAssetsRelayerSubmitBatchedFeeInfo: PalletConfidentialAssetsRelayerSubmitBatchedFeeInfo;
+    PalletConfidentialAssetsRequiredClaim: PalletConfidentialAssetsRequiredClaim;
+    PalletConfidentialAssetsRoleKind: PalletConfidentialAssetsRoleKind;
     PalletConfidentialAssetsSettlementAffirmationStatus: PalletConfidentialAssetsSettlementAffirmationStatus;
     PalletConfidentialAssetsSettlementLegAffirmParty: PalletConfidentialAssetsSettlementLegAffirmParty;
     PalletConfidentialAssetsSettlementSettlementStatus: PalletConfidentialAssetsSettlementSettlementStatus;
@@ -864,6 +896,15 @@ declare module '@polkadot/types/types/registry' {
     PalletValidatorsEvent: PalletValidatorsEvent;
     PalletValidatorsPermissionedIdentityPrefs: PalletValidatorsPermissionedIdentityPrefs;
     PalletValidatorsSlashingSwitch: PalletValidatorsSlashingSwitch;
+    PalletWorkerModulesCall: PalletWorkerModulesCall;
+    PalletWorkerModulesError: PalletWorkerModulesError;
+    PalletWorkerModulesEvent: PalletWorkerModulesEvent;
+    PalletWorkerModulesProtocolInitializationMethod: PalletWorkerModulesProtocolInitializationMethod;
+    PalletWorkerModulesProtocolMetadata: PalletWorkerModulesProtocolMetadata;
+    PalletWorkerModulesProtocolModuleConfig: PalletWorkerModulesProtocolModuleConfig;
+    PalletWorkerTestingCall: PalletWorkerTestingCall;
+    PalletWorkerTestingError: PalletWorkerTestingError;
+    PalletWorkerTestingEvent: PalletWorkerTestingEvent;
     PolymeshDartBpAccountAccountAssetRegistrationProof: PolymeshDartBpAccountAccountAssetRegistrationProof;
     PolymeshDartBpAccountAccountStateCommitment: PolymeshDartBpAccountAccountStateCommitment;
     PolymeshDartBpAccountAccountStateNullifier: PolymeshDartBpAccountAccountStateNullifier;
@@ -891,6 +932,7 @@ declare module '@polkadot/types/types/registry' {
     PolymeshDartBpFeeFeeAccountStateNullifier: PolymeshDartBpFeeFeeAccountStateNullifier;
     PolymeshDartBpFeeFeeAccountTopupProof: PolymeshDartBpFeeFeeAccountTopupProof;
     PolymeshDartBpFeeFeePaymentWithBatchedProofs: PolymeshDartBpFeeFeePaymentWithBatchedProofs;
+    PolymeshDartBpKeyDistributionProof: PolymeshDartBpKeyDistributionProof;
     PolymeshDartBpKeysAccountPublicKey: PolymeshDartBpKeysAccountPublicKey;
     PolymeshDartBpKeysAccountPublicKeys: PolymeshDartBpKeysAccountPublicKeys;
     PolymeshDartBpKeysAccountRegistrationProof: PolymeshDartBpKeysAccountRegistrationProof;
@@ -902,6 +944,7 @@ declare module '@polkadot/types/types/registry' {
     PolymeshDartBpLegLegRef: PolymeshDartBpLegLegRef;
     PolymeshDartBpLegProofsBatchedSettlementLegAffirmations: PolymeshDartBpLegProofsBatchedSettlementLegAffirmations;
     PolymeshDartBpLegProofsBatchedSettlementProof: PolymeshDartBpLegProofsBatchedSettlementProof;
+    PolymeshDartBpLegProofsMediatorAffirmationInner: PolymeshDartBpLegProofsMediatorAffirmationInner;
     PolymeshDartBpLegProofsMediatorAffirmationProof: PolymeshDartBpLegProofsMediatorAffirmationProof;
     PolymeshDartBpLegSettlementLegProof: PolymeshDartBpLegSettlementLegProof;
     PolymeshDartBpLegSettlementLegProofRevealedAssetId: PolymeshDartBpLegSettlementLegProofRevealedAssetId;
@@ -1013,6 +1056,15 @@ declare module '@polkadot/types/types/registry' {
     PolymeshRuntimeDevelopRuntimeSessionKeys: PolymeshRuntimeDevelopRuntimeSessionKeys;
     PolymeshTransactionPaymentCall: PolymeshTransactionPaymentCall;
     PolymeshTransactionPaymentChargeTransactionPayment: PolymeshTransactionPaymentChargeTransactionPayment;
+    PolymeshWorkerCommonBackendModuleDefinition: PolymeshWorkerCommonBackendModuleDefinition;
+    PolymeshWorkerCommonBackendModuleKind: PolymeshWorkerCommonBackendModuleKind;
+    PolymeshWorkerCommonErrorProtocolError: PolymeshWorkerCommonErrorProtocolError;
+    PolymeshWorkerCommonProtocol: PolymeshWorkerCommonProtocol;
+    PolymeshWorkerCommonProtocolVersion: PolymeshWorkerCommonProtocolVersion;
+    PolymeshWorkerProtocolTestingTestWorkRequest: PolymeshWorkerProtocolTestingTestWorkRequest;
+    PolymeshWorkerProtocolTestingTestWorkResponse: PolymeshWorkerProtocolTestingTestWorkResponse;
+    PolymeshWorkerProtocolTestingVerifyVersionRequest: PolymeshWorkerProtocolTestingVerifyVersionRequest;
+    PolymeshWorkerProtocolTestingVerifyVersionResponse: PolymeshWorkerProtocolTestingVerifyVersionResponse;
     SpArithmeticArithmeticError: SpArithmeticArithmeticError;
     SpAuthorityDiscoveryAppPublic: SpAuthorityDiscoveryAppPublic;
     SpConsensusBabeAllowedSlots: SpConsensusBabeAllowedSlots;

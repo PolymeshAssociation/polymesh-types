@@ -198,6 +198,10 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       maxKeysPerRegProof: u32 & AugmentedConst<ApiType>;
       /**
+       * Maximum fee a relayer may charge above the transaction fee.
+       **/
+      maxRelayerCommission: u128 & AugmentedConst<ApiType>;
+      /**
        * The maximum number of legs in a settlement.
        **/
       maxSettlementLegs: u32 & AugmentedConst<ApiType>;
@@ -206,9 +210,17 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       maxSettlementMemoLength: u32 & AugmentedConst<ApiType>;
       /**
+       * The maximum number of recipients a shared encryption key can be distributed to.
+       **/
+      maxSharedKeyRecipients: u32 & AugmentedConst<ApiType>;
+      /**
        * Maximum total supply.
        **/
       maxTotalSupply: u128 & AugmentedConst<ApiType>;
+      /**
+       * The maximum number of trusted claim issuers per gated action.
+       **/
+      maxTrustedClaimIssuers: u32 & AugmentedConst<ApiType>;
       /**
        * The minimum time between curve tree root updates.
        *

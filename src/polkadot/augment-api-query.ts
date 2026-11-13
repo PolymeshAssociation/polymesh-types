@@ -52,6 +52,10 @@ import type {
   PalletConfidentialAssetsAssetDetails,
   PalletConfidentialAssetsCurveTreeCurveTreeTimestamp,
   PalletConfidentialAssetsCurveTreeTimestampedTreeRoot,
+  PalletConfidentialAssetsFreezeOrigin,
+  PalletConfidentialAssetsLegMediatorKeys,
+  PalletConfidentialAssetsRequiredClaim,
+  PalletConfidentialAssetsRoleKind,
   PalletConfidentialAssetsSettlementAffirmationStatus,
   PalletConfidentialAssetsSettlementLegAffirmParty,
   PalletConfidentialAssetsSettlementSettlementStatus,
@@ -108,6 +112,8 @@ import type {
   PalletTransactionPaymentReleases,
   PalletValidatorsPermissionedIdentityPrefs,
   PalletValidatorsSlashingSwitch,
+  PalletWorkerModulesProtocolMetadata,
+  PalletWorkerModulesProtocolModuleConfig,
   PolymeshDartBpAccountAccountStateCommitment,
   PolymeshDartBpAccountAccountStateNullifier,
   PolymeshDartBpAssetAssetKeys,
@@ -165,6 +171,8 @@ import type {
   PolymeshPrimitivesTransferComplianceTransferConditionExemptKey,
   PolymeshRuntimeDevelopRuntimeRuntimeHoldReason,
   PolymeshRuntimeDevelopRuntimeSessionKeys,
+  PolymeshWorkerCommonProtocol,
+  PolymeshWorkerCommonProtocolVersion,
   SpAuthorityDiscoveryAppPublic,
   SpConsensusBabeAppPublic,
   SpConsensusBabeBabeEpochConfiguration,
@@ -1260,6 +1268,16 @@ declare module '@polkadot/api-base/types/storage' {
         [u32]
       >;
       /**
+       * Who froze the asset; no entry means unfrozen.
+       **/
+      assetFrozen: AugmentedQuery<
+        ApiType,
+        (
+          arg: u32 | AnyNumber | Uint8Array
+        ) => Observable<Option<PalletConfidentialAssetsFreezeOrigin>>,
+        [u32]
+      >;
+      /**
        * Inner node storage for Confidential assets curve tree.
        **/
       assetInnerNodes: AugmentedQuery<
@@ -1292,11 +1310,22 @@ declare module '@polkadot/api-base/types/storage' {
        **/
       cachedDartParameters: AugmentedQuery<ApiType, () => Observable<Option<Bytes>>, []>;
       /**
+       * The DART protocol version that `CachedDartParameters` was generated with.
+       *
+       * Used to detect when the cached parameters are from an older DART protocol version and need
+       * to be regenerated.
+       **/
+      cachedDartParametersVersion: AugmentedQuery<
+        ApiType,
+        () => Observable<Option<PolymeshWorkerCommonProtocolVersion>>,
+        []
+      >;
+      /**
        * Counter for the related counted storage map
        **/
       counterForAssetLeaves: AugmentedQuery<ApiType, () => Observable<u32>, []>;
       /**
-       * The WorkerSessionId for the current block.
+       * The WorkerSessionId for the current block (started lazily, removed in `on_finalize`).
        **/
       currentWorkerSessionId: AugmentedQuery<ApiType, () => Observable<Option<u32>>, []>;
       /**
@@ -1430,16 +1459,6 @@ declare module '@polkadot/api-base/types/storage' {
         [u64]
       >;
       /**
-       * Confidential fee account egistrations.
-       *
-       * The chain must prevent the same account from registering the multiple times.
-       **/
-      feeAccountRegistrations: AugmentedQuery<
-        ApiType,
-        (arg: PolymeshDartBpKeysAccountPublicKey | string | Uint8Array) => Observable<bool>,
-        [PolymeshDartBpKeysAccountPublicKey]
-      >;
-      /**
        * Nullifiers for Confidential fee account state commitments.
        *
        * This is used to ensure that the same fee account state commitment cannot be used twice.
@@ -1491,6 +1510,17 @@ declare module '@polkadot/api-base/types/storage' {
         [PolymeshDartBpLegSettlementRef, u8, PalletConfidentialAssetsSettlementLegAffirmParty]
       >;
       /**
+       * For settlement legs with revealed asset IDs, this keeps track of the mediators' affirmation keys.
+       **/
+      legMediators: AugmentedQuery<
+        ApiType,
+        (
+          arg1: PolymeshDartBpLegSettlementRef | string | Uint8Array,
+          arg2: u8 | AnyNumber | Uint8Array
+        ) => Observable<Option<PalletConfidentialAssetsLegMediatorKeys>>,
+        [PolymeshDartBpLegSettlementRef, u8]
+      >;
+      /**
        * A Confidential assets token name.
        **/
       names: AugmentedQuery<
@@ -1515,7 +1545,7 @@ declare module '@polkadot/api-base/types/storage' {
        **/
       nextFeeAccountLeafIndex: AugmentedQuery<ApiType, () => Observable<u64>, []>;
       /**
-       * Mapping of asset owner to their assets.
+       * Client-facing index of the confidential assets owned by each identity.
        **/
       ownerAssets: AugmentedQuery<
         ApiType,
@@ -1524,6 +1554,29 @@ declare module '@polkadot/api-base/types/storage' {
           arg2: u32 | AnyNumber | Uint8Array
         ) => Observable<Option<Null>>,
         [PolymeshPrimitivesIdentityId, u32]
+      >;
+      /**
+       * Marks a relayer submission while its transaction extension is executing.
+       **/
+      relayerSubmitExtensionMarker: AugmentedQuery<ApiType, () => Observable<Option<Null>>, []>;
+      /**
+       * Required-claim spec for each gated role.
+       *
+       * `None` means the role is permissionless (preserves dev behavior).
+       * Mediators fall back to the auditor spec when no mediator spec is set.
+       **/
+      requiredClaims: AugmentedQuery<
+        ApiType,
+        (
+          arg:
+            | PalletConfidentialAssetsRoleKind
+            | 'AssetCreator'
+            | 'Auditor'
+            | 'Mediator'
+            | number
+            | Uint8Array
+        ) => Observable<Option<PalletConfidentialAssetsRequiredClaim>>,
+        [PalletConfidentialAssetsRoleKind]
       >;
       /**
        * The number of legs in each settlement.
@@ -1584,6 +1637,16 @@ declare module '@polkadot/api-base/types/storage' {
           arg: PolymeshDartBpLegSettlementRef | string | Uint8Array
         ) => Observable<Option<PalletConfidentialAssetsSettlementSettlementStatus>>,
         [PolymeshDartBpLegSettlementRef]
+      >;
+      /**
+       * Recipient encryption keys a shared encryption key has been distributed to.
+       **/
+      sharedKeyRecipients: AugmentedQuery<
+        ApiType,
+        (
+          arg: PolymeshDartBpKeysEncryptionPublicKey | string | Uint8Array
+        ) => Observable<BTreeSet<PolymeshDartBpKeysEncryptionPublicKey>>,
+        [PolymeshDartBpKeysEncryptionPublicKey]
       >;
       /**
        * A Confidential assets token symbol.
@@ -1927,6 +1990,19 @@ declare module '@polkadot/api-base/types/storage' {
       >;
     };
     externalAgents: {
+      /**
+       * For each asset and removed agent, the value of `CurrentAuthId` at the time of removal.
+       *
+       * A `BecomeAgent` authorization with an ID at or below this value can't be accepted.
+       **/
+      agentAuthCutoff: AugmentedQuery<
+        ApiType,
+        (
+          arg1: PolymeshPrimitivesAssetAssetId | string | Uint8Array,
+          arg2: PolymeshPrimitivesIdentityId | string | Uint8Array
+        ) => Observable<u64>,
+        [PolymeshPrimitivesAssetAssetId, PolymeshPrimitivesIdentityId]
+      >;
       /**
        * Maps an agent (`IdentityId`) to all assets they belong to, if any.
        **/
@@ -2552,6 +2628,28 @@ declare module '@polkadot/api-base/types/storage' {
         ApiType,
         (arg: u64 | AnyNumber | Uint8Array) => Observable<Option<u64>>,
         [u64]
+      >;
+      /**
+       * NFTs an agent has frozen for a holder, keyed by `(asset_id, holder, nft_id)`.
+       *
+       * Mirrors the ERC-7943 per-account, per-token freeze. A frozen NFT can't leave `holder`
+       * except through a controller transfer, which unfreezes it first. A freeze can be set for a
+       * holder that doesn't hold the NFT yet, and applies if the NFT arrives. `false` is never
+       * stored; the entry is removed instead.
+       **/
+      frozenNFT: AugmentedQuery<
+        ApiType,
+        (
+          arg1: PolymeshPrimitivesAssetAssetId | string | Uint8Array,
+          arg2:
+            | PolymeshPrimitivesAssetAssetHolder
+            | { Portfolio: any }
+            | { Account: any }
+            | string
+            | Uint8Array,
+          arg3: u64 | AnyNumber | Uint8Array
+        ) => Observable<bool>,
+        [PolymeshPrimitivesAssetAssetId, PolymeshPrimitivesAssetAssetHolder, u64]
       >;
       /**
        * The metadata value of an nft given its collection id, token id and metadata key.
@@ -4544,6 +4642,17 @@ declare module '@polkadot/api-base/types/storage' {
        **/
       currentPayoutEra: AugmentedQuery<ApiType, () => Observable<Option<u32>>, []>;
       /**
+       * Stash accounts of an identity that are currently validating.
+       **/
+      identityValidatorStashes: AugmentedQuery<
+        ApiType,
+        (
+          arg1: PolymeshPrimitivesIdentityId | string | Uint8Array,
+          arg2: AccountId32 | string | Uint8Array
+        ) => Observable<Option<Null>>,
+        [PolymeshPrimitivesIdentityId, AccountId32]
+      >;
+      /**
        * Validators that are awaiting payout for a given era.
        **/
       pendingPayouts: AugmentedQuery<
@@ -4573,6 +4682,79 @@ declare module '@polkadot/api-base/types/storage' {
        * Allows flexibility in commission. Every validator has commission that should be in the range [0, Cap].
        **/
       validatorCommissionCap: AugmentedQuery<ApiType, () => Observable<Perbill>, []>;
+    };
+    workerModules: {
+      /**
+       * Protocol metadata storage item, which maps ProtocolId => ProtocolMetadata.
+       **/
+      metadata: AugmentedQuery<
+        ApiType,
+        (
+          arg: u16 | AnyNumber | Uint8Array
+        ) => Observable<Option<PalletWorkerModulesProtocolMetadata>>,
+        [u16]
+      >;
+      /**
+       * Protocol module code storage item, which double maps (Protocol, BackendCodeHash) => Vec<u8>.
+       **/
+      protocolCode: AugmentedQuery<
+        ApiType,
+        (
+          arg1: PolymeshWorkerCommonProtocol | { id?: any; version?: any } | string | Uint8Array,
+          arg2: U8aFixed | string | Uint8Array
+        ) => Observable<Option<Bytes>>,
+        [PolymeshWorkerCommonProtocol, U8aFixed]
+      >;
+      /**
+       * Protocol config storage item, which double maps (Protocol, ProtocolModuleConfigHash) => ProtocolModuleConfig.
+       **/
+      protocolConfig: AugmentedQuery<
+        ApiType,
+        (
+          arg1: PolymeshWorkerCommonProtocol | { id?: any; version?: any } | string | Uint8Array,
+          arg2: U8aFixed | string | Uint8Array
+        ) => Observable<Option<PalletWorkerModulesProtocolModuleConfig>>,
+        [PolymeshWorkerCommonProtocol, U8aFixed]
+      >;
+      /**
+       * Protocol config hash storage item, which maps Protocol => ProtocolModuleConfigHash.
+       **/
+      protocolConfigHash: AugmentedQuery<
+        ApiType,
+        (
+          arg: PolymeshWorkerCommonProtocol | { id?: any; version?: any } | string | Uint8Array
+        ) => Observable<Option<U8aFixed>>,
+        [PolymeshWorkerCommonProtocol]
+      >;
+      /**
+       * Protocol context storage item, which double maps (Protocol, BackendContextHash) => Vec<u8>.
+       **/
+      protocolContext: AugmentedQuery<
+        ApiType,
+        (
+          arg1: PolymeshWorkerCommonProtocol | { id?: any; version?: any } | string | Uint8Array,
+          arg2: U8aFixed | string | Uint8Array
+        ) => Observable<Option<Bytes>>,
+        [PolymeshWorkerCommonProtocol, U8aFixed]
+      >;
+    };
+    workerTesting: {
+      /**
+       * The current testing protocol version.
+       **/
+      currentProtocolVersion: AugmentedQuery<
+        ApiType,
+        () => Observable<Option<PolymeshWorkerCommonProtocol>>,
+        []
+      >;
+      /**
+       * The WorkerSessionId for the current block.
+       **/
+      currentWorkerSessionId: AugmentedQuery<ApiType, () => Observable<Option<u32>>, []>;
+      /**
+       * Enable work session per block. This is used for testing purpose only.
+       **/
+      enableWorkSession: AugmentedQuery<ApiType, () => Observable<bool>, []>;
     };
   } // AugmentedQueries
 } // declare module
