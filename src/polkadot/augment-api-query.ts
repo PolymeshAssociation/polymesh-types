@@ -1127,9 +1127,9 @@ declare module '@polkadot/api-base/types/storage' {
        **/
       accountCurveTreeLastPruned: AugmentedQuery<ApiType, () => Observable<u32>, []>;
       /**
-       * The block number of the last account curve tree root update.
+       * The timestamp of the last account curve tree root update.
        *
-       * This is used to track the last time the account curve tree was updated.
+       * Used to re-stamp inactive curve trees at `MinCurveTreeRootUpdateInterval`.
        **/
       accountCurveTreeLastUpdate: AugmentedQuery<
         ApiType,
@@ -1137,10 +1137,10 @@ declare module '@polkadot/api-base/types/storage' {
         []
       >;
       /**
-       * CurveTree Roots for Confidential accounts curve tree.
+       * Historical Confidential account curve tree roots, keyed by block number.
        *
-       * At the end of each block we will store the root of the accounts curve tree.
-       * The map key is the block number and the value is the root of the accounts curve tree.
+       * Proofs select a root by block number; roots are accepted only while younger than
+       * `MaxAccountCurveTreeRootAge`.  Old roots are pruned incrementally in `on_initialize`.
        **/
       accountCurveTreeRoots: AugmentedQuery<
         ApiType,
@@ -1155,7 +1155,7 @@ declare module '@polkadot/api-base/types/storage' {
         [u32]
       >;
       /**
-       * Confidential account to identity mapping.
+       * Confidential asset account to identity mapping.
        **/
       accountDid: AugmentedQuery<
         ApiType,
@@ -1203,9 +1203,10 @@ declare module '@polkadot/api-base/types/storage' {
         [u64]
       >;
       /**
-       * Nullifiers for Confidential account state commitments.
+       * Nullifiers consumed by Confidential account state updates.
        *
-       * This is used to ensure that the same account state commitment cannot be used twice.
+       * This prevents replay of a state-consuming proof (mint, affirmation, counter update,
+       * claim, or revert) whose account state has already been spent.
        **/
       accountStateCommitmentNullifiers: AugmentedQuery<
         ApiType,
@@ -1240,9 +1241,9 @@ declare module '@polkadot/api-base/types/storage' {
        **/
       assetCurveTreeLastPruned: AugmentedQuery<ApiType, () => Observable<u32>, []>;
       /**
-       * The block number of the last asset curve tree root update.
+       * The timestamp of the last asset curve tree root update.
        *
-       * This is used to track the last time the asset curve tree was updated.
+       * Used to re-stamp inactive curve trees at `MinCurveTreeRootUpdateInterval`.
        **/
       assetCurveTreeLastUpdate: AugmentedQuery<
         ApiType,
@@ -1250,10 +1251,10 @@ declare module '@polkadot/api-base/types/storage' {
         []
       >;
       /**
-       * CurveTree Roots for Confidential assets curve tree.
+       * Historical Confidential asset curve tree roots, keyed by block number.
        *
-       * At the end of each block we will store the root of the assets curve tree.
-       * The map key is the block number and the value is the root of the assets curve tree.
+       * Proofs select a root by block number; roots are accepted only while younger than
+       * `MaxAssetCurveTreeRootAge`.  Old roots are pruned incrementally in `on_initialize`.
        **/
       assetCurveTreeRoots: AugmentedQuery<
         ApiType,
@@ -1306,7 +1307,9 @@ declare module '@polkadot/api-base/types/storage' {
         [u64]
       >;
       /**
-       * Cache DART parameters.
+       * Cached DART parameters used by in-runtime proof verification.
+       *
+       * Regenerated on runtime upgrade when the cached protocol version is stale.
        **/
       cachedDartParameters: AugmentedQuery<ApiType, () => Observable<Option<Bytes>>, []>;
       /**
@@ -1325,7 +1328,8 @@ declare module '@polkadot/api-base/types/storage' {
        **/
       counterForAssetLeaves: AugmentedQuery<ApiType, () => Observable<u32>, []>;
       /**
-       * The WorkerSessionId for the current block (started lazily, removed in `on_finalize`).
+       * The WorkerSessionId for the current block, started lazily on first use and cleared in
+       * `on_finalize`.
        **/
       currentWorkerSessionId: AugmentedQuery<ApiType, () => Observable<Option<u32>>, []>;
       /**
@@ -1347,7 +1351,7 @@ declare module '@polkadot/api-base/types/storage' {
         [u32]
       >;
       /**
-       * Mapping of identity to their Confidential accounts.
+       * Mapping of identity to their Confidential asset accounts.
        **/
       didAccounts: AugmentedQuery<
         ApiType,
@@ -1370,7 +1374,7 @@ declare module '@polkadot/api-base/types/storage' {
       /**
        * Encryption key to identity mapping.
        *
-       * This is used for the auditor and mediator encryption keys.
+       * Used for Confidential account encryption keys and for auditor/mediator/shared keys.
        **/
       encryptionKeyDid: AugmentedQuery<
         ApiType,
@@ -1398,9 +1402,9 @@ declare module '@polkadot/api-base/types/storage' {
        **/
       feeAccountCurveTreeLastPruned: AugmentedQuery<ApiType, () => Observable<u32>, []>;
       /**
-       * The block number of the last fee account curve tree root update.
+       * The timestamp of the last fee account curve tree root update.
        *
-       * This is used to track the last time the fee account curve tree was updated.
+       * Used to re-stamp inactive curve trees at `MinCurveTreeRootUpdateInterval`.
        **/
       feeAccountCurveTreeLastUpdate: AugmentedQuery<
         ApiType,
@@ -1408,10 +1412,10 @@ declare module '@polkadot/api-base/types/storage' {
         []
       >;
       /**
-       * CurveTree Roots for Confidential fee accounts curve tree.
+       * Historical Confidential fee account curve tree roots, keyed by block number.
        *
-       * At the end of each block we will store the root of the fee accounts curve tree.
-       * The map key is the block number and the value is the root of the fee accounts curve tree.
+       * Proofs select a root by block number; roots are accepted only while younger than
+       * `MaxFeeAccountCurveTreeRootAge`.  Old roots are pruned incrementally in `on_initialize`.
        **/
       feeAccountCurveTreeRoots: AugmentedQuery<
         ApiType,
@@ -1459,9 +1463,10 @@ declare module '@polkadot/api-base/types/storage' {
         [u64]
       >;
       /**
-       * Nullifiers for Confidential fee account state commitments.
+       * Nullifiers consumed by Confidential fee account state updates.
        *
-       * This is used to ensure that the same fee account state commitment cannot be used twice.
+       * This prevents replay of a fee-account state update or fee payment whose committed state
+       * has already been spent.
        **/
       feeAccountStateCommitmentNullifiers: AugmentedQuery<
         ApiType,
@@ -1557,6 +1562,10 @@ declare module '@polkadot/api-base/types/storage' {
       >;
       /**
        * Marks a relayer submission while its transaction extension is executing.
+       *
+       * Set by `CheckRelayerSubmitBatchedProofs::prepare` and cleared in `post_dispatch`. Dispatch
+       * requires this marker, which keeps the fee-checked relayer call from being invoked through
+       * another call path (for example nested inside `utility.batch`).
        **/
       relayerSubmitExtensionMarker: AugmentedQuery<ApiType, () => Observable<Option<Null>>, []>;
       /**
@@ -1579,7 +1588,7 @@ declare module '@polkadot/api-base/types/storage' {
         [PalletConfidentialAssetsRoleKind]
       >;
       /**
-       * The number of legs in each settlement.
+       * The number of legs in each settlement, keyed by settlement reference.
        **/
       settlementLegCount: AugmentedQuery<
         ApiType,
@@ -1589,10 +1598,9 @@ declare module '@polkadot/api-base/types/storage' {
         [PolymeshDartBpLegSettlementRef]
       >;
       /**
-       * The settlement legs.
+       * The encrypted settlement legs.
        *
-       * This is a double map where the first key is the settlement ID and the second key is the leg ID.
-       * The value is the DartSettlementLeg.
+       * This is a double map keyed by settlement reference and leg ID.
        **/
       settlementLegs: AugmentedQuery<
         ApiType,
@@ -1603,7 +1611,7 @@ declare module '@polkadot/api-base/types/storage' {
         [PolymeshDartBpLegSettlementRef, u8]
       >;
       /**
-       * The settlement memo.
+       * The settlement memo, keyed by settlement reference.
        **/
       settlementMemo: AugmentedQuery<
         ApiType,
@@ -1629,7 +1637,7 @@ declare module '@polkadot/api-base/types/storage' {
         [PolymeshDartBpLegSettlementRef]
       >;
       /**
-       * The settlement status.
+       * The settlement status, keyed by settlement reference.
        **/
       settlementState: AugmentedQuery<
         ApiType,

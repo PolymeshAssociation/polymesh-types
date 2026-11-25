@@ -58,8 +58,10 @@ import type {
   PalletWorkerModulesProtocolMetadata,
   PalletWorkerModulesProtocolModuleConfig,
   PolymeshDartBpAccountAccountStateCommitment,
+  PolymeshDartBpAccountAccountStateUpdateAction,
   PolymeshDartBpBatchedProofHash,
   PolymeshDartBpFeeFeeAccountStateCommitment,
+  PolymeshDartBpFeeFeeAccountStateUpdateAction,
   PolymeshDartBpKeyDistributionProof,
   PolymeshDartBpKeysAccountPublicKey,
   PolymeshDartBpKeysEncryptionPublicKey,
@@ -1089,11 +1091,31 @@ declare module '@polkadot/api-base/types/events' {
        * Account curve tree leaf inserted.
        *
        * This curve tree is append-only, so we only store the new leaf.
+       *
+       * @deprecated Use event `AccountStateUpdated` instead.
        **/
       AccountStateLeafInserted: AugmentedEvent<
         ApiType,
         [leafIndex: u64, accountCommitment: PolymeshDartBpAccountAccountStateCommitment],
         { leafIndex: u64; accountCommitment: PolymeshDartBpAccountAccountStateCommitment }
+      >;
+      /**
+       * A new account state commitment has been added.
+       *
+       * This curve tree is append-only, so we only store the new leaf.
+       **/
+      AccountStateUpdated: AugmentedEvent<
+        ApiType,
+        [
+          leafIndex: u64,
+          accountCommitment: PolymeshDartBpAccountAccountStateCommitment,
+          updateAction: PolymeshDartBpAccountAccountStateUpdateAction,
+        ],
+        {
+          leafIndex: u64;
+          accountCommitment: PolymeshDartBpAccountAccountStateCommitment;
+          updateAction: PolymeshDartBpAccountAccountStateUpdateAction;
+        }
       >;
       /**
        * A new Confidential asset has been created.
@@ -1145,6 +1167,9 @@ declare module '@polkadot/api-base/types/events' {
           } & Struct;
         }
       >;
+      /**
+       * An asset has been frozen.
+       **/
       AssetFrozen: AugmentedEvent<
         ApiType,
         [assetId: u32, freezeOrigin: PalletConfidentialAssetsFreezeOrigin],
@@ -1180,6 +1205,9 @@ declare module '@polkadot/api-base/types/events' {
         [leafIndex: u64, assetLeaf: PolymeshDartCurveTreeCommonCompressedLeafValue],
         { leafIndex: u64; assetLeaf: PolymeshDartCurveTreeCommonCompressedLeafValue }
       >;
+      /**
+       * An asset has been unfrozen.
+       **/
       AssetUnfrozen: AugmentedEvent<
         ApiType,
         [assetId: u32, unfreezeOrigin: PalletConfidentialAssetsFreezeOrigin],
@@ -1261,11 +1289,31 @@ declare module '@polkadot/api-base/types/events' {
        * Fee account curve tree leaf inserted.
        *
        * This curve tree is append-only, so we only store the new leaf.
+       *
+       * @deprecated Use event `FeeAccountStateUpdated` instead.
        **/
       FeeAccountStateLeafInserted: AugmentedEvent<
         ApiType,
         [leafIndex: u64, feeAccountCommitment: PolymeshDartBpFeeFeeAccountStateCommitment],
         { leafIndex: u64; feeAccountCommitment: PolymeshDartBpFeeFeeAccountStateCommitment }
+      >;
+      /**
+       * A new fee account state commitment has been added.
+       *
+       * This curve tree is append-only, so we only store the new leaf.
+       **/
+      FeeAccountStateUpdated: AugmentedEvent<
+        ApiType,
+        [
+          leafIndex: u64,
+          feeAccountCommitment: PolymeshDartBpFeeFeeAccountStateCommitment,
+          updateAction: PolymeshDartBpFeeFeeAccountStateUpdateAction,
+        ],
+        {
+          leafIndex: u64;
+          feeAccountCommitment: PolymeshDartBpFeeFeeAccountStateCommitment;
+          updateAction: PolymeshDartBpFeeFeeAccountStateUpdateAction;
+        }
       >;
       /**
        * Fee account updated.

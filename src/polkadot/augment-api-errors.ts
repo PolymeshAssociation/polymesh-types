@@ -542,7 +542,7 @@ declare module '@polkadot/api-base/types/errors' {
     };
     confidentialAssets: {
       /**
-       * Confidential account already exists.
+       * Confidential account is already registered.
        **/
       AccountAlreadyCreated: AugmentedError<ApiType>;
       /**
@@ -554,19 +554,19 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       AccountMissing: AugmentedError<ApiType>;
       /**
-       * Already affirmed.
+       * The party has already affirmed.
        **/
       AlreadyAffirmed: AugmentedError<ApiType>;
       /**
-       * Already finalized.
+       * The party has already finalized.
        **/
       AlreadyFinalized: AugmentedError<ApiType>;
       /**
-       * Already rejected.
+       * The party has already rejected.
        **/
       AlreadyRejected: AugmentedError<ApiType>;
       /**
-       * Amount overflow.
+       * The amount does not fit the pallet balance type.
        **/
       AmountOverflow: AugmentedError<ApiType>;
       /**
@@ -586,31 +586,31 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       AssetMissing: AugmentedError<ApiType>;
       /**
-       * Asset state is invalid.
+       * The asset state or asset keys are invalid.
        **/
       AssetStateInvalid: AugmentedError<ApiType>;
       /**
-       * Batched settlement has invalid leg references.
+       * A batched settlement proof contains invalid leg references.
        **/
       BatchedSettlementInvalidLegRefs: AugmentedError<ApiType>;
       /**
-       * CurveTree error.
+       * A DART proof or curve-tree operation failed.
        **/
       CurveTreeError: AugmentedError<ApiType>;
       /**
-       * CurveTree parameters not set.
+       * DART curve-tree parameters have not been initialized.
        **/
       CurveTreeParametersNotSet: AugmentedError<ApiType>;
       /**
-       * CurveTree root not found.
+       * The curve-tree root is missing or older than the configured maximum age.
        **/
       CurveTreeRootNotFound: AugmentedError<ApiType>;
       /**
-       * Batch of proofs can't be empty.
+       * A relayer proof batch cannot be empty.
        **/
       EmptyBatchedProofs: AugmentedError<ApiType>;
       /**
-       * Encryption key already registered.
+       * Encryption key is already registered.
        **/
       EncryptionKeyAlreadyRegistered: AugmentedError<ApiType>;
       /**
@@ -626,7 +626,7 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       EncryptionKeyNotShared: AugmentedError<ApiType>;
       /**
-       * Confidential fee account already registered.
+       * Confidential fee account is already registered.
        **/
       FeeAccountAlreadyRegistered: AugmentedError<ApiType>;
       /**
@@ -638,19 +638,19 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       InvalidAffirmationStatusTransition: AugmentedError<ApiType>;
       /**
-       * Invalid asset name.
+       * Asset name must not be empty.
        **/
       InvalidAssetName: AugmentedError<ApiType>;
       /**
-       * Invalid fee asset id.
+       * The fee asset ID is invalid.
        **/
       InvalidFeeAssetId: AugmentedError<ApiType>;
       /**
-       * Invalid Fee Payment proof.
+       * Fee payment proof is invalid.
        **/
       InvalidFeePaymentProof: AugmentedError<ApiType>;
       /**
-       * Invalid proof provided.
+       * Proof verification failed.
        **/
       InvalidProof: AugmentedError<ApiType>;
       /**
@@ -662,11 +662,11 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       LegNotFound: AugmentedError<ApiType>;
       /**
-       * The asset total supply cannot exceed the maximum total supply.
+       * The asset total supply would exceed the maximum total supply.
        **/
       MaxTotalSupplyExceeded: AugmentedError<ApiType>;
       /**
-       * Missing leg mediators.
+       * The leg's mediator keys are missing for a revealed asset ID.
        **/
       MissingLegMediators: AugmentedError<ApiType>;
       /**
@@ -682,7 +682,7 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       NoAuditorsOrMediators: AugmentedError<ApiType>;
       /**
-       * No current worker session.
+       * No worker session is available for this call.
        **/
       NoCurrentWorkerSession: AugmentedError<ApiType>;
       /**
@@ -690,7 +690,7 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       NoKeyRecipients: AugmentedError<ApiType>;
       /**
-       * No pending affirmations for this settlement.
+       * The settlement has no pending affirmations.
        **/
       NoPendingAffirmations: AugmentedError<ApiType>;
       /**
@@ -702,11 +702,11 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       NotAssetOwner: AugmentedError<ApiType>;
       /**
-       * Not the last pending affirmation for the settlement.
+       * The affirmation is not the last pending affirmation for the settlement.
        **/
       NotLastPendingAffirmation: AugmentedError<ApiType>;
       /**
-       * The nullifier for the account state commitment has already been used.
+       * The nullifier for this state update has already been used.
        **/
       NullifierAlreadyUsed: AugmentedError<ApiType>;
       /**
@@ -714,7 +714,7 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       RelayerCallMustBeTopLevel: AugmentedError<ApiType>;
       /**
-       * Settlement has executed, cannot be reverted.
+       * Settlement has executed and can no longer be reverted.
        **/
       SettlementAlreadyExecuted: AugmentedError<ApiType>;
       /**
@@ -730,7 +730,7 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       SettlementMissingLegs: AugmentedError<ApiType>;
       /**
-       * Settlement not executed.
+       * Settlement is not executed.
        **/
       SettlementNotExecuted: AugmentedError<ApiType>;
       /**
@@ -738,7 +738,7 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       SettlementNotFound: AugmentedError<ApiType>;
       /**
-       * Settlement not pending.
+       * Settlement is not pending.
        **/
       SettlementNotPending: AugmentedError<ApiType>;
       /**
@@ -754,7 +754,7 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       TooManyDecimals: AugmentedError<ApiType>;
       /**
-       * Too many mediators for this leg.
+       * The leg has more mediators than are supported.
        **/
       TooManyMediators: AugmentedError<ApiType>;
       /**
@@ -766,7 +766,7 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       TooManySharedKeyRecipients: AugmentedError<ApiType>;
       /**
-       * Wrong mediator id for this leg.
+       * The mediator ID is not valid for this leg.
        **/
       WrongMediatorId: AugmentedError<ApiType>;
     };

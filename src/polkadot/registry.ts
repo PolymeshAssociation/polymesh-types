@@ -344,6 +344,7 @@ import type {
   PolymeshDartBpAccountAccountAssetRegistrationProof,
   PolymeshDartBpAccountAccountStateCommitment,
   PolymeshDartBpAccountAccountStateNullifier,
+  PolymeshDartBpAccountAccountStateUpdateAction,
   PolymeshDartBpAccountBatchedAccountAssetRegistrationProof,
   PolymeshDartBpAffirmationProofsInstantReceiverAffirmationProof,
   PolymeshDartBpAffirmationProofsInstantSenderAffirmationProof,
@@ -366,6 +367,7 @@ import type {
   PolymeshDartBpFeeFeeAccountRegistrationProof,
   PolymeshDartBpFeeFeeAccountStateCommitment,
   PolymeshDartBpFeeFeeAccountStateNullifier,
+  PolymeshDartBpFeeFeeAccountStateUpdateAction,
   PolymeshDartBpFeeFeeAccountTopupProof,
   PolymeshDartBpFeeFeePaymentWithBatchedProofs,
   PolymeshDartBpKeyDistributionProof,
@@ -908,6 +910,7 @@ declare module '@polkadot/types/types/registry' {
     PolymeshDartBpAccountAccountAssetRegistrationProof: PolymeshDartBpAccountAccountAssetRegistrationProof;
     PolymeshDartBpAccountAccountStateCommitment: PolymeshDartBpAccountAccountStateCommitment;
     PolymeshDartBpAccountAccountStateNullifier: PolymeshDartBpAccountAccountStateNullifier;
+    PolymeshDartBpAccountAccountStateUpdateAction: PolymeshDartBpAccountAccountStateUpdateAction;
     PolymeshDartBpAccountBatchedAccountAssetRegistrationProof: PolymeshDartBpAccountBatchedAccountAssetRegistrationProof;
     PolymeshDartBpAffirmationProofsInstantReceiverAffirmationProof: PolymeshDartBpAffirmationProofsInstantReceiverAffirmationProof;
     PolymeshDartBpAffirmationProofsInstantSenderAffirmationProof: PolymeshDartBpAffirmationProofsInstantSenderAffirmationProof;
@@ -930,6 +933,7 @@ declare module '@polkadot/types/types/registry' {
     PolymeshDartBpFeeFeeAccountRegistrationProof: PolymeshDartBpFeeFeeAccountRegistrationProof;
     PolymeshDartBpFeeFeeAccountStateCommitment: PolymeshDartBpFeeFeeAccountStateCommitment;
     PolymeshDartBpFeeFeeAccountStateNullifier: PolymeshDartBpFeeFeeAccountStateNullifier;
+    PolymeshDartBpFeeFeeAccountStateUpdateAction: PolymeshDartBpFeeFeeAccountStateUpdateAction;
     PolymeshDartBpFeeFeeAccountTopupProof: PolymeshDartBpFeeFeeAccountTopupProof;
     PolymeshDartBpFeeFeePaymentWithBatchedProofs: PolymeshDartBpFeeFeePaymentWithBatchedProofs;
     PolymeshDartBpKeyDistributionProof: PolymeshDartBpKeyDistributionProof;

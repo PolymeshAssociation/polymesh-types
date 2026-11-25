@@ -2474,15 +2474,31 @@ declare module '@polkadot/api-base/types/submittable' {
       /**
        * Create a settlement with batched leg affirmations.
        *
+       * All proofs in the batch are verified with a context derived from the signing account,
+       * so another account cannot extract and submit a subset of the batch.  Clients must
+       * generate the proofs with [`non_relayer_batch_proof_context`] for that account.
+       *
        * # Arguments
        * * `origin` - The origin of the call.
        * * `proof` - The settlement proof with batched leg affirmations.
        *
        * # Errors
        * * `BadOrigin` if `origin` isn't signed.
-       * * `InvalidProof` if the proof is invalid.
+       * * `BatchedSettlementInvalidLegRefs` if an included affirmation references a different
+       * settlement or leg.
        * * `SettlementMissingLegs` if the settlement has no legs.
        * * `SettlementTooManyLegs` if the settlement has more legs than the maximum allowed.
+       * * `SettlementAlreadyExists` if this settlement reference has already been created.
+       * * `AssetMissing` if a revealed asset or a leg's asset keys are missing.
+       * * `AssetIsFrozen` if a revealed asset is frozen.
+       * * `CurveTreeRootNotFound` if an asset or account curve-tree root is missing or expired.
+       * * `CurveTreeError` if a leg's mediator count cannot be derived.
+       * * `NullifierAlreadyUsed` if an included affirmation's account state nullifier has
+       * already been used.
+       * * `SettlementNotPending`, `LegNotFound`, `AlreadyRejected`, `AlreadyFinalized`,
+       * `InvalidAffirmationStatusTransition`, or `NoPendingAffirmations` if an included
+       * sender/receiver affirmation is invalid.
+       * * `InvalidProof` if the settlement or an included affirmation proof is invalid.
        **/
       batchedSettlement: AugmentedSubmittable<
         (
@@ -2495,15 +2511,32 @@ declare module '@polkadot/api-base/types/submittable' {
         [PolymeshDartBpLegProofsBatchedSettlementProof]
       >;
       /**
-       * Create a new Confidential Asset.
+       * Create a new Confidential asset.
        *
        * # Arguments
-       * * `auditor_or_mediator` - The auditor or mediator public key.
+       * * `origin` - The origin of the call.
+       * * `name` - Asset name.
+       * * `symbol` - Asset symbol.
+       * * `decimals` - Asset decimals.
+       * * `mediators` - Mediator account and encryption keys.
+       * * `auditors` - Auditor encryption keys.
+       * * `data` - Extra asset metadata.
        *
        * # Errors
-       * * `BadOrigin` if `origin` isn't signed.
-       * * `AccountMissing` if the auditor or mediator is not registered.
-       * * `EncryptionKeyMissing` if the encryption key of the auditor or mediator is not registered.
+       * * `BadOrigin` if `origin` isn't signed or lacks call permissions.
+       * * `InvalidAssetName` if `name` is empty.
+       * * `NameTooLong` if `name` exceeds `MAX_NAME_LEN`.
+       * * `SymbolTooLong` if `symbol` exceeds `MAX_SYMBOL_LEN`.
+       * * `TooManyDecimals` if `decimals` exceeds `MAX_DECIMALS`.
+       * * `MissingRequiredClaim` if the caller lacks the asset-creator claim, or a selected
+       * auditor/mediator lacks the required role claim.
+       * * `AccountMissing` if a mediator Confidential account is not registered.
+       * * `EncryptionKeyMissing` if an auditor/mediator encryption key is not registered.
+       * * `EncryptionKeyNotShared` if a mediator key was neither the account's own key nor
+       * shared with it.
+       * * `NoAuditorsOrMediators` if neither auditors nor mediators are provided.
+       * * `AssetStateInvalid` if the asset keys or asset state cannot be built/committed.
+       * * `AssetIdOverflow` if no more asset IDs are available.
        **/
       createAsset: AugmentedSubmittable<
         (
@@ -2535,9 +2568,14 @@ declare module '@polkadot/api-base/types/submittable' {
        *
        * # Errors
        * * `BadOrigin` if `origin` isn't signed.
-       * * `InvalidProof` if the proof is invalid.
        * * `SettlementMissingLegs` if the settlement has no legs.
        * * `SettlementTooManyLegs` if the settlement has more legs than the maximum allowed.
+       * * `SettlementAlreadyExists` if this settlement reference has already been created.
+       * * `AssetMissing` if a revealed asset or a leg's asset keys are missing.
+       * * `AssetIsFrozen` if a revealed asset is frozen.
+       * * `CurveTreeRootNotFound` if the asset curve-tree root is missing or expired.
+       * * `CurveTreeError` if a leg's mediator count cannot be derived.
+       * * `InvalidProof` if the proof is invalid.
        **/
       createSettlement: AugmentedSubmittable<
         (
@@ -2583,15 +2621,34 @@ declare module '@polkadot/api-base/types/submittable' {
       /**
        * Create and execute an instant settlement.
        *
+       * All proofs in the instant settlement are verified with a context derived from the
+       * signing account, so another account cannot extract and submit a subset of the batch.
+       * Clients must generate the proofs with [`non_relayer_batch_proof_context`] for that
+       * account.
+       *
        * # Arguments
        * * `origin` - The origin of the call.
        * * `proof` - The settlement proof with batched leg affirmations.
        *
        * # Errors
        * * `BadOrigin` if `origin` isn't signed.
-       * * `InvalidProof` if the proof is invalid.
+       * * `BatchedSettlementInvalidLegRefs` if the leg affirmations do not match the settlement
+       * legs or a mediator rejected.
        * * `SettlementMissingLegs` if the settlement has no legs.
        * * `SettlementTooManyLegs` if the settlement has more legs than the maximum allowed.
+       * * `SettlementAlreadyExists` if this settlement reference has already been created.
+       * * `AssetMissing` if a revealed asset or a leg's asset keys are missing.
+       * * `AssetIsFrozen` if a revealed asset is frozen.
+       * * `CurveTreeRootNotFound` if an asset or account curve-tree root is missing or expired.
+       * * `CurveTreeError` if a leg's mediator count cannot be derived.
+       * * `NullifierAlreadyUsed` if an included affirmation's account state nullifier has
+       * already been used.
+       * * `SettlementNotPending`, `LegNotFound`, `WrongMediatorId`, `MissingLegMediators`,
+       * `AlreadyAffirmed`, `AlreadyRejected`, `AlreadyFinalized`,
+       * `InvalidAffirmationStatusTransition`, or `NoPendingAffirmations` if an included
+       * affirmation is invalid.
+       * * `SettlementNotExecuted` if the settlement did not finalize successfully.
+       * * `InvalidProof` if the settlement or an included affirmation proof is invalid.
        **/
       executeInstantSettlement: AugmentedSubmittable<
         (
@@ -2614,11 +2671,20 @@ declare module '@polkadot/api-base/types/submittable' {
        *
        * # Errors
        * * `BadOrigin` if `origin` isn't signed.
-       * * `SettlementNotPending` if the settlement is not pending.
+       * * `NotLastPendingAffirmation` if this is not the settlement's last pending affirmation.
+       * * `NullifierAlreadyUsed` if the account state nullifier has already been used.
+       * * `CurveTreeRootNotFound` if the account curve-tree root is missing or expired.
        * * `SettlementNotFound` if the settlement is not found.
+       * * `SettlementNotPending` if the settlement is not pending.
        * * `LegNotFound` if the leg is not found in the settlement.
-       * * `AlreadyAffirmed` if the leg has already been affirmed by the receiver.
-       * * `NotLastPendingAffirmation` if the receiver affirmation is not the last pending affirmation for the settlement.
+       * * `AlreadyRejected` if the receiver has already rejected the leg.
+       * * `AlreadyFinalized` if the receiver has already finalized the leg.
+       * * `InvalidAffirmationStatusTransition` if the receiver has already affirmed or the
+       * status transition is otherwise invalid.
+       * * `NoPendingAffirmations` if the settlement's pending-affirmation counter is already
+       * zero.
+       * * `SettlementNotExecuted` if the settlement did not execute after the affirmation.
+       * * `InvalidProof` if the proof is invalid.
        **/
       instantReceiverAffirmation: AugmentedSubmittable<
         (
@@ -2647,11 +2713,20 @@ declare module '@polkadot/api-base/types/submittable' {
        *
        * # Errors
        * * `BadOrigin` if `origin` isn't signed.
-       * * `SettlementNotPending` if the settlement is not pending.
+       * * `NotLastPendingAffirmation` if this is not the settlement's last pending affirmation.
+       * * `NullifierAlreadyUsed` if the account state nullifier has already been used.
+       * * `CurveTreeRootNotFound` if the account curve-tree root is missing or expired.
        * * `SettlementNotFound` if the settlement is not found.
+       * * `SettlementNotPending` if the settlement is not pending.
        * * `LegNotFound` if the leg is not found in the settlement.
-       * * `AlreadyAffirmed` if the leg has already been affirmed by the sender.
-       * * `NotLastPendingAffirmation` if the sender affirmation is not the last pending affirmation for the settlement.
+       * * `AlreadyRejected` if the sender has already rejected the leg.
+       * * `AlreadyFinalized` if the sender has already finalized the leg.
+       * * `InvalidAffirmationStatusTransition` if the sender has already affirmed or the status
+       * transition is otherwise invalid.
+       * * `NoPendingAffirmations` if the settlement's pending-affirmation counter is already
+       * zero.
+       * * `SettlementNotExecuted` if the settlement did not execute after the affirmation.
+       * * `InvalidProof` if the proof is invalid.
        **/
       instantSenderAffirmation: AugmentedSubmittable<
         (
@@ -2678,11 +2753,18 @@ declare module '@polkadot/api-base/types/submittable' {
        *
        * # Errors
        * * `BadOrigin` if `origin` isn't signed.
-       * * `SettlementNotPending` if the settlement is not pending.
        * * `SettlementNotFound` if the settlement is not found.
+       * * `SettlementNotPending` if the settlement is not pending.
        * * `LegNotFound` if the leg is not found in the settlement.
-       * * `AlreadyAffirmed` if the leg has already been affirmed by the mediator.
-       * * `WrongMediatorId` if the mediator ID does not match the expected mediator for the leg.
+       * * `WrongMediatorId` if the mediator index is not valid for the leg.
+       * * `MissingLegMediators` if the revealed leg has no stored mediator keys.
+       * * `AlreadyAffirmed` if the mediator has already affirmed the leg.
+       * * `AlreadyRejected` if the mediator has already rejected the leg.
+       * * `AlreadyFinalized` if the mediator has already finalized the leg.
+       * * `InvalidAffirmationStatusTransition` if the requested status transition is invalid.
+       * * `NoPendingAffirmations` if the settlement's pending-affirmation counter is already
+       * zero.
+       * * `InvalidProof` if the proof is invalid.
        **/
       mediatorAffirmation: AugmentedSubmittable<
         (
@@ -2702,14 +2784,17 @@ declare module '@polkadot/api-base/types/submittable' {
        * * `proof` - The minting proof.
        *
        * # Errors
-       * * `BadOrigin` if `origin` isn't signed.
+       * * `BadOrigin` if `origin` isn't signed or lacks call permissions.
        * * `AccountMissing` if the Confidential account is not registered.
-       * * `AssetMissing` if the Confidential asset is not registered.
+       * * `EncryptionKeyMissing` if the account's encryption key is missing.
+       * * `EncryptionKeyMismatch` if the proof encryption key doesn't match the account's key.
        * * `NotAccountOwner` if the caller is not the owner of the Confidential account.
-       * * `InvalidProof` if the proof is invalid.
+       * * `AssetMissing` if the Confidential asset is not registered.
        * * `NotAssetOwner` if the caller is not the owner of the Confidential asset.
-       * * `MaxTotalSupplyExceeded` if the total supply of the Confidential asset exceeds the maximum total supply.
-       * * `NullifierAlreadyUsed` if the nullifier for the account state commitment has already been used.
+       * * `MaxTotalSupplyExceeded` if the new total supply would exceed the configured maximum.
+       * * `NullifierAlreadyUsed` if the account state nullifier has already been used.
+       * * `CurveTreeRootNotFound` if the account curve-tree root is missing or expired.
+       * * `InvalidProof` if the proof is invalid.
        **/
       mintAsset: AugmentedSubmittable<
         (
@@ -2739,10 +2824,18 @@ declare module '@polkadot/api-base/types/submittable' {
        *
        * # Errors
        * * `BadOrigin` if `origin` isn't signed.
-       * * `SettlementNotPending` if the settlement is not pending.
+       * * `NullifierAlreadyUsed` if the account state nullifier has already been used.
+       * * `CurveTreeRootNotFound` if the account curve-tree root is missing or expired.
        * * `SettlementNotFound` if the settlement is not found.
+       * * `SettlementNotPending` if the settlement is not pending.
        * * `LegNotFound` if the leg is not found in the settlement.
-       * * `AlreadyAffirmed` if the leg has already been affirmed by the receiver.
+       * * `AlreadyRejected` if the receiver has already rejected the leg.
+       * * `AlreadyFinalized` if the receiver has already finalized the leg.
+       * * `InvalidAffirmationStatusTransition` if the receiver has already affirmed or the
+       * status transition is otherwise invalid.
+       * * `NoPendingAffirmations` if the settlement's pending-affirmation counter is already
+       * zero.
+       * * `InvalidProof` if the proof is invalid.
        **/
       receiverAffirmation: AugmentedSubmittable<
         (
@@ -2769,9 +2862,16 @@ declare module '@polkadot/api-base/types/submittable' {
        *
        * # Errors
        * * `BadOrigin` if `origin` isn't signed.
-       * * `SettlementNotExecuted` if the settlement has not been executed.
+       * * `NullifierAlreadyUsed` if the account state nullifier has already been used.
+       * * `CurveTreeRootNotFound` if the account curve-tree root is missing or expired.
        * * `SettlementNotFound` if the settlement is not found.
+       * * `SettlementNotExecuted` if the settlement has not been executed.
        * * `LegNotFound` if the leg is not found in the settlement.
+       * * `AlreadyRejected` if the receiver has already rejected the leg.
+       * * `AlreadyFinalized` if the receiver has already finalized the leg.
+       * * `InvalidAffirmationStatusTransition` if the receiver has not affirmed the leg or the
+       * status transition is otherwise invalid.
+       * * `InvalidProof` if the proof is invalid.
        **/
       receiverClaim: AugmentedSubmittable<
         (
@@ -2798,9 +2898,16 @@ declare module '@polkadot/api-base/types/submittable' {
        *
        * # Errors
        * * `BadOrigin` if `origin` isn't signed.
-       * * `SettlementAlreadyExecuted` if the settlement has already been executed.
+       * * `NullifierAlreadyUsed` if the account state nullifier has already been used.
+       * * `CurveTreeRootNotFound` if the account curve-tree root is missing or expired.
        * * `SettlementNotFound` if the settlement is not found.
+       * * `SettlementAlreadyExecuted` if the settlement has already been executed.
        * * `LegNotFound` if the leg is not found in the settlement.
+       * * `AlreadyRejected` if the receiver has already rejected the leg.
+       * * `AlreadyFinalized` if the receiver has already finalized the leg.
+       * * `InvalidAffirmationStatusTransition` if the receiver has not affirmed the leg or the
+       * status transition is otherwise invalid.
+       * * `InvalidProof` if the proof is invalid.
        **/
       receiverRevertAffirmation: AugmentedSubmittable<
         (
@@ -2828,12 +2935,15 @@ declare module '@polkadot/api-base/types/submittable' {
        * * `proof` - The Batched Account asset registration proof.
        *
        * # Errors
-       * * `BadOrigin` if `origin` isn't signed.
+       * * `BadOrigin` if `origin` isn't signed or lacks call permissions.
+       * * `TooManyProofs` if the proof exceeds `MaxAccountAssetRegProofs`.
        * * `AccountMissing` if the Confidential account is not registered.
-       * * `AssetMissing` if the Confidential asset is not registered.
-       * * `AccountAssetAlreadyRegistered` if the Confidential account has already registered the Confidential asset.
-       * * `NotAccountOwner` if the caller is not the owner of the Confidential account.
+       * * `EncryptionKeyMissing` if the account's encryption key is missing.
        * * `EncryptionKeyMismatch` if the proof key doesn't match the account's registered key.
+       * * `AssetMissing` if the Confidential asset is not registered.
+       * * `AccountAssetAlreadyRegistered` if the Confidential account has already registered the
+       * Confidential asset.
+       * * `NotAccountOwner` if the caller is not the owner of the Confidential account.
        * * `InvalidProof` if the proof is invalid.
        **/
       registerAccountAssets: AugmentedSubmittable<
@@ -2847,16 +2957,20 @@ declare module '@polkadot/api-base/types/submittable' {
         [PolymeshDartBpAccountBatchedAccountAssetRegistrationProof]
       >;
       /**
-       * Register a dart account.
+       * Register Confidential accounts and their encryption keys.
        *
        * # Arguments
-       * * `account` the dart account to register.
-       * * `encryption_key` the encryption key for the dart account.
+       * * `origin` - The origin of the call.
+       * * `proof` - The account registration proof.
        *
        * # Errors
-       * * `BadOrigin` if `origin` isn't signed.
-       * * `AccountAlreadyCreated` if the dart account or encryption key is already registered.
-       * * `NotAccountOwner` if the account key is registered to another identity as a fee account.
+       * * `BadOrigin` if `origin` isn't signed or lacks call permissions.
+       * * `TooManyProofs` if the proof exceeds `MaxKeysPerRegProof`.
+       * * `AccountAlreadyCreated` if a Confidential account is already registered.
+       * * `EncryptionKeyAlreadyRegistered` if an encryption key is already registered.
+       * * `NotAccountOwner` if an account key is already registered to another identity as a fee
+       * account.
+       * * `InvalidProof` if the proof is invalid.
        **/
       registerAccounts: AugmentedSubmittable<
         (
@@ -2876,8 +2990,9 @@ declare module '@polkadot/api-base/types/submittable' {
        * * `proof` - The auditor/mediator encryption registration proof.
        *
        * # Errors
-       * * `BadOrigin` if `origin` isn't signed.
-       * * `EncryptionKeyAlreadyRegistered` if the encryption key is already registered.
+       * * `BadOrigin` if `origin` isn't signed or lacks call permissions.
+       * * `TooManyProofs` if the proof exceeds `MaxKeysPerRegProof`.
+       * * `EncryptionKeyAlreadyRegistered` if an encryption key is already registered.
        * * `InvalidProof` if the proof is invalid.
        **/
       registerEncryptionKeys: AugmentedSubmittable<
@@ -2900,13 +3015,15 @@ declare module '@polkadot/api-base/types/submittable' {
        * * `proof` - The batched fee account registration proof.
        *
        * # Errors
-       * * `BadOrigin` if `origin` isn't signed.
-       * * `FeeAccountAlreadyRegistered` if the fee account or encryption key is already registered.
-       * * `NotAccountOwner` if the account key is registered to another identity as an asset account.
-       * * `NullifierAlreadyUsed` if the nullifier for the fee account state commitment has already been used.
+       * * `BadOrigin` if `origin` isn't signed or lacks call permissions.
+       * * `TooManyProofs` if the proof exceeds `MaxFeeAccountRegProofs`.
+       * * `NotAccountOwner` if the account key is already registered to another identity as a
+       * Confidential account.
+       * * `FeeAccountAlreadyRegistered` if a fee account is already registered.
        * * `InvalidFeeAssetId` if the fee asset ID is invalid.
+       * * `AmountOverflow` if an amount does not fit the pallet balance type.
        * * `InvalidProof` if the proof is invalid.
-       * * `InsufficientBalance` if the caller has insufficient balance to pay the deposit.
+       * * `InsufficientBalance` if the caller cannot fund the total fee-account deposit.
        **/
       registerFeeAccounts: AugmentedSubmittable<
         (
@@ -2926,6 +3043,10 @@ declare module '@polkadot/api-base/types/submittable' {
        *
        * Relayers can charge a commission fee on top of the transaction fee (i.e. `commission fee + transaction fee = fee amount`).
        *
+       * Every proof in the batch is verified with a context derived from the fee payment's
+       * one-time nullifier.  The fee payment itself commits to the complete ordered batch and,
+       * unless broadcast, the submitting relayer.
+       *
        * Relayers are responsible for checking the fee payment terms and the fee and batch proofs before submission.
        * The signed extension checks whether the fee nullifier is already spent; a concurrent spend can still make
        * that check stale before inclusion. Fee-payment roots are checked against the shorter relayer root-age limit
@@ -2938,9 +3059,19 @@ declare module '@polkadot/api-base/types/submittable' {
        *
        * # Errors
        * * `BadOrigin` if `origin` isn't signed.
-       * * `InvalidFeePaymentProof` if the fee payment proof is invalid.
-       * * `CurveTreeRootNotFound` if the fee payment root is missing or too old.
+       * * `NullifierAlreadyUsed` if the fee-payment nullifier has already been spent.
        * * `RelayerCallMustBeTopLevel` if this call is nested or the signed extension did not run.
+       * * `TooManyProofs` if the batch exceeds `MaxBatchedProofs`.
+       * * `EmptyBatchedProofs` if the batch contains no proofs.
+       * * `AmountOverflow` if the fee amount does not fit the pallet balance type.
+       * * `InvalidFeeAssetId` if the fee asset ID is invalid.
+       * * `CurveTreeRootNotFound` if the fee-payment root is missing or too old.
+       * * `InvalidFeePaymentProof` if the fee payment proof is invalid.
+       * * `InsufficientBalance` if the fee pool cannot reimburse the relayer.
+       *
+       * Errors from processing the batched Confidential proofs do not fail this extrinsic.
+       * They are reported in the `RelayerBatchedProofs.batch_result` event after the fee payment
+       * has been verified and charged.
        **/
       relayerSubmitBatchedProofs: AugmentedSubmittable<
         (
@@ -2986,10 +3117,18 @@ declare module '@polkadot/api-base/types/submittable' {
        *
        * # Errors
        * * `BadOrigin` if `origin` isn't signed.
-       * * `SettlementNotPending` if the settlement is not pending.
+       * * `NullifierAlreadyUsed` if the account state nullifier has already been used.
+       * * `CurveTreeRootNotFound` if the account curve-tree root is missing or expired.
        * * `SettlementNotFound` if the settlement is not found.
+       * * `SettlementNotPending` if the settlement is not pending.
        * * `LegNotFound` if the leg is not found in the settlement.
-       * * `AlreadyAffirmed` if the leg has already been affirmed by the sender.
+       * * `AlreadyRejected` if the sender has already rejected the leg.
+       * * `AlreadyFinalized` if the sender has already finalized the leg.
+       * * `InvalidAffirmationStatusTransition` if the sender has already affirmed or the status
+       * transition is otherwise invalid.
+       * * `NoPendingAffirmations` if the settlement's pending-affirmation counter is already
+       * zero.
+       * * `InvalidProof` if the proof is invalid.
        **/
       senderAffirmation: AugmentedSubmittable<
         (
@@ -3016,9 +3155,16 @@ declare module '@polkadot/api-base/types/submittable' {
        *
        * # Errors
        * * `BadOrigin` if `origin` isn't signed.
-       * * `SettlementAlreadyExecuted` if the settlement has already been executed.
+       * * `NullifierAlreadyUsed` if the account state nullifier has already been used.
+       * * `CurveTreeRootNotFound` if the account curve-tree root is missing or expired.
        * * `SettlementNotFound` if the settlement is not found.
+       * * `SettlementAlreadyExecuted` if the settlement has already been executed.
        * * `LegNotFound` if the leg is not found in the settlement.
+       * * `AlreadyRejected` if the sender has already rejected the leg.
+       * * `AlreadyFinalized` if the sender has already finalized the leg.
+       * * `InvalidAffirmationStatusTransition` if the sender has not affirmed the leg or the
+       * status transition is otherwise invalid.
+       * * `InvalidProof` if the proof is invalid.
        **/
       senderRevertAffirmation: AugmentedSubmittable<
         (
@@ -3045,9 +3191,16 @@ declare module '@polkadot/api-base/types/submittable' {
        *
        * # Errors
        * * `BadOrigin` if `origin` isn't signed.
-       * * `SettlementNotExecuted` if the settlement has not been executed.
+       * * `NullifierAlreadyUsed` if the account state nullifier has already been used.
+       * * `CurveTreeRootNotFound` if the account curve-tree root is missing or expired.
        * * `SettlementNotFound` if the settlement is not found.
+       * * `SettlementNotExecuted` if the settlement has not been executed.
        * * `LegNotFound` if the leg is not found in the settlement.
+       * * `AlreadyRejected` if the sender has already rejected the leg.
+       * * `AlreadyFinalized` if the sender has already finalized the leg.
+       * * `InvalidAffirmationStatusTransition` if the leg is still pending or the status
+       * transition is otherwise invalid.
+       * * `InvalidProof` if the proof is invalid.
        **/
       senderUpdateCounter: AugmentedSubmittable<
         (
@@ -3067,6 +3220,18 @@ declare module '@polkadot/api-base/types/submittable' {
       >;
       /**
        * Set the freeze state as the issuer or Root. Only Root may change a Root freeze.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call (asset issuer or Root).
+       * * `asset_id` - Confidential asset ID.
+       * * `frozen` - Whether the asset should be frozen.
+       *
+       * # Errors
+       * * `BadOrigin` if `origin` isn't Root, signed, or permitted to act for the asset owner.
+       * * `AssetMissing` if the Confidential asset is not registered.
+       * * `NotAssetOwner` if a signed caller is not the owner of the Confidential asset.
+       * * `AssetFrozenByRoot` if a non-Root caller tries to change or clear a Root freeze.
+       * * `AssetStateInvalid` if the updated asset state cannot be committed.
        **/
       setAssetFrozen: AugmentedSubmittable<
         (
@@ -3129,13 +3294,28 @@ declare module '@polkadot/api-base/types/submittable' {
       /**
        * Submit a batch of proofs.
        *
+       * All proofs in the batch are verified with a context derived from the signing account,
+       * so another account cannot extract and submit a subset of the batch.  Clients must
+       * generate the proofs with [`non_relayer_batch_proof_context`] for that account.
+       *
        * # Arguments
        * * `origin` - The origin of the call.
        * * `proof` - The batched proofs.
        *
        * # Errors
        * * `BadOrigin` if `origin` isn't signed.
-       * * `InvalidProof` if any of the proofs are invalid.
+       * * `TooManyProofs` if the batch exceeds `MaxBatchedProofs`.
+       * * `InvalidProof` if any included proof is invalid.
+       * * `SettlementMissingLegs`, `SettlementTooManyLegs`, `SettlementAlreadyExists`,
+       * `AssetMissing`, `AssetIsFrozen`, `CurveTreeRootNotFound`, `CurveTreeError`, or
+       * `BatchedSettlementInvalidLegRefs` for an included settlement or instant-settlement
+       * proof.
+       * * `NullifierAlreadyUsed`, `SettlementNotFound`, `SettlementNotPending`,
+       * `SettlementNotExecuted`, `SettlementAlreadyExecuted`, `NotLastPendingAffirmation`,
+       * `LegNotFound`, `AlreadyAffirmed`, `AlreadyRejected`, `AlreadyFinalized`,
+       * `InvalidAffirmationStatusTransition`, `NoPendingAffirmations`, `WrongMediatorId`,
+       * `MissingLegMediators`, or `SettlementLegCountMismatch` for an included affirmation,
+       * counter update, revert, claim, or instant affirmation proof.
        **/
       submitBatchedProofs: AugmentedSubmittable<
         (
@@ -3144,19 +3324,24 @@ declare module '@polkadot/api-base/types/submittable' {
         [PolymeshDartBpBatchedBatchedProofs]
       >;
       /**
-       * Toup a batch of fee accounts.
+       * Top up a batch of fee accounts.
        *
        * # Arguments
        * * `origin` - The origin of the call.
        * * `proof` - The batched fee account topup proof.
        *
        * # Errors
-       * * `BadOrigin` if `origin` isn't signed.
-       * * `FeeAccountMissing` if the fee account is not registered.
-       * * `NotAccountOwner` if the caller does not own the fee account.
+       * * `BadOrigin` if `origin` isn't signed or lacks call permissions.
+       * * `TooManyProofs` if the proof exceeds `MaxFeeAccountTopupProofs`.
+       * * `FeeAccountMissing` if a fee account is not registered.
+       * * `NotAccountOwner` if the caller does not own a fee account.
        * * `InvalidFeeAssetId` if the fee asset ID is invalid.
+       * * `NullifierAlreadyUsed` if a nullifier is repeated in the batch or has already been
+       * used on-chain.
+       * * `AmountOverflow` if an amount does not fit the pallet balance type.
+       * * `CurveTreeRootNotFound` if the fee-account curve-tree root is missing or expired.
        * * `InvalidProof` if the proof is invalid.
-       * * `InsufficientBalance` if the caller has insufficient balance to pay the deposit.
+       * * `InsufficientBalance` if the caller cannot fund the total top-up.
        **/
       topupFeeAccounts: AugmentedSubmittable<
         (
@@ -3173,6 +3358,24 @@ declare module '@polkadot/api-base/types/submittable' {
        *
        * The asset owner must retain the required live claims for every selected auditor and
        * mediator. Existing settlements keep their creation-time encrypted legs and mediator set.
+       *
+       * # Arguments
+       * * `origin` - The origin of the call.
+       * * `asset_id` - Confidential asset ID.
+       * * `mediators` - New mediator account and encryption keys.
+       * * `auditors` - New auditor encryption keys.
+       *
+       * # Errors
+       * * `BadOrigin` if `origin` isn't signed or lacks call permissions.
+       * * `AssetMissing` if the Confidential asset is not registered.
+       * * `NotAssetOwner` if the caller is not the owner of the Confidential asset.
+       * * `AccountMissing` if a mediator Confidential account is not registered.
+       * * `EncryptionKeyMissing` if an auditor/mediator encryption key is not registered.
+       * * `EncryptionKeyNotShared` if a mediator key was neither the account's own key nor
+       * shared with it.
+       * * `MissingRequiredClaim` if a selected auditor/mediator lacks the required role claim.
+       * * `NoAuditorsOrMediators` if neither auditors nor mediators are provided.
+       * * `AssetStateInvalid` if the asset keys or asset state cannot be built/committed.
        **/
       updateAssetKeys: AugmentedSubmittable<
         (

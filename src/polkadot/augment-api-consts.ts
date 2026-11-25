@@ -178,7 +178,7 @@ declare module '@polkadot/api-base/types/consts' {
        **/
       maxAssetMediators: u32 & AugmentedConst<ApiType>;
       /**
-       * The maximum number of proofs in a single batched proof.
+       * The maximum number of proofs in a single batch.
        **/
       maxBatchedProofs: u32 & AugmentedConst<ApiType>;
       /**
@@ -224,7 +224,8 @@ declare module '@polkadot/api-base/types/consts' {
       /**
        * The minimum time between curve tree root updates.
        *
-       * If there hasn't been transactions to cause a curve tree root update for a while, a new root will be recorded.
+       * If there have been no transactions that update a curve tree for this interval, a new
+       * root is recorded with a refreshed timestamp so provers can find a fresh root.
        **/
       minCurveTreeRootUpdateInterval: u64 & AugmentedConst<ApiType>;
       /**
